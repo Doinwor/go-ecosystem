@@ -267,9 +267,56 @@
     footer .go-link:hover {
       color: var(--text);
     }
+    /* ─── mobile notice ─── */
+    .mobile-notice {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Unbounded', sans-serif;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .mobile-notice h2 {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .mobile-notice p {
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--dim);
+      max-width: 360px;
+    }
+
+    .mobile-notice .mobile-notice__icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-notice {
+        display: flex;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="mobile-notice">
+    <div class="mobile-notice__icon">⎔</div>
+    <h2>Ой, это для экрана побольше</h2>
+    <p>Спасибо, что заглянули! Наш сайт пока не дружит с телефонами — он создан для компьютера. Пожалуйста, откройте версию для ПК через меню браузера (⋮ → «Версия для компьютера») или зайдите с ноутбука. Благодарим за понимание :)</p>
+  </div>
   <div class="wrapper">
     <div class="top">
       <div class="back">
