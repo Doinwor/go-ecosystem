@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бренд — і.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #fafaf8;
+      --text: #1a1a1a;
+      --muted: #999;
+      --dim: #666;
+      --border: #e8e8e5;
+      --border-hover: #ccc;
+      --heading-color: #bbb;
+      --footer-color: #ccc;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0b12;
+      --text: #f0ece4;
+      --muted: #666;
+      --dim: #888;
+      --border: #1e1e26;
+      --border-hover: #333;
+      --heading-color: #555;
+      --footer-color: #333;
+    }
+
+    body {
+      font-family: 'Unbounded', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 24px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 56px;
+    }
+
+    .back a {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .back a:hover { color: var(--text); }
+
+    .theme-toggle {
+      background: var(--border);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      border-radius: 100px;
+      width: 42px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover { opacity: 0.8; }
+
+    .theme-toggle__knob {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg);
+      transition: transform 0.3s, background 0.3s;
+      margin: 0 3px;
+    }
+
+    [data-theme="dark"] .theme-toggle__knob {
+      transform: translateX(20px);
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .page-sub {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 56px;
+    }
+
+    section {
+      margin-bottom: 56px;
+    }
+
+    section h2 {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--heading-color);
+      margin-bottom: 20px;
+    }
+
+    section p, section li {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.8;
+    }
+
+    /* ─── colors ─── */
+    .colors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .color-swatch {
+      flex: 1;
+      min-width: 100px;
+      border-radius: 12px;
+      padding: 24px 16px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .color-swatch__circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+
+    .color-swatch__name {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .color-swatch__hex {
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    /* ─── typography ─── */
+    .type-sample {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.25s;
+    }
+
+    .type-sample:hover {
+      border-color: var(--border-hover);
+    }
+
+    .type-sample__label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .type-sample__title {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .type-sample__body {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.7;
+    }
+
+    /* ─── grid ─── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .brand-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.25s;
+    }
+
+    .brand-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .brand-card__name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .brand-card__desc {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
+    /* ─── footer ─── */
+    footer {
+      margin-top: auto;
+      padding: 40px 0 0;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--footer-color);
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="top">
+      <div class="back">
+        <a href="index.html">і.</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+        <span class="theme-toggle__knob"></span>
+      </button>
+    </div>
+
+    <h1>Бренд</h1>
+    <p class="page-sub">Визуальный язык студии і.</p>
+
+    <!-- colors -->
+    <section>
+      <h2>Цвета</h2>
+      <div class="colors">
+        <div class="color-swatch">
+          <div class="color-swatch__circle" style="background: #1a1a1a;"></div>
+          <div class="color-swatch__name">Чёрный</div>
+          <div class="color-swatch__hex">#1a1a1a</div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__circle" style="background: #fafaf8;"></div>
+          <div class="color-swatch__name">Фон</div>
+          <div class="color-swatch__hex">#fafaf8</div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-swatch__circle" style="background: #999;"></div>
+          <div class="color-swatch__name">Акцент</div>
+          <div class="color-swatch__hex">#999999</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- typography -->
+    <section>
+      <h2>Типографика</h2>
+      <div class="type-sample">
+        <div class="type-sample__label">Шрифт</div>
+        <div class="type-sample__title">Unbounded</div>
+        <div class="type-sample__body">
+          Используется во всех носителях — от логотипа до интерфейсов.
+          Начертания: от Light (300) до Black (900).
+        </div>
+      </div>
+    </section>
+
+    <!-- principles -->
+    <section>
+      <h2>Принципы</h2>
+      <div class="grid-2">
+        <div class="brand-card">
+          <div class="brand-card__name">Минимализм</div>
+          <div class="brand-card__desc">Ничего лишнего. Каждый элемент имеет функцию. Пустота — тоже материал.</div>
+        </div>
+        <div class="brand-card">
+          <div class="brand-card__name">Контраст</div>
+          <div class="brand-card__desc">Чёрное на белом, белое на чёрном. Без полутонов и компромиссов.</div>
+        </div>
+        <div class="brand-card">
+          <div class="brand-card__name">Типографика</div>
+          <div class="brand-card__desc">Шрифт как основа визуального языка. Без иллюстраций и лишней графики.</div>
+        </div>
+        <div class="brand-card">
+          <div class="brand-card__name">Постоянство</div>
+          <div class="brand-card__desc">Единый визуальный код во всех проектах студии.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>і. · бренд · 2026</footer>
+  </div>
+
+  <script>
+    (function() {
+      const toggle = document.getElementById('themeToggle');
+      const stored = localStorage.getItem('i-theme');
+      if (stored) document.documentElement.setAttribute('data-theme', stored);
+
+      toggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? '' : 'dark';
+        document.documentElement.setAttribute('data-theme', next || '');
+        localStorage.setItem('i-theme', next || '');
+      });
+    })();
+  </script>
+</body>
+</html>

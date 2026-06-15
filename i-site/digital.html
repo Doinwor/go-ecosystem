@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Цифровой дизайн — і.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #fafaf8;
+      --text: #1a1a1a;
+      --muted: #999;
+      --dim: #666;
+      --border: #e8e8e5;
+      --border-hover: #ccc;
+      --heading-color: #bbb;
+      --footer-color: #ccc;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b0b12;
+      --text: #f0ece4;
+      --muted: #666;
+      --dim: #888;
+      --border: #1e1e26;
+      --border-hover: #333;
+      --heading-color: #555;
+      --footer-color: #333;
+    }
+
+    body {
+      font-family: 'Unbounded', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 24px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 56px;
+    }
+
+    .back a {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .back a:hover { color: var(--text); }
+
+    .theme-toggle {
+      background: var(--border);
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      border-radius: 100px;
+      width: 42px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      transition: background 0.3s;
+      flex-shrink: 0;
+    }
+
+    .theme-toggle:hover { opacity: 0.8; }
+
+    .theme-toggle__knob {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg);
+      transition: transform 0.3s, background 0.3s;
+      margin: 0 3px;
+    }
+
+    [data-theme="dark"] .theme-toggle__knob {
+      transform: translateX(20px);
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .page-sub {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 56px;
+    }
+
+    section {
+      margin-bottom: 56px;
+    }
+
+    section h2 {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--heading-color);
+      margin-bottom: 20px;
+    }
+
+    section p {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.8;
+    }
+
+    .project-header {
+      margin-bottom: 32px;
+    }
+
+    .project-header__name {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .project-header__name a {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .project-header__name a:hover {
+      opacity: 0.6;
+    }
+
+    .project-header__tag {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .project-image {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      transition: border-color 0.25s;
+    }
+
+    .project-image:hover {
+      border-color: var(--border-hover);
+    }
+
+    .project-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .project-image--placeholder {
+      background: var(--border);
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 300;
+      padding: 48px;
+      text-align: center;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+
+    .detail-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.25s;
+    }
+
+    .detail-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .detail-card__label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .detail-card__value {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .body-text {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.9;
+    }
+
+    .body-text strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .body-text p {
+      margin-bottom: 16px;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 40px 0 0;
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--footer-color);
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="top">
+      <div class="back">
+        <a href="index.html">і.</a>
+      </div>
+      <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
+        <span class="theme-toggle__knob"></span>
+      </button>
+    </div>
+
+    <h1>Цифровой дизайн</h1>
+    <p class="page-sub">Проекты, для которых мы создавали визуальный язык</p>
+
+    <!-- WAWE -->
+    <section>
+      <div class="project-header">
+        <div class="project-header__name"><a href="https://doinwor.github.io/WAWE-site/" target="_blank" rel="noopener">WAWE →</a></div>
+        <div class="project-header__tag">музыкальный плеер · 2025–2026</div>
+      </div>
+
+      <div class="project-image">
+        <div class="project-image--placeholder">
+          WAWE — дизайн: тёмная тема, фиолетово-розовые градиенты,<br>сетчатый фон, стеклянные карточки
+        </div>
+      </div>
+
+      <div class="body-text">
+        <p>
+          Для WAWE мы разработали визуальный стиль с нуля. Задача была —
+          сделать интерфейс, который ощущается как <strong>музыкальный инструмент</strong>:
+          тёмный, глубокий, с акцентными неоновыми градиентами.
+        </p>
+        <p>
+          В основе айдентики — контраст между <strong>фиолетовым (#7c3aed)</strong>
+          и <strong>розовым (#ec4899)</strong>. Эти цвета задают настроение всего проекта:
+          от логотипа и кнопок до фоновых свечений и карточек.
+        </p>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-card">
+          <div class="detail-card__label">Шрифт</div>
+          <div class="detail-card__value">Inter — гротеск для интерфейсов. Хорошо читается в маленьких размерах, строгий и современный.</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card__label">Цвета</div>
+          <div class="detail-card__value">Тёмный фон #07070d, акценты #7c3aed → #ec4899, текст #e0e0e0.</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card__label">Сетка</div>
+          <div class="detail-card__value">60px фоновая сетка с полупрозрачными линиями — задаёт ритм и технологичность.</div>
+        </div>
+        <div class="detail-card">
+          <div class="detail-card__label">Анимации</div>
+          <div class="detail-card__value">Плавные свечения, градиентные переливы, эффект блика на кнопках.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>і. · цифровой дизайн · 2026</footer>
+  </div>
+
+  <script>
+    (function() {
+      const toggle = document.getElementById('themeToggle');
+      const stored = localStorage.getItem('i-theme');
+      if (stored) document.documentElement.setAttribute('data-theme', stored);
+
+      toggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? '' : 'dark';
+        document.documentElement.setAttribute('data-theme', next || '');
+        localStorage.setItem('i-theme', next || '');
+      });
+    })();
+  </script>
+</body>
+</html>

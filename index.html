@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GO — экосистема проектов</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Unbounded', sans-serif;
+      background: #0b0b12;
+      color: #f0ece4;
+      overflow-x: hidden;
+    }
+
+    /* ─── particles ─── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    /* ─── noise overlay ─── */
+    #noise {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* ─── layout ─── */
+    .site-wrapper {
+      position: relative;
+      z-index: 2;
+    }
+
+    section {
+      padding: 120px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 80px 16px; }
+    }
+
+    /* ─── hero ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 40px 24px;
+    }
+
+    .hero__glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(108,60,240,0.12) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse-glow 6s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+      50%      { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+    }
+
+    .hero__logo {
+      font-size: clamp(80px, 20vw, 200px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      background: linear-gradient(135deg, #f0ece4 0%, #a08aff 40%, #6c3cf0 70%, #a08aff 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s ease-in-out infinite;
+      position: relative;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
+
+    .hero__sub {
+      font-size: clamp(14px, 2.5vw, 22px);
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(240, 236, 228, 0.5);
+      margin-top: 16px;
+    }
+
+    .hero__tagline {
+      font-size: clamp(16px, 2vw, 24px);
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.4);
+      margin-top: 40px;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    .hero__scroll {
+      margin-top: 60px;
+      width: 24px;
+      height: 40px;
+      border: 2px solid rgba(240, 236, 228, 0.2);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .hero__scroll::after {
+      content: '';
+      width: 4px;
+      height: 8px;
+      background: rgba(240, 236, 228, 0.5);
+      border-radius: 2px;
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scrolldown 2s ease-in-out infinite;
+    }
+
+    @keyframes scrolldown {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      50%      { transform: translateX(-50%) translateY(10px); opacity: 0.3; }
+    }
+
+    /* ─── section header ─── */
+    .section-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .section-header__label {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(240, 236, 228, 0.3);
+      margin-bottom: 12px;
+    }
+
+    .section-header__title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .section-header__title span {
+      background: linear-gradient(135deg, #a08aff, #6c3cf0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-header__desc {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.45);
+      max-width: 560px;
+      margin: 16px auto 0;
+      line-height: 1.6;
+    }
+
+    /* ─── about ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    .about-text h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+
+    .about-text h2 span {
+      background: linear-gradient(135deg, #f0c040, #e8845c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .about-text p {
+      font-size: 15px;
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.5);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+    }
+
+    .stat-card__number {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a08aff, #6c3cf0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-card__label {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.4);
+      margin-top: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── projects ─── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+
+    .project-card,
+    .project-card-link {
+      display: block;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 24px;
+      padding: 40px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .project-card-link:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .project-card__glow {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.6s;
+      pointer-events: none;
+    }
+
+    .project-card:hover .project-card__glow {
+      opacity: 0.08;
+    }
+
+    .project-card__icon {
+      font-size: 32px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .project-card__name {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .project-card__name--wawe {
+      background: linear-gradient(135deg, #00d4aa, #0099ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .project-card__name--i {
+      background: linear-gradient(135deg, #ff6b9d, #c44dff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .project-card__desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.45);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .project-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .project-card__tag {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.05);
+      color: rgba(240, 236, 228, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* ─── footer ─── */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    footer .logo-small {
+      font-size: 28px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #a08aff, #6c3cf0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    footer p {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(240, 236, 228, 0.25);
+      margin-top: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── reveal animation ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+  </style>
+</head>
+<body>
+
+  <!-- particles -->
+  <div id="particles"></div>
+  <div id="noise"></div>
+
+  <div class="site-wrapper">
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero" id="hero">
+      <div class="hero__glow"></div>
+      <div class="hero__logo">GO</div>
+      <p class="hero__sub">Экосистема проектов</p>
+      <p class="hero__tagline">Разные миры. Одна орбита.</p>
+      <div class="hero__scroll"></div>
+    </section>
+
+    <!-- ═══ ABOUT ═══ -->
+    <section id="about">
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <h2>Что такое <span>GO</span>?</h2>
+          <p>
+            GO — это не компания и не бренд. Это орбита, вокруг которой вращаются
+            независимые проекты, объединённые общим вкусом, вниманием к деталям
+            и желанием делать красивые цифровые вещи.
+          </p>
+          <p>
+            WAWE — независимый музыкальный проект, а студия <strong>і.</strong>
+            — пространство, где живут Евлампия, фильмы и другие эксперименты.
+          </p>
+        </div>
+        <div class="about-stats reveal reveal-delay-1">
+          <div class="stat-card">
+            <div class="stat-card__number">2</div>
+            <div class="stat-card__label">основных проекта</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__number">∞</div>
+            <div class="stat-card__label">границ не существует</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PROJECTS ═══ -->
+    <section id="projects">
+      <div class="section-header reveal">
+        <p class="section-header__label">Проекты</p>
+        <h2 class="section-header__title">Всё, что мы <span>создаём</span></h2>
+        <p class="section-header__desc">
+          Каждый проект — отдельная вселенная со своим стилем и настроением.
+        </p>
+      </div>
+
+      <div class="projects-grid">
+
+        <!-- WAWE -->
+        <a href="https://doinwor.github.io/WAWE-site/" target="_blank" rel="noopener" class="project-card-link reveal reveal-delay-1">
+          <div class="project-card__glow" style="background: radial-gradient(circle, #00d4aa, transparent 60%);"></div>
+          <span class="project-card__icon">🎵</span>
+          <h3 class="project-card__name project-card__name--wawe">WAWE</h3>
+          <p class="project-card__desc">
+            Музыкальный проект для тех, кто хочет слушать, а не искать.
+            Волны звука, которые уносят.
+          </p>
+          <div class="project-card__tags">
+            <span class="project-card__tag">музыка</span>
+            <span class="project-card__tag">стриминг</span>
+            <span class="project-card__tag">атмосфера</span>
+          </div>
+        </a>
+
+        <!-- і. -->
+        <a href="i-site/" class="project-card-link reveal reveal-delay-2">
+          <div class="project-card__glow" style="background: radial-gradient(circle, #ff6b9d, transparent 60%);"></div>
+          <span class="project-card__icon">✦</span>
+          <h3 class="project-card__name project-card__name--i">і.</h3>
+          <p class="project-card__desc">
+            Студия. Точка отсчёта. Место, где идеи обретают форму —
+            от айдентики до интерфейсов.
+          </p>
+          <div class="project-card__tags">
+            <span class="project-card__tag">студия</span>
+            <span class="project-card__tag">дизайн</span>
+            <span class="project-card__tag">разработка</span>
+          </div>
+
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+      <div class="logo-small">GO</div>
+      <p>Экосистема проектов &nbsp;·&nbsp; 2026</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // ─── particles ───
+    (function particles() {
+      const container = document.getElementById('particles');
+      const count = 50;
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'particle';
+        el.style.left = Math.random() * 100 + '%';
+        el.style.animationDuration = (10 + Math.random() * 20) + 's';
+        el.style.animationDelay = -Math.random() * 20 + 's';
+        el.style.width = (2 + Math.random() * 3) + 'px';
+        el.style.height = el.style.width;
+        container.appendChild(el);
+      }
+    })();
+
+    // ─── reveal on scroll ───
+    (function reveal() {
+      const els = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) e.target.classList.add('visible');
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(el => observer.observe(el));
+    })();
+
+    // ─── smooth parallax hero glow ───
+    (function parallax() {
+      const glow = document.querySelector('.hero__glow');
+      if (!glow) return;
+      document.addEventListener('mousemove', e => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 20;
+        const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        glow.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(1)`;
+      });
+    })();
+  </script>
+
+</body>
+</html>
