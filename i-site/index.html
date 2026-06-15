@@ -304,6 +304,11 @@
       opacity: 0.3;
     }
 
+    @media (pointer: coarse) and (max-width: 768px) {
+      .mobile-notice {
+        display: flex;
+      }
+    }
   </style>
 </head>
 <body>
@@ -378,13 +383,7 @@
         localStorage.setItem('i-theme', next || '');
       });
 
-      const notice = document.querySelector('.mobile-notice');
-      if (notice) {
-        const isMobile = window.innerWidth < 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-        if (isMobile) {
-          notice.style.display = 'flex';
-        }
-      }
+      // mobile notice is now handled via CSS media query with pointer:coarse
     })();
   </script>
 </body>
