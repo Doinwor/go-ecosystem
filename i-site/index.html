@@ -304,11 +304,6 @@
       opacity: 0.3;
     }
 
-    @media (max-width: 768px) {
-      .mobile-notice {
-        display: flex;
-      }
-    }
   </style>
 </head>
 <body>
@@ -382,6 +377,14 @@
         document.documentElement.setAttribute('data-theme', next || '');
         localStorage.setItem('i-theme', next || '');
       });
+
+      const notice = document.querySelector('.mobile-notice');
+      if (notice) {
+        const isMobile = window.innerWidth < 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        if (isMobile) {
+          notice.style.display = 'flex';
+        }
+      }
     })();
   </script>
 </body>
