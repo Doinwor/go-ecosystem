@@ -162,9 +162,17 @@
     }
 
     @media (pointer: coarse) and (max-width: 768px) {
-      html, body {
+      html {
         overflow: hidden;
         height: 100%;
+        width: 100%;
+        position: fixed;
+      }
+      body {
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        position: fixed;
       }
       .mobile-notice {
         display: flex;
@@ -201,6 +209,11 @@
         document.documentElement.setAttribute('data-theme', next || '');
         localStorage.setItem('i-theme', next || '');
       });
+
+      var isMobile = window.innerWidth < 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+      if (isMobile) {
+        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+      }
     })();
   </script>
 </body>
