@@ -161,7 +161,7 @@
       opacity: 0.3;
     }
 
-    @media (pointer: coarse) and (max-width: 768px) {
+    @media (max-width: 480px) {
       html {
         overflow: hidden;
         height: 100%;
@@ -210,9 +210,12 @@
         localStorage.setItem('i-theme', next || '');
       });
 
-      var isMobile = window.innerWidth < 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+      var isMobile = window.innerWidth < 480 || /Mobi|Android/i.test(navigator.userAgent);
       if (isMobile) {
         document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
       }
     })();
   </script>
