@@ -373,33 +373,27 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .egg-card {
-      position: fixed !important;
-      z-index: 100;
-      pointer-events: none;
-      margin: 0 !important;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-      overflow: hidden;
-      transition: none;
-      opacity: 1;
+    @keyframes fallOff {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(120vh); opacity: 0; }
+    }
+
+    .egg-fall {
+      animation: fallOff 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards !important;
     }
 
     #eggSlider {
       position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 40px;
+      left: 10%;
+      width: 80%;
       z-index: 10001;
       display: none;
-      width: 200px;
-      height: 4px;
+      height: 6px;
       -webkit-appearance: none;
       appearance: none;
       background: var(--border);
-      border-radius: 2px;
+      border-radius: 3px;
       outline: none;
       cursor: grab;
     }
@@ -407,33 +401,34 @@
     #eggSlider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       background: var(--text);
-      border: 2px solid var(--bg);
+      border: 3px solid var(--bg);
       cursor: grab;
       transition: box-shadow 0.2s;
     }
 
     #eggSlider::-webkit-slider-thumb:hover {
-      box-shadow: 0 0 20px var(--text);
+      box-shadow: 0 0 30px var(--text);
     }
 
     #eggSlider:active::-webkit-slider-thumb {
       cursor: grabbing;
     }
 
-    .egg-glitch {
-      animation: eggGlitch 0.08s infinite alternate;
+    .egg-chaos {
+      animation: eggChaos 0.06s infinite alternate;
     }
 
-    @keyframes eggGlitch {
-      0% { filter: hue-rotate(0deg) saturate(3) contrast(2); }
-      25% { filter: hue-rotate(90deg) saturate(4) contrast(3); }
-      50% { filter: hue-rotate(180deg) saturate(2) contrast(1.5); }
-      75% { filter: hue-rotate(270deg) saturate(5) contrast(2.5); }
-      100% { filter: hue-rotate(360deg) saturate(3) contrast(1.8); }
+    @keyframes eggChaos {
+      0% { filter: hue-rotate(0deg) saturate(3) contrast(2) blur(1px); }
+      20% { filter: hue-rotate(72deg) saturate(5) contrast(3) blur(0px); }
+      40% { filter: hue-rotate(144deg) saturate(2) contrast(4) blur(2px); }
+      60% { filter: hue-rotate(216deg) saturate(6) contrast(1.5) blur(0px); }
+      80% { filter: hue-rotate(288deg) saturate(4) contrast(2.5) blur(1px); }
+      100% { filter: hue-rotate(360deg) saturate(3) contrast(3) blur(0px); }
     }
 
     /* ─── mobile notice ─── */
@@ -687,120 +682,55 @@
         btn.addEventListener('click', function() {
           btn.style.display = 'none';
 
-          var selectors = [
+          var items = [
             '.top', '.hero', '.services',
             '.process', '.pages-nav', '.projects', 'footer'
           ];
 
-          var els = [];
-          selectors.forEach(function(s) {
-            var el = document.querySelector(s);
-            if (el) els.push(el);
-          });
-
-          if (!els.length) return;
-          var docEl = document.documentElement;
-          var vw = docEl.clientWidth;
-          var vh = docEl.clientHeight;
-          var gap = 6;
-
-          var totalH = 0;
-          els.forEach(function(el) { totalH += el.offsetHeight; });
-
-          var cardH = Math.min(70, (vh - 100) / els.length - gap);
-          if (cardH < 40) cardH = 40;
-
-          var stackBottom = vh - 40;
-          var stackTop = stackBottom - els.length * (cardH + gap) + gap;
-          if (stackTop < 20) {
-            cardH = Math.max(30, (vh - 40 - 20 - gap * (els.length - 1)) / els.length);
-            stackTop = 20;
-          }
-
-          var wrapper = document.querySelector('.wrapper');
-          if (wrapper) wrapper.style.opacity = '0';
-
-          els.forEach(function(el, i) {
-            var rect = el.getBoundingClientRect();
-            var w = el.offsetWidth || vw - 48;
-            if (w > vw - 32) w = vw - 32;
-
-            var card = document.createElement('div');
-            card.className = 'egg-card';
-            card.style.top = rect.top + 'px';
-            card.style.left = Math.max(16, (vw - w) / 2) + 'px';
-            card.style.width = w + 'px';
-            card.style.height = rect.height + 'px';
-            card.textContent = el.textContent || '';
-            card.style.padding = '20px 24px';
-            card.style.fontSize = '11px';
-            card.style.fontWeight = '300';
-            card.style.color = 'var(--dim)';
-            card.style.lineHeight = '1.4';
-            card.style.display = 'flex';
-            card.style.alignItems = 'center';
-            document.body.appendChild(card);
-
-            var targetY = stackTop + i * (cardH + gap);
-            var distY = targetY - rect.top;
-            var driftX = (Math.random() - 0.5) * 16;
-            var tilt = (Math.random() - 0.5) * 4;
-
-            var dur = 1.2 + Math.random() * 1.0;
-            var eases = [
-              'cubic-bezier(0.5, 1.2, 0.5, 1)',
-              'cubic-bezier(0.34, 1.6, 0.64, 1)',
-              'cubic-bezier(0.22, 1.4, 0.36, 1)',
-              'cubic-bezier(0.6, 1.8, 0.4, 0.8)',
-              'cubic-bezier(0.3, 1.5, 0.7, 1)',
-              'cubic-bezier(0.5, 1.0, 0.5, 1.4)',
-              'cubic-bezier(0.4, 1.7, 0.6, 0.9)'
-            ];
-
-            card.getBoundingClientRect();
-
+          items.forEach(function(sel, i) {
+            var el = document.querySelector(sel);
+            if (!el) return;
             setTimeout(function() {
-              card.style.transition = 'transform ' + dur + 's ' + eases[i % eases.length];
-              card.style.transform = 'translateY(' + distY + 'px) translateX(' + driftX + 'px) rotate(' + tilt + 'deg)';
-
-              if (i === els.length - 1) {
+              el.classList.add('egg-fall');
+              if (i === items.length - 1) {
                 setTimeout(function() {
                   slider.style.display = 'block';
                   slider.style.opacity = '0';
                   slider.style.transition = 'opacity 0.6s ease';
                   slider.getBoundingClientRect();
                   slider.style.opacity = '1';
-                }, dur * 1000 + 400);
+                }, 500);
               }
-            }, i * 180 + Math.random() * 120);
+            }, i * 180);
           });
         });
 
-        var glitchInterval = null;
+        var chaosTimer = null;
         var eggDoc = document.documentElement;
+
         slider.addEventListener('input', function() {
           var v = parseFloat(this.value);
           eggDoc.style.filter = 'hue-rotate(' + v + 'deg)';
-          if (glitchInterval) {
-            clearInterval(glitchInterval);
-            glitchInterval = null;
-            eggDoc.classList.remove('egg-glitch');
+          if (chaosTimer) {
+            clearInterval(chaosTimer);
+            chaosTimer = null;
+            eggDoc.classList.remove('egg-chaos');
           }
         });
 
         slider.addEventListener('change', function() {
           var v = parseFloat(this.value);
-          if (v <= 2 || v >= 358) {
-            eggDoc.classList.add('egg-glitch');
-            glitchInterval = setInterval(function() {
-              eggDoc.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg) saturate(' + (2 + Math.random() * 3) + ')';
-            }, 80);
+          if (v <= 1 || v >= 359) {
+            eggDoc.classList.add('egg-chaos');
+            chaosTimer = setInterval(function() {
+              eggDoc.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg) saturate(' + (2 + Math.random() * 4) + ') blur(' + Math.random() * 2 + 'px)';
+            }, 60);
             setTimeout(function() {
-              if (glitchInterval) {
-                clearInterval(glitchInterval);
-                glitchInterval = null;
+              if (chaosTimer) {
+                clearInterval(chaosTimer);
+                chaosTimer = null;
               }
-              eggDoc.classList.remove('egg-glitch');
+              eggDoc.classList.remove('egg-chaos');
               eggDoc.style.filter = '';
               slider.value = '0';
             }, 5000);
