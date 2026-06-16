@@ -355,33 +355,7 @@
       color: var(--text);
     }
 
-    /* ─── easter egg (fall) ─── */
-    @keyframes fallDown {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(120vh); opacity: 0; }
-    }
-
-    .wrapper--fall .hero,
-    .wrapper--fall .services,
-    .wrapper--fall .process,
-    .wrapper--fall .pages-nav,
-    .wrapper--fall .projects {
-      animation: fallDown 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
-    }
-
-    .wrapper--fall .services { animation-delay: 0.1s; }
-    .wrapper--fall .process { animation-delay: 0.2s; }
-    .wrapper--fall .pages-nav { animation-delay: 0.3s; }
-    .wrapper--fall .projects { animation-delay: 0.4s; }
-
-    .wrapper--fall footer {
-      animation: fallDown 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.5s forwards;
-    }
-
-    .wrapper--fall .top {
-      animation: fallDown 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.05s forwards;
-    }
-
+    /* ─── easter egg ─── */
     #egg {
       position: fixed;
       top: 0;
@@ -396,6 +370,81 @@
       outline: none;
       opacity: 0;
       z-index: 9998;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .egg-falling {
+      position: fixed !important;
+      z-index: 100;
+      pointer-events: none;
+      transition: none;
+    }
+
+    #eggSlider {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10001;
+      display: none;
+      width: 200px;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--border);
+      border-radius: 2px;
+      outline: none;
+      cursor: grab;
+    }
+
+    #eggSlider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--text);
+      border: 2px solid var(--bg);
+      cursor: grab;
+      transition: box-shadow 0.2s;
+    }
+
+    #eggSlider::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 20px var(--text);
+    }
+
+    #eggSlider:active::-webkit-slider-thumb {
+      cursor: grabbing;
+    }
+
+    .egg-glitch {
+      animation: eggGlitch 0.1s infinite alternate;
+    }
+
+    @keyframes eggGlitch {
+      0% { filter: hue-rotate(0deg) contrast(1.5); }
+      25% { filter: hue-rotate(90deg) contrast(2); }
+      50% { filter: hue-rotate(180deg) contrast(0.8); }
+      75% { filter: hue-rotate(270deg) contrast(1.5); }
+      100% { filter: hue-rotate(360deg) contrast(1.2); }
+    }
+
+    .egg-fallen-stack {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .egg-fallen-stack > * {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0.85;
+      transform-origin: bottom center;
     }
 
     /* ─── mobile notice ─── */
@@ -517,6 +566,7 @@
     <p>Сайт лучше открывать на компьютере или через «Версия для ПК» в меню браузера. Но вы можете попробовать.</p>
     <button class="mobile-notice__btn" id="mobileTryBtn">Попробовать</button>
   </div>
+  <input type="range" id="eggSlider" min="0" max="360" value="0" step="1" aria-hidden="true">
   <button id="egg" aria-hidden="true"></button>
   <div class="wrapper">
     <div class="top">
@@ -641,12 +691,109 @@
       }
 
       (function egg() {
-        var el = document.getElementById('egg');
-        if (!el) return;
+        var btn = document.getElementById('egg');
+        var slider = document.getElementById('eggSlider');
         var wrapper = document.querySelector('.wrapper');
-        el.addEventListener('click', function() {
-          wrapper.classList.add('wrapper--fall');
-          el.style.pointerEvents = 'none';
+        if (!btn) return;
+
+        btn.addEventListener('click', function() {
+          btn.style.display = 'none';
+          slider.style.display = 'none';
+
+          var els = [
+            document.querySelector('.top'),
+            document.querySelector('.hero'),
+            document.querySelector('.services'),
+            document.querySelector('.process'),
+            document.querySelector('.pages-nav'),
+            document.querySelector('.projects'),
+            document.querySelector('footer')
+          ].filter(Boolean);
+
+          var vh = window.innerHeight;
+          var stackTop = vh - 80;
+          var stackIdx = 0;
+          var done = 0;
+
+          els.forEach(function(el, i) {
+            var rect = el.getBoundingClientRect();
+            var elTop = rect.top;
+            var elLeft = rect.left;
+            var elW = rect.width;
+            var elH = rect.height;
+
+            el.style.position = 'fixed';
+            el.style.top = elTop + 'px';
+            el.style.left = elLeft + 'px';
+            el.style.width = elW + 'px';
+            el.style.margin = '0';
+            el.style.zIndex = 100 + i;
+            el.style.pointerEvents = 'none';
+            el.style.transition = 'none';
+            el.getBoundingClientRect();
+
+            var fallTo = stackTop - stackIdx * 6;
+            var fallBy = fallTo - elTop;
+            var driftX = (Math.random() - 0.5) * 30;
+            var tilt = (Math.random() - 0.5) * 8;
+
+            var dur = 1.4 + Math.random() * 0.8;
+            var eases = [
+              'cubic-bezier(0.22, 1.6, 0.36, 1)',
+              'cubic-bezier(0.34, 1.8, 0.64, 1)',
+              'cubic-bezier(0.68, -0.4, 0.32, 1.4)',
+              'cubic-bezier(0.5, 1.8, 0.5, 0.8)'
+            ];
+
+            setTimeout(function() {
+              el.style.transition = 'transform ' + dur + 's ' + eases[i % eases.length];
+              el.style.transform = 'translateY(' + fallBy + 'px) translateX(' + driftX + 'px) rotate(' + tilt + 'deg)';
+              el.style.opacity = '0.88';
+
+              done++;
+              if (done === els.length) {
+                setTimeout(function() {
+                  slider.style.display = 'block';
+                  slider.style.opacity = '0';
+                  slider.style.transition = 'opacity 0.6s ease';
+                  slider.getBoundingClientRect();
+                  slider.style.opacity = '1';
+                }, 600);
+              }
+            }, i * 200 + Math.random() * 100);
+
+            stackIdx++;
+          });
+        });
+
+        var glitchInterval = null;
+        slider.addEventListener('input', function() {
+          var v = parseFloat(this.value);
+          document.documentElement.style.filter = 'hue-rotate(' + v + 'deg)';
+          if (glitchInterval) {
+            clearInterval(glitchInterval);
+            glitchInterval = null;
+            document.documentElement.classList.remove('egg-glitch');
+          }
+        });
+
+        slider.addEventListener('change', function() {
+          var v = parseFloat(this.value);
+          if (v <= 2 || v >= 358) {
+            document.documentElement.classList.add('egg-glitch');
+            glitchInterval = setInterval(function() {
+              document.documentElement.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg) saturate(' + (2 + Math.random() * 2) + ')';
+            }, 80);
+            setTimeout(function() {
+              if (glitchInterval) {
+                clearInterval(glitchInterval);
+                glitchInterval = null;
+              }
+              document.documentElement.classList.remove('egg-glitch');
+              document.documentElement.style.filter = '';
+              slider.value = '0';
+            }, 5000);
+          }
         });
       })();
 
