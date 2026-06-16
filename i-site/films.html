@@ -122,6 +122,41 @@
       margin-bottom: 24px;
     }
 
+    /* ─── project item ─── */
+    .project-item {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.25s;
+      margin-bottom: 24px;
+    }
+
+    .project-item:hover {
+      border-color: var(--border-hover);
+    }
+
+    .project-item__title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .project-item__title a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .project-item__title a:hover {
+      opacity: 0.7;
+    }
+
+    .project-item__desc {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
     /* ─── film message ─── */
     .film-message {
       border: 1px solid var(--border);
@@ -279,6 +314,12 @@
       .film-message p {
         font-size: 13px;
       }
+      .project-item {
+        padding: 18px 16px;
+      }
+      .project-item__title {
+        font-size: 14px;
+      }
       footer {
         padding-top: 24px;
         font-size: 10px;
@@ -306,6 +347,14 @@
     <p class="page-sub reveal reveal-delay-1">Короткометражки, видеоарт и всё, что мы снимаем</p>
 
     <section class="reveal reveal-delay-2">
+      <h2>Проекты</h2>
+      <div class="project-item">
+        <div class="project-item__title"><a href="https://doinwor.github.io/go-ecosystem/i-site/ema502.html">ЕМА502/ЕЖ3 Петербургское метро | Эпоха уходит →</a></div>
+        <div class="project-item__desc">Короткометражный фильм о последних днях легендарных вагонов.</div>
+      </div>
+    </section>
+
+    <section class="reveal reveal-delay-3">
       <h2>В разработке</h2>
       <div class="film-message">
         <p>Сейчас мы работаем над видеопроектами. Нас в команде не так много человек, но мы стараемся сделать что-то новое и интересное для вас.</p>
