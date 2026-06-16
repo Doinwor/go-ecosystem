@@ -382,20 +382,34 @@
       animation: fallOff 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards !important;
     }
 
-    #eggSlider {
+    /* ─── slider ─── */
+    #eggTrack {
       position: fixed;
       bottom: 40px;
       left: 10%;
       width: 80%;
+      height: 8px;
       z-index: 10001;
+      display: none;
+      background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    #eggSlider {
+      position: fixed;
+      bottom: 34px;
+      left: 10%;
+      width: 80%;
+      z-index: 10002;
       display: none;
       height: 8px;
       -webkit-appearance: none;
       appearance: none;
-      background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
-      border-radius: 4px;
+      background: transparent;
       outline: none;
       cursor: grab;
+      margin: 0;
     }
 
     #eggSlider::-webkit-slider-thumb {
@@ -408,7 +422,24 @@
       border: 3px solid var(--bg);
       cursor: grab;
       box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
-      transition: box-shadow 0.2s;
+    }
+
+    #eggSlider::-webkit-slider-runnable-track {
+      background: transparent;
+      height: 8px;
+    }
+
+    #eggFly {
+      position: fixed;
+      z-index: 10003;
+      display: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--text);
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
+      pointer-events: none;
     }
 
     #eggSlider::-webkit-slider-thumb:hover {
@@ -551,7 +582,9 @@
     <p>Сайт лучше открывать на компьютере или через «Версия для ПК» в меню браузера. Но вы можете попробовать.</p>
     <button class="mobile-notice__btn" id="mobileTryBtn">Попробовать</button>
   </div>
+  <div id="eggTrack"></div>
   <input type="range" id="eggSlider" min="0" max="360" value="0" step="1" aria-hidden="true">
+  <div id="eggFly"></div>
   <button id="egg" aria-hidden="true"></button>
   <div class="wrapper">
     <div class="top">
@@ -678,30 +711,35 @@
       (function egg() {
         var btn = document.getElementById('egg');
         var slider = document.getElementById('eggSlider');
+        var track = document.getElementById('eggTrack');
+        var fly = document.getElementById('eggFly');
         if (!btn) return;
+
+        function showAll() {
+          track.style.display = 'block';
+          slider.style.display = 'block';
+          track.style.opacity = '0';
+          slider.style.opacity = '0';
+          track.style.transition = 'opacity 0.6s ease';
+          slider.style.transition = 'opacity 0.6s ease';
+          track.getBoundingClientRect();
+          slider.getBoundingClientRect();
+          track.style.opacity = '1';
+          slider.style.opacity = '1';
+        }
 
         btn.addEventListener('click', function() {
           btn.style.display = 'none';
-
           var items = [
             '.top', '.hero', '.services',
             '.process', '.pages-nav', '.projects', 'footer'
           ];
-
           items.forEach(function(sel, i) {
             var el = document.querySelector(sel);
             if (!el) return;
             setTimeout(function() {
               el.classList.add('egg-fall');
-              if (i === items.length - 1) {
-                setTimeout(function() {
-                  slider.style.display = 'block';
-                  slider.style.opacity = '0';
-                  slider.style.transition = 'opacity 0.6s ease';
-                  slider.getBoundingClientRect();
-                  slider.style.opacity = '1';
-                }, 500);
-              }
+              if (i === items.length - 1) setTimeout(showAll, 500);
             }, i * 180);
           });
         });
@@ -709,75 +747,70 @@
         var chaosTimer = null;
         var flyTimer = null;
         var eggDoc = document.documentElement;
-        var overDrag = false;
+        var isChaos = false;
 
         slider.addEventListener('input', function() {
+          if (isChaos) return;
           var v = parseFloat(this.value);
           eggDoc.style.backgroundColor = 'hsl(' + v + ', 50%, 50%)';
-          if (chaosTimer) {
-            clearInterval(chaosTimer);
-            chaosTimer = null;
-            clearInterval(flyTimer);
-            flyTimer = null;
-            eggDoc.classList.remove('egg-chaos');
-            slider.classList.remove('egg-thumb-fly');
-            slider.style.left = '10%';
-            overDrag = false;
-          }
         });
 
         slider.addEventListener('change', function() {
+          if (isChaos) return;
           var v = parseFloat(this.value);
-          if ((v <= 1 || v >= 359) && !overDrag) {
-            overDrag = true;
-            eggDoc.classList.add('egg-chaos');
+          if (v <= 1 || v >= 359) {
+            isChaos = true;
 
-            slider.style.bottom = 'auto';
-            var startLeft = parseFloat(slider.style.left) || 10;
-            slider.style.top = '40px';
-            slider.style.left = startLeft + '%';
-            slider.style.width = '80%';
-            var vx = 4, vy = 3;
+            var thumbRect = slider.getBoundingClientRect();
+            var thumbLeft = thumbRect.left + thumbRect.width / 2 - 14;
+            var thumbTop = thumbRect.top - 3;
+
+            slider.style.opacity = '0';
+            slider.style.pointerEvents = 'none';
+
+            fly.style.display = 'block';
+            fly.style.left = thumbLeft + 'px';
+            fly.style.top = thumbTop + 'px';
+
+            var vx = 5 + Math.random() * 4;
+            var vy = 4 + Math.random() * 4;
+            if (Math.random() > 0.5) vx = -vx;
+            if (Math.random() > 0.5) vy = -vy;
+
+            var hue = 0;
 
             flyTimer = setInterval(function() {
-              var rect = slider.getBoundingClientRect();
-              var nl = parseFloat(slider.style.left) || 10;
-              var nt = parseFloat(slider.style.top) || 40;
-              nl += vx * 0.3;
-              nt += vy * 0.3;
-              if (nl <= -10 || nl + parseFloat(slider.style.width) >= 110) vx = -vx;
-              if (nt <= -20 || nt + 50 >= window.innerHeight) vy = -vy;
-              slider.style.left = nl + '%';
-              slider.style.top = nt + 'px';
-              slider.style.transform = 'rotate(' + (vx * 8) + 'deg)';
-            }, 30);
+              var l = parseFloat(fly.style.left) || 0;
+              var t = parseFloat(fly.style.top) || 0;
+              l += vx;
+              t += vy;
+              if (l <= 0 || l + 28 >= window.innerWidth) { vx = -vx; l += vx * 2; }
+              if (t <= 0 || t + 28 >= window.innerHeight) { vy = -vy; t += vy * 2; }
+              fly.style.left = l + 'px';
+              fly.style.top = t + 'px';
+              fly.style.transform = 'rotate(' + (l + t) + 'deg)';
+            }, 16);
 
             chaosTimer = setInterval(function() {
-              eggDoc.style.backgroundColor = 'hsl(' + Math.random() * 360 + ', ' + (50 + Math.random() * 50) + '%, ' + (30 + Math.random() * 40) + '%)';
-              eggDoc.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg) saturate(' + (2 + Math.random() * 4) + ') blur(' + Math.random() * 2 + 'px)';
-            }, 80);
+              hue = (hue + 7) % 360;
+              eggDoc.style.backgroundColor = 'hsl(' + hue + ', 70%, 50%)';
+              eggDoc.style.filter = 'hue-rotate(' + (hue * 2) + 'deg) saturate(' + (2 + Math.sin(hue) * 1.5) + ') contrast(' + (1.5 + Math.cos(hue * 0.7) * 0.5) + ')';
+              fly.style.background = 'hsl(' + (hue + 180) % 360 + ', 80%, 60%)';
+              fly.style.boxShadow = '0 0 30px hsl(' + hue + ', 80%, 60%)';
+            }, 100);
 
             setTimeout(function() {
-              if (chaosTimer) {
-                clearInterval(chaosTimer);
-                chaosTimer = null;
-              }
-              if (flyTimer) {
-                clearInterval(flyTimer);
-                flyTimer = null;
-              }
+              if (chaosTimer) { clearInterval(chaosTimer); chaosTimer = null; }
+              if (flyTimer) { clearInterval(flyTimer); flyTimer = null; }
               eggDoc.classList.remove('egg-chaos');
               eggDoc.style.filter = '';
               eggDoc.style.backgroundColor = '';
-              slider.style.position = '';
-              slider.style.bottom = '';
-              slider.style.top = '';
-              slider.style.left = '';
-              slider.style.transform = '';
-              slider.style.width = '';
+              fly.style.display = 'none';
+              slider.style.opacity = '1';
+              slider.style.pointerEvents = 'auto';
               slider.value = '0';
-              overDrag = false;
-            }, 5000);
+              isChaos = false;
+            }, 8000);
           }
         });
       })();
