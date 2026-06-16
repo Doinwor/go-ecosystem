@@ -342,6 +342,7 @@
       font-weight: 300;
       color: var(--footer-color);
       letter-spacing: 0.05em;
+      position: relative;
     }
 
     footer .go-link {
@@ -353,6 +354,49 @@
     footer .go-link:hover {
       color: var(--text);
     }
+
+    /* ─── easter egg (fall) ─── */
+    @keyframes fallDown {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(120vh); opacity: 0; }
+    }
+
+    .wrapper--fall .hero,
+    .wrapper--fall .services,
+    .wrapper--fall .process,
+    .wrapper--fall .pages-nav,
+    .wrapper--fall .projects {
+      animation: fallDown 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    }
+
+    .wrapper--fall .services { animation-delay: 0.1s; }
+    .wrapper--fall .process { animation-delay: 0.2s; }
+    .wrapper--fall .pages-nav { animation-delay: 0.3s; }
+    .wrapper--fall .projects { animation-delay: 0.4s; }
+
+    .wrapper--fall footer {
+      animation: fallDown 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.5s forwards;
+    }
+
+    .wrapper--fall .top {
+      animation: fallDown 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.05s forwards;
+    }
+
+    #egg {
+      display: inline;
+      width: 0;
+      height: 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      outline: none;
+      opacity: 0;
+    }
+
     /* ─── mobile notice ─── */
     .mobile-notice {
       display: none;
@@ -562,7 +606,7 @@
 
     <footer>
       <a href="https://doinwor.github.io/go-ecosystem/" class="go-link">Проект экосистемы GO</a>
-      &nbsp;·&nbsp; і. · студия · 2026
+      &nbsp;<button id="egg" aria-hidden="true"></button>·&nbsp; і. · студия · 2026
     </footer>
   </div>
 
@@ -593,6 +637,16 @@
       } else if (isMobile) {
         document.getElementById('mobileNotice').style.display = 'none';
       }
+
+      (function egg() {
+        var el = document.getElementById('egg');
+        if (!el) return;
+        var wrapper = document.querySelector('.wrapper');
+        el.addEventListener('click', function() {
+          wrapper.classList.add('wrapper--fall');
+          el.style.pointerEvents = 'none';
+        });
+      })();
 
       (function reveal() {
         var els = document.querySelectorAll('.reveal');
