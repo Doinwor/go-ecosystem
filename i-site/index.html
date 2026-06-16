@@ -383,18 +383,19 @@
     }
 
     #egg {
-      display: inline;
-      width: 0;
-      height: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 40px;
       background: transparent;
       border: none;
       cursor: pointer;
       padding: 0;
       margin: 0;
-      font: inherit;
-      color: inherit;
       outline: none;
       opacity: 0;
+      z-index: 9998;
     }
 
     /* ─── mobile notice ─── */
@@ -516,6 +517,7 @@
     <p>Сайт лучше открывать на компьютере или через «Версия для ПК» в меню браузера. Но вы можете попробовать.</p>
     <button class="mobile-notice__btn" id="mobileTryBtn">Попробовать</button>
   </div>
+  <button id="egg" aria-hidden="true"></button>
   <div class="wrapper">
     <div class="top">
       <div class="back">
@@ -606,7 +608,7 @@
 
     <footer>
       <a href="https://doinwor.github.io/go-ecosystem/" class="go-link">Проект экосистемы GO</a>
-      &nbsp;<button id="egg" aria-hidden="true"></button>·&nbsp; і. · студия · 2026
+      &nbsp;·&nbsp; і. · студия · 2026
     </footer>
   </div>
 
