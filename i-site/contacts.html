@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Бренд — і.</title>
+  <title>Контакты — і.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
@@ -122,118 +122,91 @@
       margin-bottom: 20px;
     }
 
-    section p, section li {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--dim);
-      line-height: 1.8;
-    }
-
-    /* ─── colors ─── */
-    .colors {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .color-swatch {
-      flex: 1;
-      min-width: 100px;
-      border-radius: 12px;
-      padding: 24px 16px;
-      text-align: center;
-      border: 1px solid var(--border);
-    }
-
-    .color-swatch__circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin: 0 auto 12px;
-      border: 1px solid rgba(0,0,0,0.06);
-    }
-
-    .color-swatch__name {
-      font-size: 11px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .color-swatch__hex {
-      font-size: 10px;
-      font-weight: 300;
-      color: var(--muted);
-    }
-
-    /* ─── typography ─── */
-    .type-sample {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      transition: border-color 0.25s;
-    }
-
-    .type-sample:hover {
-      border-color: var(--border-hover);
-    }
-
-    .type-sample__label {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    .type-sample__title {
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      margin-bottom: 4px;
-    }
-
-    .type-sample__body {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--dim);
-      line-height: 1.7;
-    }
-
-    /* ─── grid ─── */
-    .grid-2 {
+    /* ─── contact grid ─── */
+    .contact-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
 
     @media (max-width: 640px) {
-      .grid-2 { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
     }
 
-    .brand-card {
+    .contact-card {
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 24px;
       transition: border-color 0.25s;
     }
 
-    .brand-card:hover {
+    .contact-card:hover {
       border-color: var(--border-hover);
     }
 
-    .brand-card__name {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 6px;
+    .contact-card__label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
     }
 
-    .brand-card__desc {
+    .contact-card__value {
+      font-size: 14px;
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .contact-card__value a {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .contact-card__value a:hover {
+      opacity: 0.6;
+    }
+
+    .contact-card__desc {
       font-size: 12px;
       font-weight: 300;
       color: var(--dim);
+      margin-top: 8px;
       line-height: 1.6;
     }
+
+    /* ─── note ─── */
+    .note {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .note p {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.7;
+    }
+
+    /* ─── reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
 
     /* ─── footer ─── */
     footer {
@@ -254,22 +227,6 @@
     footer .go-link:hover {
       color: var(--text);
     }
-
-    /* ─── reveal ─── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
 
     /* ─── mobile notice ─── */
     .mobile-notice {
@@ -331,70 +288,50 @@
       </button>
     </div>
 
-    <h1 class="reveal">Бренд</h1>
-    <p class="page-sub reveal reveal-delay-1">Визуальный язык студии і.</p>
+    <h1 class="reveal">Контакты</h1>
+    <p class="page-sub reveal reveal-delay-1">Как с нами связаться</p>
 
-    <!-- colors -->
     <section class="reveal reveal-delay-2">
-      <h2>Цвета</h2>
-      <div class="colors">
-        <div class="color-swatch">
-          <div class="color-swatch__circle" style="background: #1a1a1a;"></div>
-          <div class="color-swatch__name">Чёрный</div>
-          <div class="color-swatch__hex">#1a1a1a</div>
+      <h2>Связь</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-card__label">Почта</div>
+          <div class="contact-card__value"><a href="mailto:hello@i.studio">hello@i.studio</a></div>
+          <div class="contact-card__desc">По всем вопросам — пишите, ответим в течение дня.</div>
         </div>
-        <div class="color-swatch">
-          <div class="color-swatch__circle" style="background: #fafaf8;"></div>
-          <div class="color-swatch__name">Фон</div>
-          <div class="color-swatch__hex">#fafaf8</div>
-        </div>
-        <div class="color-swatch">
-          <div class="color-swatch__circle" style="background: #999;"></div>
-          <div class="color-swatch__name">Акцент</div>
-          <div class="color-swatch__hex">#999999</div>
+        <div class="contact-card">
+          <div class="contact-card__label">Telegram</div>
+          <div class="contact-card__value"><a href="https://t.me/i_studio" target="_blank" rel="noopener">@i_studio</a></div>
+          <div class="contact-card__desc">Быстрая связь в мессенджере. Отвечаем быстрее.</div>
         </div>
       </div>
     </section>
 
-    <!-- typography -->
     <section class="reveal">
-      <h2>Типографика</h2>
-      <div class="type-sample">
-        <div class="type-sample__label">Шрифт</div>
-        <div class="type-sample__title">Unbounded</div>
-        <div class="type-sample__body">
-          Используется во всех носителях — от логотипа до интерфейсов.
-          Начертания: от Light (300) до Black (900).
+      <h2>Ещё</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <div class="contact-card__label">GO</div>
+          <div class="contact-card__value"><a href="https://doinwor.github.io/go-ecosystem/" target="_blank" rel="noopener">Экосистема проектов</a></div>
+          <div class="contact-card__desc">Наш проект — главная страница всей экосистемы.</div>
+        </div>
+        <div class="contact-card">
+          <div class="contact-card__label">WAWE</div>
+          <div class="contact-card__value"><a href="https://doinwor.github.io/WAWE-site/" target="_blank" rel="noopener">Музыкальный проект</a></div>
+          <div class="contact-card__desc">Ещё один наш проект — музыкальный плеер.</div>
         </div>
       </div>
     </section>
 
-    <!-- principles -->
     <section class="reveal reveal-delay-1">
-      <h2>Принципы</h2>
-      <div class="grid-2">
-        <div class="brand-card reveal">
-          <div class="brand-card__name">Минимализм</div>
-          <div class="brand-card__desc">Ничего лишнего. Каждый элемент имеет функцию. Пустота — тоже материал.</div>
-        </div>
-        <div class="brand-card reveal reveal-delay-1">
-          <div class="brand-card__name">Контраст</div>
-          <div class="brand-card__desc">Чёрное на белом, белое на чёрном. Без полутонов и компромиссов.</div>
-        </div>
-        <div class="brand-card reveal reveal-delay-2">
-          <div class="brand-card__name">Типографика</div>
-          <div class="brand-card__desc">Шрифт как основа визуального языка. Без иллюстраций и лишней графики.</div>
-        </div>
-        <div class="brand-card reveal reveal-delay-3">
-          <div class="brand-card__name">Постоянство</div>
-          <div class="brand-card__desc">Единый визуальный код во всех проектах студии.</div>
-        </div>
+      <div class="note">
+        <p>Мы открыты к сотрудничеству и новым проектам. Если у вас есть идея или задача — напишите нам, мы обязательно ответим.</p>
       </div>
     </section>
 
     <footer>
       <a href="https://doinwor.github.io/go-ecosystem/" class="go-link">Проект экосистемы GO</a>
-      &nbsp;·&nbsp; і. · бренд · 2026
+      &nbsp;·&nbsp; і. · контакты · 2026
     </footer>
   </div>
 

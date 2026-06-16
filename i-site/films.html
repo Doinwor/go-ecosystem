@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Бренд — і.</title>
+  <title>Фильмы — і.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
@@ -40,7 +40,7 @@
     }
 
     .wrapper {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 80px 24px 40px;
       min-height: 100vh;
@@ -119,121 +119,117 @@
       letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--heading-color);
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
-    section p, section li {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--dim);
-      line-height: 1.8;
+    /* ─── poster grid ─── */
+    .poster-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
     }
 
-    /* ─── colors ─── */
-    .colors {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+    @media (max-width: 768px) {
+      .poster-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    .color-swatch {
-      flex: 1;
-      min-width: 100px;
+    @media (max-width: 480px) {
+      .poster-grid { grid-template-columns: 1fr; }
+    }
+
+    .poster {
+      aspect-ratio: 2 / 3;
+      border: 1px solid var(--border);
       border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       padding: 24px 16px;
       text-align: center;
-      border: 1px solid var(--border);
-    }
-
-    .color-swatch__circle {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin: 0 auto 12px;
-      border: 1px solid rgba(0,0,0,0.06);
-    }
-
-    .color-swatch__name {
-      font-size: 11px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .color-swatch__hex {
-      font-size: 10px;
-      font-weight: 300;
-      color: var(--muted);
-    }
-
-    /* ─── typography ─── */
-    .type-sample {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
       transition: border-color 0.25s;
+      position: relative;
+      overflow: hidden;
     }
 
-    .type-sample:hover {
+    .poster:hover {
       border-color: var(--border-hover);
     }
 
-    .type-sample__label {
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
+    .poster--empty {
+      cursor: default;
     }
 
-    .type-sample__title {
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
+    .poster__icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+      opacity: 0.25;
+    }
+
+    .poster__title {
+      font-size: 12px;
+      font-weight: 500;
       margin-bottom: 4px;
     }
 
-    .type-sample__body {
-      font-size: 14px;
+    .poster__desc {
+      font-size: 10px;
       font-weight: 300;
-      color: var(--dim);
-      line-height: 1.7;
+      color: var(--muted);
+      line-height: 1.5;
     }
 
-    /* ─── grid ─── */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .poster--coming-soon .poster__icon {
+      opacity: 0.15;
     }
 
-    @media (max-width: 640px) {
-      .grid-2 { grid-template-columns: 1fr; }
+    .poster--coming-soon .poster__title {
+      color: var(--muted);
+      font-weight: 300;
     }
 
-    .brand-card {
+    .poster--coming-soon .poster__desc {
+      font-size: 9px;
+    }
+
+    /* ─── empty state ─── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 24px;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      transition: border-color 0.25s;
+      border-radius: 16px;
     }
 
-    .brand-card:hover {
-      border-color: var(--border-hover);
+    .empty-state__icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+      opacity: 0.15;
     }
 
-    .brand-card__name {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .brand-card__desc {
-      font-size: 12px;
+    .empty-state p {
+      font-size: 13px;
       font-weight: 300;
-      color: var(--dim);
-      line-height: 1.6;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto;
     }
+
+    /* ─── reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
 
     /* ─── footer ─── */
     footer {
@@ -254,22 +250,6 @@
     footer .go-link:hover {
       color: var(--text);
     }
-
-    /* ─── reveal ─── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
 
     /* ─── mobile notice ─── */
     .mobile-notice {
@@ -331,70 +311,45 @@
       </button>
     </div>
 
-    <h1 class="reveal">Бренд</h1>
-    <p class="page-sub reveal reveal-delay-1">Визуальный язык студии і.</p>
+    <h1 class="reveal">Фильмы</h1>
+    <p class="page-sub reveal reveal-delay-1">Короткометражки по вселенной Евлампии</p>
 
-    <!-- colors -->
     <section class="reveal reveal-delay-2">
-      <h2>Цвета</h2>
-      <div class="colors">
-        <div class="color-swatch">
-          <div class="color-swatch__circle" style="background: #1a1a1a;"></div>
-          <div class="color-swatch__name">Чёрный</div>
-          <div class="color-swatch__hex">#1a1a1a</div>
+      <h2>В разработке</h2>
+      <div class="poster-grid">
+        <div class="poster poster--coming-soon">
+          <div class="poster__icon">☐</div>
+          <div class="poster__title">Скоро здесь появится фильм</div>
+          <div class="poster__desc">Мы работаем над чем-то интересным</div>
         </div>
-        <div class="color-swatch">
-          <div class="color-swatch__circle" style="background: #fafaf8;"></div>
-          <div class="color-swatch__name">Фон</div>
-          <div class="color-swatch__hex">#fafaf8</div>
+        <div class="poster poster--coming-soon">
+          <div class="poster__icon">☐</div>
+          <div class="poster__title">Скоро здесь появится фильм</div>
+          <div class="poster__desc">Мы работаем над чем-то интересным</div>
         </div>
-        <div class="color-swatch">
-          <div class="color-swatch__circle" style="background: #999;"></div>
-          <div class="color-swatch__name">Акцент</div>
-          <div class="color-swatch__hex">#999999</div>
+        <div class="poster poster--coming-soon">
+          <div class="poster__icon">☐</div>
+          <div class="poster__title">Скоро здесь появится фильм</div>
+          <div class="poster__desc">Мы работаем над чем-то интересным</div>
+        </div>
+        <div class="poster poster--coming-soon">
+          <div class="poster__icon">☐</div>
+          <div class="poster__title">Скоро здесь появится фильм</div>
+          <div class="poster__desc">Мы работаем над чем-то интересным</div>
         </div>
       </div>
     </section>
 
-    <!-- typography -->
     <section class="reveal">
-      <h2>Типографика</h2>
-      <div class="type-sample">
-        <div class="type-sample__label">Шрифт</div>
-        <div class="type-sample__title">Unbounded</div>
-        <div class="type-sample__body">
-          Используется во всех носителях — от логотипа до интерфейсов.
-          Начертания: от Light (300) до Black (900).
-        </div>
-      </div>
-    </section>
-
-    <!-- principles -->
-    <section class="reveal reveal-delay-1">
-      <h2>Принципы</h2>
-      <div class="grid-2">
-        <div class="brand-card reveal">
-          <div class="brand-card__name">Минимализм</div>
-          <div class="brand-card__desc">Ничего лишнего. Каждый элемент имеет функцию. Пустота — тоже материал.</div>
-        </div>
-        <div class="brand-card reveal reveal-delay-1">
-          <div class="brand-card__name">Контраст</div>
-          <div class="brand-card__desc">Чёрное на белом, белое на чёрном. Без полутонов и компромиссов.</div>
-        </div>
-        <div class="brand-card reveal reveal-delay-2">
-          <div class="brand-card__name">Типографика</div>
-          <div class="brand-card__desc">Шрифт как основа визуального языка. Без иллюстраций и лишней графики.</div>
-        </div>
-        <div class="brand-card reveal reveal-delay-3">
-          <div class="brand-card__name">Постоянство</div>
-          <div class="brand-card__desc">Единый визуальный код во всех проектах студии.</div>
-        </div>
+      <div class="empty-state">
+        <div class="empty-state__icon">✦</div>
+        <p>Пока здесь пусто. Мы работаем над новыми короткометражками и скоро покажем их. Следите за обновлениями.</p>
       </div>
     </section>
 
     <footer>
       <a href="https://doinwor.github.io/go-ecosystem/" class="go-link">Проект экосистемы GO</a>
-      &nbsp;·&nbsp; і. · бренд · 2026
+      &nbsp;·&nbsp; і. · фильмы · 2026
     </footer>
   </div>
 

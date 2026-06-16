@@ -257,9 +257,73 @@
     footer .go-link:hover {
       color: var(--text);
     }
+
+    /* ─── reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ─── mobile notice ─── */
+    .mobile-notice {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Unbounded', sans-serif;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .mobile-notice h2 {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .mobile-notice p {
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--dim);
+      max-width: 360px;
+    }
+
+    .mobile-notice .mobile-notice__icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+
+    @media (max-width: 480px) {
+      html { overflow: hidden; height: 100%; width: 100%; position: fixed; }
+      body { overflow: hidden; height: 100%; width: 100%; position: fixed; }
+      .mobile-notice { display: flex; }
+    }
   </style>
 </head>
 <body>
+  <div class="mobile-notice">
+    <div class="mobile-notice__icon">⎔</div>
+    <h2>Ой, это для экрана побольше</h2>
+    <p>Сайт не оптимизирован для телефона. Откройте версию для ПК через меню браузера (⋮ → «Версия для компьютера») или зайдите с ноутбука.</p>
+  </div>
   <div class="wrapper">
     <div class="top">
       <div class="back">
@@ -270,11 +334,11 @@
       </button>
     </div>
 
-    <h1>Цифровой дизайн</h1>
-    <p class="page-sub">Проекты, для которых мы создавали визуальный язык</p>
+    <h1 class="reveal">Цифровой дизайн</h1>
+    <p class="page-sub reveal reveal-delay-1">Проекты, для которых мы создавали визуальный язык</p>
 
     <!-- WAWE -->
-    <section>
+    <section class="reveal reveal-delay-2">
       <div class="project-header">
         <div class="project-header__name"><a href="https://doinwor.github.io/WAWE-site/" target="_blank" rel="noopener">WAWE →</a></div>
         <div class="project-header__tag">музыкальный плеер · 2025–2026</div>
@@ -299,7 +363,7 @@
         </p>
       </div>
 
-      <div class="detail-grid">
+      <div class="detail-grid reveal">
         <div class="detail-card">
           <div class="detail-card__label">Шрифт</div>
           <div class="detail-card__value">Inter — гротеск для интерфейсов. Хорошо читается в маленьких размерах, строгий и современный.</div>
@@ -337,6 +401,24 @@
         document.documentElement.setAttribute('data-theme', next || '');
         localStorage.setItem('i-theme', next || '');
       });
+
+      var isMobile = window.innerWidth < 480 || /Mobi|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+      }
+
+      (function reveal() {
+        var els = document.querySelectorAll('.reveal');
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) e.target.classList.add('visible');
+          });
+        }, { threshold: 0.15 });
+        els.forEach(function(el) { observer.observe(el); });
+      })();
     })();
   </script>
 </body>

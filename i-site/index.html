@@ -248,6 +248,101 @@
       color: var(--arrow-hover);
     }
 
+    /* ─── process ─── */
+    .process {
+      margin-bottom: 80px;
+    }
+
+    .process h2 {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--heading-color);
+      margin-bottom: 24px;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 640px) {
+      .process-grid { grid-template-columns: 1fr; }
+    }
+
+    .process-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      transition: border-color 0.25s;
+    }
+
+    .process-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    .process-card__step {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .process-card__name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .process-card__desc {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.6;
+    }
+
+    /* ─── pages nav ─── */
+    .pages-nav {
+      margin-bottom: 80px;
+    }
+
+    .pages-nav h2 {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--heading-color);
+      margin-bottom: 24px;
+    }
+
+    .pages-nav .services-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    @media (max-width: 640px) {
+      .pages-nav .services-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
     /* ─── footer ─── */
     footer {
       margin-top: auto;
@@ -339,7 +434,7 @@
       </button>
     </div>
 
-    <div class="hero">
+    <div class="hero reveal">
       <h1 class="hero__title">і.</h1>
       <p class="hero__sub">Студия</p>
       <p class="hero__desc">
@@ -347,7 +442,7 @@
       </p>
     </div>
 
-    <div class="services">
+    <div class="services reveal reveal-delay-1">
       <h2>Направления</h2>
       <div class="services-grid">
         <a href="brand.html" class="service-card">
@@ -361,7 +456,51 @@
       </div>
     </div>
 
-    <div class="projects">
+    <div class="process reveal reveal-delay-2">
+      <h2>Процесс</h2>
+      <div class="process-grid">
+        <div class="process-card reveal">
+          <div class="process-card__step">Шаг 1</div>
+          <div class="process-card__name">Брифинг</div>
+          <div class="process-card__desc">Знакомимся с задачей, ищем суть и направление.</div>
+        </div>
+        <div class="process-card reveal reveal-delay-1">
+          <div class="process-card__step">Шаг 2</div>
+          <div class="process-card__name">Концепция</div>
+          <div class="process-card__desc">Находим визуальный язык и собираем第一 impressions.</div>
+        </div>
+        <div class="process-card reveal reveal-delay-2">
+          <div class="process-card__step">Шаг 3</div>
+          <div class="process-card__name">Дизайн</div>
+          <div class="process-card__desc">Прорабатываем детали, адаптируем под носители.</div>
+        </div>
+        <div class="process-card reveal reveal-delay-3">
+          <div class="process-card__step">Шаг 4</div>
+          <div class="process-card__name">Финал</div>
+          <div class="process-card__desc">Сдаём проект и остаёмся на связи.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pages-nav reveal">
+      <h2>О студии</h2>
+      <div class="services-grid">
+        <a href="about.html" class="service-card">
+          <div class="service-card__name">О студии</div>
+          <div class="service-card__desc">Кто мы, философия и подход к работе.</div>
+        </a>
+        <a href="films.html" class="service-card">
+          <div class="service-card__name">Фильмы</div>
+          <div class="service-card__desc">Короткометражки по вселенной Евлампии.</div>
+        </a>
+        <a href="contacts.html" class="service-card">
+          <div class="service-card__name">Контакты</div>
+          <div class="service-card__desc">Как с нами связаться.</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="projects reveal">
       <h2>Проекты</h2>
       <div class="projects-grid">
         <a href="https://sites.google.com/view/evlampia-org/%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F-%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0" target="_blank" rel="noopener" class="project-card">
@@ -369,10 +508,11 @@
           <div class="project-card__desc">Гадания, мистика, вселенная</div>
           <div class="project-card__arrow">→</div>
         </a>
-        <div class="project-card">
+        <a href="films.html" class="project-card">
           <div class="project-card__name">Фильмы</div>
           <div class="project-card__desc">Короткометражки по вселенной Евлампии</div>
-        </div>
+          <div class="project-card__arrow">→</div>
+        </a>
       </div>
     </div>
 
@@ -402,6 +542,16 @@
         document.body.style.overflow = 'hidden';
         document.body.style.position = 'fixed';
       }
+
+      (function reveal() {
+        var els = document.querySelectorAll('.reveal');
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) {
+            if (e.isIntersecting) e.target.classList.add('visible');
+          });
+        }, { threshold: 0.15 });
+        els.forEach(function(el) { observer.observe(el); });
+      })();
     })();
   </script>
 </body>
