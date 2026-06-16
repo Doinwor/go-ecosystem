@@ -465,87 +465,6 @@
       letter-spacing: 0.05em;
     }
 
-    /* ─── slider ─── */
-    #eggTrack {
-      position: fixed;
-      bottom: 40px;
-      left: 10%;
-      width: 80%;
-      height: 8px;
-      z-index: 10001;
-      display: none;
-      background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
-      border-radius: 4px;
-      pointer-events: none;
-    }
-
-    #eggSlider {
-      position: fixed;
-      bottom: 34px;
-      left: 10%;
-      width: 80%;
-      z-index: 10002;
-      display: none;
-      height: 8px;
-      -webkit-appearance: none;
-      appearance: none;
-      background: transparent;
-      outline: none;
-      cursor: grab;
-      margin: 0;
-    }
-
-    #eggSlider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--text);
-      border: 3px solid var(--bg);
-      cursor: grab;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
-    }
-
-    #eggSlider::-webkit-slider-runnable-track {
-      background: transparent;
-      height: 8px;
-    }
-
-    #eggFly {
-      position: fixed;
-      z-index: 10003;
-      display: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--text);
-      border: 3px solid var(--bg);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
-      pointer-events: none;
-    }
-
-    #eggSlider::-webkit-slider-thumb:hover {
-      box-shadow: 0 0 30px var(--text);
-    }
-
-    #eggSlider:active::-webkit-slider-thumb {
-      cursor: grabbing;
-    }
-
-    .egg-chaos {
-      animation: eggChaos 0.06s infinite alternate;
-    }
-
-    @keyframes eggChaos {
-      0% { filter: hue-rotate(0deg) saturate(3) contrast(2) blur(1px); }
-      20% { filter: hue-rotate(72deg) saturate(5) contrast(3) blur(0px); }
-      40% { filter: hue-rotate(144deg) saturate(2) contrast(4) blur(2px); }
-      60% { filter: hue-rotate(216deg) saturate(6) contrast(1.5) blur(0px); }
-      80% { filter: hue-rotate(288deg) saturate(4) contrast(2.5) blur(1px); }
-      100% { filter: hue-rotate(360deg) saturate(3) contrast(3) blur(0px); }
-    }
-
     /* ─── mobile notice ─── */
     .mobile-notice {
       display: none;
@@ -678,8 +597,6 @@
     <button class="egg-key" data-speed="9">9</button>
     <button class="egg-key egg-key--w" data-speed="0">MAX</button>
   </div>
-  <div id="eggTrack"></div>
-  <input type="range" id="eggSlider" min="0" max="360" value="0" step="1" aria-hidden="true">
   <div id="eggFly"></div>
   <button id="egg" aria-hidden="true"></button>
   <div class="wrapper">
@@ -806,27 +723,8 @@
 
       (function egg() {
         var btn = document.getElementById('egg');
-        var slider = document.getElementById('eggSlider');
-        var track = document.getElementById('eggTrack');
-        var fly = document.getElementById('eggFly');
         var dvd = document.getElementById('eggDvd');
         if (!btn) return;
-
-        function showSlider() {
-          dvd.style.display = 'none';
-          if (dvd._timer) { clearInterval(dvd._timer); dvd._timer = null; }
-          if (dvd._stop) dvd._stop();
-          track.style.display = 'block';
-          slider.style.display = 'block';
-          track.style.opacity = '0';
-          slider.style.opacity = '0';
-          track.style.transition = 'opacity 0.6s ease';
-          slider.style.transition = 'opacity 0.6s ease';
-          track.getBoundingClientRect();
-          slider.getBoundingClientRect();
-          track.style.opacity = '1';
-          slider.style.opacity = '1';
-        }
 
         function startDvd() {
           dvd.style.display = 'flex';
@@ -889,8 +787,6 @@
             document.removeEventListener('keydown', keyHandler);
             keys.classList.remove('show');
           };
-          dvd.addEventListener('click', showSlider);
-          setTimeout(showSlider, 14000);
         }
 
         btn.addEventListener('click', function() {
@@ -904,65 +800,6 @@
               if (i === items.length - 1) setTimeout(startDvd, 500);
             }, i * 180);
           });
-        });
-
-        var chaosTimer = null;
-        var flyTimer = null;
-        var eggDoc = document.documentElement;
-        var isChaos = false;
-
-        slider.addEventListener('input', function() {
-          if (isChaos) return;
-          var v = parseFloat(this.value);
-          eggDoc.style.backgroundColor = 'hsl(' + v + ', 50%, 50%)';
-        });
-
-        slider.addEventListener('change', function() {
-          if (isChaos) return;
-          var v = parseFloat(this.value);
-          if (v <= 1 || v >= 359) {
-            isChaos = true;
-            var sr = slider.getBoundingClientRect();
-            var sx = sr.left + sr.width / 2 - 14;
-            var sy = sr.top - 3;
-            slider.style.opacity = '0';
-            slider.style.pointerEvents = 'none';
-            fly.style.display = 'block';
-            fly.style.left = sx + 'px';
-            fly.style.top = sy + 'px';
-            var vx = 5 + Math.random() * 4, vy = 4 + Math.random() * 4;
-            if (Math.random() > 0.5) vx = -vx;
-            if (Math.random() > 0.5) vy = -vy;
-            var hue = 0;
-            flyTimer = setInterval(function() {
-              var l = parseFloat(fly.style.left) || 0;
-              var t = parseFloat(fly.style.top) || 0;
-              l += vx; t += vy;
-              if (l <= 0 || l + 28 >= window.innerWidth) { vx = -vx; l += vx * 2; }
-              if (t <= 0 || t + 28 >= window.innerHeight) { vy = -vy; t += vy * 2; }
-              fly.style.left = l + 'px';
-              fly.style.top = t + 'px';
-              fly.style.transform = 'rotate(' + (l + t) + 'deg)';
-            }, 16);
-            chaosTimer = setInterval(function() {
-              hue = (hue + 7) % 360;
-              eggDoc.style.backgroundColor = 'hsl(' + hue + ', 70%, 50%)';
-              eggDoc.style.filter = 'hue-rotate(' + (hue * 2) + 'deg) saturate(' + (2 + Math.sin(hue) * 1.5) + ') contrast(' + (1.5 + Math.cos(hue * 0.7) * 0.5) + ')';
-              fly.style.background = 'hsl(' + (hue + 180) % 360 + ', 80%, 60%)';
-              fly.style.boxShadow = '0 0 30px hsl(' + hue + ', 80%, 60%)';
-            }, 100);
-            setTimeout(function() {
-              if (chaosTimer) { clearInterval(chaosTimer); chaosTimer = null; }
-              if (flyTimer) { clearInterval(flyTimer); flyTimer = null; }
-              eggDoc.style.filter = '';
-              eggDoc.style.backgroundColor = '';
-              fly.style.display = 'none';
-              slider.style.opacity = '1';
-              slider.style.pointerEvents = 'auto';
-              slider.value = '0';
-              isChaos = false;
-            }, 8000);
-          }
         });
       })();
 
