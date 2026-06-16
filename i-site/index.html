@@ -414,6 +414,57 @@
       50% { filter: brightness(3) saturate(0); }
     }
 
+    /* ─── dvd speed keypad ─── */
+    #eggKeys {
+      position: fixed;
+      bottom: 50%;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      z-index: 10004;
+      display: none;
+      flex-wrap: wrap;
+      width: 180px;
+      gap: 6px;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    #eggKeys.show {
+      display: flex;
+    }
+
+    .egg-key {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Unbounded', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+      opacity: 0.85;
+      transition: opacity 0.15s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    .egg-key:active {
+      opacity: 1;
+      transform: scale(0.92);
+    }
+
+    .egg-key--w {
+      color: var(--dim);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+
     /* ─── slider ─── */
     #eggTrack {
       position: fixed;
@@ -615,6 +666,18 @@
     <button class="mobile-notice__btn" id="mobileTryBtn">Попробовать</button>
   </div>
   <div id="eggDvd"><span>і.</span></div>
+  <div id="eggKeys">
+    <button class="egg-key" data-speed="1">1</button>
+    <button class="egg-key" data-speed="2">2</button>
+    <button class="egg-key" data-speed="3">3</button>
+    <button class="egg-key" data-speed="4">4</button>
+    <button class="egg-key" data-speed="5">5</button>
+    <button class="egg-key" data-speed="6">6</button>
+    <button class="egg-key" data-speed="7">7</button>
+    <button class="egg-key" data-speed="8">8</button>
+    <button class="egg-key" data-speed="9">9</button>
+    <button class="egg-key egg-key--w" data-speed="0">MAX</button>
+  </div>
   <div id="eggTrack"></div>
   <input type="range" id="eggSlider" min="0" max="360" value="0" step="1" aria-hidden="true">
   <div id="eggFly"></div>
@@ -767,19 +830,52 @@
 
         function startDvd() {
           dvd.style.display = 'flex';
+          dvd.style.color = '#000';
+          dvd.style.textShadow = 'none';
           var x = 50, y = 50;
-          var vx = 2.2, vy = 1.8;
+          var baseVx = 2.2, baseVy = 1.8;
+          var speedMul = 1;
+          var vx = baseVx, vy = baseVy;
           var hue = 0;
           dvd.style.left = x + 'px';
           dvd.style.top = y + 'px';
 
+          var keys = document.getElementById('eggKeys');
+          keys.classList.add('show');
+
+          function setSpeed(n) {
+            speedMul = n === 0 ? 4 : n * 0.2 + 0.2;
+            var absVx = Math.abs(baseVx) * speedMul;
+            var absVy = Math.abs(baseVy) * speedMul;
+            vx = vx > 0 ? absVx : -absVx;
+            vy = vy > 0 ? absVy : -absVy;
+          }
+
+          function keyHandler(e) {
+            var k = e.key;
+            if (k >= '0' && k <= '9') {
+              setSpeed(parseInt(k, 10));
+              e.preventDefault();
+            }
+          }
+          document.addEventListener('keydown', keyHandler);
+
+          [].forEach.call(document.querySelectorAll('.egg-key'), function(btn) {
+            btn.addEventListener('click', function() {
+              setSpeed(parseInt(this.getAttribute('data-speed'), 10));
+            });
+            btn.addEventListener('touchend', function(e) {
+              e.preventDefault();
+              setSpeed(parseInt(this.getAttribute('data-speed'), 10));
+            });
+          });
+
           dvd._timer = setInterval(function() {
             x += vx;
             y += vy;
-            var mw = window.innerWidth;
-            var mh = window.innerHeight;
+            var mw = window.innerWidth, mh = window.innerHeight;
 
-            if (x + 60 >= mw) { vx = -Math.abs(vx); x = mw - 60; hue = (hue + 37) % 360; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; if (y <= 0 || y + 60 >= mh) { dvd.classList.add('egg-dvd-corner'); setTimeout(function() { dvd.classList.remove('egg-dvd-corner'); }, 900); } }
+            if (x + 60 >= mw) { vx = -Math.abs(vx); x = mw - 60; hue = (hue + 37) % 360; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; if (y <= 0 || y + 60 >= mh) { dvd.classList.add('egg-dvd-corner'); setTimeout(function() { dvd.classList.remove('egg-dvd-corner'); }, 900); } }
             if (x <= 0) { vx = Math.abs(vx); x = 0; hue = (hue + 37) % 360; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; if (y <= 0 || y + 60 >= mh) { dvd.classList.add('egg-dvd-corner'); setTimeout(function() { dvd.classList.remove('egg-dvd-corner'); }, 900); } }
             if (y + 60 >= mh) { vy = -Math.abs(vy); y = mh - 60; hue = (hue + 37) % 360; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; if (x <= 0 || x + 60 >= mw) { dvd.classList.add('egg-dvd-corner'); setTimeout(function() { dvd.classList.remove('egg-dvd-corner'); }, 900); } }
             if (y <= 0) { vy = Math.abs(vy); y = 0; hue = (hue + 37) % 360; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; if (x <= 0 || x + 60 >= mw) { dvd.classList.add('egg-dvd-corner'); setTimeout(function() { dvd.classList.remove('egg-dvd-corner'); }, 900); } }
@@ -788,7 +884,11 @@
             dvd.style.top = y + 'px';
           }, 16);
 
-          dvd._stop = function() { if (dvd._timer) { clearInterval(dvd._timer); dvd._timer = null; } };
+          dvd._stop = function() {
+            if (dvd._timer) { clearInterval(dvd._timer); dvd._timer = null; }
+            document.removeEventListener('keydown', keyHandler);
+            keys.classList.remove('show');
+          };
           dvd.addEventListener('click', showSlider);
           setTimeout(showSlider, 14000);
         }
