@@ -370,50 +370,101 @@
     }
 
     .mobile-notice h2 {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 900;
       letter-spacing: -0.02em;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
     .mobile-notice p {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 300;
       line-height: 1.8;
       color: var(--dim);
-      max-width: 360px;
+      max-width: 340px;
     }
 
-    .mobile-notice .mobile-notice__icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-      opacity: 0.3;
+    .mobile-notice__btn {
+      margin-top: 24px;
+      font-family: 'Unbounded', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text);
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 10px 28px;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: border-color 0.25s;
+    }
+
+    .mobile-notice__btn:hover {
+      border-color: var(--border-hover);
     }
 
     @media (max-width: 480px) {
-      html {
-        overflow: hidden;
-        height: 100%;
-        width: 100%;
-        position: fixed;
-      }
-      body {
-        overflow: hidden;
-        height: 100%;
-        width: 100%;
-        position: fixed;
-      }
       .mobile-notice {
         display: flex;
+      }
+      .wrapper {
+        padding: 40px 16px 32px;
+      }
+      .top {
+        margin-bottom: 32px;
+      }
+      .hero {
+        margin-bottom: 48px;
+      }
+      .hero__title {
+        font-size: 36px;
+      }
+      .hero__desc {
+        font-size: 13px;
+        max-width: 100%;
+      }
+      .services {
+        margin-bottom: 48px;
+      }
+      .service-card,
+      .project-card,
+      .process-card {
+        padding: 18px 16px;
+      }
+      .service-card__desc,
+      .process-card__desc {
+        font-size: 11px;
+      }
+      .project-card__name {
+        font-size: 16px;
+      }
+      .process {
+        margin-bottom: 48px;
+      }
+      .pages-nav .services-grid {
+        grid-template-columns: 1fr;
+      }
+      .pages-nav {
+        margin-bottom: 48px;
+      }
+      .projects {
+        margin-bottom: 48px;
+      }
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+      footer {
+        padding-top: 24px;
+        font-size: 10px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="mobile-notice">
-    <div class="mobile-notice__icon">⎔</div>
-    <h2>Ой, это для экрана побольше</h2>
-    <p>Спасибо, что заглянули! Наш сайт пока не дружит с телефонами — он создан для компьютера. Пожалуйста, откройте версию для ПК через меню браузера (⋮ → «Версия для компьютера») или зайдите с ноутбука. Благодарим за понимание :)</p>
+  <div class="mobile-notice" id="mobileNotice">
+    <h2>На телефоне может быть нестабильно</h2>
+    <p>Сайт лучше открывать на компьютере или через «Версия для ПК» в меню браузера. Но вы можете попробовать.</p>
+    <button class="mobile-notice__btn" id="mobileTryBtn">Попробовать</button>
   </div>
   <div class="wrapper">
     <div class="top">
@@ -523,11 +574,15 @@
       });
 
       var isMobile = window.innerWidth < 480 || /Mobi|Android/i.test(navigator.userAgent);
-      if (isMobile) {
-        document.addEventListener('touchmove', function(e) { e.preventDefault(); }, { passive: false });
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
+      if (isMobile && !sessionStorage.getItem('i-mobile-dismiss')) {
+        var notice = document.getElementById('mobileNotice');
+        var btn = document.getElementById('mobileTryBtn');
+        btn.addEventListener('click', function() {
+          notice.style.display = 'none';
+          sessionStorage.setItem('i-mobile-dismiss', '1');
+        });
+      } else if (isMobile) {
+        document.getElementById('mobileNotice').style.display = 'none';
       }
 
       (function reveal() {
