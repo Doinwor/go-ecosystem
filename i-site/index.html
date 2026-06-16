@@ -382,6 +382,38 @@
       animation: fallOff 0.9s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards !important;
     }
 
+    /* ─── DVD screensaver ─── */
+    #eggDvd {
+      position: fixed;
+      z-index: 10000;
+      display: none;
+      font-family: 'Unbounded', sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #fff;
+      pointer-events: none;
+      user-select: none;
+      width: 60px;
+      height: 60px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #eggDvd span {
+      line-height: 1;
+    }
+
+    .egg-dvd-corner {
+      animation: dvdFlash 0.3s ease 3;
+    }
+
+    @keyframes dvdFlash {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(3) saturate(0); }
+    }
+
     /* ─── slider ─── */
     #eggTrack {
       position: fixed;
@@ -582,6 +614,7 @@
     <p>Сайт лучше открывать на компьютере или через «Версия для ПК» в меню браузера. Но вы можете попробовать.</p>
     <button class="mobile-notice__btn" id="mobileTryBtn">Попробовать</button>
   </div>
+  <div id="eggDvd"><span>і.</span></div>
   <div id="eggTrack"></div>
   <input type="range" id="eggSlider" min="0" max="360" value="0" step="1" aria-hidden="true">
   <div id="eggFly"></div>
@@ -713,9 +746,13 @@
         var slider = document.getElementById('eggSlider');
         var track = document.getElementById('eggTrack');
         var fly = document.getElementById('eggFly');
+        var dvd = document.getElementById('eggDvd');
         if (!btn) return;
 
-        function showAll() {
+        function showSlider() {
+          dvd.style.display = 'none';
+          if (dvd._timer) { clearInterval(dvd._timer); dvd._timer = null; }
+          if (dvd._stop) dvd._stop();
           track.style.display = 'block';
           slider.style.display = 'block';
           track.style.opacity = '0';
@@ -728,18 +765,43 @@
           slider.style.opacity = '1';
         }
 
+        function startDvd() {
+          dvd.style.display = 'flex';
+          var x = 50, y = 50;
+          var vx = 2.2, vy = 1.8;
+          var hue = 0;
+          dvd.style.left = x + 'px';
+          dvd.style.top = y + 'px';
+
+          dvd._timer = setInterval(function() {
+            x += vx;
+            y += vy;
+            var mw = window.innerWidth;
+            var mh = window.innerHeight;
+
+            if (x + 60 >= mw) { vx = -Math.abs(vx); x = mw - 60; hue = (hue + 37) % 360; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; if (y <= 0 || y + 60 >= mh) { dvd.classList.add('egg-dvd-corner'); setTimeout(function() { dvd.classList.remove('egg-dvd-corner'); }, 900); } }
+            if (x <= 0) { vx = Math.abs(vx); x = 0; hue = (hue + 37) % 360; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; if (y <= 0 || y + 60 >= mh) { dvd.classList.add('egg-dvd-corner'); setTimeout(function() { dvd.classList.remove('egg-dvd-corner'); }, 900); } }
+            if (y + 60 >= mh) { vy = -Math.abs(vy); y = mh - 60; hue = (hue + 37) % 360; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; if (x <= 0 || x + 60 >= mw) { dvd.classList.add('egg-dvd-corner'); setTimeout(function() { dvd.classList.remove('egg-dvd-corner'); }, 900); } }
+            if (y <= 0) { vy = Math.abs(vy); y = 0; hue = (hue + 37) % 360; dvd.style.color = 'hsl(' + hue + ', 80%, 60%)'; dvd.style.textShadow = '0 0 20px hsla(' + hue + ', 80%, 60%, 0.6)'; if (x <= 0 || x + 60 >= mw) { dvd.classList.add('egg-dvd-corner'); setTimeout(function() { dvd.classList.remove('egg-dvd-corner'); }, 900); } }
+
+            dvd.style.left = x + 'px';
+            dvd.style.top = y + 'px';
+          }, 16);
+
+          dvd._stop = function() { if (dvd._timer) { clearInterval(dvd._timer); dvd._timer = null; } };
+          dvd.addEventListener('click', showSlider);
+          setTimeout(showSlider, 14000);
+        }
+
         btn.addEventListener('click', function() {
           btn.style.display = 'none';
-          var items = [
-            '.top', '.hero', '.services',
-            '.process', '.pages-nav', '.projects', 'footer'
-          ];
+          var items = ['.top', '.hero', '.services', '.process', '.pages-nav', '.projects', 'footer'];
           items.forEach(function(sel, i) {
             var el = document.querySelector(sel);
             if (!el) return;
             setTimeout(function() {
               el.classList.add('egg-fall');
-              if (i === items.length - 1) setTimeout(showAll, 500);
+              if (i === items.length - 1) setTimeout(startDvd, 500);
             }, i * 180);
           });
         });
@@ -760,37 +822,28 @@
           var v = parseFloat(this.value);
           if (v <= 1 || v >= 359) {
             isChaos = true;
-
-            var thumbRect = slider.getBoundingClientRect();
-            var thumbLeft = thumbRect.left + thumbRect.width / 2 - 14;
-            var thumbTop = thumbRect.top - 3;
-
+            var sr = slider.getBoundingClientRect();
+            var sx = sr.left + sr.width / 2 - 14;
+            var sy = sr.top - 3;
             slider.style.opacity = '0';
             slider.style.pointerEvents = 'none';
-
             fly.style.display = 'block';
-            fly.style.left = thumbLeft + 'px';
-            fly.style.top = thumbTop + 'px';
-
-            var vx = 5 + Math.random() * 4;
-            var vy = 4 + Math.random() * 4;
+            fly.style.left = sx + 'px';
+            fly.style.top = sy + 'px';
+            var vx = 5 + Math.random() * 4, vy = 4 + Math.random() * 4;
             if (Math.random() > 0.5) vx = -vx;
             if (Math.random() > 0.5) vy = -vy;
-
             var hue = 0;
-
             flyTimer = setInterval(function() {
               var l = parseFloat(fly.style.left) || 0;
               var t = parseFloat(fly.style.top) || 0;
-              l += vx;
-              t += vy;
+              l += vx; t += vy;
               if (l <= 0 || l + 28 >= window.innerWidth) { vx = -vx; l += vx * 2; }
               if (t <= 0 || t + 28 >= window.innerHeight) { vy = -vy; t += vy * 2; }
               fly.style.left = l + 'px';
               fly.style.top = t + 'px';
               fly.style.transform = 'rotate(' + (l + t) + 'deg)';
             }, 16);
-
             chaosTimer = setInterval(function() {
               hue = (hue + 7) % 360;
               eggDoc.style.backgroundColor = 'hsl(' + hue + ', 70%, 50%)';
@@ -798,11 +851,9 @@
               fly.style.background = 'hsl(' + (hue + 180) % 360 + ', 80%, 60%)';
               fly.style.boxShadow = '0 0 30px hsl(' + hue + ', 80%, 60%)';
             }, 100);
-
             setTimeout(function() {
               if (chaosTimer) { clearInterval(chaosTimer); chaosTimer = null; }
               if (flyTimer) { clearInterval(flyTimer); flyTimer = null; }
-              eggDoc.classList.remove('egg-chaos');
               eggDoc.style.filter = '';
               eggDoc.style.backgroundColor = '';
               fly.style.display = 'none';
