@@ -122,39 +122,74 @@
       margin-bottom: 24px;
     }
 
-    /* ─── project item ─── */
-    .project-item {
+    /* ─── project poster ─── */
+    .project-poster {
+      display: block;
+      text-decoration: none;
+      color: inherit;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
+      border-radius: 16px;
+      overflow: hidden;
       transition: border-color 0.25s;
       margin-bottom: 24px;
     }
 
-    .project-item:hover {
+    .project-poster:hover {
       border-color: var(--border-hover);
     }
 
-    .project-item__title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 6px;
+    .project-poster__image {
+      aspect-ratio: 2 / 3;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #1a1a2e, #16213e, #0f3460);
+      padding: 32px;
+      text-align: center;
+      position: relative;
     }
 
-    .project-item__title a {
-      color: var(--text);
-      text-decoration: none;
+    .project-poster__image-inner {
+      color: rgba(255,255,255,0.9);
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.6;
+      letter-spacing: 0.02em;
     }
 
-    .project-item__title a:hover {
+    .project-poster__image-inner strong {
+      display: block;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .project-poster__image-inner span {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
       opacity: 0.7;
+      margin-top: 12px;
+      letter-spacing: 0.05em;
     }
 
-    .project-item__desc {
+    .project-poster__caption {
+      padding: 16px 20px;
       font-size: 12px;
       font-weight: 300;
       color: var(--dim);
       line-height: 1.6;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-poster__caption strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
     }
 
     /* ─── film message ─── */
@@ -320,6 +355,15 @@
       .project-item__title {
         font-size: 14px;
       }
+      .project-poster__image {
+        padding: 24px 16px;
+      }
+      .project-poster__image-inner strong {
+        font-size: 15px;
+      }
+      .project-poster__image-inner {
+        font-size: 12px;
+      }
       footer {
         padding-top: 24px;
         font-size: 10px;
@@ -348,9 +392,18 @@
 
     <section class="reveal reveal-delay-2">
       <h2>Проекты</h2>
-      <div class="project-item">
-        <div class="project-item__title"><a href="https://doinwor.github.io/go-ecosystem/i-site/ema502.html">ЕМА502/ЕЖ3 Петербургское метро | Эпоха уходит →</a></div>
-        <div class="project-item__desc">Короткометражный фильм о последних днях легендарных вагонов.</div>
+      <div class="project-poster">
+        <a href="https://doinwor.github.io/go-ecosystem/i-site/ema502.html" class="project-poster__image">
+          <div class="project-poster__image-inner">
+            <strong>ЕМА502 / ЕЖ3</strong>
+            Петербургское метро<br>Эпоха уходит
+            <span>короткометражный фильм</span>
+          </div>
+        </a>
+        <div class="project-poster__caption">
+          <strong>ЕМА502/ЕЖ3 Петербургское метро | Эпоха уходит</strong>
+          Короткометражный фильм о последних днях легендарных вагонов.
+        </div>
       </div>
     </section>
 
