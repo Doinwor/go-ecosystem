@@ -373,11 +373,18 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .egg-falling {
+    .egg-card {
       position: fixed !important;
       z-index: 100;
       pointer-events: none;
+      margin: 0 !important;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      overflow: hidden;
       transition: none;
+      opacity: 1;
     }
 
     #eggSlider {
@@ -418,33 +425,15 @@
     }
 
     .egg-glitch {
-      animation: eggGlitch 0.1s infinite alternate;
+      animation: eggGlitch 0.08s infinite alternate;
     }
 
     @keyframes eggGlitch {
-      0% { filter: hue-rotate(0deg) contrast(1.5); }
-      25% { filter: hue-rotate(90deg) contrast(2); }
-      50% { filter: hue-rotate(180deg) contrast(0.8); }
-      75% { filter: hue-rotate(270deg) contrast(1.5); }
-      100% { filter: hue-rotate(360deg) contrast(1.2); }
-    }
-
-    .egg-fallen-stack {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      z-index: 100;
-      pointer-events: none;
-    }
-
-    .egg-fallen-stack > * {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      opacity: 0.85;
-      transform-origin: bottom center;
+      0% { filter: hue-rotate(0deg) saturate(3) contrast(2); }
+      25% { filter: hue-rotate(90deg) saturate(4) contrast(3); }
+      50% { filter: hue-rotate(180deg) saturate(2) contrast(1.5); }
+      75% { filter: hue-rotate(270deg) saturate(5) contrast(2.5); }
+      100% { filter: hue-rotate(360deg) saturate(3) contrast(1.8); }
     }
 
     /* ─── mobile notice ─── */
@@ -693,104 +682,126 @@
       (function egg() {
         var btn = document.getElementById('egg');
         var slider = document.getElementById('eggSlider');
-        var wrapper = document.querySelector('.wrapper');
         if (!btn) return;
 
         btn.addEventListener('click', function() {
           btn.style.display = 'none';
-          slider.style.display = 'none';
 
-          var els = [
-            document.querySelector('.top'),
-            document.querySelector('.hero'),
-            document.querySelector('.services'),
-            document.querySelector('.process'),
-            document.querySelector('.pages-nav'),
-            document.querySelector('.projects'),
-            document.querySelector('footer')
-          ].filter(Boolean);
+          var selectors = [
+            '.top', '.hero', '.services',
+            '.process', '.pages-nav', '.projects', 'footer'
+          ];
 
-          var vh = window.innerHeight;
-          var stackTop = vh - 80;
-          var stackIdx = 0;
-          var done = 0;
+          var els = [];
+          selectors.forEach(function(s) {
+            var el = document.querySelector(s);
+            if (el) els.push(el);
+          });
+
+          if (!els.length) return;
+          var docEl = document.documentElement;
+          var vw = docEl.clientWidth;
+          var vh = docEl.clientHeight;
+          var gap = 6;
+
+          var totalH = 0;
+          els.forEach(function(el) { totalH += el.offsetHeight; });
+
+          var cardH = Math.min(70, (vh - 100) / els.length - gap);
+          if (cardH < 40) cardH = 40;
+
+          var stackBottom = vh - 40;
+          var stackTop = stackBottom - els.length * (cardH + gap) + gap;
+          if (stackTop < 20) {
+            cardH = Math.max(30, (vh - 40 - 20 - gap * (els.length - 1)) / els.length);
+            stackTop = 20;
+          }
+
+          var wrapper = document.querySelector('.wrapper');
+          if (wrapper) wrapper.style.opacity = '0';
 
           els.forEach(function(el, i) {
             var rect = el.getBoundingClientRect();
-            var elTop = rect.top;
-            var elLeft = rect.left;
-            var elW = rect.width;
-            var elH = rect.height;
+            var w = el.offsetWidth || vw - 48;
+            if (w > vw - 32) w = vw - 32;
 
-            el.style.position = 'fixed';
-            el.style.top = elTop + 'px';
-            el.style.left = elLeft + 'px';
-            el.style.width = elW + 'px';
-            el.style.margin = '0';
-            el.style.zIndex = 100 + i;
-            el.style.pointerEvents = 'none';
-            el.style.transition = 'none';
-            el.getBoundingClientRect();
+            var card = document.createElement('div');
+            card.className = 'egg-card';
+            card.style.top = rect.top + 'px';
+            card.style.left = Math.max(16, (vw - w) / 2) + 'px';
+            card.style.width = w + 'px';
+            card.style.height = rect.height + 'px';
+            card.textContent = el.textContent || '';
+            card.style.padding = '20px 24px';
+            card.style.fontSize = '11px';
+            card.style.fontWeight = '300';
+            card.style.color = 'var(--dim)';
+            card.style.lineHeight = '1.4';
+            card.style.display = 'flex';
+            card.style.alignItems = 'center';
+            document.body.appendChild(card);
 
-            var fallTo = stackTop - stackIdx * 6;
-            var fallBy = fallTo - elTop;
-            var driftX = (Math.random() - 0.5) * 30;
-            var tilt = (Math.random() - 0.5) * 8;
+            var targetY = stackTop + i * (cardH + gap);
+            var distY = targetY - rect.top;
+            var driftX = (Math.random() - 0.5) * 16;
+            var tilt = (Math.random() - 0.5) * 4;
 
-            var dur = 1.4 + Math.random() * 0.8;
+            var dur = 1.2 + Math.random() * 1.0;
             var eases = [
-              'cubic-bezier(0.22, 1.6, 0.36, 1)',
-              'cubic-bezier(0.34, 1.8, 0.64, 1)',
-              'cubic-bezier(0.68, -0.4, 0.32, 1.4)',
-              'cubic-bezier(0.5, 1.8, 0.5, 0.8)'
+              'cubic-bezier(0.5, 1.2, 0.5, 1)',
+              'cubic-bezier(0.34, 1.6, 0.64, 1)',
+              'cubic-bezier(0.22, 1.4, 0.36, 1)',
+              'cubic-bezier(0.6, 1.8, 0.4, 0.8)',
+              'cubic-bezier(0.3, 1.5, 0.7, 1)',
+              'cubic-bezier(0.5, 1.0, 0.5, 1.4)',
+              'cubic-bezier(0.4, 1.7, 0.6, 0.9)'
             ];
 
-            setTimeout(function() {
-              el.style.transition = 'transform ' + dur + 's ' + eases[i % eases.length];
-              el.style.transform = 'translateY(' + fallBy + 'px) translateX(' + driftX + 'px) rotate(' + tilt + 'deg)';
-              el.style.opacity = '0.88';
+            card.getBoundingClientRect();
 
-              done++;
-              if (done === els.length) {
+            setTimeout(function() {
+              card.style.transition = 'transform ' + dur + 's ' + eases[i % eases.length];
+              card.style.transform = 'translateY(' + distY + 'px) translateX(' + driftX + 'px) rotate(' + tilt + 'deg)';
+
+              if (i === els.length - 1) {
                 setTimeout(function() {
                   slider.style.display = 'block';
                   slider.style.opacity = '0';
                   slider.style.transition = 'opacity 0.6s ease';
                   slider.getBoundingClientRect();
                   slider.style.opacity = '1';
-                }, 600);
+                }, dur * 1000 + 400);
               }
-            }, i * 200 + Math.random() * 100);
-
-            stackIdx++;
+            }, i * 180 + Math.random() * 120);
           });
         });
 
         var glitchInterval = null;
+        var eggDoc = document.documentElement;
         slider.addEventListener('input', function() {
           var v = parseFloat(this.value);
-          document.documentElement.style.filter = 'hue-rotate(' + v + 'deg)';
+          eggDoc.style.filter = 'hue-rotate(' + v + 'deg)';
           if (glitchInterval) {
             clearInterval(glitchInterval);
             glitchInterval = null;
-            document.documentElement.classList.remove('egg-glitch');
+            eggDoc.classList.remove('egg-glitch');
           }
         });
 
         slider.addEventListener('change', function() {
           var v = parseFloat(this.value);
           if (v <= 2 || v >= 358) {
-            document.documentElement.classList.add('egg-glitch');
+            eggDoc.classList.add('egg-glitch');
             glitchInterval = setInterval(function() {
-              document.documentElement.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg) saturate(' + (2 + Math.random() * 2) + ')';
+              eggDoc.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg) saturate(' + (2 + Math.random() * 3) + ')';
             }, 80);
             setTimeout(function() {
               if (glitchInterval) {
                 clearInterval(glitchInterval);
                 glitchInterval = null;
               }
-              document.documentElement.classList.remove('egg-glitch');
-              document.documentElement.style.filter = '';
+              eggDoc.classList.remove('egg-glitch');
+              eggDoc.style.filter = '';
               slider.value = '0';
             }, 5000);
           }
