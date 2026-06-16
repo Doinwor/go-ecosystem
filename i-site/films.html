@@ -122,97 +122,36 @@
       margin-bottom: 24px;
     }
 
-    /* ─── poster grid ─── */
-    .poster-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    @media (max-width: 768px) {
-      .poster-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 480px) {
-      .poster-grid { grid-template-columns: 1fr; }
-    }
-
-    .poster {
-      aspect-ratio: 2 / 3;
+    /* ─── film message ─── */
+    .film-message {
       border: 1px solid var(--border);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
+      border-radius: 16px;
+      padding: 48px 40px;
       text-align: center;
       transition: border-color 0.25s;
-      position: relative;
-      overflow: hidden;
     }
 
-    .poster:hover {
+    .film-message:hover {
       border-color: var(--border-hover);
     }
 
-    .poster--empty {
-      cursor: default;
-    }
-
-    .poster__icon {
-      font-size: 28px;
+    .film-message p {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.9;
       margin-bottom: 12px;
-      opacity: 0.25;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .poster__title {
+    .film-message__thanks {
       font-size: 12px;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-
-    .poster__desc {
-      font-size: 10px;
-      font-weight: 300;
+      font-weight: 400;
       color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .poster--coming-soon .poster__icon {
-      opacity: 0.15;
-    }
-
-    .poster--coming-soon .poster__title {
-      color: var(--muted);
-      font-weight: 300;
-    }
-
-    .poster--coming-soon .poster__desc {
-      font-size: 9px;
-    }
-
-    /* ─── empty state ─── */
-    .empty-state {
-      text-align: center;
-      padding: 60px 24px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-    }
-
-    .empty-state__icon {
-      font-size: 40px;
-      margin-bottom: 16px;
-      opacity: 0.15;
-    }
-
-    .empty-state p {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 400px;
-      margin: 0 auto;
+      margin-top: 20px;
+      letter-spacing: 0.03em;
     }
 
     /* ─── reveal ─── */
@@ -316,34 +255,10 @@
 
     <section class="reveal reveal-delay-2">
       <h2>В разработке</h2>
-      <div class="poster-grid">
-        <div class="poster poster--coming-soon">
-          <div class="poster__icon">☐</div>
-          <div class="poster__title">Скоро здесь появится фильм</div>
-          <div class="poster__desc">Мы работаем над чем-то интересным</div>
-        </div>
-        <div class="poster poster--coming-soon">
-          <div class="poster__icon">☐</div>
-          <div class="poster__title">Скоро здесь появится фильм</div>
-          <div class="poster__desc">Мы работаем над чем-то интересным</div>
-        </div>
-        <div class="poster poster--coming-soon">
-          <div class="poster__icon">☐</div>
-          <div class="poster__title">Скоро здесь появится фильм</div>
-          <div class="poster__desc">Мы работаем над чем-то интересным</div>
-        </div>
-        <div class="poster poster--coming-soon">
-          <div class="poster__icon">☐</div>
-          <div class="poster__title">Скоро здесь появится фильм</div>
-          <div class="poster__desc">Мы работаем над чем-то интересным</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="reveal">
-      <div class="empty-state">
-        <div class="empty-state__icon">✦</div>
-        <p>Пока здесь пусто. Мы работаем над новыми проектами и скоро покажем их. Следите за обновлениями.</p>
+      <div class="film-message">
+        <p>Сейчас мы работаем над видеопроектами. Нас в команде не так много человек, но мы стараемся сделать что-то новое и интересное для вас.</p>
+        <p>Как только будет готов первый проект — он сразу появится здесь. Следите за обновлениями.</p>
+        <p class="film-message__thanks">Спасибо, что вы с нами. Мы это ценим.</p>
       </div>
     </section>
 
