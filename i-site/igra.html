@@ -29,9 +29,9 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .menu-btn-play:hover{color:#ffd700;border-color:#ffd700;background:#2a2218;box-shadow:0 0 30px rgba(255,215,0,.1)}
 .menu-btn-sub{color:#8b7b6a;border-color:#3d3224;font-size:13px}
 .menu-btn-sub:hover{color:#ff6b35;border-color:#ff6b3566}
-.menu-settings-line{display:inline-block;margin-top:16px;padding:6px 16px;background:#1a130e;border-radius:30px;border:1px solid #3d3224;color:#8b7b6a;font-size:18px;cursor:pointer;transition:all .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
-.menu-settings-line:hover{color:#d4c4a8;border-color:#8b6b40;background:#221a14}
-.menu-settings-line:active{transform:scale(.9)}
+.menu-settings-line{display:inline-flex;align-items:center;gap:8px;margin-top:16px;padding:6px 16px;background:#1a130e;border-radius:30px;border:1px solid #3d3224;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
+.menu-settings-line span{cursor:pointer;transition:all .2s}
+.menu-settings-line span:hover{color:#d4c4a8}
 .menu-stats-line{font-size:11px;color:#8b7b6a;margin-top:10px;text-align:center}
 .menu-credits{color:#4a3a2a;font-size:14px;position:absolute;bottom:30px}
 .menu-credits a{color:#8b6b40;text-decoration:none;transition:color .2s}
@@ -43,7 +43,15 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .ach-screen-sub{font-size:14px;color:#8b7b6a;margin-bottom:20px}
 .ach-list{width:100%;max-width:420px;display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
 .ach-item{background:#1f1814;border-radius:16px;padding:10px 14px;display:flex;align-items:center;gap:12px;border:2px solid #3d3224;transition:all .2s}
-.ach-item.unlocked{border-color:#ffd70066;background:#2a2218}
+.ach-item.t-normal{border-left:4px solid #44dd88}
+.ach-item.t-hard{border-left:4px solid #ffd700}
+.ach-item.t-extreme{border-left:4px solid #ff6b35}
+.ach-item.t-epic{border-left:4px solid #bb66ff}
+.ach-item.unlocked{background:#2a2218}
+.ach-item.unlocked.t-normal{border-color:#44dd8866}
+.ach-item.unlocked.t-hard{border-color:#ffd70066}
+.ach-item.unlocked.t-extreme{border-color:#ff6b3566}
+.ach-item.unlocked.t-epic{border-color:#bb66ff66}
 .ach-icon{font-size:28px;width:40px;text-align:center}
 .ach-info{flex:1}
 .ach-name{color:#d4c4a8;font-weight:bold;font-size:14px}
@@ -383,17 +391,17 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 <div class="menu-screen" id="menuScreen">
 	<div class="menu-icon">🐹</div>
 	<div class="menu-title">Крот-собиратель</div>
-	<div class="menu-sub" id="menuSub">Стучи по кротам, собирай коллекцию!</div>
+	<div class="menu-sub" id="menuSub">Бесконечная шахта · коллекция · достижения</div>
 	<div class="menu-btn-group">
-		<button class="menu-btn menu-btn-play" id="playBtn">▶ ПРОДОЛЖИТЬ</button>
-		<button class="menu-btn menu-btn-sub" id="newGameBtn">🔄 Новая игра</button>
-		<button class="menu-btn" id="menuAchBtn">🏆 Достижения</button>
+		<button class="menu-btn menu-btn-play" id="playBtn">▶ ИГРАТЬ</button>
 		<button class="menu-btn" id="menuProfileBtn">👤 Профиль</button>
-		<button class="menu-btn menu-btn-sub" id="modeToggleBtn">🎯 Рекорд</button>
-		<button class="menu-btn menu-btn-sub" id="menuBackBtn">← На сайт</button>
+		<button class="menu-btn menu-btn-sub" id="menuBackBtn">← Назад</button>
 	</div>
 	<div class="menu-stats-line" id="menuStatsLine">🏆 0/15 · 🌱 Новичок</div>
-	<div class="menu-settings-line" id="menuSoundBtn" role="button" tabindex="0">🔊</div>
+	<div class="menu-settings-line">
+		<span id="menuSoundBtn" role="button" tabindex="0">🔊</span>
+		<span id="modeToggleBtn" style="cursor:pointer;color:#6a5a4a;font-size:11px;margin-left:8px">🎯 Рекорд</span>
+	</div>
 	<div class="menu-credits">Сделано студией <a href="index.html" class="menu-credit-link">i.</a></div>
 </div>
 
@@ -813,7 +821,7 @@ var ACHIEVEMENTS=[
 
 // DOM
 var D=function(id){return document.getElementById(id);};
-var menuScreen=D('menuScreen'),playBtn=D('playBtn'),menuSoundBtn=D('menuSoundBtn'),menuAchBtn=D('menuAchBtn');
+var menuScreen=D('menuScreen'),playBtn=D('playBtn'),menuSoundBtn=D('menuSoundBtn');
 var achScreen=D('achScreen'),achList=D('achList'),achCloseBtn=D('achCloseBtn'),achProgress=D('achProgress'),achHint=D('achHint');
 var certScreen=D('certScreen'),certCode=D('certCode'),certCloseBtn=D('certCloseBtn'),certScore=D('certScore'),certAchs=D('certAchs'),certCombo=D('certCombo'),certShovel=D('certShovel'),certCollection=D('certCollection');
 var achBanner=D('achBanner'),achBannerIcon=D('achBannerIcon'),achBannerTitle=D('achBannerTitle'),achBannerDesc=D('achBannerDesc');
@@ -1100,8 +1108,10 @@ function renderAchievements(){
 		if(!u&&(a.tier==='extreme'||a.tier==='epic')) continue;
 		shown++;
 		var div=document.createElement('div');
-		div.className='ach-item'+(u?' unlocked':'');
-		div.innerHTML='<div class="ach-icon">'+(a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+(u?'✅ ':'')+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div><div class="ach-status">'+(u?'✅':'🔒')+'</div>';
+		var tierClass='t-'+(a.tier||'normal');
+		div.className='ach-item '+(u?'unlocked ':'')+tierClass;
+		var tierIcon=a.tier==='epic'?'💜':a.tier==='extreme'?'❤️':a.tier==='hard'?'💛':'💚';
+		div.innerHTML='<div class="ach-icon">'+(a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+(u?'✅ ':'')+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div><div class="ach-status">'+tierIcon+'</div>';
 		achList.appendChild(div);
 	}
 	achProgress.textContent=totalAll+' / '+total;
@@ -1111,7 +1121,9 @@ function renderAchievements(){
 	var visibleAchs=ACHIEVEMENTS.filter(function(a){return (a.tier!=='extreme'&&a.tier!=='epic')||unlocked[a.id];});
 	var rem=visibleAchs.filter(function(a){return a.mine===99||(a.mine<=currentMine+1&&!unlocked[a.id]);}).length;
 	hintParts.push('🔍 осталось '+rem);
-	hintParts.push('🟢норм/🟡сложн · 🔴экстрим/🟣эпик скрыты');
+	var tierLabels={normal:'🟢норм',hard:'🟡сложн',extreme:'🔴экстрим',epic:'🟣эпик'};
+	var tierHint=Object.values(tierLabels).join(' · ');
+	hintParts.push(tierHint+' скрыты');
 	achHint.textContent=hintParts.join(' · ');
 	achHint.className='ach-hint revealed';
 }
@@ -1721,8 +1733,6 @@ playBtn.addEventListener('click',startGame);
 playBtn.addEventListener('touchstart',function(e){e.preventDefault();startGame();},{passive:false});
 menuSoundBtn.addEventListener('click',toggleSound);
 menuSoundBtn.addEventListener('touchstart',function(e){e.preventDefault();toggleSound();},{passive:false});
-menuAchBtn.addEventListener('click',openAchievements);
-menuAchBtn.addEventListener('touchstart',function(e){e.preventDefault();openAchievements();},{passive:false});
 D('menuProfileBtn').addEventListener('click',function(){menuScreen.classList.add('hidden');openProfile();});
 D('menuProfileBtn').addEventListener('touchstart',function(e){e.preventDefault();menuScreen.classList.add('hidden');openProfile();},{passive:false});
 var menuBackBtn=D('menuBackBtn');
@@ -1734,8 +1744,6 @@ soundBtn.addEventListener('click',toggleSound);
 soundBtn.addEventListener('touchstart',function(e){e.preventDefault();toggleSound();},{passive:false});
 D('profileFullResetBtn').addEventListener('click',fullReset);
 D('profileFullResetBtn').addEventListener('touchstart',function(e){e.preventDefault();fullReset();},{passive:false});
-D('newGameBtn').addEventListener('click',startFreshGame);
-D('newGameBtn').addEventListener('touchstart',function(e){e.preventDefault();startFreshGame();},{passive:false});
 
 // Profile/Shop handlers
 function openProfile(){profileScreen.classList.add('show');renderProfile();renderShop();}
