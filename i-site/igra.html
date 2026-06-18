@@ -62,6 +62,24 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .ach-banner-desc{color:#c49a6c;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:640px){.ach-banner{right:10px;left:10px;max-width:none}.ach-banner.show{top:10px}}
 
+.cert-screen{position:fixed;inset:0;z-index:9999;background:rgba(13,10,8,.95);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .6s ease}
+.cert-screen.show{opacity:1;pointer-events:auto}
+.cert-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);border:2px solid #ffd700;border-radius:24px;padding:36px 32px;max-width:420px;width:100%;text-align:center;box-shadow:0 0 60px rgba(255,215,0,.08),inset 0 0 60px rgba(255,215,0,.02);position:relative}
+.cert-wrap::before{content:'';position:absolute;inset:-1px;border-radius:24px;padding:1px;background:linear-gradient(135deg,#ffd70066,#ff8c0044,#ffd70022);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.cert-badge{font-size:56px;margin-bottom:8px}
+.cert-title{font-size:28px;font-weight:900;color:#ffd700;letter-spacing:-.02em;margin-bottom:4px}
+.cert-sub{font-size:12px;color:#8b7b6a;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.cert-body{font-size:13px;color:#c4b8a8;line-height:1.7;margin-bottom:20px}
+.cert-body span{color:#ffd700;font-weight:600}
+.cert-code{background:#1a130e;border-radius:16px;padding:14px;margin-bottom:16px;border:1px solid #3d3224}
+.cert-code-label{font-size:9px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.2em;margin-bottom:6px}
+.cert-code-value{font-size:20px;font-weight:700;color:#ffd700;letter-spacing:.15em;font-family:monospace}
+.cert-footer{font-size:11px;color:#8b7b6a;line-height:1.6;margin-bottom:20px}
+.cert-footer strong{color:#c49a6c}
+.cert-close-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:14px;font-weight:bold;padding:10px 30px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation;font-family:'Unbounded',sans-serif}
+.cert-close-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
+@media(max-width:500px){.cert-wrap{padding:28px 20px}.cert-badge{font-size:44px}.cert-title{font-size:24px}.cert-code-value{font-size:17px}}
+
 .gameover-screen{position:absolute;inset:0;z-index:300;background:rgba(13,10,8,.95);border-radius:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .gameover-screen.show{box-shadow:inset 0 0 80px rgba(255,215,0,.05)}
 .gameover-screen.show{opacity:1;pointer-events:auto}
@@ -177,6 +195,27 @@ body{padding:4px}.game-wrap{padding:6px;border-radius:18px}.grid{gap:4px;padding
 		<div class="ach-banner-desc" id="achBannerDesc">Описание</div>
 	</div>
 </div>
+<div class="cert-screen" id="certScreen">
+	<div class="cert-wrap">
+		<div class="cert-badge">🏆</div>
+		<div class="cert-title">Сертификат</div>
+		<div class="cert-sub">Студия i. подтверждает</div>
+		<div class="cert-body">
+			Что игрок <span id="certPlayer">Крот-собиратель</span>
+			выполнил <strong>все</strong> достижения в игре
+			«Крот-собиратель» и вошёл в историю студии.
+		</div>
+		<div class="cert-code">
+			<div class="cert-code-label">Код подтверждения</div>
+			<div class="cert-code-value" id="certCode">------</div>
+		</div>
+		<div class="cert-footer">
+			Отправьте этот код на почту студии, чтобы получить место
+			на стене почёта: <strong>studio.i@go-ecosystem.ru</strong>
+		</div>
+		<button class="cert-close-btn" id="certCloseBtn">Закрыть</button>
+	</div>
+</div>
 <div class="game-wrap" id="gameWrap">
 	<div class="levelup-flash" id="levelFlash"></div>
 	<div class="gameover-screen" id="gameoverScreen">
@@ -245,13 +284,18 @@ var ACHIEVEMENTS=[
 	{id:'strategist',name:'📊 Стратег',desc:'Достичь 5 уровня',icon:'📊'},
 	{id:'collector_1',name:'⭐ Коллекционер',desc:'Собрать коллекцию 1 раз',icon:'⭐'},
 	{id:'collector_3',name:'🌟 Мастер-коллекционер',desc:'Собрать коллекцию 3 раза',icon:'🌟'},
-	{id:'digger',name:'🗡️ Землекоп',desc:'Прокачать лопату до 10',icon:'🗡️'}
+	{id:'digger',name:'🗡️ Землекоп',desc:'Прокачать лопату до 10',icon:'🗡️'},
+	// Секретные достижения
+	{id:'secret_legend',name:'👑 Легенда',desc:'Собрать коллекцию 10 раз',icon:'👑',secret:true},
+	{id:'secret_invincible',name:'🛡️ Неуязвимый',desc:'Достичь 10 уровня',icon:'🛡️',secret:true},
+	{id:'secret_master',name:'💫 Мастер игры',desc:'Заработать 10000 монет всего',icon:'💫',secret:true}
 ];
 
 // DOM
 var D=function(id){return document.getElementById(id);};
 var menuScreen=D('menuScreen'),playBtn=D('playBtn'),menuSoundBtn=D('menuSoundBtn'),menuAchBtn=D('menuAchBtn');
 var achScreen=D('achScreen'),achList=D('achList'),achCloseBtn=D('achCloseBtn'),achProgress=D('achProgress');
+var certScreen=D('certScreen'),certCode=D('certCode'),certCloseBtn=D('certCloseBtn');
 var achBanner=D('achBanner'),achBannerIcon=D('achBannerIcon'),achBannerTitle=D('achBannerTitle'),achBannerDesc=D('achBannerDesc');
 var gameWrap=D('gameWrap'),gridEl=D('grid'),levelFlash=D('levelFlash');
 var gameoverScreen=D('gameoverScreen'),goScore=D('goScore'),goCollection=D('goCollection'),goHighScore=D('goHighScore'),goMenuBtn=D('goMenuBtn'),goAgainBtn=D('goAgainBtn'),gameoverAchs=D('gameoverAchs');
@@ -289,12 +333,16 @@ function saveData(){
 }
 
 function getUnlockedCount(){var n=0;for(var id in ACHIEVEMENTS)if(unlocked[ACHIEVEMENTS[id].id])n++;return n;}
+function getMainUnlockedCount(){var n=0;for(var i=0;i<ACHIEVEMENTS.length;i++){var a=ACHIEVEMENTS[i];if(!a.secret&&unlocked[a.id])n++;}return n;}
+function getTotalMain(){var n=0;for(var i=0;i<ACHIEVEMENTS.length;i++){if(!ACHIEVEMENTS[i].secret)n++;}return n;}
+function allMainUnlocked(){return getMainUnlockedCount()>=getTotalMain();}
 
 function checkAchievements(){
 	var prevCount=getUnlockedCount();
 	for(var i=0;i<ACHIEVEMENTS.length;i++){
 		var a=ACHIEVEMENTS[i];
 		if(unlocked[a.id]) continue;
+		if(a.secret&&!allMainUnlocked()) continue;
 		var ok=false;
 		switch(a.id){
 			case 'first_click': ok=stats.totalClicks>=1; break;
@@ -309,11 +357,15 @@ function checkAchievements(){
 			case 'collector_1': ok=stats.collectionCount>=1; break;
 			case 'collector_3': ok=stats.collectionCount>=3; break;
 			case 'digger': ok=stats.maxShovel>=10; break;
+			case 'secret_legend': ok=stats.collectionCount>=10; break;
+			case 'secret_invincible': ok=stats.maxLevel>=10; break;
+			case 'secret_master': ok=stats.totalEarnings>=10000; break;
 		}
 		if(ok){
 			unlocked[a.id]=true;
 			showAchievementBanner(a);
 			saveData();
+			if(getUnlockedCount()>=ACHIEVEMENTS.length) showCertificate();
 		}
 	}
 	if(getUnlockedCount()>prevCount) updateAchUI();
@@ -330,6 +382,23 @@ function showAchievementBanner(a){
 	soundRare();
 }
 
+function generateCertCode(){
+	var raw=stats.totalEarnings+'|'+stats.totalClicks+'|'+stats.collectionCount+'|'+stats.bestCombo+'|'+stats.maxShovel+'|i2026';
+	var h=0;for(var i=0;i<raw.length;i++){h=((h<<5)-h)+raw.charCodeAt(i);h&=h;}
+	var code='CRT-'+Math.abs(h).toString(16).toUpperCase().slice(0,6)+'-'+stats.collectionCount+'X';
+	return code;
+}
+function showCertificate(){
+	certCode.textContent=generateCertCode();
+	certScreen.classList.add('show');
+	tryVibrate(100);
+	soundRare();
+	setTimeout(function(){soundRare();},400);
+}
+function closeCertificate(){
+	certScreen.classList.remove('show');
+}
+
 function openAchievements(){
 	renderAchievements();
 	achScreen.classList.add('show');
@@ -341,13 +410,16 @@ function closeAchievements(){
 
 function renderAchievements(){
 	achList.innerHTML='';
-	var n=0;
+	var n=0,showSecrets=allMainUnlocked();
 	for(var i=0;i<ACHIEVEMENTS.length;i++){
 		var a=ACHIEVEMENTS[i],u=unlocked[a.id];
+		if(a.secret&&!showSecrets&&!u) continue;
 		if(u) n++;
 		var div=document.createElement('div');
 		div.className='ach-item'+(u?' unlocked':'');
-		div.innerHTML='<div class="ach-icon">'+(a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+(u?'✅ ':'')+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div><div class="ach-status">'+(u?'✅':'🔒')+'</div>';
+		var name=a.secret&&!u?'🔮 ???':(u?'✅ ':'')+a.name;
+		var desc=a.secret&&!u?'Выполните все основные достижения':a.desc;
+		div.innerHTML='<div class="ach-icon">'+(a.secret&&!u?'🔮':a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+name+'</div><div class="ach-desc">'+desc+'</div></div><div class="ach-status">'+(u?'✅':a.secret?'🔮':'🔒')+'</div>';
 		achList.appendChild(div);
 	}
 	achProgress.textContent=n+' / '+ACHIEVEMENTS.length;
@@ -686,6 +758,7 @@ menuAchBtn.addEventListener('click',openAchievements);
 var menuBackBtn=D('menuBackBtn');
 menuBackBtn.addEventListener('click',function(){window.location.href='index.html';});
 achCloseBtn.addEventListener('click',closeAchievements);
+certCloseBtn.addEventListener('click',closeCertificate);
 shovelBtn.addEventListener('click',upgradeShovel);
 luckBtn.addEventListener('click',upgradeLuck);
 autoBtn.addEventListener('click',upgradeAuto);
