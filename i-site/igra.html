@@ -324,10 +324,15 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 /* Profile card */
 .profile-card{background:linear-gradient(145deg,#2a2218,#1f1810);border-radius:24px;padding:20px;text-align:center;border:2px solid #3d3224;margin-bottom:14px}
 .profile-avatar-frame{width:80px;height:80px;border-radius:50%;margin:0 auto 8px;background:linear-gradient(135deg,#3d3224,#1a130e);display:flex;align-items:center;justify-content:center;border:3px solid #8b6b40;transition:border-color .3s,box-shadow .3s;position:relative}
-.profile-avatar-frame.frame-copper{border-color:#cd7f32;box-shadow:0 0 20px rgba(205,127,50,.2)}
-.profile-avatar-frame.frame-silver{border-color:#c0c0c0;box-shadow:0 0 20px rgba(192,192,192,.2)}
-.profile-avatar-frame.frame-gold{border-color:#ffd700;box-shadow:0 0 30px rgba(255,215,0,.25);animation:frameGoldPulse 3s ease-in-out infinite}
-.profile-avatar-frame.frame-crystal{border-color:transparent;background:linear-gradient(135deg,#3d3224,#1a130e);box-shadow:0 0 40px rgba(255,255,255,.08),inset 0 0 30px rgba(255,255,255,.03);animation:frameCrystalShift 4s ease-in-out infinite}
+.profile-avatar-frame.frame-default{border-color:#6a5a4a;box-shadow:0 0 16px rgba(180,150,100,.08);background:linear-gradient(135deg,#2a2218,#1f1810);position:relative}
+.profile-avatar-frame.frame-default::before{content:'';position:absolute;inset:-2px;border-radius:50%;background:radial-gradient(circle at 50% 30%,rgba(180,150,100,.06),transparent 70%);animation:frameDefaultBreathe 4s ease-in-out infinite;pointer-events:none}
+.profile-avatar-frame.frame-copper{border-color:#cd7f32;box-shadow:0 0 25px rgba(205,127,50,.15);background:linear-gradient(135deg,#2a1a0a,#1f1810);position:relative}
+.profile-avatar-frame.frame-copper::before{content:'';position:absolute;inset:-2px;border-radius:50%;background:linear-gradient(135deg,rgba(205,127,50,0),rgba(205,127,50,.08),rgba(205,127,50,0));animation:frameCopperShimmer 3s ease-in-out infinite;pointer-events:none}
+.profile-avatar-frame.frame-silver{border-color:#c0c0c0;box-shadow:0 0 25px rgba(192,192,192,.12);background:linear-gradient(135deg,#1a1a22,#1f1810);position:relative}
+.profile-avatar-frame.frame-silver::before{content:'✦';position:absolute;font-size:10px;color:#ccc;animation:frameSilverDrift 3s ease-in-out infinite;pointer-events:none}
+.profile-avatar-frame.frame-silver::after{content:'✦';position:absolute;font-size:6px;color:#aaa;animation:frameSilverDrift2 3.5s ease-in-out infinite;pointer-events:none}
+.profile-avatar-frame.frame-gold{border-color:#ffd700;box-shadow:0 0 30px rgba(255,215,0,.25);animation:frameGoldPulse 3s ease-in-out infinite;background:linear-gradient(135deg,#2a2210,#1f1810)}
+.profile-avatar-frame.frame-crystal{border-color:transparent;background:linear-gradient(135deg,#2a1a1a,#1f1810);box-shadow:0 0 40px rgba(255,200,100,.08),inset 0 0 30px rgba(255,200,100,.03);position:relative}
 .profile-avatar-frame.frame-crystal::before{content:'';position:absolute;inset:-3px;border-radius:50%;padding:3px;background:conic-gradient(#ff6,#6ff,#f6f,#ff6);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:frameCrystalSpin 3s linear infinite;pointer-events:none}
 .profile-avatar-frame.frame-neon{border-color:#0ff;box-shadow:0 0 30px rgba(0,255,255,.3),0 0 60px rgba(0,255,255,.1);animation:frameNeonPulse 1.5s ease-in-out infinite}
 .profile-avatar-frame.frame-flame{border-color:#ff4400;box-shadow:0 0 40px rgba(255,68,0,.25);animation:frameFlameFlicker .8s ease-in-out infinite}
@@ -344,6 +349,10 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 .profile-avatar-frame.frame-prism::after{content:'🌈';position:absolute;font-size:14px;animation:framePrismFloat 3s ease-in-out infinite;pointer-events:none}
 .profile-avatar-frame.frame-void{border-color:#000;box-shadow:0 0 60px rgba(0,0,0,.4);background:radial-gradient(circle,#0a001a,#000)}
 .profile-avatar-frame.frame-void::before{content:'';position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle at 30% 40%,rgba(50,0,80,.2),transparent 60%);animation:frameVoidSwirl 6s linear infinite;pointer-events:none}
+@keyframes frameDefaultBreathe{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+@keyframes frameCopperShimmer{0%{opacity:.3;transform:translateX(-30px) rotate(0deg)}50%{opacity:.8;transform:translateX(10px) rotate(180deg)}100%{opacity:.3;transform:translateX(-30px) rotate(360deg)}}
+@keyframes frameSilverDrift{0%,100%{opacity:.2;transform:translateY(0) translateX(0)}50%{opacity:.7;transform:translateY(-8px) translateX(4px)}}
+@keyframes frameSilverDrift2{0%,100%{opacity:.15;transform:translateY(0) translateX(0) scale(.8)}50%{opacity:.5;transform:translateY(6px) translateX(-4px) scale(1.2)}}
 @keyframes frameGoldPulse{0%,100%{box-shadow:0 0 30px rgba(255,215,0,.25)}50%{box-shadow:0 0 50px rgba(255,215,0,.4)}}
 @keyframes frameCrystalShift{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15)}}
 @keyframes frameCrystalSpin{to{transform:rotate(360deg)}}
@@ -702,7 +711,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 <!-- Chest result overlay -->
 <!-- Chest closed overlay (tap to open) -->
 <div class="chest-closed-overlay" id="chestClosedOverlay">
-	<div class="chest-closed-wrap" id="chestClosedWrap" onclick="onChestClosedTap()">
+	<div class="chest-closed-wrap" id="chestClosedWrap">
 		<div class="chest-closed-icon" id="chestClosedIcon">📦</div>
 		<div class="chest-closed-name" id="chestClosedName">Сундук</div>
 		<div class="chest-closed-hint">👆 нажмите, чтобы открыть</div>
@@ -2119,6 +2128,8 @@ holdToBuy(D('shopStreakBtn'),function(){if(hasStreak||score<800)return;score-=80
 holdToBuy(D('shopExpBtn'),function(){if(hasExpBoost||score<1200)return;score-=1200;hasExpBoost=true;saveData();updateUI();setMessage('📊 Ускоренный рост куплен!');soundGold();renderShop();});
 
 // Chest & collectibles handlers
+chestClosedOverlay.addEventListener('click',function(){onChestClosedTap();});
+chestClosedOverlay.addEventListener('touchstart',function(e){if(e.target===chestClosedOverlay||chestClosedOverlay.contains(e.target)){e.preventDefault();onChestClosedTap();}},{passive:false});
 chestResultBtn.addEventListener('click',hideChestResult);
 chestResultBtn.addEventListener('touchstart',function(e){e.preventDefault();hideChestResult();},{passive:false});
 collectiblesCloseBtn.addEventListener('click',closeCollectibles);
