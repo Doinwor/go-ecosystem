@@ -393,6 +393,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<button id="pauseMenuBtn">🏠 В меню</button>
 		<button class="pause-danger" id="pauseSiteBtn">← На сайт</button>
 	</div>
+	<div style="margin-top:20px;font-size:10px;color:#3d3224;text-align:center">🧹 <span id="fullResetBtn" style="cursor:pointer;color:#6a5a4a;text-decoration:underline;text-underline-offset:3px">сбросить весь прогресс</span></div>
 </div>
 
 <script>
@@ -965,7 +966,7 @@ function handleCellClick(idx){
 		collection.push(item.emoji);
 		var ct=getCollectionTarget();
 		if(collection.length<ct){setMessage('⭐ Новый предмет! '+item.emoji);tryVibrate(30);spawnParticles(pos.x,pos.y,'#ffd700',20);}
-		if(collection.length>=ct){finishGame();}
+		if(collection.length>=ct){setMessage('🎉 Коллекция собрана! Играй дальше');}
 	}else if(pts>0){
 		clicksSinceNewItem++;
 	}
@@ -1090,6 +1091,14 @@ var _resetGame=function(){
 }
 var resetGame=_resetGame;
 
+function fullReset(){
+	if(!confirm('❓ Сбросить ВЕСЬ прогресс (достижения, предметы, статистику)? Это необратимо.'))return;
+	if(!confirm('⚠️ Точно? Все достижения и собранные предметы будут потеряны.'))return;
+	localStorage.removeItem('moleData');
+	localStorage.removeItem('moleGameState');
+	location.reload();
+}
+
 function backToMenu(){
 	gameoverScreen.classList.remove('show');
 	pauseOverlay.classList.remove('show');
@@ -1177,6 +1186,8 @@ boostBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeBoo
 timeBtn.addEventListener('click',upgradeTime);
 timeBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeTime();},{passive:false});
 resetBtn.addEventListener('touchstart',function(e){e.preventDefault();resetGame();},{passive:false});
+D('fullResetBtn').addEventListener('click',fullReset);
+D('fullResetBtn').addEventListener('touchstart',function(e){e.preventDefault();fullReset();},{passive:false});
 goMenuBtn.addEventListener('click',backToMenu);
 goMenuBtn.addEventListener('touchstart',function(e){e.preventDefault();backToMenu();},{passive:false});
 goAgainBtn.addEventListener('click',playAgain);
