@@ -55,7 +55,9 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .ach-hint{font-size:11px;color:#6a5a4a;text-align:center;margin-bottom:14px;padding:6px 12px;background:#1a130e;border-radius:30px;border:1px solid #3d3224;transition:all .3s}
 .ach-hint.revealed{color:#ffd700;border-color:#ffd70044;background:#2a2218;text-shadow:0 0 10px rgba(255,215,0,.1)}
 .ach-close-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:16px;font-weight:bold;padding:12px 40px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation}
-.ach-close-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
+.ach-close-btn:active,.ach-profile-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
+.ach-btn-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.ach-profile-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:16px;font-weight:bold;padding:12px 40px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation}
 .ach-tier-section{background:#1a1510;border:2px solid #3d3224;border-radius:16px;padding:12px;margin-bottom:10px;width:100%;max-width:420px}
 .ach-tier-section.locked{opacity:.4}
 .ach-tier-header{display:flex;justify-content:space-between;align-items:center;font-size:16px;font-weight:bold;color:#ffd700;margin-bottom:4px}
@@ -223,14 +225,14 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .profile-btn{background:linear-gradient(135deg,#3d3224,#1a130e);border:none;color:#ffd700;font-size:16px;padding:4px 10px;border-radius:30px;cursor:pointer;transition:all .1s;touch-action:manipulation;line-height:1;box-shadow:inset 0 2px 5px rgba(0,0,0,.7)}
 .profile-btn:active{transform:scale(.9)}
 
-.bottom-panel{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:12px;gap:6px}
+.bottom-panel{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:12px;gap:6px;min-height:36px}
 .stats{display:flex;gap:6px;background:#1a130e;padding:3px 10px;border-radius:30px;color:#d4c4a8;font-weight:bold;font-size:14px;flex-wrap:wrap;align-items:center}
 .stats span{margin:0 2px}
 .shop{display:flex;gap:4px;flex-wrap:wrap}
 .shop-btn{background:#3d3224;border:none;color:#d4c4a8;font-weight:bold;font-size:12px;padding:7px 10px;border-radius:30px;box-shadow:0 4px 0 #1a130e,0 4px 8px rgba(0,0,0,.4);cursor:pointer;transition:all .06s linear;touch-action:manipulation;min-width:36px;text-align:center}
 .shop-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
 .shop-btn:disabled{opacity:.35;transform:translateY(4px);box-shadow:0 1px 0 #1a130e;pointer-events:none}
-.message{background:#1a130ecc;padding:4px 12px;border-radius:30px;color:#d4c4a8;font-weight:bold;font-size:13px;min-width:80px;text-align:center;flex:0 1 auto}
+.message{background:#1a130ecc;padding:4px 12px;border-radius:30px;color:#d4c4a8;font-weight:bold;font-size:13px;min-width:120px;text-align:center;flex:0 0 auto;white-space:nowrap}
 
 @media(max-width:640px){
 .menu-title{font-size:28px}.menu-icon{font-size:56px}
@@ -240,7 +242,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 @media(max-width:500px){
 body{padding:6px}.game-wrap{padding:10px;border-radius:28px}.grid{gap:6px;padding:5px;border-radius:20px}
 .cell{font-size:24px;border-radius:14px;min-height:60px;min-width:60px}.cell .mole{font-size:28px;border-radius:14px}
-.stats{font-size:11px;padding:2px 6px}.shop-btn{font-size:11px;padding:8px 10px;min-width:36px}.message{font-size:11px;padding:2px 8px;min-width:60px}
+.stats{font-size:11px;padding:2px 6px}.shop-btn{font-size:11px;padding:8px 10px;min-width:36px}.message{font-size:11px;padding:2px 8px;min-width:90px}
 .top-panel{font-size:13px;gap:3px}.top-panel span,.sound-btn{padding:3px 7px;font-size:12px}.top-panel .high-score,.top-panel .level-badge{font-size:10px}.combo-display{font-size:11px;padding:2px 6px;min-width:36px}
 .bottom-panel{gap:4px;margin-top:8px}.shop{gap:3px}.stats{gap:3px}
 .menu-title{font-size:28px}.menu-icon{font-size:56px}.menu-btn-play{font-size:15px;padding:12px 30px}.ach-screen-title{font-size:24px}
@@ -272,10 +274,10 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 .is-mobile .cell .mole{border-radius:14px;font-size:26px}
 .is-mobile .top-panel{font-size:12px;padding-bottom:4px}
 .is-mobile .top-panel span,.is-mobile .sound-btn,.is-mobile .pause-btn{padding:2px 6px;font-size:11px}
-.is-mobile .bottom-panel{margin-top:8px;gap:4px}
-.is-mobile .stats{font-size:11px;padding:2px 6px;gap:3px}
+.is-mobile .bottom-panel{margin-top:8px;gap:4px;justify-content:center;flex-direction:column;align-items:stretch}
+.is-mobile .stats{font-size:11px;padding:2px 6px;gap:3px;justify-content:center;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .is-mobile .profile-btn{font-size:13px;padding:3px 8px}
-.is-mobile .message{font-size:11px;padding:2px 6px;min-width:50px}
+.is-mobile .message{font-size:11px;padding:2px 6px;min-width:80px;text-align:center;flex:0 0 auto;margin:0 auto;display:inline-block}
 .is-mobile .combo-display{font-size:11px;padding:2px 6px;min-width:30px}
 .is-mobile .ach-banner{right:10px;left:10px;max-width:none;top:-80px}
 .is-mobile .ach-banner.show{top:10px}
@@ -385,6 +387,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<button class="menu-btn menu-btn-play" id="playBtn">▶ ПРОДОЛЖИТЬ</button>
 		<button class="menu-btn menu-btn-sub" id="newGameBtn">🔄 Новая игра</button>
 		<button class="menu-btn" id="menuAchBtn">🏆 Достижения</button>
+		<button class="menu-btn" id="menuProfileBtn">👤 Профиль</button>
 		<button class="menu-btn menu-btn-sub" id="modeToggleBtn">🎯 Рекорд</button>
 		<button class="menu-btn menu-btn-sub" id="menuBackBtn">← На сайт</button>
 	</div>
@@ -398,7 +401,10 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="ach-screen-sub" id="achProgress">0 / 12</div>
 	<div class="ach-hint" id="achHint">🔮 Собери все 12 — откроются секретные</div>
 	<div class="ach-list" id="achList"></div>
-	<button class="ach-close-btn" id="achCloseBtn">Закрыть</button>
+	<div class="ach-btn-row">
+		<button class="ach-close-btn" id="achCloseBtn">Закрыть</button>
+		<button class="ach-profile-btn" id="achProfileBtn">👤 Профиль</button>
+	</div>
 </div>
 
 <div class="ach-banner" id="achBanner">
@@ -511,6 +517,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="profile-header">
 		<button class="profile-tab active" data-tab="profile">👤 Профиль</button>
 		<button class="profile-tab" data-tab="shop">🛒 Магазин</button>
+		<button class="profile-close" id="profileAchBtn" title="Достижения">🏆</button>
 		<button class="profile-close" id="profileCloseBtn">✕</button>
 	</div>
 	<div class="profile-body">
@@ -1280,7 +1287,7 @@ function getCellCenter(c){
 function handleCellClick(idx){
 	if(!gameActive)return;
 	var state=cellStates[idx],cell=gridEl.children[idx],pos=getCellCenter(cell);
-	if(!state.active){setMessage('Здесь ничего нет');return;}
+	if(!state.active){tryVibrate(20);return;}
 	hideMole(idx);var item=state.type;
 	var cm=getComboMultiplier();
 	var pts=Math.round(item.points*shovelLevel*cm*(1+boostLevel*0.5));
@@ -1600,7 +1607,7 @@ function fullReset(){
 }
 
 function backToMenu(){
-	pauseOverlay.classList.remove('show');
+	pauseOverlay.classList.remove('show');D('gameoverOverlay').classList.remove('show');
 	if(spawnTimeout)clearTimeout(spawnTimeout);if(comboTimer)clearTimeout(comboTimer);
 	if(powerupTimer)clearTimeout(powerupTimer);powerup2x=false;
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
@@ -1667,6 +1674,8 @@ menuSoundBtn.addEventListener('click',toggleSound);
 menuSoundBtn.addEventListener('touchstart',function(e){e.preventDefault();toggleSound();},{passive:false});
 menuAchBtn.addEventListener('click',openAchievements);
 menuAchBtn.addEventListener('touchstart',function(e){e.preventDefault();openAchievements();},{passive:false});
+D('menuProfileBtn').addEventListener('click',function(){menuScreen.classList.add('hidden');openProfile();});
+D('menuProfileBtn').addEventListener('touchstart',function(e){e.preventDefault();menuScreen.classList.add('hidden');openProfile();},{passive:false});
 var menuBackBtn=D('menuBackBtn');
 menuBackBtn.addEventListener('click',function(){window.location.href='index.html';});
 menuBackBtn.addEventListener('touchstart',function(e){e.preventDefault();window.location.href='index.html';},{passive:false});
@@ -1681,11 +1690,15 @@ D('newGameBtn').addEventListener('touchstart',function(e){e.preventDefault();sta
 
 // Profile/Shop handlers
 function openProfile(){profileScreen.classList.add('show');renderProfile();renderShop();}
-function closeProfile(){profileScreen.classList.remove('show');}
+function closeProfile(){profileScreen.classList.remove('show');if(!gameStarted)menuScreen.classList.remove('hidden');}
 profileCloseBtn.addEventListener('click',closeProfile);
 profileCloseBtn.addEventListener('touchstart',function(e){e.preventDefault();closeProfile();},{passive:false});
 gameProfileBtn.addEventListener('click',function(){if(pauseOverlay.classList.contains('show')){pauseOverlay.classList.remove('show');}openProfile();});
 gameProfileBtn.addEventListener('touchstart',function(e){e.preventDefault();if(pauseOverlay.classList.contains('show')){pauseOverlay.classList.remove('show');}openProfile();},{passive:false});
+D('achProfileBtn').addEventListener('click',function(){closeAchievements();openProfile();});
+D('achProfileBtn').addEventListener('touchstart',function(e){e.preventDefault();closeAchievements();openProfile();},{passive:false});
+D('profileAchBtn').addEventListener('click',function(){closeProfile();openAchievements();});
+D('profileAchBtn').addEventListener('touchstart',function(e){e.preventDefault();closeProfile();openAchievements();},{passive:false});
 D('gameResetBtn').addEventListener('click',resetGame);
 D('gameResetBtn').addEventListener('touchstart',function(e){e.preventDefault();resetGame();},{passive:false});
 
