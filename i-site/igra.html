@@ -32,6 +32,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .menu-settings-line{display:inline-block;margin-top:16px;padding:6px 16px;background:#1a130e;border-radius:30px;border:1px solid #3d3224;color:#8b7b6a;font-size:18px;cursor:pointer;transition:all .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none}
 .menu-settings-line:hover{color:#d4c4a8;border-color:#8b6b40;background:#221a14}
 .menu-settings-line:active{transform:scale(.9)}
+.menu-stats-line{font-size:11px;color:#8b7b6a;margin-top:10px;text-align:center}
 .menu-credits{color:#4a3a2a;font-size:14px;position:absolute;bottom:30px}
 .menu-credits a{color:#8b6b40;text-decoration:none;transition:color .2s}
 .menu-credits a:hover{color:#d4c4a8}
@@ -55,6 +56,15 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .ach-hint.revealed{color:#ffd700;border-color:#ffd70044;background:#2a2218;text-shadow:0 0 10px rgba(255,215,0,.1)}
 .ach-close-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:16px;font-weight:bold;padding:12px 40px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation}
 .ach-close-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
+.ach-tier-section{background:#1a1510;border:2px solid #3d3224;border-radius:16px;padding:12px;margin-bottom:10px;width:100%;max-width:420px}
+.ach-tier-section.locked{opacity:.4}
+.ach-tier-header{display:flex;justify-content:space-between;align-items:center;font-size:16px;font-weight:bold;color:#ffd700;margin-bottom:4px}
+.ach-tier-progress{color:#8b7b6a;font-size:13px}
+.ach-tier-bar{height:6px;background:#2a2218;border-radius:3px;margin-bottom:6px;overflow:hidden}
+.ach-tier-fill{height:100%;background:linear-gradient(90deg,#ffd700,#ff6b35);border-radius:3px;transition:width .3s ease}
+.ach-tier-desc{color:#6a5a4a;font-size:11px;margin-bottom:8px}
+.ach-tier-items{display:flex;flex-direction:column;gap:6px}
+.ach-tier-next{text-align:center;font-size:11px;color:#8b7b6a;padding:6px;margin-top:6px;border-top:1px solid #2a2218}
 
 .ach-banner{position:fixed;right:20px;top:-80px;z-index:9999;background:linear-gradient(135deg,#2a1f18,#1f1814);border:2px solid #ffd70066;border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 40px rgba(0,0,0,.9);transition:top .5s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:320px}
 .ach-banner.show{top:20px}
@@ -242,6 +252,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<button class="menu-btn" id="menuAchBtn">🏆 Достижения</button>
 		<button class="menu-btn menu-btn-sub" id="menuBackBtn">← На сайт</button>
 	</div>
+	<div class="menu-stats-line" id="menuStatsLine">🏆 0/15 · 🌱 Новичок</div>
 	<div class="menu-settings-line" id="menuSoundBtn" role="button" tabindex="0">🔊</div>
 	<div class="menu-credits">Сделано студией <a href="index.html" class="menu-credit-link">i.</a></div>
 </div>
@@ -293,7 +304,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="gameover-screen" id="gameoverScreen">
 		<div class="gameover-title">🎉</div>
 		<div class="gameover-sub">Коллекция собрана!</div>
-		<div class="gameover-stats" id="gameoverStats">Очков: <span id="goScore">0</span><br>Собрано: <span id="goCollection">12</span>/12<br>Рекорд: <span id="goHighScore">0</span></div>
+		<div class="gameover-stats" id="gameoverStats">Очков: <span id="goScore">0</span><br>Собрано: <span id="goCollection">0</span>/<span id="goCollectionTotal">12</span><br>Рекорд: <span id="goHighScore">0</span></div>
 		<div class="gameover-achs" id="gameoverAchs"></div>
 		<button class="gameover-btn" id="goMenuBtn">🏠 В меню</button>
 		<button class="gameover-btn" id="goAgainBtn">🔄 Ещё раз</button>
@@ -302,7 +313,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<span>💰 <span id="scoreDisplay">0</span></span>
 		<span class="level-badge">📊 <span id="levelDisplay">1</span></span>
 		<span class="high-score">🏆 <span id="highScoreDisplay">0</span></span>
-		<span>⭐ <span id="collectionDisplay">0</span>/12</span>
+		<span>⭐ <span id="collectionDisplay">0</span>/<span id="collectionTargetDisplay">12</span></span>
 		<button class="sound-btn" id="soundBtn">🔊</button>
 		<button class="pause-btn" id="pauseBtn">☰</button>
 	</div>
@@ -347,6 +358,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 "use strict";
 
 var GRID_SIZE=4,TOTAL_CELLS=GRID_SIZE*GRID_SIZE,COLLECTION_TARGET=12;
+function getCollectionTarget(){return getActiveItems().filter(function(i){return i.points>=0&&!i.needSecret;}).length;}
 
 var ITEMS=[
 	{id:'gold',emoji:'🪙',name:'Золото',rarity:.20,points:1,color:'#ffd700',minLvl:1},
@@ -358,32 +370,38 @@ var ITEMS=[
 	{id:'king',emoji:'👑',name:'Король',rarity:.03,points:8,color:'#ffd700',minLvl:2},
 	{id:'fast',emoji:'⚡',name:'Молния',rarity:.04,points:4,color:'#00aaff',minLvl:3},
 	{id:'ghost',emoji:'👻',name:'Призрак',rarity:.04,points:3,color:'#aa44ff',minLvl:4},
-	{id:'star',emoji:'🌟',name:'Звезда',rarity:.06,points:2,color:'#fff176',minLvl:1},
-	{id:'clover',emoji:'🍀',name:'Клевер',rarity:.05,points:1,color:'#66bb6a',minLvl:2},
-	{id:'gift',emoji:'🎁',name:'Сюрприз',rarity:.04,points:4,color:'#ff7043',minLvl:3},
+	{id:'star',emoji:'🌟',name:'Звезда',rarity:.06,points:2,color:'#fff176',minLvl:1,needTier:2},
+	{id:'clover',emoji:'🍀',name:'Клевер',rarity:.05,points:1,color:'#66bb6a',minLvl:1,needTier:3},
+	{id:'gift',emoji:'🎁',name:'Сюрприз',rarity:.04,points:4,color:'#ff7043',minLvl:1,needTier:4},
 	// Секретные артефакты (появляются после соответствующих секретных достижений)
 	{id:'crown_legend',emoji:'🏆',name:'Корона легенды',rarity:.015,points:15,color:'#ffd700',minLvl:1,needSecret:'secret_legend'},
 	{id:'star_master',emoji:'💫',name:'Звезда мастера',rarity:.015,points:20,color:'#ff69b4',minLvl:1,needSecret:'secret_master'},
 	{id:'aegis',emoji:'🛡️',name:'Эгида',rarity:.02,points:5,color:'#ff6b35',minLvl:1,needSecret:'secret_invincible'}
 ];
 
+var TIERS=[
+	{id:'tier1',name:'🌱 Новичок',desc:'Сделай первые шаги',unlockItem:'🍀',next:'🔥 Охотник'},
+	{id:'tier2',name:'🔥 Охотник',desc:'Становись сильнее',unlockItem:'🌟',next:'👑 Мастер'},
+	{id:'tier3',name:'👑 Мастер',desc:'Покажи мастерство',unlockItem:'🎁',next:'💫 Легенда'},
+	{id:'tier4',name:'💫 Легенда',desc:'Для избранных',unlockItem:'🏆',next:'Сертификат'}
+];
+
 var ACHIEVEMENTS=[
-	{id:'first_click',name:'👊 Первый удар',desc:'Сделать 1 клик',icon:'👊'},
-	{id:'gold_rush',name:'💰 Золотая лихорадка',desc:'Заработать 100 монет',icon:'💰'},
-	{id:'gold_million',name:'💎 Миллионер',desc:'Заработать 500 монет',icon:'💎'},
-	{id:'bomb_survivor',name:'💣 Живучий',desc:'Поймать 10 бомб',icon:'💣'},
-	{id:'king_hunter',name:'👑 Королевский охотник',desc:'Поймать 5 королей',icon:'👑'},
-	{id:'fast_catcher',name:'⚡ Молния',desc:'Поймать 10 молний',icon:'⚡'},
-	{id:'ghost_hunter',name:'👻 Охотник за призраками',desc:'Поймать 10 призраков',icon:'👻'},
-	{id:'combo_master',name:'🔥 Комбо-мастер',desc:'Достичь комбо 15',icon:'🔥'},
-	{id:'strategist',name:'📊 Стратег',desc:'Достичь 5 уровня',icon:'📊'},
-	{id:'collector_1',name:'⭐ Коллекционер',desc:'Собрать коллекцию 1 раз',icon:'⭐'},
-	{id:'collector_3',name:'🌟 Мастер-коллекционер',desc:'Собрать коллекцию 3 раза',icon:'🌟'},
-	{id:'digger',name:'🗡️ Землекоп',desc:'Прокачать лопату до 10',icon:'🗡️'},
-	// Секретные достижения
-	{id:'secret_legend',name:'👑 Легенда',desc:'Собрать коллекцию 10 раз',icon:'👑',secret:true},
-	{id:'secret_invincible',name:'🛡️ Неуязвимый',desc:'Достичь 10 уровня',icon:'🛡️',secret:true},
-	{id:'secret_master',name:'💫 Мастер игры',desc:'Заработать 10000 монет всего',icon:'💫',secret:true}
+	{id:'first_click',name:'👊 Первый удар',desc:'Сделать 1 клик',icon:'👊',tier:1},
+	{id:'gold_rush',name:'💰 Золотая лихорадка',desc:'Заработать 100 монет',icon:'💰',tier:1},
+	{id:'bomb_survivor',name:'💣 Живучий',desc:'Поймать 5 бомб',icon:'💣',tier:1},
+	{id:'fast_catcher',name:'⚡ Молния',desc:'Поймать 5 молний',icon:'⚡',tier:1},
+	{id:'king_hunter',name:'👑 Королевский охотник',desc:'Поймать 5 королей',icon:'👑',tier:2},
+	{id:'ghost_hunter',name:'👻 Охотник за призраками',desc:'Поймать 5 призраков',icon:'👻',tier:2},
+	{id:'combo_master',name:'🔥 Комбо-мастер',desc:'Достичь комбо 10',icon:'🔥',tier:2},
+	{id:'strategist',name:'📊 Стратег',desc:'Достичь 5 уровня',icon:'📊',tier:2},
+	{id:'gold_million',name:'💎 Миллионер',desc:'Заработать 500 монет',icon:'💎',tier:3},
+	{id:'collector_1',name:'⭐ Коллекционер',desc:'Собрать коллекцию 1 раз',icon:'⭐',tier:3},
+	{id:'collector_3',name:'🌟 Мастер-коллекционер',desc:'Собрать коллекцию 3 раза',icon:'🌟',tier:3},
+	{id:'digger',name:'🗡️ Землекоп',desc:'Прокачать лопату до 10',icon:'🗡️',tier:3},
+	{id:'secret_legend',name:'👑 Легенда',desc:'Собрать коллекцию 5 раз',icon:'👑',tier:4},
+	{id:'secret_invincible',name:'🛡️ Неуязвимый',desc:'Достичь 10 уровня',icon:'🛡️',tier:4},
+	{id:'secret_master',name:'💫 Мастер игры',desc:'Заработать 10000 монет всего',icon:'💫',tier:4}
 ];
 
 // DOM
@@ -412,6 +430,7 @@ var boostLevel=0,timeLevel=0,clicksSinceNewItem=0;
 // Stats for achievements
 var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1};
 var unlocked={};
+var currentTier=1;
 var bannerTimeout=null;
 
 // Load
@@ -421,37 +440,38 @@ try{
 		if(d.highScore) highScore=d.highScore;
 		if(d.stats) for(var k in d.stats) if(stats.hasOwnProperty(k)) stats[k]=d.stats[k];
 		if(d.unlocked) for(var k in d.unlocked) if(d.unlocked[k]) unlocked[k]=true;
+		if(d.currentTier) currentTier=d.currentTier;
 	}
 }catch(e){}
 checkAchievements();
 
 function saveData(){
 	try{
-		localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked}));
+		localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked,currentTier:currentTier}));
 	}catch(e){}
 }
 
-function getUnlockedCount(){var n=0;for(var id in ACHIEVEMENTS)if(unlocked[ACHIEVEMENTS[id].id])n++;return n;}
-function getMainUnlockedCount(){var n=0;for(var i=0;i<ACHIEVEMENTS.length;i++){var a=ACHIEVEMENTS[i];if(!a.secret&&unlocked[a.id])n++;}return n;}
-function getTotalMain(){var n=0;for(var i=0;i<ACHIEVEMENTS.length;i++){if(!ACHIEVEMENTS[i].secret)n++;}return n;}
-function allMainUnlocked(){return getMainUnlockedCount()>=getTotalMain();}
+function getUnlockedCount(){var n=0;for(var i=0;i<ACHIEVEMENTS.length;i++)if(unlocked[ACHIEVEMENTS[i].id])n++;return n;}
+function countTierAchs(tierId){var t=0,u=0;for(var i=0;i<ACHIEVEMENTS.length;i++){var a=ACHIEVEMENTS[i];if(a.tier===tierId){t++;if(unlocked[a.id])u++;}}return{total:t,unlocked:u};}
+
+function tierUnlocked(tierIdx){return currentTier>=tierIdx;}
 
 function checkAchievements(){
 	var prevCount=getUnlockedCount();
 	for(var i=0;i<ACHIEVEMENTS.length;i++){
 		var a=ACHIEVEMENTS[i];
 		if(unlocked[a.id]) continue;
-		if(a.secret&&!allMainUnlocked()) continue;
+		if(a.tier>currentTier) continue;
 		var ok=false;
 		switch(a.id){
 			case 'first_click': ok=stats.totalClicks>=1; break;
 			case 'gold_rush': ok=stats.totalEarnings>=100; break;
 			case 'gold_million': ok=stats.totalEarnings>=500; break;
-			case 'bomb_survivor': ok=stats.totalBombs>=10; break;
+			case 'bomb_survivor': ok=stats.totalBombs>=5; break;
 			case 'king_hunter': ok=stats.totalKings>=5; break;
-			case 'fast_catcher': ok=stats.totalFast>=10; break;
-			case 'ghost_hunter': ok=stats.totalGhosts>=10; break;
-			case 'combo_master': ok=stats.bestCombo>=15; break;
+			case 'fast_catcher': ok=stats.totalFast>=5; break;
+			case 'ghost_hunter': ok=stats.totalGhosts>=5; break;
+			case 'combo_master': ok=stats.bestCombo>=10; break;
 			case 'strategist': ok=stats.maxLevel>=5; break;
 			case 'collector_1': ok=stats.collectionCount>=1; break;
 			case 'collector_3': ok=stats.collectionCount>=3; break;
@@ -467,22 +487,26 @@ function checkAchievements(){
 			if(getUnlockedCount()>=ACHIEVEMENTS.length) showCertificate();
 		}
 	}
-	var nowCount=getUnlockedCount();
-	if(nowCount>prevCount){
-		updateAchUI();
-		if(nowCount===getTotalMain()&&!unlocked._secrets_notified){
-			unlocked._secrets_notified=true;saveData();
-			setTimeout(function(){
-				achBannerIcon.textContent='🔮';
-				achBannerTitle.textContent='🔮 Секретные достижения открыты!';
-				achBannerDesc.textContent='Собери их все для получения сертификата';
-				achBanner.classList.add('show');
-				if(bannerTimeout)clearTimeout(bannerTimeout);
-				bannerTimeout=setTimeout(function(){achBanner.classList.remove('show');},4000);
-				soundRare();tryVibrate(50);
-			},800);
-		}
+	// Проверка завершения тира
+	var cur=countTierAchs(currentTier);
+	if(cur.unlocked===cur.total && cur.total>0 && currentTier<TIERS.length){
+		var tierName=TIERS[currentTier-1].name;
+		currentTier++;
+		saveData();
+		setMessage('🎉 Тир "'+tierName+'" пройден! Открыт "'+TIERS[currentTier-1].name+'"');
+		setTimeout(function(){
+			achBannerIcon.textContent=TIERS[currentTier-2].unlockItem;
+			achBannerTitle.textContent='🎉 Тир пройден: '+tierName;
+			achBannerDesc.textContent='Открыт новый этап: '+TIERS[currentTier-1].name;
+			achBanner.classList.add('show');
+			if(bannerTimeout)clearTimeout(bannerTimeout);
+			bannerTimeout=setTimeout(function(){achBanner.classList.remove('show');},4000);
+			soundRare();tryVibrate(50);
+		},800);
+		checkAchievements();
 	}
+	var nowCount=getUnlockedCount();
+	if(nowCount>prevCount) updateAchUI();
 }
 
 function showAchievementBanner(a){
@@ -506,7 +530,7 @@ function showCertificate(){
 	certCode.textContent=generateCertCode();
 	certScore.textContent=highScore;
 	var achs=0;for(var i=0;i<ACHIEVEMENTS.length;i++)if(unlocked[ACHIEVEMENTS[i].id])achs++;
-	certAchs.textContent=achs+'/15';
+	certAchs.textContent=achs+'/'+ACHIEVEMENTS.length;
 	certCombo.textContent='x'+stats.bestCombo;
 	certShovel.textContent=stats.maxShovel;
 	certCollection.textContent=stats.collectionCount;
@@ -531,38 +555,41 @@ function closeAchievements(){
 
 function renderAchievements(){
 	achList.innerHTML='';
-	var n=0,showSecrets=allMainUnlocked(),totalSecrets=0,unlockedSecrets=0,totalAll=0;
-	for(var i=0;i<ACHIEVEMENTS.length;i++){
-		var a=ACHIEVEMENTS[i],u=unlocked[a.id];
-		totalAll++;
-		if(a.secret){totalSecrets++;if(u)unlockedSecrets++;}
-		if(a.secret&&!showSecrets&&!u) continue;
-		if(u) n++;
+	var totalAll=getUnlockedCount(),total=ACHIEVEMENTS.length;
+	for(var t=0;t<TIERS.length;t++){
+		if(!tierUnlocked(t+1)&&countTierAchs(t+1).unlocked===0) continue;
+		var tier=TIERS[t];
+		var cur=countTierAchs(t+1);
+		var lockedTier=!tierUnlocked(t+1);
 		var div=document.createElement('div');
-		div.className='ach-item'+(u?' unlocked':'');
-		var name=a.secret&&!u?'🔮 ???':(u?'✅ ':'')+a.name;
-		var desc=a.secret&&!u?'Выполните все основные достижения':a.desc;
-		div.innerHTML='<div class="ach-icon">'+(a.secret&&!u?'🔮':a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+name+'</div><div class="ach-desc">'+desc+'</div></div><div class="ach-status">'+(u?'✅':a.secret?'🔮':'🔒')+'</div>';
+		div.className='ach-tier-section'+(lockedTier?' locked':'');
+		var header='<div class="ach-tier-header">'+tier.name+' <span class="ach-tier-progress">'+cur.unlocked+'/'+cur.total+'</span></div>';
+		var bar='<div class="ach-tier-bar"><div class="ach-tier-fill" style="width:'+(cur.total>0?cur.unlocked/cur.total*100:0)+'%"></div></div>';
+		var desc='<div class="ach-tier-desc">'+tier.desc+'</div>';
+		var items='<div class="ach-tier-items">';
+		for(var i=0;i<ACHIEVEMENTS.length;i++){
+			var a=ACHIEVEMENTS[i];
+			if(a.tier!==t+1) continue;
+			var u=unlocked[a.id];
+			var locked=lockedTier&&!u;
+			if(locked) continue;
+			items+='<div class="ach-item'+(u?' unlocked':'')+'"><div class="ach-icon">'+(a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+(u?'✅ ':'')+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div><div class="ach-status">'+(u?'✅':'🔒')+'</div></div>';
+		}
+		items+='</div>';
+		var next='';
+		if(t<TIERS.length-1){
+			if(cur.unlocked===cur.total&&cur.total>0) next='<div class="ach-tier-next">✅ Пройдено → '+TIERS[t+1].name+'</div>';
+			else if(currentTier>t+1||(currentTier>=t+1&&cur.unlocked<cur.total)) next='<div class="ach-tier-next">🔒 Пройди все → откроется '+TIERS[t+1].name+'</div>';
+		}else{
+			if(cur.unlocked===cur.total&&cur.total>0) next='<div class="ach-tier-next">🏆 Все достижения собраны! Получи сертификат!</div>';
+			else next='<div class="ach-tier-next">🏆 Собери всё → сертификат</div>';
+		}
+		div.innerHTML=header+bar+desc+items+next;
 		achList.appendChild(div);
 	}
-	achProgress.textContent=n+' / '+totalAll;
-	if(showSecrets){
-		var remaining=[];
-		for(var j=0;j<ACHIEVEMENTS.length;j++){var a2=ACHIEVEMENTS[j];if(!unlocked[a2.id])remaining.push(a2);}
-		var hint='🔮 Секретные: '+unlockedSecrets+'/'+totalSecrets;
-		if(remaining.length>0){
-			hint+=' · осталось: ';
-			for(var j=0;j<remaining.length;j++){
-				if(j>0)hint+=' · ';
-				hint+=remaining[j].name+(remaining[j].secret?' ⚡':'');
-			}
-		}
-		achHint.textContent=hint;
-		achHint.className='ach-hint revealed';
-	}else{
-		achHint.textContent='🔮 Собери все 12 — откроются секретные';
-		achHint.className='ach-hint';
-	}
+	achProgress.textContent=totalAll+' / '+total;
+	achHint.textContent='🎯 Прогресс: '+totalAll+'/'+total+' · Текущий тир: '+TIERS[Math.min(currentTier-1,TIERS.length-1)].name;
+	achHint.className='ach-hint revealed';
 }
 
 function updateAchUI(){
@@ -631,7 +658,7 @@ function addCombo(){
 }
 function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 
-function getActiveItems(){return ITEMS.filter(function(i){return i.minLvl<=playerLevel&&(!i.needSecret||unlocked[i.needSecret]);});}
+function getActiveItems(){return ITEMS.filter(function(i){return i.minLvl<=playerLevel&&(!i.needTier||currentTier>=i.needTier)&&(!i.needSecret||unlocked[i.needSecret]);});}
 
 function generateItem(){
 	var items=getActiveItems().map(function(i){return{id:i.id,emoji:i.emoji,name:i.name,rarity:i.rarity,points:i.points,color:i.color,minLvl:i.minLvl,needSecret:i.needSecret};});
@@ -742,7 +769,7 @@ function finishGame(){
 	if(powerupTimer)clearTimeout(powerupTimer);powerup2x=false;
 	clearGameState();
 	stats.collectionCount++;saveData();
-	goScore.textContent=score;goCollection.textContent=collection.length;goHighScore.textContent=highScore;
+	goScore.textContent=score;goCollection.textContent=collection.length;D('goCollectionTotal').textContent=getCollectionTarget();goHighScore.textContent=highScore;
 	renderGameOverAchs();
 	gameoverScreen.classList.add('show');
 	setMessage('🎉 Коллекция собрана!');
@@ -790,8 +817,9 @@ function handleCellClick(idx){
 	if(!collection.includes(item.emoji)){
 		clicksSinceNewItem=0;
 		collection.push(item.emoji);
-		if(collection.length<COLLECTION_TARGET){setMessage('⭐ Новый предмет! '+item.emoji);tryVibrate(30);spawnParticles(pos.x,pos.y,'#ffd700',20);}
-		if(collection.length>=COLLECTION_TARGET){finishGame();}
+		var ct=getCollectionTarget();
+		if(collection.length<ct){setMessage('⭐ Новый предмет! '+item.emoji);tryVibrate(30);spawnParticles(pos.x,pos.y,'#ffd700',20);}
+		if(collection.length>=ct){finishGame();}
 	}else if(pts>0){
 		clicksSinceNewItem++;
 	}
@@ -834,8 +862,10 @@ function updateUI(){
 	if(score>highScore){highScore=score;saveData();}
 	highScoreSpan.textContent=highScore;levelSpan.textContent=playerLevel;
 	collectionSpan.textContent=collection.length;
-	var pct=collection.length/COLLECTION_TARGET*100;
-	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+COLLECTION_TARGET;
+	var ct=getCollectionTarget();
+	D('collectionTargetDisplay').textContent=ct;
+	var pct=collection.length/ct*100;
+	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+ct;
 	shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;
 	shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;boostBtn.disabled=!gameActive;timeBtn.disabled=!gameActive;
 }
@@ -921,6 +951,8 @@ function backToMenu(){
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	if(gameActive)saveGameState();
 	gameActive=false;gameStarted=false;menuScreen.classList.remove('hidden');
+	var mu=getUnlockedCount(),mt=ACHIEVEMENTS.length,tierName=TIERS[Math.min(currentTier-1,TIERS.length-1)].name;
+	D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+tierName;
 }
 
 function startGame(){
@@ -1068,6 +1100,8 @@ if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||window.innerWidth
 // Init
 if(loadGameState())playBtn.textContent='▶ ПРОДОЛЖИТЬ';
 highScoreSpan.textContent=highScore;
+var mu=getUnlockedCount(),mt=ACHIEVEMENTS.length,tierName=TIERS[Math.min(currentTier-1,TIERS.length-1)].name;
+D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+tierName;
 })();
 </script>
 </body>
