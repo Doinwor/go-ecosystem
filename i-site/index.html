@@ -248,6 +248,126 @@
       color: var(--arrow-hover);
     }
 
+    /* ─── event ─── */
+    .event {
+      margin-bottom: 80px;
+    }
+
+    .event-card {
+      border: 2px solid #ffd70055;
+      border-radius: 20px;
+      padding: 24px 28px;
+      background: linear-gradient(145deg, #2a221a11, #1f181411);
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+      user-select: none;
+    }
+
+    [data-theme="dark"] .event-card {
+      background: linear-gradient(145deg, #2a221a44, #1f181444);
+    }
+
+    .event-card:hover {
+      border-color: #ffd70099;
+      box-shadow: 0 4px 30px #ffd70011;
+    }
+
+    .event-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .event-card__badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #ffd700;
+      background: #ffd70022;
+      padding: 4px 12px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .event-card__title {
+      font-size: clamp(18px, 3vw, 26px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      flex: 1;
+    }
+
+    .event-card__chevron {
+      font-size: 18px;
+      color: var(--arrow-color);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .event-card.open .event-card__chevron {
+      transform: rotate(180deg);
+    }
+
+    .event-card__body {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease, margin 0.4s ease;
+      opacity: 0;
+    }
+
+    .event-card.open .event-card__body {
+      max-height: 500px;
+      opacity: 1;
+      margin-top: 20px;
+    }
+
+    .event-card__desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--dim);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .event-card__rules {
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 20px;
+      padding-left: 4px;
+    }
+
+    .event-card__rules li {
+      list-style: none;
+      margin-bottom: 4px;
+    }
+
+    .event-card__play {
+      display: inline-block;
+      font-family: 'Unbounded', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a1a1a;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
+      padding: 12px 32px;
+      border-radius: 100px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px #ffd70044;
+    }
+
+    .event-card__play:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 25px #ffd70066;
+    }
+
+    .event-card__play:active {
+      transform: scale(0.96);
+    }
+
     /* ─── process ─── */
     .process {
       margin-bottom: 80px;
@@ -653,6 +773,30 @@
       </div>
     </div>
 
+    <div class="event reveal reveal-delay-2">
+      <div class="event-card" id="eventCard">
+        <div class="event-card__header">
+          <span class="event-card__badge">🎮 Событие</span>
+          <span class="event-card__title">Крот-собиратель</span>
+          <span class="event-card__chevron">▼</span>
+        </div>
+        <div class="event-card__body">
+          <p class="event-card__desc">
+            Студия i. выпустила свою первую игру&nbsp;— аркаду, в&nbsp;которой нужно собирать
+            редких кротов, открывать коллекцию и&nbsp;ставить рекорды.
+          </p>
+          <ul class="event-card__rules">
+            <li>🥇 &nbsp;Стучи по кротам — получай монеты</li>
+            <li>👑 &nbsp;Лови короля, молнию и призрака</li>
+            <li>📦 &nbsp;Собери 12 предметов коллекции</li>
+            <li>🔥 &nbsp;Строй комбо и улучшай лопату</li>
+            <li>🏆 &nbsp;Открывай достижения</li>
+          </ul>
+          <a href="igra.html" class="event-card__play">▶ Играть</a>
+        </div>
+      </div>
+    </div>
+
     <div class="pages-nav reveal">
       <h2>О студии</h2>
       <div class="services-grid">
@@ -801,6 +945,15 @@
             }, i * 180);
           });
         });
+      })();
+
+      (function eventCard() {
+        var card = document.getElementById('eventCard');
+        if (card) {
+          card.addEventListener('click', function() {
+            card.classList.toggle('open');
+          });
+        }
       })();
 
       (function reveal() {
