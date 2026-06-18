@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>🐹 Крот-собиратель — i.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#fafaf8;--text:#1a1a1a;--muted:#999;--dim:#666;--border:#e8e8e5;--border-hover:#ccc;--card-shadow:rgba(0,0,0,0.04);--heading-color:#bbb;--arrow-color:#bbb;--arrow-hover:#1a1a1a;--footer-color:#ccc}
+[data-theme="dark"]{--bg:#0b0b12;--text:#f0ece4;--muted:#666;--dim:#888;--border:#1e1e26;--border-hover:#333;--card-shadow:rgba(255,255,255,0.02);--heading-color:#555;--arrow-color:#555;--arrow-hover:#f0ece4;--footer-color:#333}
+body{font-family:'Unbounded',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s;min-height:100vh}
+.wrapper{max-width:960px;margin:0 auto;padding:40px 24px 60px;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+.back a{font-size:12px;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:.05em;transition:color .2s}
+.back a:hover{color:var(--text)}
+.theme-toggle{background:var(--border);border:none;cursor:pointer;padding:0;border-radius:100px;width:42px;height:22px;display:flex;align-items:center;transition:background .3s;position:relative;flex-shrink:0}
+.theme-toggle:hover{opacity:.8}
+.theme-toggle__knob{width:16px;height:16px;border-radius:50%;background:var(--bg);transition:transform .3s,background .3s;margin:0 3px}
+[data-theme="dark"] .theme-toggle__knob{transform:translateX(20px)}
+.game-header{margin-bottom:24px}
+.game-header__label{font-size:11px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--heading-color);margin-bottom:6px}
+.game-header__title{font-size:clamp(26px,5vw,40px);font-weight:900;line-height:1.2;letter-spacing:-.02em}
+.game-header__title span{background:linear-gradient(135deg,#ffd700,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.game-header__desc{font-size:13px;font-weight:300;color:var(--dim);line-height:1.7;margin-top:10px;max-width:500px}
+.game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);padding:15px;border-radius:40px;box-shadow:0 20px 30px rgba(0,0,0,.8);width:100%;position:relative;overflow:hidden;margin-bottom:24px}
+.game-wrap.shake{animation:shake .3s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px) rotate(-.5deg)}40%{transform:translateX(8px) rotate(.5deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.top-panel{display:flex;justify-content:space-between;align-items:center;color:#d4c4a8;font-weight:bold;font-size:15px;padding-bottom:6px;flex-wrap:wrap;gap:4px}
+.top-panel span,.sound-btn{background:#1a130e;padding:3px 10px;border-radius:30px;box-shadow:inset 0 2px 5px rgba(0,0,0,.7)}
+.top-panel .high-score{font-size:12px;color:#ffd700}
+.top-panel .level-badge{font-size:12px;color:#c49a6c}
+.sound-btn{border:none;color:#d4c4a8;font-size:14px;cursor:pointer;transition:.1s;padding:3px 8px}
+.sound-btn:active{transform:scale(.9)}
+.progress-wrap{background:#1a130e;border-radius:20px;height:12px;margin:5px 0;overflow:hidden;box-shadow:inset 0 2px 5px rgba(0,0,0,.7);position:relative}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#8b6b40,#ffd700);border-radius:20px;transition:width .4s ease}
+.progress-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:8px;background:#2a221c;border-radius:30px;box-shadow:inset 0 0 0 3px #3a2e22}
+.cell{aspect-ratio:1;background:radial-gradient(circle at 50% 60%,#4a3a2a,#3d3224);border-radius:20px;box-shadow:inset 0 -6px 0 #1a130e,0 6px 12px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;transition:transform .08s,box-shadow .2s;cursor:pointer;touch-action:manipulation;position:relative}
+.cell:active{transform:scale(.92);box-shadow:inset 0 -2px 0 #1a130e}
+.cell .mole{width:100%;height:100%;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:40px;background:radial-gradient(circle at 30% 30%,#c49a6c,#8b6b40);box-shadow:inset -4px -8px 15px #4a3a2a,0 8px 15px rgba(0,0,0,.4);transform:scale(0);transition:transform .12s cubic-bezier(.34,1.56,.64,1);position:relative}
+.cell .mole.show{transform:scale(1);animation:moleBob 1.5s ease-in-out infinite}
+.cell .mole.gold{background:radial-gradient(circle at 30% 30%,#ffd966,#b8860b);box-shadow:inset -4px -8px 15px #8b6508,0 0 30px #ffd700}
+.cell .mole.bomb{background:radial-gradient(circle at 30% 30%,#555,#111);box-shadow:inset -4px -8px 15px #000,0 0 30px #ff4444;animation:none}
+.cell .mole.bomb.show{animation:bombPulse .6s ease-in-out infinite}
+.cell .mole.king{background:radial-gradient(circle at 30% 30%,#ffe066,#cc9900);box-shadow:inset -4px -8px 15px #8b6508,0 0 40px #ffd700,0 0 80px #ffd70044}
+.cell .mole.fast{background:radial-gradient(circle at 30% 30%,#a0d8ff,#4080cc);box-shadow:inset -4px -8px 15px #204060,0 0 30px #00aaff,0 0 60px #00aaff44}
+.cell .mole.ghost{background:radial-gradient(circle at 30% 30%,#c8a0ff,#8040cc);box-shadow:inset -4px -8px 15px #402060,0 0 30px #aa44ff,0 0 60px #aa44ff44}
+.cell .mole .emoji{position:relative;z-index:1}
+@keyframes moleBob{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.03) translateY(-3px)}}
+@keyframes bombPulse{0%,100%{transform:scale(1);box-shadow:inset -4px -8px 15px #000,0 0 30px #ff4444}50%{transform:scale(1.08);box-shadow:inset -4px -8px 15px #000,0 0 50px #ff0000}}
+.float-text{position:absolute;font-size:26px;font-weight:bold;pointer-events:none;z-index:100;text-shadow:0 3px 12px rgba(0,0,0,.9);animation:floatUp .9s ease forwards}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}60%{opacity:1}100%{opacity:0;transform:translateY(-80px) scale(1.4)}}
+.particle{position:absolute;border-radius:50%;pointer-events:none;z-index:99;animation:particleFly .7s ease forwards}
+@keyframes particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+.levelup-flash{position:absolute;inset:0;z-index:50;pointer-events:none;opacity:0}
+.levelup-flash.go{animation:levelFlash .6s ease forwards}
+@keyframes levelFlash{0%{background:radial-gradient(circle at 50% 50%,rgba(255,215,0,.3),transparent);opacity:1}100%{opacity:0}}
+.combo-display{background:#1a130e;padding:2px 10px;border-radius:30px;font-weight:bold;font-size:14px;text-align:center;transition:all .15s;min-width:50px}
+.combo-display.idle{color:#6a5a4a}
+.combo-display.active{color:#ffd700;text-shadow:0 0 10px #ffd70066;transform:scale(1.05)}
+.combo-display.hot{color:#ff6b35;text-shadow:0 0 15px #ff6b3588;transform:scale(1.1)}
+.bottom-panel{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:12px;gap:6px}
+.stats{display:flex;gap:6px;background:#1a130e;padding:3px 10px;border-radius:30px;color:#d4c4a8;font-weight:bold;font-size:14px;flex-wrap:wrap;align-items:center}
+.stats span{margin:0 2px}
+.shop{display:flex;gap:4px;flex-wrap:wrap}
+.shop-btn{background:#3d3224;border:none;color:#d4c4a8;font-weight:bold;font-size:12px;padding:7px 10px;border-radius:30px;box-shadow:0 4px 0 #1a130e,0 4px 8px rgba(0,0,0,.4);cursor:pointer;transition:all .06s linear;touch-action:manipulation;min-width:36px;text-align:center}
+.shop-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
+.shop-btn:disabled{opacity:.35;transform:translateY(4px);box-shadow:0 1px 0 #1a130e;pointer-events:none}
+.message{background:#1a130ecc;padding:4px 12px;border-radius:30px;color:#d4c4a8;font-weight:bold;font-size:13px;min-width:80px;text-align:center;flex:0 1 auto}
+.ach-banner{position:absolute;left:10px;right:10px;top:-80px;z-index:250;background:linear-gradient(135deg,#2a1f18,#1f1814);border:2px solid #ffd70066;border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.8);transition:top .5s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+.ach-banner.show{top:10px}
+.ach-banner-icon{font-size:32px}
+.ach-banner-info{flex:1}
+.ach-banner-title{color:#ffd700;font-weight:bold;font-size:14px}
+.ach-banner-desc{color:#c49a6c;font-size:12px}
+.gameover-screen{position:absolute;inset:0;z-index:300;background:rgba(13,10,8,.92);border-radius:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.gameover-screen.show{opacity:1;pointer-events:auto}
+.gameover-title{font-size:38px;margin-bottom:4px}
+.gameover-sub{color:#ffd700;font-size:18px;font-weight:bold;margin-bottom:16px}
+.gameover-stats{color:#d4c4a8;font-size:15px;margin-bottom:16px;text-align:center;line-height:1.8}
+.gameover-stats span{color:#ffd700}
+.gameover-achs{color:#c49a6c;font-size:13px;margin-bottom:16px;text-align:center;line-height:1.6}
+.gameover-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:16px;font-weight:bold;padding:12px 30px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation;margin:4px}
+.gameover-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
+footer{margin-top:auto;padding:40px 0 0;font-size:11px;font-weight:300;color:var(--footer-color);letter-spacing:.05em}
+footer .go-link{color:var(--muted);text-decoration:none;transition:color .2s}
+footer .go-link:hover{color:var(--text)}
+@media(max-width:500px){
+.wrapper{padding:24px 16px 40px}
+.game-wrap{padding:10px;border-radius:28px}
+.grid{gap:7px;padding:6px;border-radius:22px}
+.cell{font-size:24px;border-radius:16px}.cell .mole{font-size:28px;border-radius:16px}
+.stats{font-size:12px;padding:2px 8px}.shop-btn{font-size:11px;padding:6px 8px;min-width:32px}.message{font-size:12px;padding:2px 8px;min-width:70px}
+.top-panel{font-size:14px}.top-panel .high-score,.top-panel .level-badge{font-size:11px}.combo-display{font-size:12px;padding:2px 8px;min-width:40px}
+}
+@media(max-width:380px){
+.game-wrap{padding:6px;border-radius:20px}.grid{gap:5px;padding:4px}.cell{font-size:18px}.cell .mole{font-size:22px}
+.top-panel span{padding:2px 6px;font-size:11px}.shop-btn{font-size:9px;padding:4px 5px}
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+<div class="top">
+<div class="back"><a href="https://doinwor.github.io/go-ecosystem/">GO</a> / <a href="https://doinwor.github.io/go-ecosystem/i-site/">i.</a></div>
+<button class="theme-toggle" id="themeToggle"><span class="theme-toggle__knob"></span></button>
+</div>
+<div class="game-header">
+<p class="game-header__label">🎮 Игра от студии i.</p>
+<h1 class="game-header__title">Крот-<span>собиратель</span></h1>
+<p class="game-header__desc">Стучи по кротам, собирай монеты и коллекцию редких предметов. Новые кроты, уровни, достижения — скучно не будет!</p>
+</div>
+<div class="game-wrap" id="gameWrap">
+<div class="ach-banner" id="achBanner">
+<div class="ach-banner-icon" id="achBannerIcon">🏆</div>
+<div class="ach-banner-info">
+<div class="ach-banner-title" id="achBannerTitle">Достижение!</div>
+<div class="ach-banner-desc" id="achBannerDesc">Описание</div>
+</div>
+</div>
+<div class="levelup-flash" id="levelFlash"></div>
+<div class="gameover-screen" id="gameoverScreen">
+<div class="gameover-title">🎉</div>
+<div class="gameover-sub">Коллекция собрана!</div>
+<div class="gameover-stats" id="gameoverStats">Очков: <span id="goScore">0</span><br>Собрано: <span id="goCollection">12</span>/12<br>Рекорд: <span id="goHighScore">0</span></div>
+<div class="gameover-achs" id="gameoverAchs"></div>
+<button class="gameover-btn" id="goAgainBtn">🔄 Ещё раз</button>
+</div>
+<div class="top-panel">
+<span>💰 <span id="scoreDisplay">0</span></span>
+<span class="level-badge">📊 <span id="levelDisplay">1</span></span>
+<span class="high-score">🏆 <span id="highScoreDisplay">0</span></span>
+<span>⭐ <span id="collectionDisplay">0</span>/12</span>
+<button class="sound-btn" id="soundBtn">🔊</button>
+</div>
+<div class="progress-wrap">
+<div class="progress-bar" id="progressBar"></div>
+<div class="progress-label" id="progressLabel">0/12</div>
+</div>
+<div class="grid" id="grid"></div>
+<div class="bottom-panel">
+<div class="stats">
+<span>🗡️ <span id="shovelLevel">1</span></span>
+<span>🎯 <span id="luckLevel">0</span></span>
+<span class="combo-display idle" id="comboDisplay">🔥 x1</span>
+</div>
+<div class="message" id="messageDisplay">🔨 Копай!</div>
+<div class="shop">
+<button class="shop-btn" id="shovelUpgrade">⬆ Лопата</button>
+<button class="shop-btn" id="luckUpgrade">🍀 Удача</button>
+<button class="shop-btn" id="autoUpgrade">🤖 0</button>
+<button class="shop-btn restart" id="resetBtn">🔄</button>
+</div>
+</div>
+</div>
+<footer>
+<a href="https://doinwor.github.io/go-ecosystem/" class="go-link">Экосистема GO</a> · Сделано студией i. · 2026
+</footer>
+</div>
+<script>
+(function(){var toggle=document.getElementById('themeToggle');var stored=localStorage.getItem('i-theme');if(stored)document.documentElement.setAttribute('data-theme',stored);toggle.addEventListener('click',function(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'':'dark';document.documentElement.setAttribute('data-theme',next||'');localStorage.setItem('i-theme',next||'');});})();
+(function(){
+"use strict";var GRID_SIZE=4,TOTAL_CELLS=GRID_SIZE*GRID_SIZE,COLLECTION_TARGET=12;
+var ITEMS=[
+{id:'gold',emoji:'🪙',name:'Золото',rarity:.20,points:1,color:'#ffd700',minLvl:1},
+{id:'silver',emoji:'🥈',name:'Серебро',rarity:.22,points:1,color:'#c0c0c0',minLvl:1},
+{id:'bronze',emoji:'🥉',name:'Бронза',rarity:.25,points:0,color:'#cd7f32',minLvl:1},
+{id:'crystal',emoji:'💎',name:'Кристалл',rarity:.10,points:3,color:'#00ffff',minLvl:1},
+{id:'artifact',emoji:'🏺',name:'Артефакт',rarity:.05,points:5,color:'#ff69b4',minLvl:1},
+{id:'bomb',emoji:'💣',name:'Бомба',rarity:.10,points:-2,color:'#ff4444',minLvl:1},
+{id:'king',emoji:'👑',name:'Король',rarity:.03,points:8,color:'#ffd700',minLvl:2},
+{id:'fast',emoji:'⚡',name:'Молния',rarity:.04,points:4,color:'#00aaff',minLvl:3},
+{id:'ghost',emoji:'👻',name:'Призрак',rarity:.04,points:3,color:'#aa44ff',minLvl:4}
+];
+var D=function(id){return document.getElementById(id);};
+var gameWrap=D('gameWrap'),gridEl=D('grid'),levelFlash=D('levelFlash');
+var achBanner=D('achBanner'),achBannerIcon=D('achBannerIcon'),achBannerTitle=D('achBannerTitle'),achBannerDesc=D('achBannerDesc');
+var gameoverScreen=D('gameoverScreen'),goScore=D('goScore'),goCollection=D('goCollection'),goHighScore=D('goHighScore'),goAgainBtn=D('goAgainBtn'),gameoverAchs=D('gameoverAchs');
+var scoreSpan=D('scoreDisplay'),highScoreSpan=D('highScoreDisplay'),collectionSpan=D('collectionDisplay'),levelSpan=D('levelDisplay');
+var progressBar=D('progressBar'),progressLabel=D('progressLabel');
+var shovelLevelSpan=D('shovelLevel'),luckLevelSpan=D('luckLevel'),comboDisplay=D('comboDisplay');
+var messageEl=D('messageDisplay'),soundBtn=D('soundBtn');
+var shovelBtn=D('shovelUpgrade'),luckBtn=D('luckUpgrade'),autoBtn=D('autoUpgrade'),resetBtn=D('resetBtn');
+var score=0,highScore=0,collection=[],shovelLevel=1,luckLevel=0,autoLevel=0,playerLevel=1;
+var cellStates=[],gameActive=true,messageTimeout=null,spawnTimeout=null,combo=0,comboTimer=null,muted=false,autoInterval=null;
+var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1};
+var unlocked={},bannerTimeout=null;
+try{var d=JSON.parse(localStorage.getItem('moleData'));if(d){if(d.highScore)highScore=d.highScore;if(d.stats)for(var k in d.stats)if(stats.hasOwnProperty(k))stats[k]=d.stats[k];if(d.unlocked)for(var k in d.unlocked)if(d.unlocked[k])unlocked[k]=true;}}catch(e){}
+highScoreSpan.textContent=highScore;
+function saveData(){try{localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked}));}catch(e){}}
+var audioCtx=null;
+function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();}
+function playTone(f,d,t,v){if(muted)return;try{initAudio();var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=t||'sine';o.frequency.setValueAtTime(f,audioCtx.currentTime);g.gain.setValueAtTime(v||.15,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d);}catch(e){}}
+function soundHit(){playTone(800,.08,'square',.15);}
+function soundGold(){playTone(1000,.1,'sine',.2);setTimeout(function(){playTone(1200,.1,'sine',.15);},100);}
+function soundBomb(){playTone(150,.3,'sawtooth',.2);}
+function soundCombo(){playTone(600,.06,'sine',.1);setTimeout(function(){playTone(900,.08,'sine',.12);},60);}
+function soundLevelUp(){playTone(800,.1,'sine',.15);setTimeout(function(){playTone(1000,.1,'sine',.15);},100);setTimeout(function(){playTone(1200,.15,'sine',.18);},200);}
+function soundRare(){playTone(900,.08,'sine',.15);setTimeout(function(){playTone(1100,.08,'sine',.15);},80);setTimeout(function(){playTone(1400,.12,'sine',.2);},160);}
+function tryVibrate(ms){try{navigator.vibrate(ms);}catch(e){}}
+function spawnFloatText(x,y,t,c){var e=document.createElement('div');e.className='float-text';e.textContent=t;e.style.left=x+'px';e.style.top=y+'px';e.style.color=c||'#fff';gameWrap.appendChild(e);setTimeout(function(){e.remove();},900);}
+function spawnParticles(x,y,c,n){for(var i=0;i<(n||8);i++){var p=document.createElement('div');p.className='particle';var a=Math.random()*Math.PI*2,d=30+Math.random()*60;p.style.setProperty('--dx',Math.cos(a)*d+'px');p.style.setProperty('--dy',Math.sin(a)*d+'px');p.style.left=x+'px';p.style.top=y+'px';p.style.background=c||'#ffd700';var s=4+Math.random()*7;p.style.width=s+'px';p.style.height=s+'px';gameWrap.appendChild(p);setTimeout(function(){p.remove();},700);}}
+function screenShake(){gameWrap.classList.remove('shake');void gameWrap.offsetWidth;gameWrap.classList.add('shake');setTimeout(function(){gameWrap.classList.remove('shake');},300);}
+function updateCombo(){if(combo>=10){comboDisplay.textContent='🔥 x'+Math.min(combo,99);comboDisplay.className='combo-display hot';}else if(combo>0){comboDisplay.textContent='🔥 x'+Math.min(combo,99);comboDisplay.className='combo-display active';}else{comboDisplay.textContent='🔥 x1';comboDisplay.className='combo-display idle';}}
+function addCombo(){combo++;if(combo>stats.bestCombo){stats.bestCombo=combo;saveData();}if(comboTimer)clearTimeout(comboTimer);comboTimer=setTimeout(function(){combo=0;updateCombo();},1500);updateCombo();if(combo>=5&&combo%5===0)soundCombo();if(combo>=10)tryVibrate(20);}
+function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
+function getActiveItems(){return ITEMS.filter(function(i){return i.minLvl<=playerLevel;});}
+function generateItem(){var items=getActiveItems().map(function(i){return{id:i.id,emoji:i.emoji,name:i.name,rarity:i.rarity,points:i.points,color:i.color,minLvl:i.minLvl};});var lb=luckLevel*.03;items.forEach(function(i){if(i.id==='crystal')i.rarity+=lb;else if(i.id==='artifact')i.rarity+=lb*.5;else if(i.id==='king')i.rarity+=lb*.3;else if(i.id==='bomb')i.rarity-=lb*.5;});var sum=items.reduce(function(a,i){return a+Math.max(0,i.rarity);},0);items.forEach(function(i){i.rarity=Math.max(0,i.rarity/sum);});var r=Math.random(),acc=0;for(var i of items){acc+=i.rarity;if(r<=acc)return i;}return items[0];}
+function checkLevelUp(){var nl=1+Math.floor(score/25);if(nl!==playerLevel){playerLevel=nl;levelSpan.textContent=playerLevel;stats.maxLevel=Math.max(stats.maxLevel,playerLevel);saveData();soundLevelUp();tryVibrate(30);levelFlash.classList.remove('go');void levelFlash.offsetWidth;levelFlash.classList.add('go');setMessage('📊 Уровень '+playerLevel+'!');if(playerLevel===2)setMessage('👑 Появился Король!');else if(playerLevel===3)setMessage('⚡ Появилась Молния!');else if(playerLevel===4)setMessage('👻 Появился Призрак!');checkAchievements();}}
+function spawnMole(idx){if(!gameActive||cellStates[idx].active)return;var item=generateItem();cellStates[idx].active=true;cellStates[idx].type=item;var cell=gridEl.children[idx],mole=cell.querySelector('.mole');mole.className='mole';if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king')mole.classList.add('gold');if(item.id==='king')mole.classList.add('king');else if(item.id==='fast')mole.classList.add('fast');else if(item.id==='ghost')mole.classList.add('ghost');else if(item.id==='bomb')mole.classList.add('bomb');var es=mole.querySelector('.emoji');if(es)es.textContent=item.emoji;mole.classList.add('show');var du=1500+Math.random()*1500;if(item.id==='gold')du=1000+Math.random()*800;else if(item.id==='artifact')du=800+Math.random()*600;else if(item.id==='king')du=900+Math.random()*600;else if(item.id==='fast')du=500+Math.random()*300;else if(item.id==='ghost')du=2000+Math.random()*1000;else if(item.id==='bomb')du=2000+Math.random()*1000;du*=Math.max(.4,1-score*.00004);if(cellStates[idx].timer)clearTimeout(cellStates[idx].timer);cellStates[idx].timer=setTimeout(function(){hideMole(idx);},du);if(item.id==='ghost'){setTimeout(function(){if(!cellStates[idx]||!cellStates[idx].active)return;var gi=cellStates[idx].type;hideMole(idx);var inv=[];for(var i=0;i<TOTAL_CELLS;i++){if(!cellStates[i].active)inv.push(i);}if(inv.length>0){var ni=inv[Math.floor(Math.random()*inv.length)];cellStates[ni].active=true;cellStates[ni].type=gi;var nc=gridEl.children[ni],nm=nc.querySelector('.mole');nm.className='mole ghost';var ies=nm.querySelector('.emoji');if(ies)ies.textContent='👻';nm.classList.add('show');if(cellStates[ni].timer)clearTimeout(cellStates[ni].timer);cellStates[ni].timer=setTimeout(function(){hideMole(ni);},du*.4);}},1000+Math.random()*500);}}
+function hideMole(idx){if(!cellStates[idx]||!cellStates[idx].active)return;cellStates[idx].active=false;if(cellStates[idx].timer){clearTimeout(cellStates[idx].timer);cellStates[idx].timer=null;}var c=gridEl.children[idx];if(c){var m=c.querySelector('.mole');if(m)m.classList.remove('show');}}
+function getCellCenter(c){var r=c.getBoundingClientRect(),wr=gameWrap.getBoundingClientRect();return{x:r.left-wr.left+r.width/2,y:r.top-wr.top+r.height/2};}
+function showAchBanner(){achBanner.classList.add('show');if(bannerTimeout)clearTimeout(bannerTimeout);bannerTimeout=setTimeout(function(){achBanner.classList.remove('show');},3000);}
+function checkAchievements(){var u=0;for(var i=0;i<ACHIEVEMENTS.length;i++){var a=ACHIEVEMENTS[i];if(unlocked[a.id]){u++;continue;}var ok=false;switch(a.id){case'first_click':ok=stats.totalClicks>=1;break;case'gold_rush':ok=stats.totalEarnings>=100;break;case'gold_million':ok=stats.totalEarnings>=500;break;case'bomb_survivor':ok=stats.totalBombs>=10;break;case'king_hunter':ok=stats.totalKings>=5;break;case'fast_catcher':ok=stats.totalFast>=10;break;case'ghost_hunter':ok=stats.totalGhosts>=10;break;case'combo_master':ok=stats.bestCombo>=15;break;case'strategist':ok=stats.maxLevel>=5;break;case'collector_1':ok=stats.collectionCount>=1;break;case'digger':ok=stats.maxShovel>=10;break;}if(ok){unlocked[a.id]=true;achBannerIcon.textContent=a.icon||'🏆';achBannerTitle.textContent='🏆 Достижение: '+a.name;achBannerDesc.textContent=a.desc;showAchBanner();tryVibrate(50);soundRare();saveData();}}
+}
+function finishGame(){gameActive=false;if(spawnTimeout)clearTimeout(spawnTimeout);if(autoInterval)clearInterval(autoInterval);stats.collectionCount++;saveData();goScore.textContent=score;goCollection.textContent=collection.length;goHighScore.textContent=highScore;gameoverScreen.classList.add('show');setMessage('🎉 Коллекция собрана!');checkAchievements();}
+function handleCellClick(idx){if(!gameActive)return;var state=cellStates[idx],cell=gridEl.children[idx],pos=getCellCenter(cell);if(!state.active){setMessage('Здесь ничего нет');return;}hideMole(idx);var item=state.type;var cm=getComboMultiplier();var pts=Math.round(item.points*shovelLevel*cm);var crit=false;if(pts>0&&Math.random()<.05+luckLevel*.02){pts=Math.round(pts*2);crit=true;}stats.totalClicks++;if(item.id==='bomb')stats.totalBombs++;if(item.id==='king')stats.totalKings++;if(item.id==='fast')stats.totalFast++;if(item.id==='ghost')stats.totalGhosts++;if(pts>0){score+=pts;stats.totalEarnings+=pts;soundHit();if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king')soundGold();if(item.id==='king'){soundRare();tryVibrate(40);}if(item.id==='fast')soundRare();addCombo();setMessage((crit?'КРИТ! ':'')+'+'+pts+' '+item.emoji);}else if(pts<0){score=Math.max(0,score+pts);soundBomb();combo=0;updateCombo();screenShake();setMessage('💥 '+item.name);}else{setMessage('😐 '+item.emoji);}spawnFloatText(pos.x-15,pos.y-20,(crit?'КРИТ! ':'')+pts,item.color||'#fff');spawnParticles(pos.x,pos.y,item.color||'#ffd700',pts>0?12:18);checkLevelUp();if(item.id==='king')spawnParticles(pos.x,pos.y,'#ffd700',30);if(!collection.includes(item.emoji)){collection.push(item.emoji);if(collection.length<COLLECTION_TARGET){setMessage('⭐ Новый предмет! '+item.emoji);tryVibrate(30);spawnParticles(pos.x,pos.y,'#ffd700',20);}if(collection.length>=COLLECTION_TARGET){finishGame();}}updateUI();saveData();checkAchievements();if(gameActive&&pts>=0){setTimeout(function(){if(!cellStates[idx].active)spawnMole(idx);},300+Math.random()*800);}}
+function scheduleSpawn(){if(!gameActive)return;var base=2000,reduction=Math.min(1200,Math.floor(score/20)*50),intv=Math.max(700,base-reduction)+Math.random()*700;spawnTimeout=setTimeout(function(){if(!gameActive)return;var count=1+Math.floor(Math.random()*Math.min(5,1+Math.floor(playerLevel/2)+Math.floor(score/40)));for(var i=0;i<count;i++){setTimeout(function(n){return function(){if(!gameActive)return;var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}if(inv.length>0){var idx=inv[Math.floor(Math.random()*inv.length)];spawnMole(idx);}};}(i),i*150);}scheduleSpawn();},intv);}
+function startSpawning(){if(spawnTimeout)clearTimeout(spawnTimeout);for(var i=0;i<2;i++){setTimeout(function(){if(gameActive){var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}if(inv.length>0)spawnMole(inv[Math.floor(Math.random()*inv.length)]);}},i*400+300);}scheduleSpawn();}
+function startAutoCollect(){if(autoInterval)clearInterval(autoInterval);if(autoLevel<=0)return;autoInterval=setInterval(function(){if(!gameActive)return;var ac=[];for(var i=0;i<TOTAL_CELLS;i++){if(cellStates[i].active)ac.push(i);}if(ac.length===0)return;var tc=Math.min(ac.length,autoLevel);for(var k=0;k<tc;k++){var idx=ac.splice(Math.floor(Math.random()*ac.length),1)[0],st=cellStates[idx];if(st.active){hideMole(idx);var pts=Math.round(st.type.points*shovelLevel*.5);if(pts>0)score+=pts;else if(pts<0)score=Math.max(0,score+pts);if(!collection.includes(st.type.emoji)){collection.push(st.type.emoji);if(collection.length>=COLLECTION_TARGET)finishGame();}updateUI();}}},3000/autoLevel);}
+function updateUI(){scoreSpan.textContent=score;if(score>highScore){highScore=score;saveData();}highScoreSpan.textContent=highScore;levelSpan.textContent=playerLevel;collectionSpan.textContent=collection.length;var pct=collection.length/COLLECTION_TARGET*100;progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+COLLECTION_TARGET;shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;autoBtn.disabled=!gameActive;autoBtn.textContent='🤖 '+autoLevel;}
+function setMessage(t){messageEl.textContent=t;if(messageTimeout)clearTimeout(messageTimeout);messageTimeout=setTimeout(function(){if(gameActive)messageEl.textContent='🔨 Копай!';else messageEl.textContent='🏁';},2500);}
+function upgradeShovel(){if(!gameActive)return;var cost=10*shovelLevel;if(score<cost){setMessage('Нужно '+cost+'💰');return;}score-=cost;shovelLevel++;if(shovelLevel>stats.maxShovel){stats.maxShovel=shovelLevel;saveData();}soundGold();setMessage('⬆ Лопата '+shovelLevel);updateUI();checkAchievements();}
+function upgradeLuck(){if(!gameActive)return;var cost=15*(luckLevel+1);if(score<cost){setMessage('Нужно '+cost+'💰');return;}score-=cost;luckLevel++;soundGold();setMessage('🍀 Удача '+luckLevel);updateUI();}
+function upgradeAuto(){if(!gameActive)return;var cost=30*(autoLevel+1);if(score<cost){setMessage('Нужно '+cost+'💰');return;}score-=cost;autoLevel++;soundGold();setMessage('🤖 Авто '+autoLevel);if(autoInterval)clearInterval(autoInterval);startAutoCollect();updateUI();}
+function toggleSound(){muted=!muted;var icon=muted?'🔇':'🔊';soundBtn.textContent=icon;if(gameStarted)setMessage(muted?'🔇 Без звука':'🔊 Звук включён');}
+function resetGame(){if(spawnTimeout)clearTimeout(spawnTimeout);if(autoInterval)clearInterval(autoInterval);if(comboTimer)clearTimeout(comboTimer);for(var i=0;i<TOTAL_CELLS;i++){if(cellStates[i]){if(cellStates[i].timer)clearTimeout(cellStates[i].timer);cellStates[i].active=false;cellStates[i].type=null;cellStates[i].timer=null;}var c=gridEl.children[i];if(c){var m=c.querySelector('.mole');if(m)m.classList.remove('show');}}document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});score=0;collection=[];shovelLevel=1;luckLevel=0;autoLevel=0;playerLevel=1;combo=0;updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();if(autoLevel>0)startAutoCollect();setTimeout(function(){setMessage('🔨 Копай!');},2000);gameoverScreen.classList.remove('show');}
+function createGrid(){gridEl.innerHTML='';cellStates=[];for(var i=0;i<TOTAL_CELLS;i++){var cell=document.createElement('div');cell.className='cell';var mole=document.createElement('div');mole.className='mole';var emoji=document.createElement('span');emoji.className='emoji';emoji.textContent='🪙';mole.appendChild(emoji);cell.appendChild(mole);cell.addEventListener('click',(function(idx){return function(){handleCellClick(idx);};})(i));cell.addEventListener('touchstart',(function(idx){return function(e){e.preventDefault();handleCellClick(idx);};})(i),{passive:false});gridEl.appendChild(cell);cellStates.push({active:false,type:null,timer:null});}}
+var gameStarted=true;createGrid();updateUI();setMessage('🔨 Копай!');startSpawning();
+shovelBtn.addEventListener('click',upgradeShovel);
+luckBtn.addEventListener('click',upgradeLuck);
+autoBtn.addEventListener('click',upgradeAuto);
+resetBtn.addEventListener('click',function(){resetGame();});
+soundBtn.addEventListener('click',toggleSound);
+goAgainBtn.addEventListener('click',function(){resetGame();});
+})();
+</script>
+</body>
+</html>
