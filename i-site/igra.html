@@ -21,12 +21,12 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 @keyframes menuMole{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 .menu-title{font-size:42px;color:#d4c4a8;font-weight:bold;text-shadow:0 4px 20px rgba(0,0,0,.6);margin-bottom:6px}
 .menu-sub{font-size:15px;color:#8b7b6a;margin-bottom:36px}
-.menu-play{background:linear-gradient(180deg,#f0c896,#c49a6c);border:none;color:#1f1814;font-size:24px;font-weight:bold;padding:18px 70px;border-radius:60px;box-shadow:0 8px 0 #8b6b40,0 0 40px rgba(196,154,108,.2);cursor:pointer;transition:all .08s linear;touch-action:manipulation;margin-bottom:14px;letter-spacing:1px}
-.menu-play:active{transform:translateY(6px);box-shadow:0 2px 0 #8b6b40,0 0 40px rgba(196,154,108,.2)}
 .menu-btn-group{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:260px}
 .menu-btn{display:block;width:100%;font-family:'Unbounded','Segoe UI',sans-serif;background:#1a130e;border:2px solid #3d3224;color:#c49a6c;font-size:14px;cursor:pointer;padding:10px 20px;border-radius:40px;transition:all .2s;touch-action:manipulation;text-align:center;letter-spacing:.03em}
 .menu-btn:hover{color:#d4c4a8;border-color:#8b6b40;background:#221a14;box-shadow:0 0 20px rgba(196,154,108,.05)}
 .menu-btn:active{transform:scale(.95)}
+.menu-btn-play{color:#d4c4a8;border-color:#8b6b40;font-weight:bold;font-size:16px;padding:12px 20px;background:#221a14}
+.menu-btn-play:hover{color:#ffd700;border-color:#ffd700;background:#2a2218;box-shadow:0 0 30px rgba(255,215,0,.1)}
 .menu-btn-sub{color:#8b7b6a;border-color:#3d3224;font-size:13px}
 .menu-btn-sub:hover{color:#ff6b35;border-color:#ff6b3566}
 .menu-credits{color:#4a3a2a;font-size:14px;position:absolute;bottom:30px}
@@ -160,8 +160,9 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .message{background:#1a130ecc;padding:4px 12px;border-radius:30px;color:#d4c4a8;font-weight:bold;font-size:13px;min-width:80px;text-align:center;flex:0 1 auto}
 
 @media(max-width:640px){
-.menu-play{font-size:20px;padding:16px 44px}.menu-title{font-size:28px}.menu-icon{font-size:56px}
+.menu-title{font-size:28px}.menu-icon{font-size:56px}
 .menu-btn{font-size:13px;padding:9px 16px}
+.menu-btn-play{font-size:15px;padding:11px 16px}
 }
 @media(max-width:500px){
 body{padding:6px}.game-wrap{padding:10px;border-radius:28px}.grid{gap:6px;padding:5px;border-radius:20px}
@@ -169,7 +170,7 @@ body{padding:6px}.game-wrap{padding:10px;border-radius:28px}.grid{gap:6px;paddin
 .stats{font-size:11px;padding:2px 6px}.shop-btn{font-size:11px;padding:8px 10px;min-width:36px}.message{font-size:11px;padding:2px 8px;min-width:60px}
 .top-panel{font-size:13px;gap:3px}.top-panel span,.sound-btn{padding:3px 7px;font-size:12px}.top-panel .high-score,.top-panel .level-badge{font-size:10px}.combo-display{font-size:11px;padding:2px 6px;min-width:36px}
 .bottom-panel{gap:4px;margin-top:8px}.shop{gap:3px}.stats{gap:3px}
-.menu-title{font-size:28px}.menu-icon{font-size:56px}.menu-play{font-size:18px;padding:14px 36px}.ach-screen-title{font-size:24px}
+.menu-title{font-size:28px}.menu-icon{font-size:56px}.menu-btn-play{font-size:15px;padding:12px 30px}.ach-screen-title{font-size:24px}
 .ach-name{font-size:12px}.ach-desc{font-size:11px}
 .cell .mole{font-size:24px}.cell{min-height:55px;min-width:55px}
 }
@@ -177,7 +178,7 @@ body{padding:6px}.game-wrap{padding:10px;border-radius:28px}.grid{gap:6px;paddin
 body{padding:4px}.game-wrap{padding:6px;border-radius:18px}.grid{gap:4px;padding:4px;border-radius:16px}
 .cell{font-size:18px;border-radius:12px;min-height:48px;min-width:48px}.cell .mole{font-size:20px;border-radius:12px}
 .top-panel span{padding:2px 5px;font-size:10px}.shop-btn{font-size:10px;padding:6px 7px;min-width:30px}
-.menu-play{font-size:16px;padding:12px 30px}.menu-title{font-size:24px}.menu-icon{font-size:44px}
+.menu-btn-play{font-size:14px;padding:10px 24px}.menu-title{font-size:24px}.menu-icon{font-size:44px}
 .ach-screen-title{font-size:20px}.ach-list{max-width:100%}.ach-item{padding:8px 10px}.ach-icon{font-size:22px;width:30px}
 .gameover-title{font-size:30px}.gameover-sub{font-size:16px}.gameover-stats{font-size:13px}.gameover-btn{font-size:14px;padding:10px 22px}
 }
@@ -226,8 +227,8 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="menu-icon">🐹</div>
 	<div class="menu-title">Крот-собиратель</div>
 	<div class="menu-sub">Стучи по кротам, собирай коллекцию!</div>
-	<button class="menu-play" id="playBtn">▶ ПРОДОЛЖИТЬ</button>
 	<div class="menu-btn-group">
+		<button class="menu-btn menu-btn-play" id="playBtn">▶ ПРОДОЛЖИТЬ</button>
 		<button class="menu-btn menu-btn-sub" id="newGameBtn">🔄 Новая игра</button>
 		<button class="menu-btn" id="menuAchBtn">🏆 Достижения</button>
 		<button class="menu-btn" id="menuSoundBtn">🔊</button>
