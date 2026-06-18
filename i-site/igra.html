@@ -51,6 +51,8 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .ach-item.unlocked .ach-desc{color:#c49a6c}
 .ach-status{font-size:16px;color:#3d3224}
 .ach-item.unlocked .ach-status{color:#ffd700}
+.ach-hint{font-size:11px;color:#6a5a4a;text-align:center;margin-bottom:14px;padding:6px 12px;background:#1a130e;border-radius:30px;border:1px solid #3d3224;transition:all .3s}
+.ach-hint.revealed{color:#ffd700;border-color:#ffd70044;background:#2a2218;text-shadow:0 0 10px rgba(255,215,0,.1)}
 .ach-close-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:16px;font-weight:bold;padding:12px 40px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation}
 .ach-close-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
 
@@ -69,8 +71,11 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .cert-badge{font-size:56px;margin-bottom:8px}
 .cert-title{font-size:28px;font-weight:900;color:#ffd700;letter-spacing:-.02em;margin-bottom:4px}
 .cert-sub{font-size:12px;color:#8b7b6a;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
-.cert-body{font-size:13px;color:#c4b8a8;line-height:1.7;margin-bottom:20px}
+.cert-body{font-size:13px;color:#c4b8a8;line-height:1.7;margin-bottom:16px}
 .cert-body span{color:#ffd700;font-weight:600}
+.cert-steps{margin-bottom:16px;text-align:left;background:#1a130e;border-radius:14px;padding:12px 16px;border:1px solid #3d3224}
+.cert-step{font-size:12px;color:#a09080;line-height:1.8;padding:2px 0}
+.cert-step strong{color:#c49a6c}
 .cert-code{background:#1a130e;border-radius:16px;padding:14px;margin-bottom:16px;border:1px solid #3d3224}
 .cert-code-label{font-size:9px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.2em;margin-bottom:6px}
 .cert-code-value{font-size:20px;font-weight:700;color:#ffd700;letter-spacing:.15em;font-family:monospace}
@@ -184,6 +189,7 @@ body{padding:4px}.game-wrap{padding:6px;border-radius:18px}.grid{gap:4px;padding
 <div class="ach-screen" id="achScreen">
 	<div class="ach-screen-title">🏆 Достижения</div>
 	<div class="ach-screen-sub" id="achProgress">0 / 12</div>
+	<div class="ach-hint" id="achHint">🔮 Собери все 12 — откроются секретные</div>
 	<div class="ach-list" id="achList"></div>
 	<button class="ach-close-btn" id="achCloseBtn">Закрыть</button>
 </div>
@@ -197,23 +203,24 @@ body{padding:4px}.game-wrap{padding:6px;border-radius:18px}.grid{gap:4px;padding
 </div>
 <div class="cert-screen" id="certScreen">
 	<div class="cert-wrap">
-		<div class="cert-badge">🏆</div>
+		<div class="cert-badge">👑</div>
 		<div class="cert-title">Сертификат</div>
 		<div class="cert-sub">Студия i. подтверждает</div>
 		<div class="cert-body">
-			Что игрок <span id="certPlayer">Крот-собиратель</span>
-			выполнил <strong>все</strong> достижения в игре
-			«Крот-собиратель» и вошёл в историю студии.
+			Что игрок выполнил <strong>все достижения</strong> в игре
+			«Крот-собиратель» и навсегда вписал своё имя
+			в историю студии.
+		</div>
+		<div class="cert-steps">
+			<div class="cert-step">1. Скопируй код ниже</div>
+			<div class="cert-step">2. Напиши на <strong>studio.i@go-ecosystem.ru</strong></div>
+			<div class="cert-step">3. Получи место на стене почёта студии i.</div>
 		</div>
 		<div class="cert-code">
 			<div class="cert-code-label">Код подтверждения</div>
 			<div class="cert-code-value" id="certCode">------</div>
 		</div>
-		<div class="cert-footer">
-			Отправьте этот код на почту студии, чтобы получить место
-			на стене почёта: <strong>studio.i@go-ecosystem.ru</strong>
-		</div>
-		<button class="cert-close-btn" id="certCloseBtn">Закрыть</button>
+		<button class="cert-close-btn" id="certCloseBtn">✓ Принято</button>
 	</div>
 </div>
 <div class="game-wrap" id="gameWrap">
@@ -297,7 +304,7 @@ var ACHIEVEMENTS=[
 // DOM
 var D=function(id){return document.getElementById(id);};
 var menuScreen=D('menuScreen'),playBtn=D('playBtn'),menuSoundBtn=D('menuSoundBtn'),menuAchBtn=D('menuAchBtn');
-var achScreen=D('achScreen'),achList=D('achList'),achCloseBtn=D('achCloseBtn'),achProgress=D('achProgress');
+var achScreen=D('achScreen'),achList=D('achList'),achCloseBtn=D('achCloseBtn'),achProgress=D('achProgress'),achHint=D('achHint');
 var certScreen=D('certScreen'),certCode=D('certCode'),certCloseBtn=D('certCloseBtn');
 var achBanner=D('achBanner'),achBannerIcon=D('achBannerIcon'),achBannerTitle=D('achBannerTitle'),achBannerDesc=D('achBannerDesc');
 var gameWrap=D('gameWrap'),gridEl=D('grid'),levelFlash=D('levelFlash');
@@ -371,7 +378,22 @@ function checkAchievements(){
 			if(getUnlockedCount()>=ACHIEVEMENTS.length) showCertificate();
 		}
 	}
-	if(getUnlockedCount()>prevCount) updateAchUI();
+	var nowCount=getUnlockedCount();
+	if(nowCount>prevCount){
+		updateAchUI();
+		if(nowCount===getTotalMain()&&!unlocked._secrets_notified){
+			unlocked._secrets_notified=true;saveData();
+			setTimeout(function(){
+				achBannerIcon.textContent='🔮';
+				achBannerTitle.textContent='🔮 Секретные достижения открыты!';
+				achBannerDesc.textContent='Собери их все для получения сертификата';
+				achBanner.classList.add('show');
+				if(bannerTimeout)clearTimeout(bannerTimeout);
+				bannerTimeout=setTimeout(function(){achBanner.classList.remove('show');},4000);
+				soundRare();tryVibrate(50);
+			},800);
+		}
+	}
 }
 
 function showAchievementBanner(a){
@@ -413,9 +435,10 @@ function closeAchievements(){
 
 function renderAchievements(){
 	achList.innerHTML='';
-	var n=0,showSecrets=allMainUnlocked();
+	var n=0,showSecrets=allMainUnlocked(),totalSecrets=0,unlockedSecrets=0;
 	for(var i=0;i<ACHIEVEMENTS.length;i++){
 		var a=ACHIEVEMENTS[i],u=unlocked[a.id];
+		if(a.secret){totalSecrets++;if(u)unlockedSecrets++;}
 		if(a.secret&&!showSecrets&&!u) continue;
 		if(u) n++;
 		var div=document.createElement('div');
@@ -426,6 +449,13 @@ function renderAchievements(){
 		achList.appendChild(div);
 	}
 	achProgress.textContent=n+' / '+ACHIEVEMENTS.length;
+	if(showSecrets){
+		achHint.textContent='🔮 Секретные: '+unlockedSecrets+'/'+totalSecrets;
+		achHint.className='ach-hint revealed';
+	}else{
+		achHint.textContent='🔮 Собери все 12 — откроются секретные';
+		achHint.className='ach-hint';
+	}
 }
 
 function updateAchUI(){
