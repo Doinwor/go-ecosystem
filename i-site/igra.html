@@ -85,6 +85,19 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .cert-close-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
 @media(max-width:500px){.cert-wrap{padding:28px 20px}.cert-badge{font-size:44px}.cert-title{font-size:24px}.cert-code-value{font-size:17px}}
 
+.pause-btn{background:#1a130e;border:none;color:#d4c4a8;font-size:18px;cursor:pointer;transition:.1s;padding:3px 8px;border-radius:30px;box-shadow:inset 0 2px 5px rgba(0,0,0,.7);line-height:1}
+.pause-btn:active{transform:scale(.9)}
+.pause-overlay{position:fixed;inset:0;z-index:2000;background:rgba(13,10,8,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.pause-overlay.show{opacity:1;pointer-events:auto}
+.pause-title{font-size:24px;color:#d4c4a8;font-weight:bold;margin-bottom:30px;letter-spacing:.05em}
+.pause-btn-group{display:flex;flex-direction:column;gap:10px;align-items:center}
+.pause-btn-group button{font-family:'Unbounded',sans-serif;background:none;border:2px solid #3d3224;color:#d4c4a8;font-size:15px;cursor:pointer;padding:12px 36px;border-radius:40px;transition:all .2s;touch-action:manipulation;min-width:200px}
+.pause-btn-group button:active{transform:scale(.95)}
+.pause-btn-group button:hover{color:#ffd700;border-color:#8b6b40;background:#221a14}
+.pause-btn-group .pause-continue{background:linear-gradient(180deg,#f0c896,#c49a6c);border:none;color:#1f1814;font-weight:bold;font-size:17px;box-shadow:0 6px 0 #8b6b40,0 0 30px rgba(196,154,108,.15)}
+.pause-btn-group .pause-continue:active{transform:translateY(4px);box-shadow:0 2px 0 #8b6b40}
+.pause-btn-group .pause-danger{color:#ff6b35;border-color:#5a2a1a}
+.pause-btn-group .pause-danger:hover{color:#ff6b35;border-color:#ff6b3566}
 .gameover-screen{position:absolute;inset:0;z-index:300;background:rgba(13,10,8,.95);border-radius:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .gameover-screen.show{box-shadow:inset 0 0 80px rgba(255,215,0,.05)}
 .gameover-screen.show{opacity:1;pointer-events:auto}
@@ -96,7 +109,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .gameover-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:16px;font-weight:bold;padding:12px 30px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation;margin:4px}
 .gameover-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
 
-.game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);padding:15px;border-radius:40px;box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,215,0,.04),inset 0 1px 0 rgba(255,255,255,.05);max-width:500px;width:100%;position:relative;overflow:hidden}
+.game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);padding:15px;border-radius:40px;box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,215,0,.04),inset 0 1px 0 rgba(255,255,255,.05);max-width:500px;width:100%;position:relative;overflow:hidden;will-change:transform;transform:translateZ(0)}
 .game-wrap.shake{animation:shake .3s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px) rotate(-.5deg)}40%{transform:translateX(8px) rotate(.5deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 
@@ -111,10 +124,10 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,#8b6b40,#ffd700);border-radius:20px;transition:width .4s ease}
 
 
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:8px;background:#2a221c;border-radius:30px;box-shadow:inset 0 0 0 3px #3a2e22}
-.cell{aspect-ratio:1;background:radial-gradient(circle at 50% 60%,#4a3a2a,#3d3224);border-radius:20px;box-shadow:inset 0 -6px 0 #1a130e,0 6px 12px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;transition:transform .08s,box-shadow .2s;cursor:pointer;touch-action:manipulation;position:relative}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:8px;background:#2a221c;border-radius:30px;box-shadow:inset 0 0 0 3px #3a2e22;contain:layout style paint}
+.cell{aspect-ratio:1;background:radial-gradient(circle at 50% 60%,#4a3a2a,#3d3224);border-radius:20px;box-shadow:inset 0 -6px 0 #1a130e,0 6px 12px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;transition:transform .08s,box-shadow .2s;cursor:pointer;touch-action:manipulation;position:relative;contain:layout style;will-change:transform}
 .cell:active{transform:scale(.92);box-shadow:inset 0 -2px 0 #1a130e}
-.cell .mole{width:100%;height:100%;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:40px;background:radial-gradient(circle at 30% 30%,#c49a6c,#8b6b40);box-shadow:inset -4px -8px 15px #4a3a2a,0 8px 15px rgba(0,0,0,.4);transform:scale(0);transition:transform .12s cubic-bezier(.34,1.56,.64,1);position:relative}
+.cell .mole{width:100%;height:100%;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:40px;background:radial-gradient(circle at 30% 30%,#c49a6c,#8b6b40);box-shadow:inset -4px -8px 15px #4a3a2a,0 8px 15px rgba(0,0,0,.4);transform:scale(0) translateZ(0);transition:transform .12s cubic-bezier(.34,1.56,.64,1);position:relative;will-change:transform}
 .cell .mole.show{transform:scale(1);animation:moleBob 1.5s ease-in-out infinite}
 .cell .mole.gold{background:radial-gradient(circle at 30% 30%,#ffd966,#b8860b);box-shadow:inset -4px -8px 15px #8b6508,0 0 30px #ffd700}
 .cell .mole.bomb{background:radial-gradient(circle at 30% 30%,#555,#111);box-shadow:inset -4px -8px 15px #000,0 0 30px #ff4444;animation:none}
@@ -171,15 +184,53 @@ body{padding:4px}.game-wrap{padding:6px;border-radius:18px}.grid{gap:4px;padding
 .ach-screen-title{font-size:20px}.ach-list{max-width:100%}.ach-item{padding:8px 10px}.ach-icon{font-size:22px;width:30px}
 .gameover-title{font-size:30px}.gameover-sub{font-size:16px}.gameover-stats{font-size:13px}.gameover-btn{font-size:14px;padding:10px 22px}
 }
+/* ===== Звёздный фон ===== */
+@keyframes starPulse{0%,100%{opacity:.15;transform:scale(.8)}50%{opacity:.7;transform:scale(1.2)}}
+@keyframes meteor{0%{transform:translateX(0) translateY(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateX(300px) translateY(200px);opacity:0}}
+.bg-stars{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.bg-star{position:absolute;width:3px;height:3px;background:#ffd700;border-radius:50%;opacity:.2;animation:starPulse var(--sp) ease-in-out infinite alternate}
+.bg-star.s{width:2px;height:2px;opacity:.1;--sp:4s}
+.bg-star.l{width:4px;height:4px;opacity:.4;--sp:2s}
+/* Мобильный фон: звёздная дымка */
+body.is-mobile::before{background:radial-gradient(ellipse at 50% 0%,#1a1620 0%,#0d0a12 60%,#08060a 100%);opacity:1}
+body.is-mobile::after{background:radial-gradient(2px 2px at 15% 20%,rgba(200,180,255,.04),transparent 200px),radial-gradient(2px 2px at 85% 60%,rgba(100,180,255,.03),transparent 200px),radial-gradient(2px 2px at 50% 90%,rgba(255,215,0,.02),transparent 200px);pointer-events:none}
+/* ===== Мобильный лейаут: игра внизу ===== */
+body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start;padding:0;display:flex;flex-direction:column}
+.is-mobile .game-wrap{border-radius:32px 32px 0 0;max-width:100%;width:100%;margin-top:auto;padding:12px;overflow:hidden}
+.is-mobile .grid{gap:6px;padding:5px;border-radius:20px}
+.is-mobile .cell{border-radius:14px}
+.is-mobile .cell .mole{border-radius:14px;font-size:26px}
+.is-mobile .top-panel{font-size:12px;padding-bottom:4px}
+.is-mobile .top-panel span,.is-mobile .sound-btn,.is-mobile .pause-btn{padding:2px 6px;font-size:11px}
+.is-mobile .bottom-panel{margin-top:8px;gap:4px}
+.is-mobile .stats{font-size:11px;padding:2px 6px;gap:3px}
+.is-mobile .shop-btn{font-size:10px;padding:6px 8px;min-width:30px}
+.is-mobile .message{font-size:11px;padding:2px 6px;min-width:50px}
+.is-mobile .combo-display{font-size:11px;padding:2px 6px;min-width:30px}
+.is-mobile .ach-banner{right:10px;left:10px;max-width:none;top:-80px}
+.is-mobile .ach-banner.show{top:10px}
+.is-mobile .progress-wrap{height:8px;margin:3px 0}
+.is-mobile .cell .mole{box-shadow:inset -2px -4px 8px #4a3a2a,0 4px 8px rgba(0,0,0,.4);will-change:transform}
+.is-mobile .cell .mole.gold{box-shadow:inset -2px -4px 8px #8b6508,0 0 15px #ffd700}
+.is-mobile .cell .mole.king{box-shadow:inset -2px -4px 8px #8b6508,0 0 20px #ffd700,0 0 40px #ffd70022}
+.is-mobile .cell .mole.fast{box-shadow:inset -2px -4px 8px #204060,0 0 15px #00aaff,0 0 30px #00aaff22}
+.is-mobile .cell .mole.ghost{box-shadow:inset -2px -4px 8px #402060,0 0 15px #aa44ff,0 0 30px #aa44ff22}
+.is-mobile .cell .mole.bomb{box-shadow:inset -2px -4px 8px #000,0 0 15px #ff4444}
+.is-mobile .mole.show{animation:none}
+.is-mobile .bg-star{width:2px;height:2px;opacity:.15}
+.is-mobile .bg-star.l{width:3px;height:3px;opacity:.25}
 </style>
 </head>
 <body>
+
+<div class="bg-stars" id="bgStars"></div>
 
 <div class="menu-screen" id="menuScreen">
 	<div class="menu-icon">🐹</div>
 	<div class="menu-title">Крот-собиратель</div>
 	<div class="menu-sub">Стучи по кротам, собирай коллекцию!</div>
-	<button class="menu-play" id="playBtn">▶ ИГРАТЬ</button>
+	<button class="menu-play" id="playBtn">▶ ПРОДОЛЖИТЬ</button>
+	<button class="menu-ach-btn" id="newGameBtn" style="background:none;border:2px solid #3d3224;color:#8b7b6a;font-size:13px;cursor:pointer;padding:8px 20px;border-radius:40px;transition:all .2s;touch-action:manipulation;margin-bottom:6px;font-family:'Unbounded',sans-serif">🔄 Новая игра</button>
 	<button class="menu-sound" id="menuSoundBtn">🔊</button>
 	<button class="menu-ach-btn" id="menuAchBtn">🏆 Достижения</button>
 	<button class="menu-back" id="menuBackBtn"><span class="arrow">←</span> На сайт</button>
@@ -239,6 +290,7 @@ body{padding:4px}.game-wrap{padding:6px;border-radius:18px}.grid{gap:4px;padding
 		<span class="high-score">🏆 <span id="highScoreDisplay">0</span></span>
 		<span>⭐ <span id="collectionDisplay">0</span>/12</span>
 		<button class="sound-btn" id="soundBtn">🔊</button>
+		<button class="pause-btn" id="pauseBtn">☰</button>
 	</div>
 <div style="display:flex;justify-content:space-between;align-items:center;padding:2px 4px;margin-top:2px">
 	<span style="font-size:9px;color:#8b7b6a;letter-spacing:.1em;text-transform:uppercase">📦 Коллекция</span>
@@ -258,9 +310,19 @@ body{padding:4px}.game-wrap{padding:6px;border-radius:18px}.grid{gap:4px;padding
 		<div class="shop">
 			<button class="shop-btn" id="shovelUpgrade">⬆ Лопата</button>
 			<button class="shop-btn" id="luckUpgrade">🍀 Удача</button>
-			<button class="shop-btn" id="autoUpgrade">🤖 0</button>
 			<button class="shop-btn restart" id="resetBtn">🔄</button>
 		</div>
+	</div>
+</div>
+
+<div class="pause-overlay" id="pauseOverlay">
+	<div class="pause-title">⏸ Пауза</div>
+	<div class="pause-btn-group">
+		<button class="pause-continue" id="pauseContinueBtn">▶ Продолжить</button>
+		<button id="pauseAchBtn">🏆 Достижения</button>
+		<button id="pauseSoundBtn">🔊 Звук</button>
+		<button id="pauseMenuBtn">🏠 В меню</button>
+		<button class="pause-danger" id="pauseSiteBtn">← На сайт</button>
 	</div>
 </div>
 
@@ -279,7 +341,11 @@ var ITEMS=[
 	{id:'bomb',emoji:'💣',name:'Бомба',rarity:.10,points:-2,color:'#ff4444',minLvl:1},
 	{id:'king',emoji:'👑',name:'Король',rarity:.03,points:8,color:'#ffd700',minLvl:2},
 	{id:'fast',emoji:'⚡',name:'Молния',rarity:.04,points:4,color:'#00aaff',minLvl:3},
-	{id:'ghost',emoji:'👻',name:'Призрак',rarity:.04,points:3,color:'#aa44ff',minLvl:4}
+	{id:'ghost',emoji:'👻',name:'Призрак',rarity:.04,points:3,color:'#aa44ff',minLvl:4},
+	// Секретные артефакты (появляются после соответствующих секретных достижений)
+	{id:'crown_legend',emoji:'👑',name:'Корона легенды',rarity:.015,points:15,color:'#ffd700',minLvl:1,needSecret:'secret_legend'},
+	{id:'star_master',emoji:'💫',name:'Звезда мастера',rarity:.015,points:20,color:'#ff69b4',minLvl:1,needSecret:'secret_master'},
+	{id:'aegis',emoji:'🛡️',name:'Эгида',rarity:.02,points:5,color:'#ff6b35',minLvl:1,needSecret:'secret_invincible'}
 ];
 
 var ACHIEVEMENTS=[
@@ -313,12 +379,13 @@ var scoreSpan=D('scoreDisplay'),highScoreSpan=D('highScoreDisplay'),collectionSp
 var progressBar=D('progressBar'),progressLabel=D('progressLabel');
 var shovelLevelSpan=D('shovelLevel'),luckLevelSpan=D('luckLevel'),comboDisplay=D('comboDisplay');
 var messageEl=D('messageDisplay'),soundBtn=D('soundBtn');
-var shovelBtn=D('shovelUpgrade'),luckBtn=D('luckUpgrade'),autoBtn=D('autoUpgrade'),resetBtn=D('resetBtn');
+var shovelBtn=D('shovelUpgrade'),luckBtn=D('luckUpgrade'),resetBtn=D('resetBtn');
+var pauseBtn=D('pauseBtn'),pauseOverlay=D('pauseOverlay');
 
 // State
-var score=0,highScore=0,collection=[],shovelLevel=1,luckLevel=0,autoLevel=0,playerLevel=1;
+var score=0,highScore=0,collection=[],shovelLevel=1,luckLevel=0,playerLevel=1;
 var cellStates=[],gameActive=false,gameStarted=false;
-var messageTimeout=null,spawnTimeout=null,combo=0,comboTimer=null,muted=false,autoInterval=null;
+var messageTimeout=null,spawnTimeout=null,combo=0,comboTimer=null,muted=false;
 var powerup2x=false,powerupTimer=null;
 
 // Stats for achievements
@@ -431,13 +498,15 @@ function openAchievements(){
 
 function closeAchievements(){
 	achScreen.classList.remove('show');
+	if(gameStarted&&!gameActive&&!gameoverScreen.classList.contains('show'))pauseOverlay.classList.add('show');
 }
 
 function renderAchievements(){
 	achList.innerHTML='';
-	var n=0,showSecrets=allMainUnlocked(),totalSecrets=0,unlockedSecrets=0;
+	var n=0,showSecrets=allMainUnlocked(),totalSecrets=0,unlockedSecrets=0,totalAll=0;
 	for(var i=0;i<ACHIEVEMENTS.length;i++){
 		var a=ACHIEVEMENTS[i],u=unlocked[a.id];
+		totalAll++;
 		if(a.secret){totalSecrets++;if(u)unlockedSecrets++;}
 		if(a.secret&&!showSecrets&&!u) continue;
 		if(u) n++;
@@ -448,9 +517,9 @@ function renderAchievements(){
 		div.innerHTML='<div class="ach-icon">'+(a.secret&&!u?'🔮':a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+name+'</div><div class="ach-desc">'+desc+'</div></div><div class="ach-status">'+(u?'✅':a.secret?'🔮':'🔒')+'</div>';
 		achList.appendChild(div);
 	}
-	achProgress.textContent=n+' / '+ACHIEVEMENTS.length;
+	achProgress.textContent=n+' / '+totalAll;
 	if(showSecrets){
-		achHint.textContent='🔮 Секретные: '+unlockedSecrets+'/'+totalSecrets;
+		achHint.textContent='🔮 Секретные: '+unlockedSecrets+'/'+totalSecrets+' · до сертификата: '+(totalAll-n)+'/'+totalAll;
 		achHint.className='ach-hint revealed';
 	}else{
 		achHint.textContent='🔮 Собери все 12 — откроются секретные';
@@ -486,18 +555,21 @@ function tryVibrate(ms){try{navigator.vibrate(ms);}catch(e){}}
 
 // Effects
 function spawnFloatText(x,y,t,c){
+	if(document.querySelectorAll('.float-text').length>8)return;
 	var e=document.createElement('div');e.className='float-text';e.textContent=t;
 	e.style.left=(x-15)+'px';e.style.top=(y-20)+'px';e.style.color=c||'#fff';
 	document.body.appendChild(e);setTimeout(function(){e.remove();},900);
 }
 function spawnParticles(x,y,c,n){
-	for(var i=0;i<(n||8);i++){
+	n=n||8;if(document.querySelectorAll('.particle').length>25)return;
+	if(document.body.classList.contains('is-mobile'))n=Math.min(n,6);
+	for(var i=0;i<n;i++){
 		var p=document.createElement('div');p.className='particle';
-		var a=Math.random()*Math.PI*2,d=30+Math.random()*60;
+		var a=Math.random()*Math.PI*2,d=20+Math.random()*40;
 		p.style.setProperty('--dx',Math.cos(a)*d+'px');p.style.setProperty('--dy',Math.sin(a)*d+'px');
 		p.style.left=x+'px';p.style.top=y+'px';p.style.background=c||'#ffd700';
-		var s=4+Math.random()*7;p.style.width=s+'px';p.style.height=s+'px';
-		document.body.appendChild(p);setTimeout(function(){p.remove();},700);
+		var s=3+Math.random()*5;p.style.width=s+'px';p.style.height=s+'px';
+		document.body.appendChild(p);setTimeout(function(){p.remove();},600);
 	}
 }
 function screenShake(){
@@ -519,15 +591,16 @@ function addCombo(){
 }
 function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 
-function getActiveItems(){return ITEMS.filter(function(i){return i.minLvl<=playerLevel;});}
+function getActiveItems(){return ITEMS.filter(function(i){return i.minLvl<=playerLevel&&(!i.needSecret||unlocked[i.needSecret]);});}
 
 function generateItem(){
-	var items=getActiveItems().map(function(i){return{id:i.id,emoji:i.emoji,name:i.name,rarity:i.rarity,points:i.points,color:i.color,minLvl:i.minLvl};});
+	var items=getActiveItems().map(function(i){return{id:i.id,emoji:i.emoji,name:i.name,rarity:i.rarity,points:i.points,color:i.color,minLvl:i.minLvl,needSecret:i.needSecret};});
 	var lb=luckLevel*.03;
 	items.forEach(function(i){
 		if(i.id==='crystal')i.rarity+=lb;
 		else if(i.id==='artifact')i.rarity+=lb*.5;
 		else if(i.id==='king')i.rarity+=lb*.3;
+		else if(i.id==='crown_legend'||i.id==='star_master')i.rarity+=lb*.2;
 		else if(i.id==='bomb')i.rarity-=lb*.5;
 	});
 	var sum=items.reduce(function(a,i){return a+Math.max(0,i.rarity);},0);
@@ -558,11 +631,14 @@ function spawnMole(idx){
 	cellStates[idx].active=true;cellStates[idx].type=item;
 	var cell=gridEl.children[idx],mole=cell.querySelector('.mole');
 	mole.className='mole';
-	if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king')mole.classList.add('gold');
+	if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king'||item.needSecret)mole.classList.add('gold');
 	if(item.id==='king')mole.classList.add('king');
 	else if(item.id==='fast')mole.classList.add('fast');
 	else if(item.id==='ghost')mole.classList.add('ghost');
 	else if(item.id==='bomb')mole.classList.add('bomb');
+	else if(item.id==='crown_legend'){mole.classList.add('king');mole.style.boxShadow='inset -4px -8px 15px #8b6508,0 0 50px #ffd700,0 0 100px #ffd70044';}
+	else if(item.id==='star_master'){mole.style.background='radial-gradient(circle at 30% 30%,#ff69b4,#cc3388)';mole.style.boxShadow='inset -4px -8px 15px #661144,0 0 40px #ff69b4,0 0 80px #ff69b444';}
+	else if(item.id==='aegis'){mole.style.background='radial-gradient(circle at 30% 30%,#ff8c42,#cc5500)';mole.style.boxShadow='inset -4px -8px 15px #662200,0 0 40px #ff6b35,0 0 80px #ff6b3544';}
 	var es=mole.querySelector('.emoji');if(es)es.textContent=item.emoji;
 	mole.classList.add('show');
 	var du=1500+Math.random()*1500;
@@ -610,8 +686,8 @@ function getCellCenter(c){
 function finishGame(){
 	gameActive=false;
 	if(spawnTimeout)clearTimeout(spawnTimeout);
-	if(autoInterval)clearInterval(autoInterval);
 	if(powerupTimer)clearTimeout(powerupTimer);powerup2x=false;
+	clearGameState();
 	stats.collectionCount++;saveData();
 	goScore.textContent=score;goCollection.textContent=collection.length;goHighScore.textContent=highScore;
 	renderGameOverAchs();
@@ -652,6 +728,9 @@ function handleCellClick(idx){
 	spawnParticles(pos.x,pos.y,item.color||'#ffd700',pts>0?12:18);
 	checkLevelUp();
 	if(item.id==='king')spawnParticles(pos.x,pos.y,'#ffd700',30);
+	else if(item.id==='crown_legend'){spawnParticles(pos.x,pos.y,'#ffd700',40);tryVibrate(60);}
+	else if(item.id==='star_master'){spawnParticles(pos.x,pos.y,'#ff69b4',45);tryVibrate(60);}
+	else if(item.id==='aegis'){spawnParticles(pos.x,pos.y,'#ff6b35',35);tryVibrate(50);}
 	if(!collection.includes(item.emoji)){
 		collection.push(item.emoji);
 		if(collection.length<COLLECTION_TARGET){setMessage('⭐ Новый предмет! '+item.emoji);tryVibrate(30);spawnParticles(pos.x,pos.y,'#ffd700',20);}
@@ -663,10 +742,12 @@ function handleCellClick(idx){
 
 function scheduleSpawn(){
 	if(!gameActive)return;
-	var base=2000,reduction=Math.min(1200,Math.floor(score/20)*50),intv=Math.max(700,base-reduction)+Math.random()*700;
+	var isMob=document.body.classList.contains('is-mobile');
+	var base=isMob?2800:2200,reduction=Math.min(800,Math.floor(score/40)*40),intv=Math.max(isMob?2000:1200,base-reduction)+Math.random()*600;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var count=1+Math.floor(Math.random()*Math.min(5,1+Math.floor(playerLevel/2)+Math.floor(score/40)));
+		var maxCount=Math.min(isMob?2:3,1+Math.floor(playerLevel/3)+Math.floor(Math.min(score,500)/200));
+		var count=1+Math.floor(Math.random()*maxCount);
 		for(var i=0;i<count;i++){
 			setTimeout(function(n){return function(){
 				if(!gameActive)return;
@@ -686,23 +767,7 @@ function startSpawning(){
 	scheduleSpawn();
 }
 
-function startAutoCollect(){
-	if(autoInterval)clearInterval(autoInterval);if(autoLevel<=0)return;
-	autoInterval=setInterval(function(){
-		if(!gameActive)return;
-		var ac=[];for(var i=0;i<TOTAL_CELLS;i++){if(cellStates[i].active)ac.push(i);}if(ac.length===0)return;
-		var tc=Math.min(ac.length,autoLevel);
-		for(var k=0;k<tc;k++){
-			var idx=ac.splice(Math.floor(Math.random()*ac.length),1)[0],st=cellStates[idx];
-			if(st.active){hideMole(idx);
-				var pts=Math.round(st.type.points*shovelLevel*.5);
-				if(pts>0)score+=pts;else if(pts<0)score=Math.max(0,score+pts);
-				if(!collection.includes(st.type.emoji)){collection.push(st.type.emoji);if(collection.length>=COLLECTION_TARGET)finishGame();}
-				updateUI();
-			}
-		}
-	},3000/autoLevel);
-}
+
 
 function updateUI(){
 	scoreSpan.textContent=score;
@@ -712,8 +777,7 @@ function updateUI(){
 	var pct=collection.length/COLLECTION_TARGET*100;
 	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+COLLECTION_TARGET;
 	shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;
-	shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;autoBtn.disabled=!gameActive;
-	autoBtn.textContent='🤖 '+autoLevel;
+	shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;
 }
 
 function setMessage(t){
@@ -733,20 +797,37 @@ function upgradeLuck(){
 	var cost=15*(luckLevel+1);if(score<cost){setMessage('Нужно '+cost+'💰');return;}
 	score-=cost;luckLevel++;soundGold();setMessage('🍀 Удача '+luckLevel);updateUI();
 }
-function upgradeAuto(){
-	if(!gameActive)return;
-	var cost=30*(autoLevel+1);if(score<cost){setMessage('Нужно '+cost+'💰');return;}
-	score-=cost;autoLevel++;soundGold();setMessage('🤖 Авто '+autoLevel);
-	if(autoInterval)clearInterval(autoInterval);startAutoCollect();updateUI();
-}
+
 function toggleSound(){
 	muted=!muted;var icon=muted?'🔇':'🔊';
 	soundBtn.textContent=icon;menuSoundBtn.textContent=icon;
 	if(gameStarted)setMessage(muted?'🔇 Без звука':'🔊 Звук включён');
 }
 
-function resetGame(){
-	if(spawnTimeout)clearTimeout(spawnTimeout);if(autoInterval)clearInterval(autoInterval);if(comboTimer)clearTimeout(comboTimer);
+// ===== Сохранение прогресса игры =====
+function saveGameState(){
+	if(!gameStarted)return;
+	try{
+		localStorage.setItem('moleGameState',JSON.stringify({
+			score:score,collection:collection,shovelLevel:shovelLevel,
+			luckLevel:luckLevel,playerLevel:playerLevel,combo:combo
+		}));
+	}catch(e){}
+}
+function loadGameState(){
+	try{
+		var d=JSON.parse(localStorage.getItem('moleGameState'));
+		if(d&&d.collection&&d.collection.length>=0) return d;
+	}catch(e){}
+	return null;
+}
+function clearGameState(){
+	try{localStorage.removeItem('moleGameState');}catch(e){}
+}
+
+// Обновлённый resetGame с очисткой сохранения
+var _resetGame=function(){
+	if(spawnTimeout)clearTimeout(spawnTimeout);if(comboTimer)clearTimeout(comboTimer);
 	if(powerupTimer)clearTimeout(powerupTimer);powerup2x=false;
 	for(var i=0;i<TOTAL_CELLS;i++){
 		if(cellStates[i]){if(cellStates[i].timer)clearTimeout(cellStates[i].timer);cellStates[i].active=false;cellStates[i].type=null;cellStates[i].timer=null;}
@@ -754,9 +835,54 @@ function resetGame(){
 	}
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	achBanner.classList.remove('show');
-	score=0;collection=[];shovelLevel=1;luckLevel=0;autoLevel=0;playerLevel=1;combo=0;
+	pauseOverlay.classList.remove('show');
+	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;
 	updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
-	if(autoLevel>0)startAutoCollect();setTimeout(function(){setMessage('🔨 Копай!');},2000);
+	setTimeout(function(){setMessage('🔨 Копай!');},2000);
+}
+var resetGame=_resetGame;
+
+function backToMenu(){
+	gameoverScreen.classList.remove('show');
+	pauseOverlay.classList.remove('show');
+	if(spawnTimeout)clearTimeout(spawnTimeout);if(comboTimer)clearTimeout(comboTimer);
+	if(powerupTimer)clearTimeout(powerupTimer);powerup2x=false;
+	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
+	if(gameActive)saveGameState();
+	gameActive=false;gameStarted=false;menuScreen.classList.remove('hidden');
+}
+
+function startGame(){
+	var saved=loadGameState();
+	if(saved){
+		score=saved.score||0;collection=saved.collection||[];
+		shovelLevel=saved.shovelLevel||1;luckLevel=saved.luckLevel||0;
+		playerLevel=saved.playerLevel||1;combo=saved.combo||0;
+		clearGameState();
+		pauseOverlay.classList.remove('show');
+	}
+	gameStarted=true;gameActive=true;menuScreen.classList.add('hidden');
+	createGrid();updateCombo();updateUI();setMessage('🔨 Копай!');startSpawning();
+}
+function startFreshGame(){
+	clearGameState();
+	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;
+	startGame();
+}
+function playAgain(){gameoverScreen.classList.remove('show');resetGame();}
+
+function togglePause(){
+	if(!gameStarted||gameoverScreen.classList.contains('show')||achScreen.classList.contains('show')||certScreen.classList.contains('show'))return;
+	if(pauseOverlay.classList.contains('show')){
+		pauseOverlay.classList.remove('show');
+		gameActive=true;
+		startSpawning();
+	}else{
+		gameActive=false;
+		if(spawnTimeout)clearTimeout(spawnTimeout);
+		saveGameState();
+		pauseOverlay.classList.add('show');
+	}
 }
 
 function createGrid(){
@@ -772,16 +898,8 @@ function createGrid(){
 	}
 }
 
-function backToMenu(){
-	gameoverScreen.classList.remove('show');
-	if(spawnTimeout)clearTimeout(spawnTimeout);if(autoInterval)clearInterval(autoInterval);if(comboTimer)clearTimeout(comboTimer);
-	if(powerupTimer)clearTimeout(powerupTimer);powerup2x=false;
-	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
-	gameActive=false;gameStarted=false;menuScreen.classList.remove('hidden');
-}
 
-function startGame(){gameStarted=true;gameActive=true;menuScreen.classList.add('hidden');createGrid();updateUI();setMessage('🔨 Копай!');startSpawning();}
-function playAgain(){gameoverScreen.classList.remove('show');resetGame();}
+
 
 playBtn.addEventListener('click',startGame);
 playBtn.addEventListener('touchstart',function(e){e.preventDefault();startGame();},{passive:false});
@@ -794,27 +912,68 @@ achCloseBtn.addEventListener('click',closeAchievements);
 certCloseBtn.addEventListener('click',closeCertificate);
 shovelBtn.addEventListener('click',upgradeShovel);
 luckBtn.addEventListener('click',upgradeLuck);
-autoBtn.addEventListener('click',upgradeAuto);
 resetBtn.addEventListener('click',resetGame);
 soundBtn.addEventListener('click',toggleSound);
 goMenuBtn.addEventListener('click',backToMenu);
 goAgainBtn.addEventListener('click',playAgain);
+D('newGameBtn').addEventListener('click',startFreshGame);
+D('newGameBtn').addEventListener('touchstart',function(e){e.preventDefault();startFreshGame();},{passive:false});
+
+function handlePauseAch(){
+	pauseOverlay.classList.remove('show');
+	openAchievements();
+}
+function handlePauseSound(){
+	toggleSound();
+	var icon=muted?'🔇':'🔊';
+	var el=D('pauseSoundBtn');if(el)el.textContent=icon+' Звук';
+}
+pauseBtn.addEventListener('click',togglePause);
+D('pauseContinueBtn').addEventListener('click',togglePause);
+D('pauseAchBtn').addEventListener('click',handlePauseAch);
+D('pauseSoundBtn').addEventListener('click',handlePauseSound);
+D('pauseMenuBtn').addEventListener('click',function(){pauseOverlay.classList.remove('show');backToMenu();});
+D('pauseSiteBtn').addEventListener('click',function(){window.location.href='index.html';});
 document.addEventListener('keydown',function(e){
 	if(!gameStarted)return;
-	if(e.key==='r'||e.key==='R')resetGame();
+	if(e.key==='Escape'){if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(pauseOverlay.classList.contains('show'))togglePause();else if(!gameoverScreen.classList.contains('show'))togglePause();}
+	else if(e.key==='r'||e.key==='R')resetGame();
 	else if(e.key==='s'||e.key==='S')upgradeShovel();
 	else if(e.key==='l'||e.key==='L')upgradeLuck();
-	else if(e.key==='a'||e.key==='A')upgradeAuto();
 	else if(e.key==='m'||e.key==='M')toggleSound();
 });
+
+// Сохранять при закрытии вкладки
+window.addEventListener('beforeunload',function(){
+	if(gameStarted)saveGameState();
+});
+// Сохранять при скрытии вкладки (мобильный браузер — уход в фон)
+document.addEventListener('visibilitychange',function(){
+	if(document.hidden&&gameStarted)saveGameState();
+});
+
+// ===== Звёздный фон =====
+function createStarField(){
+	var el=D('bgStars');if(!el)return;
+	var isMob=document.body.classList.contains('is-mobile');
+	var cnt=isMob?25:60;
+	for(var i=0;i<cnt;i++){
+		var s=document.createElement('div');s.className='bg-star';
+		if(i%3===0)s.classList.add('s');else if(i%5===0)s.classList.add('l');
+		s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+		s.style.setProperty('--sp',(2+Math.random()*4)+'s');s.style.animationDelay=Math.random()*5+'s';
+		el.appendChild(s);
+	}
+}
+createStarField();
 
 // Mobile class
 if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||window.innerWidth<640){
 	document.body.classList.add('is-mobile');
-	document.documentElement.style.setProperty('--cell-size','56px');
 }
 
 // Init
+if(loadGameState())playBtn.textContent='▶ ПРОДОЛЖИТЬ';
 highScoreSpan.textContent=highScore;
 })();
 </script>
