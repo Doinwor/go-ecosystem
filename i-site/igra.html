@@ -350,6 +350,27 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	.shop-cosmetic-list{grid-template-columns:1fr 1fr}
 }
 
+/* ===== Game Over overlay ===== */
+.gameover-overlay{position:fixed;inset:0;z-index:2500;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .4s ease}
+.gameover-overlay.show{opacity:1;pointer-events:auto}
+.gameover-wrap{background:linear-gradient(160deg,#2a1a1a,#1f0a0a);border:2px solid #ff4444;border-radius:28px;padding:36px 28px;max-width:360px;width:100%;text-align:center;box-shadow:0 0 80px rgba(255,0,0,.1),inset 0 0 80px rgba(255,0,0,.02);position:relative;overflow:hidden}
+.gameover-wrap::before{content:'';position:absolute;inset:-1px;border-radius:28px;padding:1px;background:linear-gradient(135deg,#ff444488,#ff000044,#ff444422,#ff444488);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.gameover-icon{font-size:64px;margin-bottom:4px;display:block;filter:drop-shadow(0 4px 20px rgba(255,0,0,.3));animation:gameoverPulse 1.5s ease-in-out infinite}
+@keyframes gameoverPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.gameover-title{font-size:28px;font-weight:900;color:#ff6666;letter-spacing:-.01em;margin-bottom:2px;text-shadow:0 2px 20px rgba(255,0,0,.15)}
+.gameover-sub{font-size:11px;color:#8b6a6a;margin-bottom:16px}
+.gameover-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px}
+.gameover-stat{background:#1a0a0a;border-radius:14px;padding:12px 6px;border:1px solid #3d2222}
+.gameover-stat-val{display:block;font-size:20px;font-weight:700;color:#ff6666}
+.gameover-stat-lbl{display:block;font-size:9px;color:#6a4a4a;text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
+.gameover-btns{display:flex;flex-direction:column;gap:8px}
+.gameover-btn{font-family:'Unbounded',sans-serif;background:none;border:2px solid #3d2222;color:#d4a8a8;font-size:14px;cursor:pointer;padding:12px 36px;border-radius:40px;transition:all .2s;touch-action:manipulation}
+.gameover-btn:active{transform:scale(.95)}
+.gameover-btn:hover{color:#ff6666;border-color:#6a3a3a;background:#1a0a0a}
+.gameover-play{background:linear-gradient(180deg,#cc4444,#8b2222);border:none!important;color:#fff!important;font-weight:bold;font-size:16px;box-shadow:0 6px 0 #4a1111,0 0 30px rgba(255,0,0,.15)}
+.gameover-play:active{transform:translateY(4px);box-shadow:0 2px 0 #4a1111!important}
+@media(max-width:500px){.gameover-wrap{padding:24px 18px}.gameover-icon{font-size:48px}.gameover-title{font-size:24px}.gameover-stat-val{font-size:17px}}
+
 </style>
 </head>
 <body>
@@ -456,6 +477,33 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<button class="pause-danger" id="pauseSiteBtn">← На сайт</button>
 	</div>
 	<div style="margin-top:20px;font-size:10px;color:#3d3224;text-align:center">🧹 <span id="fullResetBtn" style="cursor:pointer;color:#6a5a4a;text-decoration:underline;text-underline-offset:3px">сбросить весь прогресс</span></div>
+</div>
+
+<!-- Game Over overlay -->
+<div class="gameover-overlay" id="gameoverOverlay">
+	<div class="gameover-wrap">
+		<div class="gameover-icon">💀</div>
+		<div class="gameover-title">Игра окончена</div>
+		<div class="gameover-sub">Ты взорвал 3 бомбы</div>
+		<div class="gameover-stats">
+			<div class="gameover-stat">
+				<span class="gameover-stat-val" id="gameoverScore">0</span>
+				<span class="gameover-stat-lbl">Очков</span>
+			</div>
+			<div class="gameover-stat">
+				<span class="gameover-stat-val" id="gameoverRecord">0</span>
+				<span class="gameover-stat-lbl">Рекорд</span>
+			</div>
+			<div class="gameover-stat">
+				<span class="gameover-stat-val" id="gameoverCombo">x1</span>
+				<span class="gameover-stat-lbl">Комбо</span>
+			</div>
+		</div>
+		<div class="gameover-btns">
+			<button class="gameover-btn gameover-play" id="gameoverReplayBtn">🔄 Ещё раз</button>
+			<button class="gameover-btn" id="gameoverMenuBtn">🏠 В меню</button>
+		</div>
+	</div>
 </div>
 
 <!-- Profile/Shop overlay -->
@@ -1262,8 +1310,8 @@ function handleCellClick(idx){
 			setMessage('💥 Бомба! ('+bombHits+'/3)');
 			if(bombHits>=3){
 				gameActive=false;if(spawnTimeout)clearTimeout(spawnTimeout);
-				setMessage('💀 Игра окончена! Счёт: '+score);
-				updateUI();return;
+				showGameOver();
+				return;
 			}
 		}
 	}else{setMessage('😐 '+item.emoji);}
@@ -1367,6 +1415,36 @@ function setMessage(t){
 	if(messageTimeout)clearTimeout(messageTimeout);
 	messageTimeout=setTimeout(function(){if(gameActive)messageEl.textContent='🔨 Копай!';else messageEl.textContent='🏁';},2500);
 }
+
+// ===== Game Over (score mode) =====
+function showGameOver(){
+	D('gameoverScore').textContent=score;
+	D('gameoverRecord').textContent=scoreModeHighScore;
+	D('gameoverCombo').textContent='x'+stats.bestCombo;
+	D('gameoverOverlay').classList.add('show');
+	tryVibrate(200);
+}
+
+function hideGameOver(){
+	D('gameoverOverlay').classList.remove('show');
+}
+
+function gameOverReplay(){
+	hideGameOver();
+	if(powerupTimer)clearTimeout(powerupTimer);powerup2x=false;
+	resetGame();
+}
+
+function gameOverToMenu(){
+	hideGameOver();
+	backToMenu();
+}
+
+// Setup game over buttons
+D('gameoverReplayBtn').addEventListener('click',gameOverReplay);
+D('gameoverReplayBtn').addEventListener('touchstart',function(e){e.preventDefault();gameOverReplay();},{passive:false});
+D('gameoverMenuBtn').addEventListener('click',gameOverToMenu);
+D('gameoverMenuBtn').addEventListener('touchstart',function(e){e.preventDefault();gameOverToMenu();},{passive:false});
 
 function upgradeShovel(){
 	if(!gameActive||gameMode==='score')return;
@@ -1505,7 +1583,7 @@ var _resetGame=function(){
 	}
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	achBanner.classList.remove('show');
-	pauseOverlay.classList.remove('show');
+	pauseOverlay.classList.remove('show');D('gameoverOverlay').classList.remove('show');
 	if(gameMode==='score'){score=0;combo=0;bombHits=0;updateCombo();gameActive=true;updateUI();setMessage('🔄 Новый забег');startSpawning();return;}
 	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
 	updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
@@ -1657,7 +1735,7 @@ D('pauseSiteBtn').addEventListener('click',function(){window.location.href='inde
 D('pauseSiteBtn').addEventListener('touchstart',function(e){e.preventDefault();window.location.href='index.html';},{passive:false});
 document.addEventListener('keydown',function(e){
 	if(!gameStarted)return;
-	if(e.key==='Escape'){if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(profileScreen.classList.contains('show'))closeProfile();else if(pauseOverlay.classList.contains('show'))togglePause();else togglePause();}
+	if(e.key==='Escape'){if(D('gameoverOverlay').classList.contains('show'))hideGameOver();else if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(profileScreen.classList.contains('show'))closeProfile();else if(pauseOverlay.classList.contains('show'))togglePause();else togglePause();}
 	else if(e.key==='m'||e.key==='M')toggleSound();
 });
 
