@@ -54,12 +54,13 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .ach-close-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:16px;font-weight:bold;padding:12px 40px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation}
 .ach-close-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
 
-.ach-banner{position:absolute;left:10px;right:10px;top:-80px;z-index:250;background:linear-gradient(135deg,#2a1f18,#1f1814);border:2px solid #ffd70066;border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.8);transition:top .5s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
-.ach-banner.show{top:10px}
-.ach-banner-icon{font-size:32px}
-.ach-banner-info{flex:1}
-.ach-banner-title{color:#ffd700;font-weight:bold;font-size:14px}
-.ach-banner-desc{color:#c49a6c;font-size:12px}
+.ach-banner{position:fixed;right:20px;top:-80px;z-index:9999;background:linear-gradient(135deg,#2a1f18,#1f1814);border:2px solid #ffd70066;border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 40px rgba(0,0,0,.9);transition:top .5s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:320px}
+.ach-banner.show{top:20px}
+.ach-banner-icon{font-size:28px;flex-shrink:0}
+.ach-banner-info{flex:1;min-width:0}
+.ach-banner-title{color:#ffd700;font-weight:bold;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ach-banner-desc{color:#c49a6c;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:640px){.ach-banner{right:10px;left:10px;max-width:none}.ach-banner.show{top:10px}}
 
 .gameover-screen{position:absolute;inset:0;z-index:300;background:rgba(13,10,8,.95);border-radius:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;opacity:0;pointer-events:none;transition:opacity .5s ease}
 .gameover-screen.show{box-shadow:inset 0 0 80px rgba(255,215,0,.05)}
@@ -102,10 +103,11 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 @keyframes moleBob{0%,100%{transform:scale(1) translateY(0)}50%{transform:scale(1.03) translateY(-3px)}}
 @keyframes bombPulse{0%,100%{transform:scale(1);box-shadow:inset -4px -8px 15px #000,0 0 30px #ff4444}50%{transform:scale(1.08);box-shadow:inset -4px -8px 15px #000,0 0 50px #ff0000}}
 
-.float-text{position:absolute;font-size:26px;font-weight:bold;pointer-events:none;z-index:100;text-shadow:0 3px 12px rgba(0,0,0,.9);animation:floatUp .9s ease forwards}
+.float-text{position:fixed;font-size:26px;font-weight:bold;pointer-events:none;z-index:9998;text-shadow:0 3px 12px rgba(0,0,0,.9);animation:floatUp .9s ease forwards}
 @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}60%{opacity:1}100%{opacity:0;transform:translateY(-80px) scale(1.4)}}
-.particle{position:absolute;border-radius:50%;pointer-events:none;z-index:99;animation:particleFly .7s ease forwards}
+.particle{position:fixed;border-radius:50%;pointer-events:none;z-index:9997;animation:particleFly .7s ease forwards}
 @keyframes particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+@media(max-width:500px){.float-text{font-size:20px}.particle{width:4px!important;height:4px!important}}
 .levelup-flash{position:absolute;inset:0;z-index:50;pointer-events:none;opacity:0}
 .levelup-flash.go{animation:levelFlash .6s ease forwards}
 @keyframes levelFlash{0%{background:radial-gradient(circle at 50% 50%,rgba(255,215,0,.3),transparent);opacity:1}100%{opacity:0}}
@@ -124,17 +126,27 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .shop-btn:disabled{opacity:.35;transform:translateY(4px);box-shadow:0 1px 0 #1a130e;pointer-events:none}
 .message{background:#1a130ecc;padding:4px 12px;border-radius:30px;color:#d4c4a8;font-weight:bold;font-size:13px;min-width:80px;text-align:center;flex:0 1 auto}
 
+@media(max-width:640px){
+.menu-play{font-size:20px;padding:16px 44px}.menu-title{font-size:28px}.menu-icon{font-size:56px}
+.menu-sound,.menu-ach-btn,.menu-back{font-size:14px;padding:10px 20px}
+}
 @media(max-width:500px){
-body{padding:6px}.game-wrap{padding:10px;border-radius:28px}.grid{gap:7px;padding:6px;border-radius:22px}
-.cell{font-size:24px;border-radius:16px}.cell .mole{font-size:28px;border-radius:16px}
-.stats{font-size:12px;padding:2px 8px}.shop-btn{font-size:11px;padding:6px 8px;min-width:32px}.message{font-size:12px;padding:2px 8px;min-width:70px}
-.top-panel{font-size:14px}.top-panel .high-score,.top-panel .level-badge{font-size:11px}.combo-display{font-size:12px;padding:2px 8px;min-width:40px}
-.menu-title{font-size:30px}.menu-icon{font-size:60px}.menu-play{font-size:20px;padding:14px 40px}.ach-screen-title{font-size:26px}
-.ach-name{font-size:13px}.ach-desc{font-size:11px}
+body{padding:6px}.game-wrap{padding:10px;border-radius:28px}.grid{gap:6px;padding:5px;border-radius:20px}
+.cell{font-size:24px;border-radius:14px;min-height:60px;min-width:60px}.cell .mole{font-size:28px;border-radius:14px}
+.stats{font-size:11px;padding:2px 6px}.shop-btn{font-size:11px;padding:8px 10px;min-width:36px}.message{font-size:11px;padding:2px 8px;min-width:60px}
+.top-panel{font-size:13px;gap:3px}.top-panel span,.sound-btn{padding:3px 7px;font-size:12px}.top-panel .high-score,.top-panel .level-badge{font-size:10px}.combo-display{font-size:11px;padding:2px 6px;min-width:36px}
+.bottom-panel{gap:4px;margin-top:8px}.shop{gap:3px}.stats{gap:3px}
+.menu-title{font-size:28px}.menu-icon{font-size:56px}.menu-play{font-size:18px;padding:14px 36px}.ach-screen-title{font-size:24px}
+.ach-name{font-size:12px}.ach-desc{font-size:11px}
+.cell .mole{font-size:24px}.cell{min-height:55px;min-width:55px}
 }
 @media(max-width:380px){
-.game-wrap{padding:6px;border-radius:20px}.grid{gap:5px;padding:4px}.cell{font-size:18px}.cell .mole{font-size:22px}
-.top-panel span{padding:2px 6px;font-size:11px}.shop-btn{font-size:9px;padding:4px 5px}
+body{padding:4px}.game-wrap{padding:6px;border-radius:18px}.grid{gap:4px;padding:4px;border-radius:16px}
+.cell{font-size:18px;border-radius:12px;min-height:48px;min-width:48px}.cell .mole{font-size:20px;border-radius:12px}
+.top-panel span{padding:2px 5px;font-size:10px}.shop-btn{font-size:10px;padding:6px 7px;min-width:30px}
+.menu-play{font-size:16px;padding:12px 30px}.menu-title{font-size:24px}.menu-icon{font-size:44px}
+.ach-screen-title{font-size:20px}.ach-list{max-width:100%}.ach-item{padding:8px 10px}.ach-icon{font-size:22px;width:30px}
+.gameover-title{font-size:30px}.gameover-sub{font-size:16px}.gameover-stats{font-size:13px}.gameover-btn{font-size:14px;padding:10px 22px}
 }
 </style>
 </head>
@@ -158,14 +170,14 @@ body{padding:6px}.game-wrap{padding:10px;border-radius:28px}.grid{gap:7px;paddin
 	<button class="ach-close-btn" id="achCloseBtn">Закрыть</button>
 </div>
 
-<div class="game-wrap" id="gameWrap">
-	<div class="ach-banner" id="achBanner">
-		<div class="ach-banner-icon" id="achBannerIcon">🏆</div>
-		<div class="ach-banner-info">
-			<div class="ach-banner-title" id="achBannerTitle">Достижение!</div>
-			<div class="ach-banner-desc" id="achBannerDesc">Описание</div>
-		</div>
+<div class="ach-banner" id="achBanner">
+	<div class="ach-banner-icon" id="achBannerIcon">🏆</div>
+	<div class="ach-banner-info">
+		<div class="ach-banner-title" id="achBannerTitle">Достижение!</div>
+		<div class="ach-banner-desc" id="achBannerDesc">Описание</div>
 	</div>
+</div>
+<div class="game-wrap" id="gameWrap">
 	<div class="levelup-flash" id="levelFlash"></div>
 	<div class="gameover-screen" id="gameoverScreen">
 		<div class="gameover-title">🎉</div>
@@ -370,8 +382,8 @@ function tryVibrate(ms){try{navigator.vibrate(ms);}catch(e){}}
 // Effects
 function spawnFloatText(x,y,t,c){
 	var e=document.createElement('div');e.className='float-text';e.textContent=t;
-	e.style.left=x+'px';e.style.top=y+'px';e.style.color=c||'#fff';
-	gameWrap.appendChild(e);setTimeout(function(){e.remove();},900);
+	e.style.left=(x-15)+'px';e.style.top=(y-20)+'px';e.style.color=c||'#fff';
+	document.body.appendChild(e);setTimeout(function(){e.remove();},900);
 }
 function spawnParticles(x,y,c,n){
 	for(var i=0;i<(n||8);i++){
@@ -380,7 +392,7 @@ function spawnParticles(x,y,c,n){
 		p.style.setProperty('--dx',Math.cos(a)*d+'px');p.style.setProperty('--dy',Math.sin(a)*d+'px');
 		p.style.left=x+'px';p.style.top=y+'px';p.style.background=c||'#ffd700';
 		var s=4+Math.random()*7;p.style.width=s+'px';p.style.height=s+'px';
-		gameWrap.appendChild(p);setTimeout(function(){p.remove();},700);
+		document.body.appendChild(p);setTimeout(function(){p.remove();},700);
 	}
 }
 function screenShake(){
@@ -486,8 +498,8 @@ function hideMole(idx){
 }
 
 function getCellCenter(c){
-	var r=c.getBoundingClientRect(),wr=gameWrap.getBoundingClientRect();
-	return{x:r.left-wr.left+r.width/2,y:r.top-wr.top+r.height/2};
+	var r=c.getBoundingClientRect();
+	return{x:r.left+r.width/2,y:r.top+r.height/2};
 }
 
 function finishGame(){
@@ -636,6 +648,7 @@ function resetGame(){
 		var c=gridEl.children[i];if(c){var m=c.querySelector('.mole');if(m)m.classList.remove('show');}
 	}
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
+	achBanner.classList.remove('show');
 	score=0;collection=[];shovelLevel=1;luckLevel=0;autoLevel=0;playerLevel=1;combo=0;
 	updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
 	if(autoLevel>0)startAutoCollect();setTimeout(function(){setMessage('🔨 Копай!');},2000);
@@ -688,6 +701,12 @@ document.addEventListener('keydown',function(e){
 	else if(e.key==='a'||e.key==='A')upgradeAuto();
 	else if(e.key==='m'||e.key==='M')toggleSound();
 });
+
+// Mobile class
+if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||window.innerWidth<640){
+	document.body.classList.add('is-mobile');
+	document.documentElement.style.setProperty('--cell-size','56px');
+}
 
 // Init
 highScoreSpan.textContent=highScore;
