@@ -334,7 +334,10 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 .shop-section-title{font-size:16px;color:#ffd700;font-weight:bold;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid #2a1f18}
 .shop-subsection-title{font-size:12px;color:#8b7b6a;margin:10px 0 6px}
 .shop-item{display:flex;align-items:center;gap:12px;background:#1a130e;border:1px solid #2a1f18;border-radius:16px;padding:10px 12px;width:100%;margin-bottom:6px;cursor:pointer;transition:all .15s;font-family:'Unbounded',sans-serif;text-align:left}
+.shop-item{position:relative;overflow:hidden}
 .shop-item:active{transform:scale(.97)}
+.shop-item.holding::after{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,215,0,.2);border-radius:14px;animation:holdProgress .5s linear forwards;pointer-events:none;z-index:1}
+@keyframes holdProgress{to{width:100%}}
 .shop-item.disabled{opacity:.4;pointer-events:none}
 .shop-item.bought{border-color:#ffd70044;background:#2a2218}
 .shop-item-icon{font-size:28px;flex-shrink:0;width:40px;text-align:center}
@@ -344,7 +347,8 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 .shop-item-cost{font-size:12px;font-weight:bold;color:#ffd700;flex-shrink:0;padding:4px 10px;background:#2a2218;border-radius:20px}
 .shop-cosmetic-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
 .shop-balance{background:#1a130e;border-radius:16px;border:1px solid #2a1f18;font-size:18px;font-weight:bold;color:#ffd700;text-align:center;padding:10px;margin-bottom:10px;letter-spacing:.02em}
-.shop-cosmetic-item{background:#1a130e;border:2px solid #2a1f18;border-radius:14px;padding:8px;text-align:center;cursor:pointer;transition:all .15s}
+.shop-cosmetic-item{position:relative;overflow:hidden;background:#1a130e;border:2px solid #2a1f18;border-radius:14px;padding:8px;text-align:center;cursor:pointer;transition:all .15s}
+.shop-cosmetic-item.holding::after{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,215,0,.2);border-radius:12px;animation:holdProgress .5s linear forwards;pointer-events:none;z-index:1}
 .shop-cosmetic-item:active{transform:scale(.95)}
 .shop-cosmetic-item.owned{border-color:#3d3224}
 .shop-cosmetic-item.equipped{border-color:#ffd700;background:#2a2218}
@@ -363,26 +367,60 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	.shop-cosmetic-list{grid-template-columns:1fr 1fr}
 }
 
-/* ===== Game Over overlay ===== */
-.gameover-overlay{position:fixed;inset:0;z-index:2500;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .4s ease}
-.gameover-overlay.show{opacity:1;pointer-events:auto}
-.gameover-wrap{background:linear-gradient(160deg,#2a1a1a,#1f0a0a);border:2px solid #ff4444;border-radius:28px;padding:36px 28px;max-width:360px;width:100%;text-align:center;box-shadow:0 0 80px rgba(255,0,0,.1),inset 0 0 80px rgba(255,0,0,.02);position:relative;overflow:hidden}
-.gameover-wrap::before{content:'';position:absolute;inset:-1px;border-radius:28px;padding:1px;background:linear-gradient(135deg,#ff444488,#ff000044,#ff444422,#ff444488);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-.gameover-icon{font-size:64px;margin-bottom:4px;display:block;filter:drop-shadow(0 4px 20px rgba(255,0,0,.3));animation:gameoverPulse 1.5s ease-in-out infinite}
-@keyframes gameoverPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-.gameover-title{font-size:28px;font-weight:900;color:#ff6666;letter-spacing:-.01em;margin-bottom:2px;text-shadow:0 2px 20px rgba(255,0,0,.15)}
-.gameover-sub{font-size:11px;color:#8b6a6a;margin-bottom:16px}
-.gameover-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:24px}
-.gameover-stat{background:#1a0a0a;border-radius:14px;padding:12px 6px;border:1px solid #3d2222}
-.gameover-stat-val{display:block;font-size:20px;font-weight:700;color:#ff6666}
-.gameover-stat-lbl{display:block;font-size:9px;color:#6a4a4a;text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
-.gameover-btns{display:flex;flex-direction:column;gap:8px}
-.gameover-btn{font-family:'Unbounded',sans-serif;background:none;border:2px solid #3d2222;color:#d4a8a8;font-size:14px;cursor:pointer;padding:12px 36px;border-radius:40px;transition:all .2s;touch-action:manipulation}
-.gameover-btn:active{transform:scale(.95)}
-.gameover-btn:hover{color:#ff6666;border-color:#6a3a3a;background:#1a0a0a}
-.gameover-play{background:linear-gradient(180deg,#cc4444,#8b2222);border:none!important;color:#fff!important;font-weight:bold;font-size:16px;box-shadow:0 6px 0 #4a1111,0 0 30px rgba(255,0,0,.15)}
-.gameover-play:active{transform:translateY(4px);box-shadow:0 2px 0 #4a1111!important}
-@media(max-width:500px){.gameover-wrap{padding:24px 18px}.gameover-icon{font-size:48px}.gameover-title{font-size:24px}.gameover-stat-val{font-size:17px}}
+/* ===== Chests ===== */
+.shop-chests{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.chest-card{background:#1a130e;border:1px solid #2a1f18;border-radius:16px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.chest-card:active{transform:scale(.95)}
+.chest-card.holding::after{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(255,215,0,.2);border-radius:14px;animation:holdProgress .5s linear forwards;pointer-events:none;z-index:1}
+.chest-card.disabled{opacity:.4;pointer-events:none}
+.chest-card-icon{font-size:36px;display:block;margin-bottom:4px}
+.chest-card-name{font-size:11px;color:#d4c4a8;font-weight:bold;display:block}
+.chest-card-desc{font-size:8px;color:#6a5a4a;display:block;margin-top:2px}
+.chest-card-cost{font-size:11px;color:#ffd700;font-weight:bold;display:block;margin-top:4px}
+/* Chest result overlay */
+.chest-result-overlay{position:fixed;inset:0;z-index:2600;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.chest-result-overlay.show{opacity:1;pointer-events:auto}
+.chest-result-wrap{background:linear-gradient(160deg,#1a1a2a,#0a0a1a);border:2px solid #ffd70044;border-radius:28px;padding:32px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 0 80px rgba(255,215,0,.05)}
+.chest-result-icon{font-size:72px;display:block;margin-bottom:6px;animation:chestReveal .6s ease forwards}
+@keyframes chestReveal{0%{transform:scale(0) rotate(-180deg);opacity:0}60%{transform:scale(1.2) rotate(10deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}
+.chest-result-name{font-size:20px;font-weight:900;color:#ffd700;margin-bottom:2px}
+.chest-result-desc{font-size:11px;color:#8b7b6a;margin-bottom:16px;line-height:1.4}
+.chest-result-tier{font-size:10px;text-transform:uppercase;letter-spacing:.15em;margin-bottom:4px;font-weight:bold}
+.chest-result-tier.common{color:#8b9a6a}
+.chest-result-tier.rare{color:#6a8bff}
+.chest-result-tier.epic{color:#b46aff}
+.chest-result-tier.legendary{color:#ff6a00}
+.chest-result-btn{font-family:'Unbounded',sans-serif;background:linear-gradient(180deg,#ffd700,#b8860b);border:none;color:#1a0a00;font-weight:bold;font-size:14px;cursor:pointer;padding:12px 36px;border-radius:40px;transition:all .2s;touch-action:manipulation;box-shadow:0 4px 0 #6a4a00}
+.chest-result-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #6a4a00}
+/* Collectibles overlay */
+.collectibles-overlay{position:fixed;inset:0;z-index:2700;background:rgba(10,8,6,.97);display:flex;flex-direction:column;padding:20px;opacity:0;pointer-events:none;transition:opacity .4s ease}
+.collectibles-overlay.show{opacity:1;pointer-events:auto}
+.collectibles-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.collectibles-title{font-size:20px;font-weight:900;color:#ffd700}
+.collectibles-close{font-size:24px;background:none;border:none;color:#6a5a4a;cursor:pointer;padding:4px 12px}
+.collectibles-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;overflow-y:auto;flex:1;padding:4px 0 20px}
+.collect-slot{background:#1a130e;border:1px solid #2a1f18;border-radius:14px;padding:10px 4px;text-align:center;min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all .2s}
+.collect-slot.filled{border-color:#3d3024}
+.collect-slot-icon{font-size:28px;display:block;margin-bottom:2px}
+.collect-slot-name{font-size:8px;color:#c4b49a;font-weight:bold;display:block;line-height:1.2;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.collect-slot.empty{opacity:.25}
+.collect-slot.empty .collect-slot-icon{font-size:18px;color:#3d3224}
+.collect-set-header{grid-column:1/-1;font-size:13px;color:#8b7b6a;font-weight:bold;padding:8px 0 2px;border-bottom:1px solid #1f1812;display:flex;justify-content:space-between}
+.collect-set-header .set-progress{font-size:11px;color:#6a5a4a}
+.collect-slot.locked{opacity:.3}
+.collect-slot .slot-tier{display:block;font-size:7px;text-transform:uppercase;letter-spacing:.1em;margin-top:2px;font-weight:bold}
+.collect-slot .slot-tier.common{color:#6a7a4a}
+.collect-slot .slot-tier.rare{color:#4a6acc}
+.collect-slot .slot-tier.epic{color:#8a4adb}
+.collect-slot .slot-tier.legendary{color:#cc5500}
+@media(max-width:500px){
+	.collectibles-grid{grid-template-columns:repeat(4,1fr);gap:6px}
+	.collect-slot{min-height:56px;padding:8px 2px}
+	.collect-slot-icon{font-size:22px}
+	.collect-slot-name{font-size:7px}
+	.chest-card-icon{font-size:28px}
+	.shop-chests{grid-template-columns:1fr 1fr}
+}
 
 </style>
 </head>
@@ -402,7 +440,6 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="menu-stats-line" id="menuStatsLine">🏆 0/15 · 🌱 Новичок</div>
 	<div class="menu-settings-line">
 		<span id="menuSoundBtn" role="button" tabindex="0">🔊</span>
-		<span id="modeToggleBtn" style="cursor:pointer;color:#6a5a4a;font-size:11px;margin-left:8px">🎯 Рекорд</span>
 	</div>
 	<div class="menu-credits">Сделано студией <a href="index.html" class="menu-credit-link">i.</a></div>
 </div>
@@ -415,6 +452,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="ach-btn-row">
 		<button class="ach-close-btn" id="achCloseBtn">Закрыть</button>
 		<button class="ach-profile-btn" id="achProfileBtn">👤 Профиль</button>
+		<button class="ach-profile-btn" id="achCollectBtn">🏛️ Коллекция</button>
 	</div>
 </div>
 
@@ -490,6 +528,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<button class="pause-continue" id="pauseContinueBtn">▶ Продолжить</button>
 		<button id="pauseAchBtn">🏆 Достижения</button>
 		<button id="pauseProfileBtn">👤 Профиль</button>
+		<button id="pauseCollectBtn">🏛️ Коллекция</button>
 		<button id="pauseSoundBtn">🔊 Звук</button>
 		<button id="pauseMenuBtn">🏠 В меню</button>
 		<button class="pause-danger" id="pauseSiteBtn">← На сайт</button>
@@ -497,32 +536,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div style="margin-top:20px;font-size:10px;color:#3d3224;text-align:center"></div>
 </div>
 
-<!-- Game Over overlay -->
-<div class="gameover-overlay" id="gameoverOverlay">
-	<div class="gameover-wrap">
-		<div class="gameover-icon">💀</div>
-		<div class="gameover-title">Игра окончена</div>
-		<div class="gameover-sub">Ты взорвал 3 бомбы</div>
-		<div class="gameover-stats">
-			<div class="gameover-stat">
-				<span class="gameover-stat-val" id="gameoverScore">0</span>
-				<span class="gameover-stat-lbl">Очков</span>
-			</div>
-			<div class="gameover-stat">
-				<span class="gameover-stat-val" id="gameoverRecord">0</span>
-				<span class="gameover-stat-lbl">Рекорд</span>
-			</div>
-			<div class="gameover-stat">
-				<span class="gameover-stat-val" id="gameoverCombo">x1</span>
-				<span class="gameover-stat-lbl">Комбо</span>
-			</div>
-		</div>
-		<div class="gameover-btns">
-			<button class="gameover-btn gameover-play" id="gameoverReplayBtn">🔄 Ещё раз</button>
-			<button class="gameover-btn" id="gameoverMenuBtn">🏠 В меню</button>
-		</div>
-	</div>
-</div>
+
 
 <!-- Profile/Shop overlay -->
 <div class="profile-screen" id="profileScreen">
@@ -552,6 +566,12 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 				<div class="profile-stat"><span class="profile-stat-val" id="profileStatClicks">0</span><span class="profile-stat-lbl">Кликов</span></div>
 			</div>
 			<div class="profile-settings">
+				<div class="shop-section-title">🏛️ Коллекционные предметы</div>
+				<button class="shop-item" id="profileCollectBtn">
+					<span class="shop-item-icon">🏛️</span>
+					<span class="shop-item-info"><span class="shop-item-name">Собранные предметы</span><span class="shop-item-desc">Посмотреть коллекцию из сундуков</span></span>
+					<span class="shop-item-cost" style="font-size:10px" id="profileCollectCount">0/12</span>
+				</button>
 				<div class="shop-section-title">⚙️ Настройки</div>
 				<button class="shop-item" id="profileFullResetBtn" style="border-color:#4a2a2a">
 					<span class="shop-item-icon">🧹</span>
@@ -613,6 +633,26 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 			</div>
 		</div>
 	</div>
+</div>
+
+<!-- Chest result overlay -->
+<div class="chest-result-overlay" id="chestResultOverlay">
+	<div class="chest-result-wrap">
+		<div class="chest-result-tier" id="chestResultTier">common</div>
+		<div class="chest-result-icon" id="chestResultIcon">🎁</div>
+		<div class="chest-result-name" id="chestResultName">Предмет</div>
+		<div class="chest-result-desc" id="chestResultDesc">Описание</div>
+		<button class="chest-result-btn" id="chestResultBtn">✓ Забрать</button>
+	</div>
+</div>
+
+<!-- Collectibles overlay -->
+<div class="collectibles-overlay" id="collectiblesOverlay">
+	<div class="collectibles-header">
+		<div class="collectibles-title">🏛️ Коллекционные предметы</div>
+		<button class="collectibles-close" id="collectiblesCloseBtn">✕</button>
+	</div>
+	<div class="collectibles-grid" id="collectiblesGrid"></div>
 </div>
 
 <script>
@@ -818,7 +858,17 @@ var ACHIEVEMENTS=[
 	{id:'trillionaire',name:'Триллионер',desc:'Заработать 50000 монет',icon:'💰',mine:99,tier:'epic'},
 	{id:'max_level',name:'Максимальный уровень',desc:'Достичь 100 уровня',icon:'📊',mine:99,tier:'epic'},
 	{id:'true_immortal',name:'Бессмертный',desc:'Сделать 25000 кликов',icon:'👆',mine:99,tier:'epic'},
-	{id:'perfectionist',name:'Перфекционист',desc:'Найти все предметы всех шахт',icon:'💎',mine:99,tier:'epic'}
+	{id:'perfectionist',name:'Перфекционист',desc:'Найти все предметы всех шахт',icon:'💎',mine:99,tier:'epic'},
+	// Сундучные — Normal
+	{id:'chest_opener',name:'Коллекционер',desc:'Открыть 3 предмета из сундуков',icon:'📦',mine:99,tier:'normal'},
+	{id:'antiquity_set',name:'Антиквар',desc:'Собрать все предметы набора Древности',icon:'🏛️',mine:99,tier:'normal'},
+	// Сундучные — Hard
+	{id:'mystic_set',name:'Мистик',desc:'Собрать все предметы набора Мистика',icon:'🌙',mine:99,tier:'hard'},
+	// Сундучные — Extreme
+	{id:'treasure_set',name:'Охотник за сокровищами',desc:'Собрать все предметы набора Сокровища',icon:'👑',mine:99,tier:'extreme'},
+	// Сундучные — Epic
+	{id:'eternity_set',name:'Повелитель вечности',desc:'Собрать все предметы набора Вечность',icon:'∞',mine:99,tier:'epic'},
+	{id:'all_chest_items',name:'Библиотекарь',desc:'Собрать ВСЕ предметы из сундуков',icon:'🏛️',mine:99,tier:'epic'}
 ];
 
 // DOM
@@ -844,6 +894,8 @@ var shopShovelLvl=D('shopShovelLvl'),shopLuckLvl=D('shopLuckLvl'),shopBoostLvl=D
 var shopShovelCost=D('shopShovelCost'),shopLuckCost=D('shopLuckCost'),shopBoostCost=D('shopBoostCost'),shopTimeCost=D('shopTimeCost');
 var shopFrameList=D('shopFrameList'),shopTitleList=D('shopTitleList');
 var gameProfileBtn=D('gameProfileBtn');
+var collectiblesOverlay=D('collectiblesOverlay'),collectiblesGrid=D('collectiblesGrid'),collectiblesCloseBtn=D('collectiblesCloseBtn');
+var chestResultOverlay=D('chestResultOverlay'),chestResultIcon=D('chestResultIcon'),chestResultName=D('chestResultName'),chestResultDesc=D('chestResultDesc'),chestResultTier=D('chestResultTier'),chestResultBtn=D('chestResultBtn');
 
 // Profile cosmetics
 var PROFILE_FRAMES=[
@@ -869,6 +921,34 @@ var PROFILE_TITLES=[
 // Profile state
 var profileState={equippedFrame:'default',equippedTitle:'novice',ownedFrames:['default'],ownedTitles:['novice']};
 
+// Chest collection items
+var CHEST_SETS=[
+	{id:'antiquity',name:'🏛️ Древности',tier:'common'},
+	{id:'mystic',name:'🌙 Мистика',tier:'rare'},
+	{id:'treasure',name:'👑 Сокровища',tier:'epic'},
+	{id:'eternity',name:'∞ Вечность',tier:'legendary'}
+];
+var CHEST_ITEMS=[
+	{id:'antique_coin',name:'Древняя монета',icon:'🪙',desc:'Монета затонувшей цивилизации',set:'antiquity',tier:'common'},
+	{id:'clay_tablet',name:'Глиняная табличка',icon:'📜',desc:'С письменами на неизвестном языке',set:'antiquity',tier:'common'},
+	{id:'broken_amulet',name:'Сломанный амулет',icon:'📿',desc:'Хранит память о древнем маге',set:'antiquity',tier:'common'},
+	{id:'moon_stone',name:'Лунный камень',icon:'🌙',desc:'Испускает мягкое голубое свечение',set:'mystic',tier:'rare'},
+	{id:'dragon_eye',name:'Глаз дракона',icon:'👁️',desc:'Кажется, он за тобой следит',set:'mystic',tier:'rare'},
+	{id:'ether_dust',name:'Эфирная пыль',icon:'✨',desc:'Светится в темноте',set:'mystic',tier:'rare'},
+	{id:'kings_crown',name:'Корона короля',icon:'👑',desc:'Была утеряна тысячу лет назад',set:'treasure',tier:'epic'},
+	{id:'spellbook',name:'Книга заклинаний',icon:'📖',desc:'Страницы сами перелистываются',set:'treasure',tier:'epic'},
+	{id:'abyss_pearl',name:'Жемчужина бездны',icon:'🦪',desc:'Чёрная как сама бездна',set:'treasure',tier:'epic'},
+	{id:'universe_key',name:'Ключ от вселенной',icon:'🗝️',desc:'Говорят, открывает любую дверь',set:'eternity',tier:'legendary'},
+	{id:'eternity_crystal',name:'Кристалл вечности',icon:'💠',desc:'Внутри видно рождение вселенных',set:'eternity',tier:'legendary'},
+	{id:'jar_star',name:'Звезда в банке',icon:'⭐',desc:'Настоящая звезда, уменьшенная до размеров банки',set:'eternity',tier:'legendary'}
+];
+var CHEST_TYPES=[
+	{id:'common_chest',name:'Обычный сундук',icon:'📦',cost:200,tiers:['common'],desc:'Содержит 1 предмет из Древностей'},
+	{id:'rare_chest',name:'Редкий сундук',icon:'🧰',cost:800,tiers:['rare'],desc:'Содержит 1 предмет из Мистики'},
+	{id:'epic_chest',name:'Эпический сундук',icon:'💎',cost:2500,tiers:['epic'],desc:'Содержит 1 предмет из Сокровищ'},
+	{id:'legendary_chest',name:'Легендарный сундук',icon:'🏆',cost:6000,tiers:['legendary'],desc:'Содержит 1 предмет из Вечности'}
+];
+
 // State
 var score=0,highScore=0,collection=[],shovelLevel=1,luckLevel=0,playerLevel=1;
 var cellStates=[],gameActive=false,gameStarted=false;
@@ -877,20 +957,20 @@ var powerup2x=false,powerupTimer=null;
 var particleCount=0,floatTextCount=0;
 var boostLevel=0,timeLevel=0,clicksSinceNewItem=0;
 var hasCharm=false,hasStreak=false,hasExpBoost=false;
+var collectedChestItems=[];
 
 // Stats for achievements
 var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1,itemCounts:{}};
 var unlocked={};
 var currentMine=0;
 var bannerTimeout=null;
-var gameMode='adventure'; // 'adventure' or 'score'
-var scoreModeHighScore=0;
-var bombHits=0;
+var poolSize=getCollectionTarget();
 
 // Load
 try{
 	var d=JSON.parse(localStorage.getItem('moleData'));
 	if(d){
+		if(d.score) score=d.score;
 		if(d.highScore) highScore=d.highScore;
 		if(d.stats) for(var k in d.stats) if(stats.hasOwnProperty(k)) stats[k]=d.stats[k];
 		if(d.stats&&d.stats.itemCounts) for(var k in d.stats.itemCounts) stats.itemCounts[k]=d.stats.itemCounts[k];
@@ -898,6 +978,7 @@ try{
 		if(d.currentMine!==undefined) currentMine=d.currentMine;
 		if(d.profile){profileState.equippedFrame=d.profile.equippedFrame||'default';profileState.equippedTitle=d.profile.equippedTitle||'novice';profileState.ownedFrames=d.profile.ownedFrames||['default'];profileState.ownedTitles=d.profile.ownedTitles||['novice'];}
 		if(d.boosters){hasCharm=!!d.boosters.charm;hasStreak=!!d.boosters.streak;hasExpBoost=!!d.boosters.exp;}
+		if(d.collectedChestItems) collectedChestItems=d.collectedChestItems;
 	}
 }catch(e){}
 // Load muted state
@@ -909,7 +990,7 @@ checkAchievements();
 
 function saveData(){
 	try{
-		localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked,currentMine:currentMine,profile:profileState,boosters:{charm:hasCharm,streak:hasStreak,exp:hasExpBoost}}));
+		localStorage.setItem('moleData',JSON.stringify({score:score,highScore:highScore,stats:stats,unlocked:unlocked,currentMine:currentMine,profile:profileState,boosters:{charm:hasCharm,streak:hasStreak,exp:hasExpBoost},collectedChestItems:collectedChestItems}));
 	}catch(e){}
 }
 
@@ -1002,7 +1083,13 @@ function checkAchievements(){
 		perfectionist:function(){var all=ITEMS.filter(function(i){return i.points>=0;});return all.every(function(i){return collection.indexOf(i.emoji)>-1;});},
 		speed_demon:function(){return boostLevel>=10;},
 		time_wizard:function(){return timeLevel>=10;},
-		explorer:function(){return currentMine>=14;}
+		explorer:function(){return currentMine>=14;},
+		chest_opener:function(){return collectedChestItems.length>=3;},
+		antiquity_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.set==='antiquity';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});},
+		mystic_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.set==='mystic';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});},
+		treasure_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.set==='treasure';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});},
+		eternity_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.set==='eternity';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});},
+		all_chest_items:function(){return CHEST_ITEMS.every(function(i){return collectedChestItems.indexOf(i.id)>-1;});}
 	};
 	for(var i=0;i<ACHIEVEMENTS.length;i++){
 		var a=ACHIEVEMENTS[i];
@@ -1193,7 +1280,7 @@ function addCombo(){
 function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 
 function getActiveItems(){
-	if(gameMode==='score')return ITEMS.filter(function(i){return ['gold','silver','bronze','bomb','king','fast'].indexOf(i.id)>-1;});
+
 	var ids=[];
 	for(var m=0;m<=currentMine&&m<MINES.length;m++){
 		for(var j=0;j<MINES[m].items.length;j++){
@@ -1237,7 +1324,6 @@ function generateItem(){
 }
 
 function checkLevelUp(){
-	if(gameMode==='score')return;
 	var mult=hasExpBoost?0.8:1;
 	var nl=1+Math.floor(score/((20+playerLevel*3)*mult));
 	if(nl!==playerLevel&&nl>=1){
@@ -1365,15 +1451,6 @@ function handleCellClick(idx){
 			score=Math.max(0,score+pts);
 			soundBomb();combo=0;updateCombo();screenShake();
 			setMessage('💥 '+item.name);
-			if(gameMode==='score'){
-				bombHits++;
-				setMessage('💥 Бомба! ('+bombHits+'/3)');
-				if(bombHits>=3){
-					gameActive=false;if(spawnTimeout)clearTimeout(spawnTimeout);
-					showGameOver();
-					return;
-				}
-			}
 		}
 	}else{setMessage('😐 '+item.emoji);}
 	spawnFloatText(pos.x-15,pos.y-20,(crit?'КРИТ! ':'')+pts,item.color||'#fff');
@@ -1405,12 +1482,12 @@ function handleCellClick(idx){
 	else if(item.id==='infinity_star'){spawnParticles(pos.x,pos.y,'#ffd700',32);tryVibrate(70);score+=12;setMessage('💫 Бесконечность! +12');if(powerupTimer)clearTimeout(powerupTimer);powerup2x=true;powerupTimer=setTimeout(function(){powerup2x=false;},5000);}
 	else if(item.id==='eternal_crystal'){spawnParticles(pos.x,pos.y,'#ffffff',40);tryVibrate(100);score+=25;screenShake();setMessage('💠 Вечность! +25');}
 	if(item.points>=8)spawnParticles(pos.x,pos.y,item.color||'#ffd700',18);
-	if(gameMode!=='score'&&!collection.includes(item.emoji)){
+	if(!collection.includes(item.emoji)){
 		clicksSinceNewItem=0;
 		collection.push(item.emoji);
 		var ct=getCollectionTarget();
 		if(collection.length<ct){setMessage('⭐ '+item.emoji);tryVibrate(30);spawnParticles(pos.x,pos.y,'#ffd700',20);}
-	}else if(pts>0&&gameMode!=='score'){
+	}else if(pts>0){
 		clicksSinceNewItem++;
 	}
 	updateUI();saveData();checkAchievements();
@@ -1425,14 +1502,13 @@ function handleCellClick(idx){
 function scheduleSpawn(){
 	if(!gameActive)return;
 	var isMob=document.body.classList.contains('is-mobile');
-	var scoreMode=gameMode==='score';
-	var effLvl=scoreMode?20:Math.min(playerLevel,20);
-	var base=scoreMode?(isMob?2200:1600):(isMob?3500:2800);
-	var reduction=scoreMode?Math.min(1200,Math.floor(score/40)*25):Math.min(600,Math.floor(score/60)*30);
-	var intv=Math.max(scoreMode?(isMob?1200:800):(isMob?2500:1800),base-reduction)+Math.random()*500;
+	var effLvl=Math.min(playerLevel,20);
+	var base=(isMob?3500:2800);
+	var reduction=Math.min(600,Math.floor(score/60)*30);
+	var intv=Math.max((isMob?2500:1800),base-reduction)+Math.random()*500;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var maxCount=scoreMode?(isMob?3:5):Math.min(isMob?2:3,1+Math.floor(effLvl/5)+Math.floor(Math.min(currentMine,6)/3));
+		var maxCount=Math.min(isMob?2:3,1+Math.floor(effLvl/5)+Math.floor(Math.min(currentMine,6)/3));
 		var count=1+Math.floor(Math.random()*maxCount);
 		for(var i=0;i<count;i++){
 			setTimeout(function(n){return function(){
@@ -1456,19 +1532,17 @@ function startSpawning(){
 
 
 function updateUI(){
-	var scoreMode=gameMode==='score';
 	scoreSpan.textContent=score;
-	if(!scoreMode&&score>highScore){highScore=score;saveData();}
-	if(scoreMode&&score>scoreModeHighScore){scoreModeHighScore=score;}
-	highScoreSpan.textContent=scoreMode?scoreModeHighScore:highScore;
-	levelSpan.textContent=scoreMode?'∞':playerLevel;
-	collectionSpan.textContent=scoreMode?'-':collection.length;
-	var ct=scoreMode?1:getCollectionTarget();
+	if(score>highScore){highScore=score;saveData();}
+	highScoreSpan.textContent=highScore;
+	levelSpan.textContent=playerLevel;
+	collectionSpan.textContent=collection.length;
+	var ct=getCollectionTarget();
 	D('collectionTargetDisplay').textContent=ct;
-	var pct=scoreMode?0:collection.length/ct*100;
-	progressBar.style.width=pct+'%';progressLabel.textContent=scoreMode?'∞':collection.length+'/'+ct;
-	shovelLevelSpan.textContent=scoreMode?'-':shovelLevel;luckLevelSpan.textContent=scoreMode?'-':luckLevel;
-	D('mineDisplay').textContent=scoreMode?'∞':getMine().name.split(' ')[0]+' '+(currentMine+1);
+	var pct=collection.length/ct*100;
+	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+ct;
+	shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;
+	D('mineDisplay').textContent=getMine().name.split(' ')[0]+' '+(currentMine+1);
 	D('charmDisplay').style.display=hasCharm?'inline':'none';
 }
 
@@ -1478,38 +1552,10 @@ function setMessage(t){
 	messageTimeout=setTimeout(function(){if(gameActive)messageEl.textContent='🔨 Копай!';else messageEl.textContent='🏁';},2500);
 }
 
-// ===== Game Over (score mode) =====
-function showGameOver(){
-	D('gameoverScore').textContent=score;
-	D('gameoverRecord').textContent=scoreModeHighScore;
-	D('gameoverCombo').textContent='x'+stats.bestCombo;
-	D('gameoverOverlay').classList.add('show');
-	tryVibrate(200);
-}
 
-function hideGameOver(){
-	D('gameoverOverlay').classList.remove('show');
-}
-
-function gameOverReplay(){
-	hideGameOver();
-	if(powerupTimer)clearTimeout(powerupTimer);powerup2x=false;
-	resetGame();
-}
-
-function gameOverToMenu(){
-	hideGameOver();
-	backToMenu();
-}
-
-// Setup game over buttons
-D('gameoverReplayBtn').addEventListener('click',gameOverReplay);
-D('gameoverReplayBtn').addEventListener('touchstart',function(e){e.preventDefault();gameOverReplay();},{passive:false});
-D('gameoverMenuBtn').addEventListener('click',gameOverToMenu);
-D('gameoverMenuBtn').addEventListener('touchstart',function(e){e.preventDefault();gameOverToMenu();},{passive:false});
 
 function upgradeShovel(){
-	if(!gameActive||gameMode==='score')return;
+	if(!gameActive)return;
 	var cost=Math.floor(15*Math.pow(1.5,shovelLevel-1));if(score<cost){setMessage('💰 Нужно '+cost);return;}
 	score-=cost;shovelLevel++;if(shovelLevel>stats.maxShovel){stats.maxShovel=shovelLevel;saveData();}
 	soundGold();setMessage('⬆ Лопата '+shovelLevel);updateUI();checkAchievements();renderShop();
@@ -1532,9 +1578,8 @@ function upgradeTime(){
 
 // ===== Profile & Shop =====
 function renderProfile(){
-	var isScore=gameMode==='score';
-	profileLevelDisplay.textContent=isScore?'∞':playerLevel;
-	profileMineDisplay.textContent=isScore?'∞':getMine().name+' '+(currentMine+1)+'/'+MINES.length;
+	profileLevelDisplay.textContent=playerLevel;
+	profileMineDisplay.textContent=getMine().name+' '+(currentMine+1)+'/'+MINES.length;
 	profileStatScore.textContent=score;
 	var achs=getUnlockedCount();
 	profileStatAchs.textContent=achs+'/'+ACHIEVEMENTS.length;
@@ -1542,6 +1587,7 @@ function renderProfile(){
 	profileStatShovel.textContent=shovelLevel;
 	profileStatColl.textContent=stats.collectionCount;
 	profileStatClicks.textContent=stats.totalClicks;
+	D('profileCollectCount').textContent=collectedChestItems.length+'/'+CHEST_ITEMS.length;
 	// Apply cosmetics
 	var frame=PROFILE_FRAMES.find(function(f){return f.id===profileState.equippedFrame;});
 	if(frame){profileAvatarFrame.className='profile-avatar-frame'+(frame.cls?' '+frame.cls:'');}
@@ -1550,23 +1596,62 @@ function renderProfile(){
 }
 function renderShop(){
 	D('shopBalanceAmount').textContent=score||0;
-	var sm=gameMode==='score';
-	[shopShovelBtn,shopLuckBtn,shopBoostBtn,shopTimeBtn].forEach(function(b){b.classList.toggle('disabled',sm);});
 	shopShovelLvl.textContent=shovelLevel;shopLuckLvl.textContent=luckLevel;shopBoostLvl.textContent=boostLevel;shopTimeLvl.textContent=timeLevel;
 	var sc=score||0;
-	var scost=Math.floor(15*Math.pow(1.5,shovelLevel-1));shopShovelCost.textContent=scost+'💰';shopShovelBtn.classList.toggle('disabled',sm||sc<scost);
-	var lcost=Math.floor(20*Math.pow(1.5,luckLevel));shopLuckCost.textContent=lcost+'💰';shopLuckBtn.classList.toggle('disabled',sm||sc<lcost);
-	var bcost=Math.floor(100*Math.pow(2,boostLevel));shopBoostCost.textContent=bcost+'💰';shopBoostBtn.classList.toggle('disabled',sm||sc<bcost);
-	var tcost=Math.floor(80*Math.pow(2,timeLevel));shopTimeCost.textContent=tcost+'💰';shopTimeBtn.classList.toggle('disabled',sm||sc<tcost);
-	// Boosters — hidden in score mode
-	var boosterSection=D('shopBoostersSection');
-	if(sm){boosterSection.style.display='none';}else{boosterSection.style.display='block';
-		D('shopCharmBtn').classList.toggle('bought',hasCharm);D('shopCharmCost').textContent=hasCharm?'✅':'💰500';D('shopCharmBtn').classList.toggle('disabled',hasCharm||sc<500);
-		D('shopStreakBtn').classList.toggle('bought',hasStreak);D('shopStreakCost').textContent=hasStreak?'✅':'💰800';D('shopStreakBtn').classList.toggle('disabled',hasStreak||sc<800);
-		D('shopExpBtn').classList.toggle('bought',hasExpBoost);D('shopExpCost').textContent=hasExpBoost?'✅':'💰1200';D('shopExpBtn').classList.toggle('disabled',hasExpBoost||sc<1200);
+	var scost=Math.floor(15*Math.pow(1.5,shovelLevel-1));shopShovelCost.textContent=scost+'💰';shopShovelBtn.classList.toggle('disabled',sc<scost);
+	var lcost=Math.floor(20*Math.pow(1.5,luckLevel));shopLuckCost.textContent=lcost+'💰';shopLuckBtn.classList.toggle('disabled',sc<lcost);
+	var bcost=Math.floor(100*Math.pow(2,boostLevel));shopBoostCost.textContent=bcost+'💰';shopBoostBtn.classList.toggle('disabled',sc<bcost);
+	var tcost=Math.floor(80*Math.pow(2,timeLevel));shopTimeCost.textContent=tcost+'💰';shopTimeBtn.classList.toggle('disabled',sc<tcost);
+	D('shopCharmBtn').classList.toggle('bought',hasCharm);D('shopCharmCost').textContent=hasCharm?'✅':'💰500';D('shopCharmBtn').classList.toggle('disabled',hasCharm||sc<500);
+	D('shopStreakBtn').classList.toggle('bought',hasStreak);D('shopStreakCost').textContent=hasStreak?'✅':'💰800';D('shopStreakBtn').classList.toggle('disabled',hasStreak||sc<800);
+	D('shopExpBtn').classList.toggle('bought',hasExpBoost);D('shopExpCost').textContent=hasExpBoost?'✅':'💰1200';D('shopExpBtn').classList.toggle('disabled',hasExpBoost||sc<1200);
+	// Chest shop
+	var chestSection=D('shopChestSection');
+	if(!chestSection){
+		var ups=D('shopBoostersSection').parentNode;
+		var sec=document.createElement('div');sec.className='shop-chests';sec.id='shopChestSection';
+		ups.insertBefore(document.createElement('div'),ups.children[ups.children.length-1]).outerHTML='<div class="shop-section-title" style="margin-top:4px">🎁 Сундуки</div>';
+		ups.insertBefore(sec,ups.children[ups.children.length-1]);
+		chestSection=sec;
 	}
+	chestSection.innerHTML='';
+	CHEST_TYPES.forEach(function(ct){
+		var card=document.createElement('div');card.className='chest-card'+(sc<ct.cost?' disabled':'');
+		card.innerHTML='<span class="chest-card-icon">'+ct.icon+'</span><span class="chest-card-name">'+ct.name+'</span><span class="chest-card-desc">'+ct.desc+'</span><span class="chest-card-cost">💰'+ct.cost+'</span>';
+		if(sc>=ct.cost)holdToBuy(card,function(){buyChest(ct.id);});
+		chestSection.appendChild(card);
+	});
 	renderCosmetics();
 }
+// Hold-to-buy: prevents accidental taps (defined before renderCosmetics uses it)
+function holdToBuy(btn, fn, delay){
+	if(!delay)delay=500;
+	var timer=null,cancelled=false;
+	function start(e){
+		if(e.type==='touchstart')e.preventDefault();
+		if(btn.classList.contains('disabled')||btn.classList.contains('bought'))return;
+		cancelled=false;
+		btn.classList.add('holding');
+		timer=setTimeout(function(){
+			if(!cancelled){btn.classList.remove('holding');fn();}
+		},delay);
+	}
+	function end(){
+		btn.classList.remove('holding');
+		if(timer){clearTimeout(timer);timer=null;}
+	}
+	function cancel(){
+		cancelled=true;btn.classList.remove('holding');
+		if(timer){clearTimeout(timer);timer=null;}
+	}
+	btn.addEventListener('mousedown',start);
+	btn.addEventListener('mouseup',end);
+	btn.addEventListener('mouseleave',cancel);
+	btn.addEventListener('touchstart',start,{passive:false});
+	btn.addEventListener('touchend',end);
+	btn.addEventListener('touchcancel',cancel);
+}
+
 function renderCosmetics(){
 	// Frames
 	shopFrameList.innerHTML='';
@@ -1577,7 +1662,8 @@ function renderCosmetics(){
 		var div=document.createElement('div');
 		div.className='shop-cosmetic-item'+(owned?' owned':'')+(equipped?' equipped':'')+(f.cost>0&&!owned&&score<f.cost?' locked':'');
 		div.innerHTML='<span class="shop-cosmetic-icon">'+f.icon+'</span><span class="shop-cosmetic-name">'+f.name+'</span><span class="shop-cosmetic-status">'+(equipped?'✅':(owned?'В наличии':'💰'+f.cost))+'</span>';
-		div.addEventListener('click',function(){buyOrEquipFrame(f.id,owned,equipped);});
+		if(owned){div.addEventListener('click',function(){if(equipped)return;profileState.equippedFrame=f.id;saveData();renderCosmetics();renderProfile();});}
+		else if(f.cost>0&&score>=f.cost){holdToBuy(div,function(){if(score<f.cost)return;score-=f.cost;profileState.ownedFrames.push(f.id);profileState.equippedFrame=f.id;saveData();updateUI();setMessage('🖼 Рамка "'+f.name+'" куплена!');soundGold();renderCosmetics();renderProfile();});}
 		shopFrameList.appendChild(div);
 	});
 	// Titles
@@ -1590,25 +1676,71 @@ function renderCosmetics(){
 		var div=document.createElement('div');
 		div.className='shop-cosmetic-item'+(owned?' owned':'')+(equipped?' equipped':'')+(locked?' locked':'');
 		div.innerHTML='<span class="shop-cosmetic-icon">'+t.icon+'</span><span class="shop-cosmetic-name">'+t.name+'</span><span class="shop-cosmetic-status">'+(equipped?'✅':(owned?'В наличии':(playerLevel<t.needLevel?'📊ур.'+t.needLevel:'💰'+t.cost)))+'</span>';
-		div.addEventListener('click',function(){buyOrEquipTitle(t.id,owned,equipped);});
+		if(owned&&!equipped){div.addEventListener('click',function(){profileState.equippedTitle=t.id;saveData();renderCosmetics();renderProfile();});}
+		else if(!owned&&playerLevel>=t.needLevel&&score>=t.cost){holdToBuy(div,function(){if(score<t.cost)return;score-=t.cost;profileState.ownedTitles.push(t.id);profileState.equippedTitle=t.id;saveData();updateUI();setMessage('🎖 Титул "'+t.name+'" куплен!');soundGold();renderCosmetics();renderProfile();});}
 		shopTitleList.appendChild(div);
 	});
 }
-function buyOrEquipFrame(id,owned,equipped){
-	if(equipped)return;
-	if(owned){profileState.equippedFrame=id;saveData();renderCosmetics();renderProfile();return;}
-	var f=PROFILE_FRAMES.find(function(x){return x.id===id;});
-	if(!f||score<f.cost)return;
-	score-=f.cost;profileState.ownedFrames.push(id);profileState.equippedFrame=id;saveData();
-	updateUI();setMessage('🖼 Рамка "'+f.name+'" куплена!');soundGold();renderCosmetics();renderProfile();
+
+// Chest system
+function getChestItemsByTier(tiers){
+	var pool=CHEST_ITEMS.filter(function(i){return tiers.indexOf(i.tier)>-1;});
+	var missing=pool.filter(function(i){return collectedChestItems.indexOf(i.id)===-1;});
+	if(missing.length>0)return missing[Math.floor(Math.random()*missing.length)];
+	return pool[Math.floor(Math.random()*pool.length)];
 }
-function buyOrEquipTitle(id,owned,equipped){
-	if(equipped)return;
-	if(owned){profileState.equippedTitle=id;saveData();renderCosmetics();renderProfile();return;}
-	var t=PROFILE_TITLES.find(function(x){return x.id===id;});
-	if(!t||score<t.cost||playerLevel<t.needLevel)return;
-	score-=t.cost;profileState.ownedTitles.push(id);profileState.equippedTitle=id;saveData();
-	updateUI();setMessage('🎖 Титул "'+t.name+'" куплен!');soundGold();renderCosmetics();renderProfile();
+function buyChest(chestId){
+	var ct=CHEST_TYPES.find(function(c){return c.id===chestId;});
+	if(!ct||score<ct.cost)return;
+	score-=ct.cost;saveData();updateUI();
+	var item=getChestItemsByTier(ct.tiers);
+	collectedChestItems.push(item.id);saveData();
+	renderShop();renderCollectibles();checkAchievements();
+	showChestResult(item);
+}
+function showChestResult(item){
+	var tierNames={common:'Обычный',rare:'Редкий',epic:'Эпический',legendary:'Легендарный'};
+	chestResultTier.textContent='✦ '+tierNames[item.tier]+' предмет';
+	chestResultTier.className='chest-result-tier '+item.tier;
+	chestResultIcon.textContent=item.icon;
+	chestResultName.textContent=item.name;
+	chestResultDesc.textContent=item.desc;
+	chestResultOverlay.classList.add('show');
+	soundRare();tryVibrate(50);
+}
+function hideChestResult(){
+	chestResultOverlay.classList.remove('show');
+}
+function openCollectibles(){
+	renderCollectibles();
+	collectiblesOverlay.classList.add('show');
+}
+function closeCollectibles(){
+	collectiblesOverlay.classList.remove('show');
+	if(gameStarted&&!gameActive)pauseOverlay.classList.add('show');
+	else if(!gameStarted)menuScreen.classList.remove('hidden');
+}
+function renderCollectibles(){
+	collectiblesGrid.innerHTML='';
+	CHEST_SETS.forEach(function(s){
+		var setItems=CHEST_ITEMS.filter(function(i){return i.set===s.id;});
+		var collected=setItems.filter(function(i){return collectedChestItems.indexOf(i.id)>-1;});
+		var header=document.createElement('div');header.className='collect-set-header';
+		header.innerHTML='<span>'+s.name+'</span><span class="set-progress">'+collected.length+'/'+setItems.length+'</span>';
+		collectiblesGrid.appendChild(header);
+		setItems.forEach(function(item){
+			var has=collectedChestItems.indexOf(item.id)>-1;
+			var slot=document.createElement('div');
+			slot.className='collect-slot'+(has?' filled':' empty');
+			if(has){
+				var tierNames={common:'🟢',rare:'🔵',epic:'🟣',legendary:'🟠'};
+				slot.innerHTML='<span class="collect-slot-icon">'+item.icon+'</span><span class="collect-slot-name">'+item.name+'</span><span class="slot-tier '+item.tier+'">'+tierNames[item.tier]+'</span>';
+			}else{
+				slot.innerHTML='<span class="collect-slot-icon">❓</span><span class="collect-slot-name">???</span>';
+			}
+			collectiblesGrid.appendChild(slot);
+		});
+	});
 }
 
 function toggleSound(){
@@ -1652,10 +1784,9 @@ var _resetGame=function(){
 	}
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	achBanner.classList.remove('show');
-	pauseOverlay.classList.remove('show');D('gameoverOverlay').classList.remove('show');
-	if(gameMode==='score'){score=0;combo=hasStreak?2:0;bombHits=0;updateCombo();gameActive=true;updateUI();setMessage('🔄 Новый забег');startSpawning();return;}
+	pauseOverlay.classList.remove('show');
 	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=hasStreak?2:0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
-	updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
+	saveData();updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
 	setTimeout(function(){setMessage('🔨 Копай!');},2000);
 }
 var resetGame=_resetGame;
@@ -1670,11 +1801,11 @@ function fullReset(){
 }
 
 function backToMenu(){
-	pauseOverlay.classList.remove('show');D('gameoverOverlay').classList.remove('show');
+	pauseOverlay.classList.remove('show');
 	if(spawnTimeout)clearTimeout(spawnTimeout);if(comboTimer)clearTimeout(comboTimer);
 	if(powerupTimer)clearTimeout(powerupTimer);powerup2x=false;
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
-	if(gameActive)saveGameState();
+	saveData();if(gameActive)saveGameState();
 	gameActive=false;gameStarted=false;menuScreen.classList.remove('hidden');
 	var mu=getUnlockedCount(),mt=ACHIEVEMENTS.length,mine=getMine();
 	D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+mine.name+' '+(currentMine+1)+'/'+MINES.length;
@@ -1682,7 +1813,7 @@ function backToMenu(){
 
 function startGame(){
 	var saved=loadGameState();
-	if(saved&&gameMode==='normal'){
+	if(saved){
 		score=saved.score||0;collection=saved.collection||[];
 		shovelLevel=saved.shovelLevel||1;luckLevel=saved.luckLevel||0;
 		playerLevel=saved.playerLevel||1;combo=saved.combo||0;
@@ -1692,13 +1823,13 @@ function startGame(){
 	}
 	gameStarted=true;gameActive=true;menuScreen.classList.add('hidden');
 	createGrid();updateCombo();updateUI();setMessage('🔨 Копай!');startSpawning();
-	if(gameMode==='normal')applyTheme(getMine().theme);
+	applyTheme(getMine().theme);
 	checkAchievements();
 }
 function startFreshGame(){
 	clearGameState();
-	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;bombHits=0;
-	startGame();
+	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
+	saveData();startGame();
 }
 
 function togglePause(){
@@ -1746,6 +1877,8 @@ soundBtn.addEventListener('click',toggleSound);
 soundBtn.addEventListener('touchstart',function(e){e.preventDefault();toggleSound();},{passive:false});
 D('profileFullResetBtn').addEventListener('click',fullReset);
 D('profileFullResetBtn').addEventListener('touchstart',function(e){e.preventDefault();fullReset();},{passive:false});
+D('profileCollectBtn').addEventListener('click',function(){closeProfile();openCollectibles();});
+D('profileCollectBtn').addEventListener('touchstart',function(e){e.preventDefault();closeProfile();openCollectibles();},{passive:false});
 
 // Profile/Shop handlers
 function openProfile(){profileScreen.classList.add('show');renderProfile();renderShop();}
@@ -1756,6 +1889,8 @@ gameProfileBtn.addEventListener('click',function(){if(pauseOverlay.classList.con
 gameProfileBtn.addEventListener('touchstart',function(e){e.preventDefault();if(pauseOverlay.classList.contains('show')){pauseOverlay.classList.remove('show');}openProfile();},{passive:false});
 D('achProfileBtn').addEventListener('click',function(){closeAchievements();openProfile();});
 D('achProfileBtn').addEventListener('touchstart',function(e){e.preventDefault();closeAchievements();openProfile();},{passive:false});
+D('achCollectBtn').addEventListener('click',function(){closeAchievements();openCollectibles();});
+D('achCollectBtn').addEventListener('touchstart',function(e){e.preventDefault();closeAchievements();openCollectibles();},{passive:false});
 D('profileAchBtn').addEventListener('click',function(){closeProfile();openAchievements();});
 D('profileAchBtn').addEventListener('touchstart',function(e){e.preventDefault();closeProfile();openAchievements();},{passive:false});
 D('gameResetBtn').addEventListener('click',resetGame);
@@ -1772,18 +1907,24 @@ document.querySelectorAll('.profile-tab').forEach(function(btn){
 	});
 });
 
-// Shop upgrade handlers
-shopShovelBtn.addEventListener('click',upgradeShovel);
-shopLuckBtn.addEventListener('click',upgradeLuck);
-shopBoostBtn.addEventListener('click',upgradeBoost);
-shopTimeBtn.addEventListener('click',upgradeTime);
-D('shopCharmBtn').addEventListener('click',function(){if(hasCharm||score<500)return;score-=500;hasCharm=true;saveData();updateUI();setMessage('🛡️ Анти-бомба куплена!');soundGold();renderShop();});
-D('shopCharmBtn').addEventListener('touchstart',function(e){e.preventDefault();if(hasCharm||score<500)return;score-=500;hasCharm=true;saveData();updateUI();setMessage('🛡️ Анти-бомба куплена!');soundGold();renderShop();},{passive:false});
-D('shopStreakBtn').addEventListener('click',function(){if(hasStreak||score<800)return;score-=800;hasStreak=true;saveData();updateUI();setMessage('🔥 Стартовый разгон куплен!');soundGold();renderShop();});
-D('shopStreakBtn').addEventListener('touchstart',function(e){e.preventDefault();if(hasStreak||score<800)return;score-=800;hasStreak=true;saveData();updateUI();setMessage('🔥 Стартовый разгон куплен!');soundGold();renderShop();},{passive:false});
-D('shopExpBtn').addEventListener('click',function(){if(hasExpBoost||score<1200)return;score-=1200;hasExpBoost=true;saveData();updateUI();setMessage('📊 Ускоренный рост куплен!');soundGold();renderShop();});
-D('shopExpBtn').addEventListener('touchstart',function(e){e.preventDefault();if(hasExpBoost||score<1200)return;score-=1200;hasExpBoost=true;saveData();updateUI();setMessage('📊 Ускоренный рост куплен!');soundGold();renderShop();},{passive:false});
+holdToBuy(shopShovelBtn,upgradeShovel);
+holdToBuy(shopLuckBtn,upgradeLuck);
+holdToBuy(shopBoostBtn,upgradeBoost);
+holdToBuy(shopTimeBtn,upgradeTime);
+holdToBuy(D('shopCharmBtn'),function(){if(hasCharm||score<500)return;score-=500;hasCharm=true;saveData();updateUI();setMessage('🛡️ Анти-бомба куплена!');soundGold();renderShop();});
+holdToBuy(D('shopStreakBtn'),function(){if(hasStreak||score<800)return;score-=800;hasStreak=true;saveData();updateUI();setMessage('🔥 Стартовый разгон куплен!');soundGold();renderShop();});
+holdToBuy(D('shopExpBtn'),function(){if(hasExpBoost||score<1200)return;score-=1200;hasExpBoost=true;saveData();updateUI();setMessage('📊 Ускоренный рост куплен!');soundGold();renderShop();});
 
+// Chest & collectibles handlers
+chestResultBtn.addEventListener('click',hideChestResult);
+chestResultBtn.addEventListener('touchstart',function(e){e.preventDefault();hideChestResult();},{passive:false});
+collectiblesCloseBtn.addEventListener('click',closeCollectibles);
+collectiblesCloseBtn.addEventListener('touchstart',function(e){e.preventDefault();closeCollectibles();},{passive:false});
+
+function handlePauseCollect(){
+	pauseOverlay.classList.remove('show');
+	openCollectibles();
+}
 function handlePauseAch(){
 	pauseOverlay.classList.remove('show');
 	openAchievements();
@@ -1801,6 +1942,8 @@ pauseBtn.addEventListener('click',togglePause);
 pauseBtn.addEventListener('touchstart',function(e){e.preventDefault();togglePause();},{passive:false});
 D('pauseContinueBtn').addEventListener('click',togglePause);
 D('pauseContinueBtn').addEventListener('touchstart',function(e){e.preventDefault();togglePause();},{passive:false});
+D('pauseCollectBtn').addEventListener('click',handlePauseCollect);
+D('pauseCollectBtn').addEventListener('touchstart',function(e){e.preventDefault();handlePauseCollect();},{passive:false});
 D('pauseAchBtn').addEventListener('click',handlePauseAch);
 D('pauseAchBtn').addEventListener('touchstart',function(e){e.preventDefault();handlePauseAch();},{passive:false});
 D('pauseProfileBtn').addEventListener('click',handlePauseProfile);
@@ -1813,7 +1956,7 @@ D('pauseSiteBtn').addEventListener('click',function(){window.location.href='inde
 D('pauseSiteBtn').addEventListener('touchstart',function(e){e.preventDefault();window.location.href='index.html';},{passive:false});
 document.addEventListener('keydown',function(e){
 	if(!gameStarted)return;
-	if(e.key==='Escape'){if(D('gameoverOverlay').classList.contains('show'))hideGameOver();else if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(profileScreen.classList.contains('show'))closeProfile();else if(pauseOverlay.classList.contains('show'))togglePause();else togglePause();}
+	if(e.key==='Escape'){if(collectiblesOverlay.classList.contains('show'))closeCollectibles();else if(chestResultOverlay.classList.contains('show'))hideChestResult();else if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(profileScreen.classList.contains('show'))closeProfile();else if(pauseOverlay.classList.contains('show'))togglePause();else togglePause();}
 	else if(e.key==='m'||e.key==='M')toggleSound();
 });
 
@@ -1851,18 +1994,6 @@ if(loadGameState())playBtn.textContent='▶ ПРОДОЛЖИТЬ';
 highScoreSpan.textContent=highScore;
 var mu=getUnlockedCount(),mt=ACHIEVEMENTS.length,mine=getMine();
 D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+mine.name+' '+(currentMine+1)+'/'+MINES.length;
-
-// Mode toggle
-D('modeToggleBtn').addEventListener('click',toggleMode);
-D('modeToggleBtn').addEventListener('touchstart',function(e){e.preventDefault();toggleMode();},{passive:false});
-function toggleMode(){
-	gameMode=(gameMode==='adventure'?'score':'adventure');
-	var isScore=gameMode==='score';
-	D('modeToggleBtn').textContent=isScore?'⛏ Приключение':'🎯 Рекорд';
-	D('menuSub').textContent=isScore?'🎯 3 бомбы — игра окончена. Держись!':'Стучи по кротам, собирай коллекцию!';
-	D('playBtn').textContent=isScore?'🎯 ИГРАТЬ':'▶ ПРОДОЛЖИТЬ';
-	bombHits=0;
-}
 })();
 </script>
 </body>
