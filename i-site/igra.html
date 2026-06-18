@@ -103,7 +103,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 
 .pause-btn{background:#1a130e;border:none;color:#d4c4a8;font-size:18px;cursor:pointer;transition:.1s;padding:3px 8px;border-radius:30px;box-shadow:inset 0 2px 5px rgba(0,0,0,.7);line-height:1}
 .pause-btn:active{transform:scale(.9)}
-.pause-overlay{position:fixed;inset:0;z-index:2000;background:rgba(13,10,8,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.pause-overlay{position:fixed;inset:0;z-index:2000;background:rgba(13,10,8,.95);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease;transform:translateZ(0)}
 .pause-overlay.show{opacity:1;pointer-events:auto}
 .pause-title{font-size:24px;color:#d4c4a8;font-weight:bold;margin-bottom:30px;letter-spacing:.05em}
 .pause-btn-group{display:flex;flex-direction:column;gap:10px;align-items:center}
@@ -296,11 +296,12 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 <div class="menu-screen" id="menuScreen">
 	<div class="menu-icon">🐹</div>
 	<div class="menu-title">Крот-собиратель</div>
-	<div class="menu-sub">Стучи по кротам, собирай коллекцию!</div>
+	<div class="menu-sub" id="menuSub">Стучи по кротам, собирай коллекцию!</div>
 	<div class="menu-btn-group">
 		<button class="menu-btn menu-btn-play" id="playBtn">▶ ПРОДОЛЖИТЬ</button>
 		<button class="menu-btn menu-btn-sub" id="newGameBtn">🔄 Новая игра</button>
 		<button class="menu-btn" id="menuAchBtn">🏆 Достижения</button>
+		<button class="menu-btn menu-btn-sub" id="modeToggleBtn">∞ Бесконечный режим</button>
 		<button class="menu-btn menu-btn-sub" id="menuBackBtn">← На сайт</button>
 	</div>
 	<div class="menu-stats-line" id="menuStatsLine">🏆 0/15 · 🌱 Новичок</div>
@@ -327,8 +328,8 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="cert-wrap">
 		<span class="cert-mole">🐹</span>
 		<div class="cert-seal">📜</div>
-		<div class="cert-title">Сертификат</div>
-		<div class="cert-sub">Студия i. подтверждает</div>
+		<div class="cert-title">📜 Легендарный сертификат</div>
+		<div class="cert-sub">Ты нашёл его в глубинах шахты</div>
 		<div class="cert-divider"></div>
 		<div class="cert-body" id="certBody">
 			Игрок выполнил <strong>все достижения</strong><br>
@@ -579,6 +580,8 @@ var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,t
 var unlocked={};
 var currentMine=0;
 var bannerTimeout=null;
+var gameMode='normal'; // 'normal' or 'endless'
+var endlessHighScore=0;
 
 // Load
 try{
@@ -681,7 +684,6 @@ function checkAchievements(){
 			unlocked[a.id]=true;
 			showAchievementBanner(a);
 			saveData();
-			if(getUnlockedCount()>=ACHIEVEMENTS.length) showCertificate();
 		}
 	}
 	// Проверка достижения новой шахты
@@ -747,7 +749,7 @@ function showCertificate(){
 	certCombo.textContent='x'+stats.bestCombo;
 	certShovel.textContent=stats.maxShovel;
 	certCollection.textContent=stats.collectionCount;
-	D('certBody').innerHTML='Игрок выполнил <strong>все '+ACHIEVEMENTS.length+' достижений</strong><br>в игре «Крот-собиратель» и навсегда<br>вписал своё имя в историю студии.';
+		D('certBody').innerHTML='Говорят, в недрах шахт можно найти легендарный сертификат.<br>Никто не знает, когда он выпадет. Может, сегодня?<br>Продолжай копать, <strong>'+getMine().name+'</strong> ждёт!';
 	certScreen.classList.add('show');
 	tryVibrate(100);
 	soundRare();
@@ -854,6 +856,7 @@ function addCombo(){
 function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 
 function getActiveItems(){
+	if(gameMode==='endless')return ITEMS.filter(function(i){return ['gold','silver','bronze','bomb','king','fast'].indexOf(i.id)>-1;});
 	var ids=[];
 	for(var m=0;m<=currentMine&&m<MINES.length;m++){
 		for(var j=0;j<MINES[m].items.length;j++){
@@ -897,6 +900,7 @@ function generateItem(){
 }
 
 function checkLevelUp(){
+	if(gameMode==='endless')return;
 	var nl=1+Math.floor(score/(20+playerLevel*3));
 	if(nl!==playerLevel&&nl>=1){
 		playerLevel=nl;levelSpan.textContent=playerLevel;stats.maxLevel=Math.max(stats.maxLevel,playerLevel);saveData();
@@ -1047,26 +1051,34 @@ function handleCellClick(idx){
 	else if(item.id==='infinity_star'){spawnParticles(pos.x,pos.y,'#ffd700',55);tryVibrate(70);score+=12;setMessage('💫 Бесконечность! +12');if(powerupTimer)clearTimeout(powerupTimer);powerup2x=true;powerupTimer=setTimeout(function(){powerup2x=false;},5000);}
 	else if(item.id==='eternal_crystal'){spawnParticles(pos.x,pos.y,'#ffffff',70);tryVibrate(100);score+=25;screenShake();setMessage('💠 Вечность! +25');}
 	if(item.points>=8)spawnParticles(pos.x,pos.y,item.color||'#ffd700',30);
-	if(!collection.includes(item.emoji)){
+	if(gameMode!=='endless'&&!collection.includes(item.emoji)){
 		clicksSinceNewItem=0;
 		collection.push(item.emoji);
 		var ct=getCollectionTarget();
 		if(collection.length<ct){setMessage('⭐ '+item.emoji);tryVibrate(30);spawnParticles(pos.x,pos.y,'#ffd700',20);}
-	}else if(pts>0){
+	}else if(pts>0&&gameMode!=='endless'){
 		clicksSinceNewItem++;
 	}
 	updateUI();saveData();checkAchievements();
+	// Легендарный сертификат — редкая находка в глубинах
+	if(!stats.certFound&&currentMine>=5&&getUnlockedCount()>=Math.floor(ACHIEVEMENTS.length*0.6)){
+		var certChance=0.0005+getUnlockedCount()/ACHIEVEMENTS.length*0.001;
+		if(Math.random()<certChance){stats.certFound=true;saveData();showCertificate();}
+	}
 	if(gameActive&&pts>=0){setTimeout(function(){if(!cellStates[idx].active)spawnMole(idx);},300+Math.random()*800);}
 }
 
 function scheduleSpawn(){
 	if(!gameActive)return;
 	var isMob=document.body.classList.contains('is-mobile');
-	var effLvl=Math.min(playerLevel,20);
-	var base=isMob?2800:2200,reduction=Math.min(800,Math.floor(score/50)*40),intv=Math.max(isMob?2000:1200,base-reduction)+Math.random()*600;
+	var endless=gameMode==='endless';
+	var effLvl=endless?20:Math.min(playerLevel,20);
+	var base=endless?(isMob?1500:1000):(isMob?2800:2200);
+	var reduction=endless?Math.min(1500,Math.floor(score/30)*30):Math.min(800,Math.floor(score/50)*40);
+	var intv=Math.max(endless?(isMob?800:500):(isMob?2000:1200),base-reduction)+Math.random()*400;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var maxCount=Math.min(isMob?3:5,2+Math.floor(effLvl/4)+Math.floor(Math.min(currentMine,8)/2));
+		var maxCount=endless?(isMob?5:8):Math.min(isMob?3:5,2+Math.floor(effLvl/4)+Math.floor(Math.min(currentMine,8)/2));
 		var count=1+Math.floor(Math.random()*maxCount);
 		for(var i=0;i<count;i++){
 			setTimeout(function(n){return function(){
@@ -1090,17 +1102,22 @@ function startSpawning(){
 
 
 function updateUI(){
+	var endless=gameMode==='endless';
 	scoreSpan.textContent=score;
-	if(score>highScore){highScore=score;saveData();}
-	highScoreSpan.textContent=highScore;levelSpan.textContent=playerLevel;
-	collectionSpan.textContent=collection.length;
-	var ct=getCollectionTarget();
+	if(!endless&&score>highScore){highScore=score;saveData();}
+	if(endless&&score>endlessHighScore){endlessHighScore=score;}
+	highScoreSpan.textContent=endless?endlessHighScore:highScore;
+	levelSpan.textContent=endless?'∞':playerLevel;
+	collectionSpan.textContent=endless?'-':collection.length;
+	var ct=endless?1:getCollectionTarget();
 	D('collectionTargetDisplay').textContent=ct;
-	var pct=collection.length/ct*100;
-	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+ct;
-	shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;
+	var pct=endless?0:collection.length/ct*100;
+	progressBar.style.width=pct+'%';progressLabel.textContent=endless?'∞':collection.length+'/'+ct;
+	shovelLevelSpan.textContent=endless?'-':shovelLevel;luckLevelSpan.textContent=endless?'-':luckLevel;
+	var shopVis=endless?'none':'';
+	shovelBtn.style.display=shopVis;luckBtn.style.display=shopVis;boostBtn.style.display=shopVis;timeBtn.style.display=shopVis;resetBtn.style.display=shopVis;
 	shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;boostBtn.disabled=!gameActive;timeBtn.disabled=!gameActive;
-	D('mineDisplay').textContent=getMine().name.split(' ')[0]+' '+(currentMine+1);
+	D('mineDisplay').textContent=endless?'∞':getMine().name.split(' ')[0]+' '+(currentMine+1);
 }
 
 function setMessage(t){
@@ -1110,7 +1127,7 @@ function setMessage(t){
 }
 
 function upgradeShovel(){
-	if(!gameActive)return;
+	if(!gameActive||gameMode==='endless')return;
 	var cost=Math.floor(15*Math.pow(1.5,shovelLevel-1));if(score<cost){setMessage('💰 '+cost);return;}
 	score-=cost;shovelLevel++;if(shovelLevel>stats.maxShovel){stats.maxShovel=shovelLevel;saveData();}
 	soundGold();setMessage('⬆ Лопата '+shovelLevel);updateUI();checkAchievements();
@@ -1170,6 +1187,7 @@ var _resetGame=function(){
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	achBanner.classList.remove('show');
 	pauseOverlay.classList.remove('show');
+	if(gameMode==='endless'){score=0;combo=0;updateCombo();gameActive=true;updateUI();setMessage('🔄 Новый забег');startSpawning();return;}
 	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
 	updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
 	setTimeout(function(){setMessage('🔨 Копай!');},2000);
@@ -1197,7 +1215,7 @@ function backToMenu(){
 
 function startGame(){
 	var saved=loadGameState();
-	if(saved){
+	if(saved&&gameMode==='normal'){
 		score=saved.score||0;collection=saved.collection||[];
 		shovelLevel=saved.shovelLevel||1;luckLevel=saved.luckLevel||0;
 		playerLevel=saved.playerLevel||1;combo=saved.combo||0;
@@ -1207,7 +1225,7 @@ function startGame(){
 	}
 	gameStarted=true;gameActive=true;menuScreen.classList.add('hidden');
 	createGrid();updateCombo();updateUI();setMessage('🔨 Копай!');startSpawning();
-	applyTheme(getMine().theme);
+	if(gameMode==='normal')applyTheme(getMine().theme);
 	checkAchievements();
 }
 function startFreshGame(){
@@ -1340,6 +1358,17 @@ if(loadGameState())playBtn.textContent='▶ ПРОДОЛЖИТЬ';
 highScoreSpan.textContent=highScore;
 var mu=getUnlockedCount(),mt=ACHIEVEMENTS.length,mine=getMine();
 D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+mine.name+' '+(currentMine+1)+'/'+MINES.length;
+
+// Mode toggle
+D('modeToggleBtn').addEventListener('click',toggleMode);
+D('modeToggleBtn').addEventListener('touchstart',function(e){e.preventDefault();toggleMode();},{passive:false});
+function toggleMode(){
+	gameMode=(gameMode==='normal'?'endless':'normal');
+	var isEndless=gameMode==='endless';
+	D('modeToggleBtn').textContent=isEndless?'🎯 Обычный режим':'∞ Бесконечный режим';
+	D('menuSub').textContent=isEndless?'∞ Бесконечно тыкай и ставь рекорды!':'Стучи по кротам, собирай коллекцию!';
+	D('playBtn').textContent=isEndless?'∞ ИГРАТЬ':'▶ ПРОДОЛЖИТЬ';
+}
 })();
 </script>
 </body>
