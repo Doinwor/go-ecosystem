@@ -4,9 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>🐹 Крот-собиратель — i.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
-body{background:#0d0a08;min-height:100vh;min-height:-webkit-fill-available;display:flex;justify-content:center;align-items:center;font-family:'Segoe UI',system-ui,sans-serif;touch-action:manipulation;padding:10px;overscroll-behavior:none}
+@keyframes bgDrift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+body{background:#0d0a08;min-height:100vh;min-height:-webkit-fill-available;display:flex;justify-content:center;align-items:center;font-family:'Unbounded','Segoe UI',system-ui,sans-serif;touch-action:manipulation;padding:10px;overscroll-behavior:none;position:relative}
+body::before{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at 50% 0%,#1f1410 0%,#0d0a08 60%,#0a0604 100%);opacity:.8}
+body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradient(2px 2px at 20% 30%,rgba(255,215,0,.03),transparent 200px),radial-gradient(2px 2px at 80% 70%,rgba(196,154,108,.03),transparent 200px);pointer-events:none}
+.menu-screen{z-index:1000;background:radial-gradient(ellipse at 50% 40%,#2a1f18,#0d0a08);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;transition:opacity .5s ease,transform .5s ease;position:fixed;inset:0}
 
 .menu-screen{position:fixed;inset:0;z-index:1000;background:radial-gradient(ellipse at 50% 40%,#2a1f18,#0d0a08);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;transition:opacity .5s ease,transform .5s ease}
 .menu-screen.hidden{opacity:0;transform:scale(1.05);pointer-events:none}
@@ -21,10 +28,13 @@ body{background:#0d0a08;min-height:100vh;min-height:-webkit-fill-available;displ
 .menu-ach-btn{background:none;border:2px solid #3d3224;color:#c49a6c;font-size:15px;cursor:pointer;padding:8px 20px;border-radius:40px;transition:all .2s;touch-action:manipulation;margin-bottom:10px}
 .menu-ach-btn:active{transform:scale(.95)}
 .menu-credits{color:#4a3a2a;font-size:14px;position:absolute;bottom:30px}
-.menu-credits span{color:#8b6b40}
-.menu-back{background:none;border:2px solid #3d3224;color:#8b7b6a;font-size:14px;cursor:pointer;padding:8px 20px;border-radius:40px;transition:all .2s;touch-action:manipulation;margin-bottom:8px;font-family:inherit}
-.menu-back:hover{color:#d4c4a8;border-color:#8b6b40}
+.menu-credits a{color:#8b6b40;text-decoration:none;transition:color .2s}
+.menu-credits a:hover{color:#d4c4a8}
+.menu-back{background:#1a130e;border:2px solid #3d3224;color:#8b7b6a;font-size:13px;cursor:pointer;padding:10px 24px;border-radius:40px;transition:all .2s;touch-action:manipulation;margin-bottom:10px;font-family:'Unbounded','Segoe UI',sans-serif;letter-spacing:.03em}
+.menu-back:hover{color:#d4c4a8;border-color:#8b6b40;background:#221a14;box-shadow:0 0 20px rgba(196,154,108,.05)}
 .menu-back:active{transform:scale(.95)}
+.menu-back .arrow{display:inline-block;transition:transform .2s}
+.menu-back:hover .arrow{transform:translateX(-3px)}
 
 .ach-screen{position:fixed;inset:0;z-index:1100;background:rgba(13,10,8,.95);display:flex;flex-direction:column;align-items:center;padding:30px 20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .3s ease}
 .ach-screen.show{opacity:1;pointer-events:auto}
@@ -51,7 +61,8 @@ body{background:#0d0a08;min-height:100vh;min-height:-webkit-fill-available;displ
 .ach-banner-title{color:#ffd700;font-weight:bold;font-size:14px}
 .ach-banner-desc{color:#c49a6c;font-size:12px}
 
-.gameover-screen{position:absolute;inset:0;z-index:300;background:rgba(13,10,8,.92);border-radius:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.gameover-screen{position:absolute;inset:0;z-index:300;background:rgba(13,10,8,.95);border-radius:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.gameover-screen.show{box-shadow:inset 0 0 80px rgba(255,215,0,.05)}
 .gameover-screen.show{opacity:1;pointer-events:auto}
 .gameover-title{font-size:38px;margin-bottom:4px}
 .gameover-sub{color:#ffd700;font-size:18px;font-weight:bold;margin-bottom:16px}
@@ -61,7 +72,7 @@ body{background:#0d0a08;min-height:100vh;min-height:-webkit-fill-available;displ
 .gameover-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:16px;font-weight:bold;padding:12px 30px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation;margin:4px}
 .gameover-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
 
-.game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);padding:15px;border-radius:40px;box-shadow:0 20px 30px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.03);max-width:500px;width:100%;position:relative;overflow:hidden}
+.game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);padding:15px;border-radius:40px;box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,215,0,.04),inset 0 1px 0 rgba(255,255,255,.05);max-width:500px;width:100%;position:relative;overflow:hidden}
 .game-wrap.shake{animation:shake .3s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px) rotate(-.5deg)}40%{transform:translateX(8px) rotate(.5deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 
@@ -136,8 +147,8 @@ body{padding:6px}.game-wrap{padding:10px;border-radius:28px}.grid{gap:7px;paddin
 	<button class="menu-play" id="playBtn">▶ ИГРАТЬ</button>
 	<button class="menu-sound" id="menuSoundBtn">🔊</button>
 	<button class="menu-ach-btn" id="menuAchBtn">🏆 Достижения</button>
-	<button class="menu-back" id="menuBackBtn">← Назад</button>
-	<div class="menu-credits">Сделано студией <span>i.</span></div>
+	<button class="menu-back" id="menuBackBtn"><span class="arrow">←</span> На сайт</button>
+	<div class="menu-credits">Сделано студией <a href="index.html" class="menu-credit-link">i.</a></div>
 </div>
 
 <div class="ach-screen" id="achScreen">

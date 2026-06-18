@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Крот-собиратель — событие i.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fafaf8;--text:#1a1a1a;--muted:#999;--dim:#666;--border:#e8e8e5;--border-hover:#ccc;--card-shadow:rgba(0,0,0,0.04);--heading-color:#bbb;--arrow-color:#bbb;--arrow-hover:#1a1a1a;--footer-color:#ccc}
+[data-theme="dark"]{--bg:#0b0b12;--text:#f0ece4;--muted:#666;--dim:#888;--border:#1e1e26;--border-hover:#333;--card-shadow:rgba(255,255,255,0.02);--heading-color:#555;--arrow-color:#555;--arrow-hover:#f0ece4;--footer-color:#333}
+body{font-family:'Unbounded',sans-serif;background:var(--bg);color:var(--text);transition:background .3s,color .3s}
+.wrapper{max-width:960px;margin:0 auto;padding:80px 24px 40px;min-height:100vh;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:48px}
+.back a{font-size:12px;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:.05em;transition:color .2s}
+.back a:hover{color:var(--text)}
+.back a span{color:#ffd700}
+.theme-toggle{background:var(--border);border:none;cursor:pointer;padding:0;border-radius:100px;width:42px;height:22px;display:flex;align-items:center;transition:background .3s;position:relative;flex-shrink:0}
+.theme-toggle:hover{opacity:.8}
+.theme-toggle__knob{width:16px;height:16px;border-radius:50%;background:var(--bg);transition:transform .3s,background .3s;margin:0 3px}
+[data-theme="dark"] .theme-toggle__knob{transform:translateX(20px)}
+.hero{text-align:center;margin-bottom:64px}
+.hero__badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:#ffd700;background:#ffd70022;padding:6px 16px;border-radius:100px;margin-bottom:16px}
+.hero__icon{font-size:72px;margin-bottom:12px;display:block}
+.hero__title{font-size:clamp(36px,7vw,64px);font-weight:900;line-height:1.1;letter-spacing:-.02em;margin-bottom:8px}
+.hero__title span{background:linear-gradient(135deg,#ffd700,#ff8c00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero__sub{font-size:14px;font-weight:400;letter-spacing:.25em;text-transform:uppercase;color:var(--muted)}
+.hero__desc{font-size:15px;font-weight:300;color:var(--dim);max-width:520px;line-height:1.7;margin:20px auto 0}
+.section{margin-bottom:64px}
+.section h2{font-size:11px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--heading-color);margin-bottom:20px}
+.section p{font-size:14px;font-weight:300;color:var(--dim);line-height:1.8}
+.section ul{list-style:none;padding:0}
+.section ul li{font-size:13px;font-weight:300;color:var(--dim);line-height:1.8;padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.section ul li:last-child{border-bottom:none}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+@media(max-width:640px){.features{grid-template-columns:1fr}}
+.feature-card{border:1px solid var(--border);border-radius:14px;padding:20px 22px;transition:border-color .25s}
+.feature-card:hover{border-color:var(--border-hover)}
+.feature-card__icon{font-size:24px;margin-bottom:6px}
+.feature-card__name{font-size:13px;font-weight:600;margin-bottom:4px}
+.feature-card__desc{font-size:11px;font-weight:300;color:var(--dim);line-height:1.6}
+.play-section{text-align:center;padding:48px 0;border-top:1px solid var(--border);margin-bottom:32px}
+.play-section p{font-size:13px;font-weight:300;color:var(--dim);margin-bottom:24px;max-width:400px;margin-left:auto;margin-right:auto}
+.play-btn{display:inline-block;font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700;color:#1a1a1a;background:linear-gradient(135deg,#ffd700,#ff8c00);padding:16px 56px;border-radius:100px;text-decoration:none;letter-spacing:.02em;transition:transform .15s,box-shadow .2s;box-shadow:0 6px 20px #ffd70044}
+.play-btn:hover{transform:scale(1.04);box-shadow:0 8px 30px #ffd70066}
+.play-btn:active{transform:scale(.96)}
+.play-btn .arrow{display:inline-block;transition:transform .2s}
+.play-btn:hover .arrow{transform:translateX(4px)}
+footer{margin-top:auto;padding:40px 0 0;font-size:11px;font-weight:300;color:var(--footer-color);letter-spacing:.05em}
+footer .go-link{color:var(--muted);text-decoration:none;transition:color .2s}
+footer .go-link:hover{color:var(--text)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+@media(max-width:480px){
+.wrapper{padding:40px 16px 32px}.top{margin-bottom:32px}.hero{margin-bottom:40px}.hero__icon{font-size:48px}.section{margin-bottom:40px}.feature-card{padding:16px}.play-section{padding:32px 0}.play-btn{font-size:16px;padding:14px 40px}
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+<div class="top">
+<div class="back"><a href="https://doinwor.github.io/go-ecosystem/">GO</a> / <a href="index.html">i.</a> / <a href="event.html"><span>событие</span></a></div>
+<button class="theme-toggle" id="themeToggle"><span class="theme-toggle__knob"></span></button>
+</div>
+
+<div class="hero reveal">
+<span class="hero__badge">🎮 Событие</span>
+<span class="hero__icon">🐹</span>
+<h1 class="hero__title">Крот-<span>собиратель</span></h1>
+<p class="hero__sub">Аркада от студии i.</p>
+<p class="hero__desc">Студия i. выпустила свою первую игру — аркаду, в которой нужно собирать редких кротов, открывать коллекцию и ставить рекорды.</p>
+</div>
+
+<div class="section reveal reveal-delay-1">
+<h2>О чём игра</h2>
+<p>Вы — коллекционер подземных сокровищ. Ваша задача — стучать по кротам, которые появляются из нор, и собирать монеты и редкие предметы. Каждый крот уникален: одни приносят золото, другие — бонусы, третьи — взрываются. Собирайте коллекцию из 12 предметов, открывайте достижения и ставьте рекорды!</p>
+</div>
+
+<div class="section reveal reveal-delay-1">
+<h2>Особенности</h2>
+<div class="features">
+<div class="feature-card">
+<div class="feature-card__icon">🪙</div>
+<div class="feature-card__name">9 видов кротов</div>
+<div class="feature-card__desc">От обычных до короля, молнии и призрака — у каждого своя механика и редкость.</div>
+</div>
+<div class="feature-card">
+<div class="feature-card__icon">📦</div>
+<div class="feature-card__name">Коллекция</div>
+<div class="feature-card__desc">Соберите 12 предметов, чтобы завершить игру. Каждый предмет выпадает случайно.</div>
+</div>
+<div class="feature-card">
+<div class="feature-card__icon">🔥</div>
+<div class="feature-card__name">Комбо-система</div>
+<div class="feature-card__desc">Бейте кротов подряд — стройте комбо до x10 и выше для множителя очков.</div>
+</div>
+<div class="feature-card">
+<div class="feature-card__icon">⬆</div>
+<div class="feature-card__name">Улучшения</div>
+<div class="feature-card__desc">Прокачивайте лопату, удачу и автоколлектора — игра становится быстрее.</div>
+</div>
+<div class="feature-card">
+<div class="feature-card__icon">🏆</div>
+<div class="feature-card__name">12 достижений</div>
+<div class="feature-card__desc">Открывайте ачивки за смелые подвиги: поймать 10 бомб, 5 королей, собрать комбо 15.</div>
+</div>
+<div class="feature-card">
+<div class="feature-card__icon">📊</div>
+<div class="feature-card__name">Система уровней</div>
+<div class="feature-card__desc">С каждым уровнем открываются новые кроты и увеличивается сложность.</div>
+</div>
+</div>
+</div>
+
+<div class="section reveal reveal-delay-2">
+<h2>Правила</h2>
+<ul>
+<li>🥇 Стучи по кротам — получай монеты</li>
+<li>👑 Лови короля, молнию и призрака — они дают больше очков</li>
+<li>💣 Остерегайся бомб — они отнимают монеты и сбрасывают комбо</li>
+<li>📦 Собери 12 предметов коллекции, чтобы завершить игру</li>
+<li>⬆ Улучшай лопату, чтобы получать больше монет за удар</li>
+<li>🍀 Прокачай удачу — повысит шанс выпадения редких кротов</li>
+<li>🤖 Автоколлектор будет собирать кротов за вас</li>
+<li>🏆 Открывай достижения — они сохраняются между играми</li>
+</ul>
+</div>
+
+<div class="play-section reveal reveal-delay-3">
+<p>Готовы проверить свою реакцию? Начинайте собирать коллекцию прямо сейчас!</p>
+<a href="igra.html" class="play-btn">▶ Играть <span class="arrow">→</span></a>
+</div>
+
+<footer>
+<a href="https://doinwor.github.io/go-ecosystem/" class="go-link">Экосистема GO</a> · Сделано студией i. · 2026
+</footer>
+</div>
+
+<script>
+(function(){var toggle=document.getElementById('themeToggle');var stored=localStorage.getItem('i-theme');if(stored)document.documentElement.setAttribute('data-theme',stored);toggle.addEventListener('click',function(){var cur=document.documentElement.getAttribute('data-theme');var next=cur==='dark'?'':'dark';document.documentElement.setAttribute('data-theme',next||'');localStorage.setItem('i-theme',next||'');});})();
+(function(){var els=document.querySelectorAll('.reveal');var observer=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.15});els.forEach(function(el){observer.observe(el);});})();
+</script>
+</body>
+</html>
