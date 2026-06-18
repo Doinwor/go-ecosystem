@@ -313,6 +313,8 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<div class="shop">
 			<button class="shop-btn" id="shovelUpgrade">⬆ Лопата</button>
 			<button class="shop-btn" id="luckUpgrade">🍀 Удача</button>
+			<button class="shop-btn" id="boostUpgrade">⚡ Ускорение</button>
+			<button class="shop-btn" id="timeUpgrade">⏱ Время</button>
 			<button class="shop-btn restart" id="resetBtn">🔄</button>
 		</div>
 	</div>
@@ -382,7 +384,7 @@ var scoreSpan=D('scoreDisplay'),highScoreSpan=D('highScoreDisplay'),collectionSp
 var progressBar=D('progressBar'),progressLabel=D('progressLabel');
 var shovelLevelSpan=D('shovelLevel'),luckLevelSpan=D('luckLevel'),comboDisplay=D('comboDisplay');
 var messageEl=D('messageDisplay'),soundBtn=D('soundBtn');
-var shovelBtn=D('shovelUpgrade'),luckBtn=D('luckUpgrade'),resetBtn=D('resetBtn');
+var shovelBtn=D('shovelUpgrade'),luckBtn=D('luckUpgrade'),boostBtn=D('boostUpgrade'),timeBtn=D('timeUpgrade'),resetBtn=D('resetBtn');
 var pauseBtn=D('pauseBtn'),pauseOverlay=D('pauseOverlay');
 
 // State
@@ -391,6 +393,7 @@ var cellStates=[],gameActive=false,gameStarted=false;
 var messageTimeout=null,spawnTimeout=null,combo=0,comboTimer=null,muted=false;
 var powerup2x=false,powerupTimer=null;
 var particleCount=0,floatTextCount=0;
+var boostLevel=0,timeLevel=0,clicksSinceNewItem=0;
 
 // Stats for achievements
 var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1};
@@ -601,6 +604,14 @@ function getActiveItems(){return ITEMS.filter(function(i){return i.minLvl<=playe
 
 function generateItem(){
 	var items=getActiveItems().map(function(i){return{id:i.id,emoji:i.emoji,name:i.name,rarity:i.rarity,points:i.points,color:i.color,minLvl:i.minLvl,needSecret:i.needSecret};});
+	// Pity: если давно не выпадал новый предмет — гарантированно даём недостающий
+	if(clicksSinceNewItem>25){
+		var missing=items.filter(function(i){return !collection.includes(i.emoji)&&i.points>=0;});
+		if(missing.length>0){
+			clicksSinceNewItem=0;
+			return missing[Math.floor(Math.random()*missing.length)];
+		}
+	}
 	var lb=luckLevel*.03;
 	items.forEach(function(i){
 		if(i.id==='crystal')i.rarity+=lb;
@@ -654,7 +665,7 @@ function spawnMole(idx){
 	else if(item.id==='fast')du=500+Math.random()*300;
 	else if(item.id==='ghost')du=2000+Math.random()*1000;
 	else if(item.id==='bomb')du=2000+Math.random()*1000;
-	du*=Math.max(.4,1-score*.00004);
+	du*=Math.max(.4,1-score*.00004)*(1+timeLevel*0.15);
 	if(cellStates[idx].timer)clearTimeout(cellStates[idx].timer);
 	cellStates[idx].timer=setTimeout(function(){hideMole(idx);},du);
 	// Ghost teleport
@@ -708,7 +719,7 @@ function handleCellClick(idx){
 	if(!state.active){setMessage('Здесь ничего нет');return;}
 	hideMole(idx);var item=state.type;
 	var cm=getComboMultiplier();
-	var pts=Math.round(item.points*shovelLevel*cm);
+	var pts=Math.round(item.points*shovelLevel*cm*(1+boostLevel*0.5));
 	if(powerup2x&&pts>0)pts*=2;
 	var crit=false;
 	if(pts>0&&Math.random()<.05+luckLevel*.02){pts=Math.round(pts*2);crit=true;}
@@ -738,9 +749,12 @@ function handleCellClick(idx){
 	else if(item.id==='star_master'){spawnParticles(pos.x,pos.y,'#ff69b4',45);tryVibrate(60);}
 	else if(item.id==='aegis'){spawnParticles(pos.x,pos.y,'#ff6b35',35);tryVibrate(50);}
 	if(!collection.includes(item.emoji)){
+		clicksSinceNewItem=0;
 		collection.push(item.emoji);
 		if(collection.length<COLLECTION_TARGET){setMessage('⭐ Новый предмет! '+item.emoji);tryVibrate(30);spawnParticles(pos.x,pos.y,'#ffd700',20);}
 		if(collection.length>=COLLECTION_TARGET){finishGame();}
+	}else if(pts>0){
+		clicksSinceNewItem++;
 	}
 	updateUI();saveData();checkAchievements();
 	if(gameActive&&pts>=0){setTimeout(function(){if(!cellStates[idx].active)spawnMole(idx);},300+Math.random()*800);}
@@ -749,10 +763,11 @@ function handleCellClick(idx){
 function scheduleSpawn(){
 	if(!gameActive)return;
 	var isMob=document.body.classList.contains('is-mobile');
-	var base=isMob?2800:2200,reduction=Math.min(800,Math.floor(score/40)*40),intv=Math.max(isMob?2000:1200,base-reduction)+Math.random()*600;
+	var effLvl=Math.min(playerLevel,20);
+	var base=isMob?2800:2200,reduction=Math.min(800,Math.floor(score/50)*40),intv=Math.max(isMob?2000:1200,base-reduction)+Math.random()*600;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var maxCount=Math.min(isMob?2:3,1+Math.floor(playerLevel/3)+Math.floor(Math.min(score,500)/200));
+		var maxCount=Math.min(isMob?2:3,1+Math.floor(effLvl/3)+Math.floor(Math.min(score,500)/250));
 		var count=1+Math.floor(Math.random()*maxCount);
 		for(var i=0;i<count;i++){
 			setTimeout(function(n){return function(){
@@ -783,7 +798,7 @@ function updateUI(){
 	var pct=collection.length/COLLECTION_TARGET*100;
 	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+COLLECTION_TARGET;
 	shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;
-	shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;
+	shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;boostBtn.disabled=!gameActive;timeBtn.disabled=!gameActive;
 }
 
 function setMessage(t){
@@ -794,14 +809,24 @@ function setMessage(t){
 
 function upgradeShovel(){
 	if(!gameActive)return;
-	var cost=10*shovelLevel;if(score<cost){setMessage('Нужно '+cost+'💰');return;}
+	var cost=Math.floor(15*Math.pow(1.5,shovelLevel-1));if(score<cost){setMessage('💰 '+cost);return;}
 	score-=cost;shovelLevel++;if(shovelLevel>stats.maxShovel){stats.maxShovel=shovelLevel;saveData();}
 	soundGold();setMessage('⬆ Лопата '+shovelLevel);updateUI();checkAchievements();
 }
 function upgradeLuck(){
 	if(!gameActive)return;
-	var cost=15*(luckLevel+1);if(score<cost){setMessage('Нужно '+cost+'💰');return;}
+	var cost=Math.floor(20*Math.pow(1.5,luckLevel));if(score<cost){setMessage('💰 '+cost);return;}
 	score-=cost;luckLevel++;soundGold();setMessage('🍀 Удача '+luckLevel);updateUI();
+}
+function upgradeBoost(){
+	if(!gameActive)return;
+	var cost=Math.floor(100*Math.pow(2,boostLevel));if(score<cost){setMessage('💰 '+cost);return;}
+	score-=cost;boostLevel++;soundGold();setMessage('⚡ Ускорение '+boostLevel);updateUI();
+}
+function upgradeTime(){
+	if(!gameActive)return;
+	var cost=Math.floor(80*Math.pow(2,timeLevel));if(score<cost){setMessage('💰 '+cost);return;}
+	score-=cost;timeLevel++;soundGold();setMessage('⏱ Время '+timeLevel);updateUI();
 }
 
 function toggleSound(){
@@ -816,7 +841,8 @@ function saveGameState(){
 	try{
 		localStorage.setItem('moleGameState',JSON.stringify({
 			score:score,collection:collection,shovelLevel:shovelLevel,
-			luckLevel:luckLevel,playerLevel:playerLevel,combo:combo
+			luckLevel:luckLevel,playerLevel:playerLevel,combo:combo,
+			boostLevel:boostLevel,timeLevel:timeLevel
 		}));
 	}catch(e){}
 }
@@ -842,7 +868,7 @@ var _resetGame=function(){
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	achBanner.classList.remove('show');
 	pauseOverlay.classList.remove('show');
-	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;
+	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
 	updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
 	setTimeout(function(){setMessage('🔨 Копай!');},2000);
 }
@@ -864,6 +890,7 @@ function startGame(){
 		score=saved.score||0;collection=saved.collection||[];
 		shovelLevel=saved.shovelLevel||1;luckLevel=saved.luckLevel||0;
 		playerLevel=saved.playerLevel||1;combo=saved.combo||0;
+		boostLevel=saved.boostLevel||0;timeLevel=saved.timeLevel||0;
 		clearGameState();
 		pauseOverlay.classList.remove('show');
 	}
@@ -872,7 +899,7 @@ function startGame(){
 }
 function startFreshGame(){
 	clearGameState();
-	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;
+	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
 	startGame();
 }
 function playAgain(){gameoverScreen.classList.remove('show');resetGame();}
@@ -925,6 +952,10 @@ soundBtn.addEventListener('click',toggleSound);
 soundBtn.addEventListener('touchstart',function(e){e.preventDefault();toggleSound();},{passive:false});
 shovelBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeShovel();},{passive:false});
 luckBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeLuck();},{passive:false});
+boostBtn.addEventListener('click',upgradeBoost);
+boostBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeBoost();},{passive:false});
+timeBtn.addEventListener('click',upgradeTime);
+timeBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeTime();},{passive:false});
 resetBtn.addEventListener('touchstart',function(e){e.preventDefault();resetGame();},{passive:false});
 goMenuBtn.addEventListener('click',backToMenu);
 goMenuBtn.addEventListener('touchstart',function(e){e.preventDefault();backToMenu();},{passive:false});
@@ -960,6 +991,8 @@ document.addEventListener('keydown',function(e){
 	else if(e.key==='r'||e.key==='R')resetGame();
 	else if(e.key==='s'||e.key==='S')upgradeShovel();
 	else if(e.key==='l'||e.key==='L')upgradeLuck();
+	else if(e.key==='b'||e.key==='B')upgradeBoost();
+	else if(e.key==='t'||e.key==='T')upgradeTime();
 	else if(e.key==='m'||e.key==='M')toggleSound();
 });
 
