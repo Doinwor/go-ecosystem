@@ -423,6 +423,7 @@ try{
 		if(d.unlocked) for(var k in d.unlocked) if(d.unlocked[k]) unlocked[k]=true;
 	}
 }catch(e){}
+checkAchievements();
 
 function saveData(){
 	try{
@@ -455,7 +456,7 @@ function checkAchievements(){
 			case 'collector_1': ok=stats.collectionCount>=1; break;
 			case 'collector_3': ok=stats.collectionCount>=3; break;
 			case 'digger': ok=stats.maxShovel>=10; break;
-			case 'secret_legend': ok=stats.collectionCount>=10; break;
+			case 'secret_legend': ok=stats.collectionCount>=5; break;
 			case 'secret_invincible': ok=stats.maxLevel>=10; break;
 			case 'secret_master': ok=stats.totalEarnings>=10000; break;
 		}
@@ -546,7 +547,17 @@ function renderAchievements(){
 	}
 	achProgress.textContent=n+' / '+totalAll;
 	if(showSecrets){
-		achHint.textContent='🔮 Секретные: '+unlockedSecrets+'/'+totalSecrets+' · до сертификата: '+(totalAll-n)+'/'+totalAll;
+		var remaining=[];
+		for(var j=0;j<ACHIEVEMENTS.length;j++){var a2=ACHIEVEMENTS[j];if(!unlocked[a2.id])remaining.push(a2);}
+		var hint='🔮 Секретные: '+unlockedSecrets+'/'+totalSecrets;
+		if(remaining.length>0){
+			hint+=' · осталось: ';
+			for(var j=0;j<remaining.length;j++){
+				if(j>0)hint+=' · ';
+				hint+=remaining[j].name+(remaining[j].secret?' ⚡':'');
+			}
+		}
+		achHint.textContent=hint;
 		achHint.className='ach-hint revealed';
 	}else{
 		achHint.textContent='🔮 Собери все 12 — откроются секретные';
@@ -924,6 +935,7 @@ function startGame(){
 	}
 	gameStarted=true;gameActive=true;menuScreen.classList.add('hidden');
 	createGrid();updateCombo();updateUI();setMessage('🔨 Копай!');startSpawning();
+	checkAchievements();
 }
 function startFreshGame(){
 	clearGameState();
