@@ -333,6 +333,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 .shop-item-desc{display:block;font-size:9px;color:#6a5a4a;margin-top:2px}
 .shop-item-cost{font-size:12px;font-weight:bold;color:#ffd700;flex-shrink:0;padding:4px 10px;background:#2a2218;border-radius:20px}
 .shop-cosmetic-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.shop-balance{background:#1a130e;border-radius:16px;border:1px solid #2a1f18;font-size:18px;font-weight:bold;color:#ffd700;text-align:center;padding:10px;margin-bottom:10px;letter-spacing:.02em}
 .shop-cosmetic-item{background:#1a130e;border:2px solid #2a1f18;border-radius:14px;padding:8px;text-align:center;cursor:pointer;transition:all .15s}
 .shop-cosmetic-item:active{transform:scale(.95)}
 .shop-cosmetic-item.owned{border-color:#3d3224}
@@ -449,6 +450,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<span class="high-score">🏆 <span id="highScoreDisplay">0</span></span>
 		<span>⭐ <span id="collectionDisplay">0</span>/<span id="collectionTargetDisplay">12</span></span>
 		<span id="mineDisplay" style="font-size:10px;color:#8b7b6a">🪨 1</span>
+		<span id="charmDisplay" style="font-size:12px;display:none" title="Анти-бомба активна">🛡️</span>
 		<button class="sound-btn" id="soundBtn">🔊</button>
 		<button class="pause-btn" id="pauseBtn">☰</button>
 	</div>
@@ -482,7 +484,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<button id="pauseMenuBtn">🏠 В меню</button>
 		<button class="pause-danger" id="pauseSiteBtn">← На сайт</button>
 	</div>
-	<div style="margin-top:20px;font-size:10px;color:#3d3224;text-align:center">🧹 <span id="fullResetBtn" style="cursor:pointer;color:#6a5a4a;text-decoration:underline;text-underline-offset:3px">сбросить весь прогресс</span></div>
+	<div style="margin-top:20px;font-size:10px;color:#3d3224;text-align:center"></div>
 </div>
 
 <!-- Game Over overlay -->
@@ -539,9 +541,18 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 				<div class="profile-stat"><span class="profile-stat-val" id="profileStatColl">0</span><span class="profile-stat-lbl">Коллекций</span></div>
 				<div class="profile-stat"><span class="profile-stat-val" id="profileStatClicks">0</span><span class="profile-stat-lbl">Кликов</span></div>
 			</div>
+			<div class="profile-settings">
+				<div class="shop-section-title">⚙️ Настройки</div>
+				<button class="shop-item" id="profileFullResetBtn" style="border-color:#4a2a2a">
+					<span class="shop-item-icon">🧹</span>
+					<span class="shop-item-info"><span class="shop-item-name" style="color:#9a6a6a">Сбросить весь прогресс</span><span class="shop-item-desc">Удалит все данные безвозвратно</span></span>
+					<span class="shop-item-cost" style="background:#2a1818;color:#9a6a6a">⚠️</span>
+				</button>
+			</div>
 		</div>
 		<!-- TAB: Магазин -->
 		<div class="profile-content" id="shopTab">
+			<div class="shop-balance" id="shopBalance">💰 <span id="shopBalanceAmount">0</span></div>
 			<div class="shop-upgrades">
 				<div class="shop-section-title">⚙️ Улучшения</div>
 				<button class="shop-item" id="shopShovelBtn">
@@ -563,6 +574,24 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 					<span class="shop-item-icon">⏱</span>
 					<span class="shop-item-info"><span class="shop-item-name">Время <span id="shopTimeLvl">0</span></span><span class="shop-item-desc">+15% длительности за уровень</span></span>
 					<span class="shop-item-cost" id="shopTimeCost">100💰</span>
+				</button>
+			</div>
+			<div class="shop-boosters" id="shopBoostersSection">
+				<div class="shop-section-title">🧪 Бонусы</div>
+				<button class="shop-item" id="shopCharmBtn">
+					<span class="shop-item-icon">🛡️</span>
+					<span class="shop-item-info"><span class="shop-item-name">Анти-бомба</span><span class="shop-item-desc">Пропускает 1 бомбу (одноразово)</span></span>
+					<span class="shop-item-cost" id="shopCharmCost">500💰</span>
+				</button>
+				<button class="shop-item" id="shopStreakBtn">
+					<span class="shop-item-icon">🔥</span>
+					<span class="shop-item-info"><span class="shop-item-name">Стартовый разгон</span><span class="shop-item-desc">Начинать с x2 комбо</span></span>
+					<span class="shop-item-cost" id="shopStreakCost">800💰</span>
+				</button>
+				<button class="shop-item" id="shopExpBtn">
+					<span class="shop-item-icon">📊</span>
+					<span class="shop-item-info"><span class="shop-item-name">Ускоренный рост</span><span class="shop-item-desc">+20% к опыту навсегда</span></span>
+					<span class="shop-item-cost" id="shopExpCost">1200💰</span>
 				</button>
 			</div>
 			<div class="shop-cosmetics">
@@ -837,6 +866,7 @@ var messageTimeout=null,spawnTimeout=null,combo=0,comboTimer=null,muted=false;
 var powerup2x=false,powerupTimer=null;
 var particleCount=0,floatTextCount=0;
 var boostLevel=0,timeLevel=0,clicksSinceNewItem=0;
+var hasCharm=false,hasStreak=false,hasExpBoost=false;
 
 // Stats for achievements
 var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1,itemCounts:{}};
@@ -857,6 +887,7 @@ try{
 		if(d.unlocked) for(var k in d.unlocked) if(d.unlocked[k]) unlocked[k]=true;
 		if(d.currentMine!==undefined) currentMine=d.currentMine;
 		if(d.profile){profileState.equippedFrame=d.profile.equippedFrame||'default';profileState.equippedTitle=d.profile.equippedTitle||'novice';profileState.ownedFrames=d.profile.ownedFrames||['default'];profileState.ownedTitles=d.profile.ownedTitles||['novice'];}
+		if(d.boosters){hasCharm=!!d.boosters.charm;hasStreak=!!d.boosters.streak;hasExpBoost=!!d.boosters.exp;}
 	}
 }catch(e){}
 // Load muted state
@@ -868,7 +899,7 @@ checkAchievements();
 
 function saveData(){
 	try{
-		localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked,currentMine:currentMine,profile:profileState}));
+		localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked,currentMine:currentMine,profile:profileState,boosters:{charm:hasCharm,streak:hasStreak,exp:hasExpBoost}}));
 	}catch(e){}
 }
 
@@ -1192,7 +1223,8 @@ function generateItem(){
 
 function checkLevelUp(){
 	if(gameMode==='score')return;
-	var nl=1+Math.floor(score/(20+playerLevel*3));
+	var mult=hasExpBoost?0.8:1;
+	var nl=1+Math.floor(score/((20+playerLevel*3)*mult));
 	if(nl!==playerLevel&&nl>=1){
 		playerLevel=nl;levelSpan.textContent=playerLevel;stats.maxLevel=Math.max(stats.maxLevel,playerLevel);saveData();
 		soundLevelUp();tryVibrate(30);
@@ -1309,16 +1341,23 @@ function handleCellClick(idx){
 		addCombo();
 		setMessage((crit?'КРИТ! ':'')+'+'+pts+' '+item.emoji);
 	}else if(pts<0){
-		score=Math.max(0,score+pts);
-		soundBomb();combo=0;updateCombo();screenShake();
-		setMessage('💥 '+item.name);
-		if(gameMode==='score'){
-			bombHits++;
-			setMessage('💥 Бомба! ('+bombHits+'/3)');
-			if(bombHits>=3){
-				gameActive=false;if(spawnTimeout)clearTimeout(spawnTimeout);
-				showGameOver();
-				return;
+		if(hasCharm&&item.id==='bomb'){
+			hasCharm=false;saveData();
+			setMessage('🛡️ Щит сработал!');soundGold();tryVibrate(30);
+			spawnFloatText(pos.x-15,pos.y-20,'🛡️','#44ddff');
+			spawnParticles(pos.x,pos.y,'#44ddff',10);
+		}else{
+			score=Math.max(0,score+pts);
+			soundBomb();combo=0;updateCombo();screenShake();
+			setMessage('💥 '+item.name);
+			if(gameMode==='score'){
+				bombHits++;
+				setMessage('💥 Бомба! ('+bombHits+'/3)');
+				if(bombHits>=3){
+					gameActive=false;if(spawnTimeout)clearTimeout(spawnTimeout);
+					showGameOver();
+					return;
+				}
 			}
 		}
 	}else{setMessage('😐 '+item.emoji);}
@@ -1415,6 +1454,7 @@ function updateUI(){
 	progressBar.style.width=pct+'%';progressLabel.textContent=scoreMode?'∞':collection.length+'/'+ct;
 	shovelLevelSpan.textContent=scoreMode?'-':shovelLevel;luckLevelSpan.textContent=scoreMode?'-':luckLevel;
 	D('mineDisplay').textContent=scoreMode?'∞':getMine().name.split(' ')[0]+' '+(currentMine+1);
+	D('charmDisplay').style.display=hasCharm?'inline':'none';
 }
 
 function setMessage(t){
@@ -1494,15 +1534,22 @@ function renderProfile(){
 	if(title){profileTitleBadge.textContent=title.icon+' '+title.name;}
 }
 function renderShop(){
-	if(gameMode==='score'){shopShovelBtn.classList.add('disabled');shopLuckBtn.classList.add('disabled');shopBoostBtn.classList.add('disabled');shopTimeBtn.classList.add('disabled');}else{
-		shopShovelBtn.classList.remove('disabled');shopLuckBtn.classList.remove('disabled');shopBoostBtn.classList.remove('disabled');shopTimeBtn.classList.remove('disabled');
-	}
+	D('shopBalanceAmount').textContent=score||0;
+	var sm=gameMode==='score';
+	[shopShovelBtn,shopLuckBtn,shopBoostBtn,shopTimeBtn].forEach(function(b){b.classList.toggle('disabled',sm);});
 	shopShovelLvl.textContent=shovelLevel;shopLuckLvl.textContent=luckLevel;shopBoostLvl.textContent=boostLevel;shopTimeLvl.textContent=timeLevel;
 	var sc=score||0;
-	var scost=Math.floor(15*Math.pow(1.5,shovelLevel-1));shopShovelCost.textContent=scost+'💰';shopShovelBtn.classList.toggle('disabled',gameMode==='score'||sc<scost);
-	var lcost=Math.floor(20*Math.pow(1.5,luckLevel));shopLuckCost.textContent=lcost+'💰';shopLuckBtn.classList.toggle('disabled',gameMode==='score'||sc<lcost);
-	var bcost=Math.floor(100*Math.pow(2,boostLevel));shopBoostCost.textContent=bcost+'💰';shopBoostBtn.classList.toggle('disabled',gameMode==='score'||sc<bcost);
-	var tcost=Math.floor(80*Math.pow(2,timeLevel));shopTimeCost.textContent=tcost+'💰';shopTimeBtn.classList.toggle('disabled',gameMode==='score'||sc<tcost);
+	var scost=Math.floor(15*Math.pow(1.5,shovelLevel-1));shopShovelCost.textContent=scost+'💰';shopShovelBtn.classList.toggle('disabled',sm||sc<scost);
+	var lcost=Math.floor(20*Math.pow(1.5,luckLevel));shopLuckCost.textContent=lcost+'💰';shopLuckBtn.classList.toggle('disabled',sm||sc<lcost);
+	var bcost=Math.floor(100*Math.pow(2,boostLevel));shopBoostCost.textContent=bcost+'💰';shopBoostBtn.classList.toggle('disabled',sm||sc<bcost);
+	var tcost=Math.floor(80*Math.pow(2,timeLevel));shopTimeCost.textContent=tcost+'💰';shopTimeBtn.classList.toggle('disabled',sm||sc<tcost);
+	// Boosters — hidden in score mode
+	var boosterSection=D('shopBoostersSection');
+	if(sm){boosterSection.style.display='none';}else{boosterSection.style.display='block';
+		D('shopCharmBtn').classList.toggle('bought',hasCharm);D('shopCharmCost').textContent=hasCharm?'✅':'💰500';D('shopCharmBtn').classList.toggle('disabled',hasCharm||sc<500);
+		D('shopStreakBtn').classList.toggle('bought',hasStreak);D('shopStreakCost').textContent=hasStreak?'✅':'💰800';D('shopStreakBtn').classList.toggle('disabled',hasStreak||sc<800);
+		D('shopExpBtn').classList.toggle('bought',hasExpBoost);D('shopExpCost').textContent=hasExpBoost?'✅':'💰1200';D('shopExpBtn').classList.toggle('disabled',hasExpBoost||sc<1200);
+	}
 	renderCosmetics();
 }
 function renderCosmetics(){
@@ -1591,14 +1638,15 @@ var _resetGame=function(){
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	achBanner.classList.remove('show');
 	pauseOverlay.classList.remove('show');D('gameoverOverlay').classList.remove('show');
-	if(gameMode==='score'){score=0;combo=0;bombHits=0;updateCombo();gameActive=true;updateUI();setMessage('🔄 Новый забег');startSpawning();return;}
-	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
+	if(gameMode==='score'){score=0;combo=hasStreak?2:0;bombHits=0;updateCombo();gameActive=true;updateUI();setMessage('🔄 Новый забег');startSpawning();return;}
+	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=hasStreak?2:0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
 	updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
 	setTimeout(function(){setMessage('🔨 Копай!');},2000);
 }
 var resetGame=_resetGame;
 
 function fullReset(){
+	closeProfile();
 	if(!confirm('❓ Сбросить ВЕСЬ прогресс (достижения, предметы, статистику)? Это необратимо.'))return;
 	if(!confirm('⚠️ Точно? Все достижения и собранные предметы будут потеряны.'))return;
 	localStorage.removeItem('moleData');
@@ -1683,8 +1731,8 @@ achCloseBtn.addEventListener('click',closeAchievements);
 certCloseBtn.addEventListener('click',closeCertificate);
 soundBtn.addEventListener('click',toggleSound);
 soundBtn.addEventListener('touchstart',function(e){e.preventDefault();toggleSound();},{passive:false});
-D('fullResetBtn').addEventListener('click',fullReset);
-D('fullResetBtn').addEventListener('touchstart',function(e){e.preventDefault();fullReset();},{passive:false});
+D('profileFullResetBtn').addEventListener('click',fullReset);
+D('profileFullResetBtn').addEventListener('touchstart',function(e){e.preventDefault();fullReset();},{passive:false});
 D('newGameBtn').addEventListener('click',startFreshGame);
 D('newGameBtn').addEventListener('touchstart',function(e){e.preventDefault();startFreshGame();},{passive:false});
 
@@ -1718,6 +1766,12 @@ shopShovelBtn.addEventListener('click',upgradeShovel);
 shopLuckBtn.addEventListener('click',upgradeLuck);
 shopBoostBtn.addEventListener('click',upgradeBoost);
 shopTimeBtn.addEventListener('click',upgradeTime);
+D('shopCharmBtn').addEventListener('click',function(){if(hasCharm||score<500)return;score-=500;hasCharm=true;saveData();updateUI();setMessage('🛡️ Анти-бомба куплена!');soundGold();renderShop();});
+D('shopCharmBtn').addEventListener('touchstart',function(e){e.preventDefault();if(hasCharm||score<500)return;score-=500;hasCharm=true;saveData();updateUI();setMessage('🛡️ Анти-бомба куплена!');soundGold();renderShop();},{passive:false});
+D('shopStreakBtn').addEventListener('click',function(){if(hasStreak||score<800)return;score-=800;hasStreak=true;saveData();updateUI();setMessage('🔥 Стартовый разгон куплен!');soundGold();renderShop();});
+D('shopStreakBtn').addEventListener('touchstart',function(e){e.preventDefault();if(hasStreak||score<800)return;score-=800;hasStreak=true;saveData();updateUI();setMessage('🔥 Стартовый разгон куплен!');soundGold();renderShop();},{passive:false});
+D('shopExpBtn').addEventListener('click',function(){if(hasExpBoost||score<1200)return;score-=1200;hasExpBoost=true;saveData();updateUI();setMessage('📊 Ускоренный рост куплен!');soundGold();renderShop();});
+D('shopExpBtn').addEventListener('touchstart',function(e){e.preventDefault();if(hasExpBoost||score<1200)return;score-=1200;hasExpBoost=true;saveData();updateUI();setMessage('📊 Ускоренный рост куплен!');soundGold();renderShop();},{passive:false});
 
 function handlePauseAch(){
 	pauseOverlay.classList.remove('show');
