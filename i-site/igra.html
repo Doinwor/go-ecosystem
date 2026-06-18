@@ -347,8 +347,11 @@ var ITEMS=[
 	{id:'king',emoji:'👑',name:'Король',rarity:.03,points:8,color:'#ffd700',minLvl:2},
 	{id:'fast',emoji:'⚡',name:'Молния',rarity:.04,points:4,color:'#00aaff',minLvl:3},
 	{id:'ghost',emoji:'👻',name:'Призрак',rarity:.04,points:3,color:'#aa44ff',minLvl:4},
+	{id:'star',emoji:'🌟',name:'Звезда',rarity:.06,points:2,color:'#fff176',minLvl:1},
+	{id:'clover',emoji:'🍀',name:'Клевер',rarity:.05,points:1,color:'#66bb6a',minLvl:2},
+	{id:'gift',emoji:'🎁',name:'Сюрприз',rarity:.04,points:4,color:'#ff7043',minLvl:3},
 	// Секретные артефакты (появляются после соответствующих секретных достижений)
-	{id:'crown_legend',emoji:'👑',name:'Корона легенды',rarity:.015,points:15,color:'#ffd700',minLvl:1,needSecret:'secret_legend'},
+	{id:'crown_legend',emoji:'🏆',name:'Корона легенды',rarity:.015,points:15,color:'#ffd700',minLvl:1,needSecret:'secret_legend'},
 	{id:'star_master',emoji:'💫',name:'Звезда мастера',rarity:.015,points:20,color:'#ff69b4',minLvl:1,needSecret:'secret_master'},
 	{id:'aegis',emoji:'🛡️',name:'Эгида',rarity:.02,points:5,color:'#ff6b35',minLvl:1,needSecret:'secret_invincible'}
 ];
@@ -617,7 +620,9 @@ function generateItem(){
 		if(i.id==='crystal')i.rarity+=lb;
 		else if(i.id==='artifact')i.rarity+=lb*.5;
 		else if(i.id==='king')i.rarity+=lb*.3;
-		else if(i.id==='crown_legend'||i.id==='star_master')i.rarity+=lb*.2;
+		else 		if(i.id==='crown_legend'||i.id==='star_master')i.rarity+=lb*.2;
+		else if(i.id==='star')i.rarity+=lb*.3;
+		else if(i.id==='clover'||i.id==='gift')i.rarity+=lb*.2;
 		else if(i.id==='bomb')i.rarity-=lb*.5;
 	});
 	var sum=items.reduce(function(a,i){return a+Math.max(0,i.rarity);},0);
@@ -648,12 +653,15 @@ function spawnMole(idx){
 	cellStates[idx].active=true;cellStates[idx].type=item;
 	var cell=gridEl.children[idx],mole=cell.querySelector('.mole');
 	mole.className='mole';
-	if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king'||item.needSecret)mole.classList.add('gold');
+	if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king'||item.id==='star'||item.id==='clover'||item.id==='gift'||item.needSecret)mole.classList.add('gold');
 	if(item.id==='king')mole.classList.add('king');
 	else if(item.id==='fast')mole.classList.add('fast');
 	else if(item.id==='ghost')mole.classList.add('ghost');
 	else if(item.id==='bomb')mole.classList.add('bomb');
-	else if(item.id==='crown_legend'){mole.classList.add('king');mole.style.boxShadow='inset -4px -8px 15px #8b6508,0 0 50px #ffd700,0 0 100px #ffd70044';}
+	else 	if(item.id==='star'){mole.style.background='radial-gradient(circle at 30% 30%,#fff176,#fdd835)';mole.style.boxShadow='inset -4px -8px 15px #665200,0 0 30px #fff176,0 0 60px #fff17644';}
+	else if(item.id==='clover'){mole.style.background='radial-gradient(circle at 30% 30%,#81c784,#388e3c)';mole.style.boxShadow='inset -4px -8px 15px #1b3a1b,0 0 30px #66bb6a,0 0 60px #66bb6a44';}
+	else if(item.id==='gift'){mole.style.background='radial-gradient(circle at 30% 30%,#ff8a65,#d84315)';mole.style.boxShadow='inset -4px -8px 15px #4a1a0a,0 0 30px #ff7043,0 0 60px #ff704344';}
+	if(item.id==='crown_legend'){mole.classList.add('king');mole.style.boxShadow='inset -4px -8px 15px #8b6508,0 0 50px #ffd700,0 0 100px #ffd70044';}
 	else if(item.id==='star_master'){mole.style.background='radial-gradient(circle at 30% 30%,#ff69b4,#cc3388)';mole.style.boxShadow='inset -4px -8px 15px #661144,0 0 40px #ff69b4,0 0 80px #ff69b444';}
 	else if(item.id==='aegis'){mole.style.background='radial-gradient(circle at 30% 30%,#ff8c42,#cc5500)';mole.style.boxShadow='inset -4px -8px 15px #662200,0 0 40px #ff6b35,0 0 80px #ff6b3544';}
 	var es=mole.querySelector('.emoji');if(es)es.textContent=item.emoji;
@@ -744,6 +752,9 @@ function handleCellClick(idx){
 	spawnFloatText(pos.x-15,pos.y-20,(crit?'КРИТ! ':'')+pts,item.color||'#fff');
 	spawnParticles(pos.x,pos.y,item.color||'#ffd700',pts>0?12:18);
 	checkLevelUp();
+	if(item.id==='star'){spawnParticles(pos.x,pos.y,'#fff176',20);tryVibrate(20);}
+	else if(item.id==='clover'){luckLevel++;spawnParticles(pos.x,pos.y,'#66bb6a',20);setMessage('🍀 Удача +1!');tryVibrate(20);}
+	else if(item.id==='gift'){spawnParticles(pos.x,pos.y,'#ff7043',25);tryVibrate(25);}
 	if(item.id==='king')spawnParticles(pos.x,pos.y,'#ffd700',30);
 	else if(item.id==='crown_legend'){spawnParticles(pos.x,pos.y,'#ffd700',40);tryVibrate(60);}
 	else if(item.id==='star_master'){spawnParticles(pos.x,pos.y,'#ff69b4',45);tryVibrate(60);}
