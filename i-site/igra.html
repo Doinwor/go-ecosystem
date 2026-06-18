@@ -444,7 +444,8 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 .chest-card-desc{font-size:8px;color:#6a5a4a;display:block;margin-top:2px}
 .chest-card-cost{font-size:11px;color:#ffd700;font-weight:bold;display:block;margin-top:4px}
 /* Chest closed overlay — tap to reveal */
-.chest-closed-overlay{position:fixed;inset:0;z-index:2600;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .5s ease}
+.chest-closed-overlay{position:fixed;inset:0;z-index:2600;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .4s ease}
+.chest-closed-overlay.leaving{opacity:0;transition:opacity .3s ease}
 .chest-closed-overlay.show{opacity:1;pointer-events:auto}
 .chest-closed-wrap{background:linear-gradient(160deg,#2a1a0a,#1a0a00);border:2px solid #ffd70022;border-radius:28px;padding:40px 24px;max-width:300px;width:100%;text-align:center;cursor:pointer;box-shadow:0 0 60px rgba(255,215,0,.03);animation:chestPulse 2s ease-in-out infinite}
 @keyframes chestPulse{0%,100%{box-shadow:0 0 60px rgba(255,215,0,.03)}50%{box-shadow:0 0 80px rgba(255,215,0,.08)}}
@@ -455,9 +456,30 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 @keyframes hintBlink{0%,100%{opacity:.4}50%{opacity:1}}
 .chest-closed-wrap:active{transform:scale(.96)}
 /* Chest result overlay — open reveal */
-.chest-result-overlay{position:fixed;inset:0;z-index:2610;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .6s ease}
+.chest-result-overlay{position:fixed;inset:0;z-index:2610;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .4s ease}
 .chest-result-overlay.show{opacity:1;pointer-events:auto}
-.chest-result-wrap{background:linear-gradient(160deg,#1a1a2a,#0a0a1a);border:2px solid #ffd70044;border-radius:28px;padding:32px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 0 100px rgba(255,215,0,.1)}
+.chest-result-wrap{background:linear-gradient(160deg,#1a1a2a,#0a0a1a);border:2px solid #ffd70044;border-radius:28px;padding:32px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 0 100px rgba(255,215,0,.1);position:relative;overflow:hidden}
+.chest-smoke{position:absolute;inset:-40px;pointer-events:none;opacity:0;z-index:0}
+.chest-result-overlay.show .chest-smoke{opacity:1;animation:chestSmokeBurst .8s ease-out forwards}
+.chest-smoke-s{position:absolute;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle,rgba(200,180,255,.12),transparent 70%);animation:chestSmokeFloat 2s ease-out infinite}
+.chest-smoke-s:nth-child(1){left:10%;top:40%;animation-delay:.1s;width:60px;height:60px}
+.chest-smoke-s:nth-child(2){left:60%;top:30%;animation-delay:.4s;width:40px;height:40px;background:radial-gradient(circle,rgba(255,200,150,.1),transparent 70%)}
+.chest-smoke-s:nth-child(3){left:30%;top:60%;animation-delay:.7s;width:50px;height:50px;background:radial-gradient(circle,rgba(150,200,255,.08),transparent 70%)}
+.chest-smoke-s:nth-child(4){left:70%;top:55%;animation-delay:1s;width:35px;height:35px}
+.chest-smoke-s:nth-child(5){left:20%;top:20%;animation-delay:1.3s;width:45px;height:45px;background:radial-gradient(circle,rgba(255,220,100,.1),transparent 70%)}
+@keyframes chestSmokeBurst{0%{opacity:0;transform:scale(.5)}30%{opacity:1}100%{opacity:0;transform:scale(2)}}
+@keyframes chestSmokeFloat{0%{transform:translateY(0) scale(1);opacity:0}20%{opacity:1}100%{transform:translateY(-60px) scale(2);opacity:0}}
+.chest-result-icon-wrap{position:relative;z-index:1;display:inline-block}
+.chest-result-icon{font-size:80px;display:block;margin-bottom:6px;position:relative;z-index:1}
+.chest-result-overlay.show .chest-result-icon{animation:chestReveal .8s cubic-bezier(.34,1.56,.64,1) forwards}
+.chest-result-overlay.show .chest-result-icon.tier-rare{animation:chestReveal .8s cubic-bezier(.34,1.56,.64,1) forwards,rareGlow 2s ease-in-out infinite 1s}
+.chest-result-overlay.show .chest-result-icon.tier-epic{animation:chestReveal .8s cubic-bezier(.34,1.56,.64,1) forwards,epicGlow 2s ease-in-out infinite 1s}
+.chest-result-overlay.show .chest-result-icon.tier-legendary{animation:chestReveal .8s cubic-bezier(.34,1.56,.64,1) forwards,legendaryGlow 1.8s ease-in-out infinite 1s}
+.chest-result-overlay.show .chest-result-icon.tier-mythic{animation:chestReveal .8s cubic-bezier(.34,1.56,.64,1) forwards,mythicGlow 1.5s ease-in-out infinite 1s}
+@keyframes rareGlow{0%,100%{filter:drop-shadow(0 0 10px #6a8bff)}50%{filter:drop-shadow(0 0 25px #6a8bff)}}
+@keyframes epicGlow{0%,100%{filter:drop-shadow(0 0 15px #b46aff)}50%{filter:drop-shadow(0 0 35px #b46aff)}}
+@keyframes legendaryGlow{0%,100%{filter:drop-shadow(0 0 20px #ff6a00);transform:scale(1)}50%{filter:drop-shadow(0 0 40px #ff6a00);transform:scale(1.05)}}
+@keyframes mythicGlow{0%,100%{filter:drop-shadow(0 0 25px #ff2a75);transform:scale(1) rotate(0deg)}50%{filter:drop-shadow(0 0 50px #ff2a75);transform:scale(1.08) rotate(3deg)}}
 .chest-result-icon{font-size:80px;display:block;margin-bottom:6px;animation:chestReveal .8s cubic-bezier(.34,1.56,.64,1) forwards}
 @keyframes chestReveal{0%{transform:scale(0) rotate(-180deg);opacity:0}50%{transform:scale(1.3) rotate(10deg);opacity:1}100%{transform:scale(1) rotate(0deg);opacity:1}}
 .chest-result-name{font-size:22px;font-weight:900;color:#ffd700;margin-bottom:2px}
@@ -599,10 +621,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="pause-title">⏸ Пауза</div>
 	<div class="pause-btn-group">
 		<button class="pause-continue" id="pauseContinueBtn">▶ Продолжить</button>
-		<button id="pauseAchBtn">🏆 Достижения</button>
 		<button id="pauseProfileBtn">👤 Профиль</button>
-		<button id="pauseCollectBtn">🏛️ Коллекция</button>
-		<button id="pauseSoundBtn">🔊 Звук</button>
 		<button id="pauseMenuBtn">🏠 В меню</button>
 		<button class="pause-danger" id="pauseSiteBtn">← На сайт</button>
 	</div>
@@ -646,6 +665,11 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 					<span class="shop-item-cost" style="font-size:10px" id="profileCollectCount">0/12</span>
 				</button>
 				<div class="shop-section-title">⚙️ Настройки</div>
+				<button class="shop-item" id="profileSoundBtn">
+					<span class="shop-item-icon">🔊</span>
+					<span class="shop-item-info"><span class="shop-item-name" id="profileSoundLabel">Звук включён</span><span class="shop-item-desc">Нажмите чтобы выключить</span></span>
+					<span class="shop-item-cost" id="profileSoundIcon">🔊</span>
+				</button>
 				<button class="shop-item" id="profileFullResetBtn" style="border-color:#4a2a2a">
 					<span class="shop-item-icon">🧹</span>
 					<span class="shop-item-info"><span class="shop-item-name" style="color:#9a6a6a">Сбросить весь прогресс</span><span class="shop-item-desc">Удалит все данные безвозвратно</span></span>
@@ -720,8 +744,9 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 <!-- Chest open result overlay -->
 <div class="chest-result-overlay" id="chestOpenResultOverlay">
 	<div class="chest-result-wrap">
+		<div class="chest-smoke"><div class="chest-smoke-s"></div><div class="chest-smoke-s"></div><div class="chest-smoke-s"></div><div class="chest-smoke-s"></div><div class="chest-smoke-s"></div></div>
 		<div class="chest-result-tier" id="chestResultTier">common</div>
-		<div class="chest-result-icon" id="chestResultIcon">🎁</div>
+		<div class="chest-result-icon-wrap"><div class="chest-result-icon" id="chestResultIcon">🎁</div></div>
 		<div class="chest-result-name" id="chestResultName">Предмет</div>
 		<div class="chest-result-desc" id="chestResultDesc">Описание</div>
 		<button class="chest-result-btn" id="chestResultBtn">✓ Забрать</button>
@@ -953,7 +978,25 @@ var ACHIEVEMENTS=[
 	{id:'collector_24',name:'Библиотекарь',desc:'Собрать ВСЕ предметы из сундуков',icon:'🏛️',mine:99,tier:'epic'},
 	{id:'epic_set',name:'Эпический герой',desc:'Собрать все эпические предметы',icon:'💎',mine:99,tier:'epic'},
 	{id:'legendary_set',name:'Легенда',desc:'Собрать все легендарные предметы',icon:'🏆',mine:99,tier:'epic'},
-	{id:'mythic_set',name:'Бессмертный',desc:'Собрать все мифические предметы',icon:'🌀',mine:99,tier:'epic'}
+	{id:'mythic_set',name:'Бессмертный',desc:'Собрать все мифические предметы',icon:'🌀',mine:99,tier:'epic'},
+	// Глубинные — Normal
+	{id:'click_10k',name:'Неутомимый',desc:'Сделать 10000 кликов',icon:'👆',mine:99,tier:'normal'},
+	{id:'gold_20k',name:'Крез',desc:'Заработать 20000 монет',icon:'💰',mine:99,tier:'normal'},
+	// Глубинные — Hard
+	{id:'deep_mine_25',name:'Крот-ас',desc:'Достичь шахты 25',icon:'⛏️',mine:99,tier:'hard'},
+	{id:'click_50k',name:'Машина кликов',desc:'Сделать 50000 кликов',icon:'👆',mine:99,tier:'hard'},
+	{id:'combo_200',name:'Комбо-вулкан',desc:'Достичь комбо 200',icon:'🌋',mine:99,tier:'hard'},
+	{id:'gold_100k',name:'Стоунер',desc:'Заработать 100000 монет',icon:'💰',mine:99,tier:'hard'},
+	// Глубинные — Extreme
+	{id:'deep_mine_50',name:'Безумный землекоп',desc:'Достичь шахты 50',icon:'⛏️',mine:99,tier:'extreme'},
+	{id:'click_250k',name:'Легенда клика',desc:'Сделать 250000 кликов',icon:'👆',mine:99,tier:'extreme'},
+	{id:'combo_500',name:'Феникс комбо',desc:'Достичь комбо 500',icon:'🔥',mine:99,tier:'extreme'},
+	{id:'gold_500k',name:'Полумиллионер',desc:'Заработать 500000 монет',icon:'💰',mine:99,tier:'extreme'},
+	// Глубинные — Epic
+	{id:'deep_mine_100',name:'Властелин глубин',desc:'Достичь шахты 100',icon:'♾️',mine:99,tier:'epic'},
+	{id:'click_million',name:'Миллион кликов',desc:'Сделать 1000000 кликов',icon:'👆',mine:99,tier:'epic'},
+	{id:'combo_1000',name:'Бесконечное комбо',desc:'Достичь комбо 1000',icon:'∞',mine:99,tier:'epic'},
+	{id:'gold_2m',name:'Двухмиллионер',desc:'Заработать 2000000 монет',icon:'💰',mine:99,tier:'epic'}
 ];
 
 // DOM
@@ -1014,6 +1057,7 @@ var PROFILE_TITLES=[
 var profileState={equippedFrame:'default',equippedTitle:'novice',ownedFrames:['default'],ownedTitles:['novice']};
 
 // Chest collection items — 24 штуки, 6 тиров
+var ACHIEVEMENTS_ORDER=ACHIEVEMENTS.map(function(a){return a.id;});
 var CHEST_ITEMS=[
 	// Обычные (common)
 	{id:'antique_coin',name:'Древняя монета',icon:'🪙',desc:'Монета затонувшей цивилизации. На аверсе — корона, на реверсе — пустота.',tier:'common'},
@@ -1044,7 +1088,39 @@ var CHEST_ITEMS=[
 	{id:'galaxy_heart',name:'Сердце галактики',icon:'🌀',desc:'Пульсирует в такт с твоим сердцем. Однажды они забьются в унисон.',tier:'mythic'},
 	{id:'primordial_light',name:'Первобытный свет',icon:'🌠',desc:'Первый свет, вспыхнувший после Большого взрыва. Заперт в хрустальной сфере.',tier:'mythic'},
 	{id:'philosopher_stone',name:'Философский камень',icon:'🜁',desc:'Превращает мечты в реальность. По капле. Не торопись — реальность хрупка.',tier:'mythic'},
-	{id:'infinity_ring',name:'Кольцо бесконечности',icon:'∞',desc:'Надпись внутри кольца: «Всё, что ты ищешь, уже внутри тебя». Примерь — почувствуешь.',tier:'mythic'}
+	{id:'infinity_ring',name:'Кольцо бесконечности',icon:'∞',desc:'Надпись внутри кольца: «Всё, что ты ищешь, уже внутри тебя». Примерь — почувствуешь.',tier:'mythic'},
+	// Сезон 2 — Обычные
+	{id:'rusted_bell',name:'Ржавый колокольчик',icon:'🔔',desc:'Звенит сам по себе раз в столетие. Сегодня как раз тот день.',tier:'common'},
+	{id:'chipped_cup',name:'Щербатая кружка',icon:'🍵',desc:'На дне видна надпись: «Выпей меня». Лучше не надо.',tier:'common'},
+	{id:'old_key',name:'Старый ключ',icon:'🔑',desc:'Не подходит ни к одному замку. Может, он открывает то, что не заперто?',tier:'common'},
+	{id:'burnt_candle',name:'Огарок свечи',icon:'🕯️',desc:'Догорает уже тысячу лет. Тень от него живёт своей жизнью.',tier:'common'},
+	{id:'torn_map',name:'Рваная карта',icon:'🗺️',desc:'Ведёт в место, которого нет на карте. Метафора.',tier:'common'},
+	// Сезон 2 — Необычные
+	{id:'singing_shell',name:'Поющая ракушка',icon:'🐚',desc:'Внутри слышен не океан, а чей-то шёпот. Он зовёт тебя по имени.',tier:'uncommon'},
+	{id:'glow_mushroom',name:'Светящийся гриб',icon:'🍄',desc:'Растёт в полной темноте. Питается тишиной. Не срывай — заплачет.',tier:'uncommon'},
+	{id:'crystal_tear',name:'Хрустальная слеза',icon:'💧',desc:'Застывшая слеза древней статуи. Говорят, она плачет о конце света.',tier:'uncommon'},
+	{id:'silver_compass',name:'Серебряный компас',icon:'🧭',desc:'Стрелка всегда указывает на то, чего ты боишься больше всего.',tier:'uncommon'},
+	{id:'bone_flute',name:'Костяная флейта',icon:'🪈',desc:'Играет мелодию, которую никто не слышал, но все помнят.',tier:'uncommon'},
+	// Сезон 2 — Редкие
+	{id:'thunder_stone',name:'Камень грома',icon:'🪨',desc:'Гремит, если ударить им о землю. После удара остаётся тишина на час.',tier:'rare'},
+	{id:'witch_eye',name:'Ведьмин глаз',icon:'🔮',desc:'Внутри вращается зрачок. Он смотрит на тебя. Всегда.',tier:'rare'},
+	{id:'frost_flower',name:'Морозный цветок',icon:'🌸',desc:'Цветёт только при -50°C. Лепестки не тают даже в лаве.',tier:'rare'},
+	{id:'dream_catcher',name:'Ловец снов',icon:'🕸️',desc:'Ловит не плохие сны, а реальность. Проснёшься — не вспомнишь кто ты.',tier:'rare'},
+	{id:'void_fragment',name:'Осколок пустоты',icon:'⬛',desc:'Кусок ничего. Весит тонну. Если долго смотреть — исчезаешь.',tier:'rare'},
+	// Сезон 2 — Эпические
+	{id:'soul_mirror',name:'Зеркало души',icon:'🪞',desc:'Показывает не отражение, а твою суть. Смотреть страшно.',tier:'epic'},
+	{id:'thunder_feather',name:'Перо бури',icon:'🌩️',desc:'Упало с неба в день, когда не было туч. Внутри бушует шторм.',tier:'epic'},
+	{id:'gravity_shard',name:'Осколок гравитации',icon:'🌀',desc:'Всё вокруг тянется к нему. Положи на стол — стол треснет.',tier:'epic'},
+	{id:'life_crystal',name:'Кристалл жизни',icon:'💚',desc:'Пульсирует зелёным. Внутри бьётся крошечное сердце.',tier:'epic'},
+	// Сезон 2 — Легендарные
+	{id:'world_seed',name:'Семя мира',icon:'🌱',desc:'Если посадить — вырастет новая вселенная. Горшок не прилагается.',tier:'legendary'},
+	{id:'time_hourglass',name:'Песочные часы времени',icon:'⌛',desc:'Переверни — время пойдёт вспять. Но только для тебя.',tier:'legendary'},
+	{id:'dragon_soul',name:'Душа дракона',icon:'🐉',desc:'Рёв внутри слышат только те, кто достоин. Ты слышишь?',tier:'legendary'},
+	{id:'celestial_map',name:'Небесная карта',icon:'🌌',desc:'На ней отмечено место твоей смерти. Оно меняется каждую секунду.',tier:'legendary'},
+	// Сезон 2 — Мифические
+	{id:'creation_hammer',name:'Молот созидания',icon:'🔨',desc:'Ударь — и появится то, чего не было. Но исчезнет что-то другое.',tier:'mythic'},
+	{id:'void_crown',name:'Корона бездны',icon:'👑',desc:'Надень — станешь повелителем ничего. Абсолютная власть над пустотой.',tier:'mythic'},
+	{id:'reality_fragment',name:'Осколок реальности',icon:'💠',desc:'Частица того, что было до Большого взрыва. До всего. До тебя.',tier:'mythic'}
 ];
 var CHEST_TYPES=[
 	{id:'common_chest',name:'Обычный сундук',icon:'📦',cost:200,desc:'Любой предмет, но чаще простой',rates:{common:70,uncommon:25,rare:4,epic:0.9,legendary:0.09,mythic:0.01}},
@@ -1217,6 +1293,20 @@ function checkAchievements(){
 		speed_demon:function(){return boostLevel>=10;},
 		time_wizard:function(){return timeLevel>=10;},
 		explorer:function(){return currentMine>=14;},
+		click_10k:function(){return stats.totalClicks>=10000;},
+		gold_20k:function(){return stats.totalEarnings>=20000;},
+		deep_mine_25:function(){return currentMine>=24;},
+		click_50k:function(){return stats.totalClicks>=50000;},
+		combo_200:function(){return stats.bestCombo>=200;},
+		gold_100k:function(){return stats.totalEarnings>=100000;},
+		deep_mine_50:function(){return currentMine>=49;},
+		click_250k:function(){return stats.totalClicks>=250000;},
+		combo_500:function(){return stats.bestCombo>=500;},
+		gold_500k:function(){return stats.totalEarnings>=500000;},
+		deep_mine_100:function(){return currentMine>=99;},
+		click_million:function(){return stats.totalClicks>=1000000;},
+		combo_1000:function(){return stats.bestCombo>=1000;},
+		gold_2m:function(){return stats.totalEarnings>=2000000;},
 		chest_opener:function(){return collectedChestItems.length>=3;},
 		collector_8:function(){return collectedChestItems.length>=8;},
 		collector_14:function(){return collectedChestItems.length>=14;},
@@ -1236,7 +1326,9 @@ function checkAchievements(){
 		var fn=ACH_CHECKS[a.id];
 		if(fn&&fn()){
 			unlocked[a.id]=true;
-			showAchievementBanner(a);
+			var reward=Math.floor(30+Math.pow(ACHIEVEMENTS_ORDER.indexOf(a.id)+1,1.4)*2);
+			score+=reward;saveData();updateUI();
+			showAchievementBanner(a,reward);
 			saveData();
 		}
 	}
@@ -1255,10 +1347,10 @@ function applyTheme(themeId){
 	wrap.style.animation='themeTransition .6s ease';
 }
 
-function showAchievementBanner(a){
+function showAchievementBanner(a,reward){
 	achBannerIcon.textContent=a.icon||'🏆';
 	achBannerTitle.textContent='🏆 Достижение: '+a.name;
-	achBannerDesc.textContent=a.desc;
+	achBannerDesc.textContent=a.desc+(reward?' · +'+reward+'💰':'');
 	achBanner.classList.add('show');
 	if(bannerTimeout) clearTimeout(bannerTimeout);
 	bannerTimeout=setTimeout(function(){achBanner.classList.remove('show');},3000);
@@ -1457,7 +1549,7 @@ function getMineItemsForMine(m){
 		if(!MINES[m].items){
 			MINES[m].items=[];
 			var totalBefore=0;for(var mm=0;mm<m;mm++){totalBefore+=(MINES[mm].items?MINES[mm].items.length:0);}
-			var cnt=m===0?3:(m<10?2:3);
+			var cnt=m===0?3:(m<10?2:(m===NAMED_MINES_COUNT-1?3:2));
 			for(var j=0;j<cnt&&totalBefore+j<ITEMS.length;j++){MINES[m].items.push(ITEMS[totalBefore+j].id);}
 		}
 		return MINES[m].items;
@@ -1466,9 +1558,9 @@ function getMineItemsForMine(m){
 	if(!window[key]){
 		window[key]=[];
 		var pool=ITEMS.slice();
-		var count=2+(m%3===0?1:0);
+		var count=3+(m%3===0?1:0)+(m%5===0?1:0);
 		for(var i=0;i<count;i++){
-			var base=pool[(m*3+i)%pool.length];
+			var base=pool[(m*3+i*2)%pool.length];
 			var bonus=m>=NAMED_MINES_COUNT?Math.floor(m/5):0;
 			var dupId=base.id+'_d'+m;
 			if(!ITEMS.find(function(x){return x.id===dupId;})){
@@ -1906,12 +1998,14 @@ function buyChest(chestId){
 function onChestClosedTap(){
 	if(chestOpeningStep!=='closed')return;
 	chestOpeningStep='open';
-	chestClosedOverlay.classList.remove('show');
+	chestClosedOverlay.classList.add('leaving');
+	setTimeout(function(){chestClosedOverlay.classList.remove('show','leaving');},300);
 	var item=pendingChestItem;
 	var tierNames={common:'Обычный',uncommon:'Необычный',rare:'Редкий',epic:'Эпический',legendary:'Легендарный',mythic:'Мифический'};
 	chestResultTier.textContent='✦ '+tierNames[item.tier]+' предмет';
 	chestResultTier.className='chest-result-tier '+item.tier;
 	chestResultIcon.textContent=item.icon;
+	chestResultIcon.className='chest-result-icon tier-'+item.tier;
 	chestResultName.textContent=item.name;
 	chestResultDesc.textContent=item.desc;
 	chestOpenResultOverlay.classList.add('show');
@@ -2134,39 +2228,30 @@ chestResultBtn.addEventListener('touchstart',function(e){e.preventDefault();hide
 collectiblesCloseBtn.addEventListener('click',closeCollectibles);
 collectiblesCloseBtn.addEventListener('touchstart',function(e){e.preventDefault();closeCollectibles();},{passive:false});
 
-function handlePauseCollect(){
-	pauseOverlay.classList.remove('show');
-	openCollectibles();
-}
-function handlePauseAch(){
-	pauseOverlay.classList.remove('show');
-	openAchievements();
-}
-function handlePauseSound(){
-	toggleSound();
-	var icon=muted?'🔇':'🔊';
-	var el=D('pauseSoundBtn');if(el)el.textContent=icon+' Звук';
-}
 function handlePauseProfile(){
 	pauseOverlay.classList.remove('show');
 	openProfile();
+}
+function updateSoundUI(){
+	var icon=muted?'🔇':'🔊';
+	var label=muted?'Звук выключен':'Звук включён';
+	var el1=D('profileSoundLabel');if(el1)el1.textContent=label;
+	var el2=D('profileSoundIcon');if(el2)el2.textContent=icon;
+	var btn=D('profileSoundBtn');if(btn)btn.innerHTML='<span class="shop-item-icon">'+icon+'</span><span class="shop-item-info"><span class="shop-item-name" id="profileSoundLabel">'+label+'</span><span class="shop-item-desc">Нажмите чтобы '+(muted?'включить':'выключить')+'</span></span><span class="shop-item-cost" id="profileSoundIcon">'+icon+'</span>';
 }
 pauseBtn.addEventListener('click',togglePause);
 pauseBtn.addEventListener('touchstart',function(e){e.preventDefault();togglePause();},{passive:false});
 D('pauseContinueBtn').addEventListener('click',togglePause);
 D('pauseContinueBtn').addEventListener('touchstart',function(e){e.preventDefault();togglePause();},{passive:false});
-D('pauseCollectBtn').addEventListener('click',handlePauseCollect);
-D('pauseCollectBtn').addEventListener('touchstart',function(e){e.preventDefault();handlePauseCollect();},{passive:false});
-D('pauseAchBtn').addEventListener('click',handlePauseAch);
-D('pauseAchBtn').addEventListener('touchstart',function(e){e.preventDefault();handlePauseAch();},{passive:false});
 D('pauseProfileBtn').addEventListener('click',handlePauseProfile);
 D('pauseProfileBtn').addEventListener('touchstart',function(e){e.preventDefault();handlePauseProfile();},{passive:false});
-D('pauseSoundBtn').addEventListener('click',handlePauseSound);
-D('pauseSoundBtn').addEventListener('touchstart',function(e){e.preventDefault();handlePauseSound();},{passive:false});
 D('pauseMenuBtn').addEventListener('click',function(){pauseOverlay.classList.remove('show');backToMenu();});
 D('pauseMenuBtn').addEventListener('touchstart',function(e){e.preventDefault();pauseOverlay.classList.remove('show');backToMenu();},{passive:false});
 D('pauseSiteBtn').addEventListener('click',function(){window.location.href='index.html';});
 D('pauseSiteBtn').addEventListener('touchstart',function(e){e.preventDefault();window.location.href='index.html';},{passive:false});
+var soundBtnEl=D('profileSoundBtn');
+if(soundBtnEl)soundBtnEl.addEventListener('click',function(){toggleSound();updateSoundUI();});
+updateSoundUI();
 document.addEventListener('keydown',function(e){
 	if(!gameStarted)return;
 	if(e.key==='Escape'){if(collectiblesOverlay.classList.contains('show'))closeCollectibles();else if(chestResultOverlay.classList.contains('show'))hideChestResult();else if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(profileScreen.classList.contains('show'))closeProfile();else if(pauseOverlay.classList.contains('show'))togglePause();else togglePause();}
