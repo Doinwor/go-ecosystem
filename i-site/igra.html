@@ -129,20 +129,46 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .game-wrap.shake{animation:shake .3s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px) rotate(-.5deg)}40%{transform:translateX(8px) rotate(.5deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 @keyframes themeTransition{0%{transform:scale(.95);opacity:.6}100%{transform:scale(1);opacity:1}}
-/* 🪨 Медная шахта (по умолчанию) */
+/* Шахты по умолчанию — медная */
 .game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,215,0,.04),inset 0 1px 0 rgba(255,255,255,.05)}
-/* 🔥 Огненная шахта */
-.game-wrap.theme-fire{background:linear-gradient(145deg,#2a1a10,#1f1008);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,69,0,.08),inset 0 1px 0 rgba(255,100,0,.08)}
-.theme-fire .cell{background:radial-gradient(circle at 50% 60%,#5a3020,#4a2210);box-shadow:inset 0 -6px 0 #2a1008,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(255,69,0,.05)}
-.theme-fire .grid{border-color:#6a3a20;box-shadow:0 0 30px rgba(255,69,0,.05)}
-/* ❄️ Ледяная шахта */
-.game-wrap.theme-ice{background:linear-gradient(145deg,#10202a,#08101f);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(0,170,255,.08),inset 0 1px 0 rgba(0,200,255,.08)}
-.theme-ice .cell{background:radial-gradient(circle at 50% 60%,#204060,#102040);box-shadow:inset 0 -6px 0 #08102a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(0,170,255,.05)}
-.theme-ice .grid{border-color:#204060;box-shadow:0 0 30px rgba(0,170,255,.05)}
-/* 👻 Мистическая шахта */
-.game-wrap.theme-mystic{background:linear-gradient(145deg,#20102a,#10081f);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(170,68,255,.08),inset 0 1px 0 rgba(200,100,255,.08)}
-.theme-mystic .cell{background:radial-gradient(circle at 50% 60%,#402060,#301050);box-shadow:inset 0 -6px 0 #20082a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(170,68,255,.05)}
-.theme-mystic .grid{border-color:#503070;box-shadow:0 0 30px rgba(170,68,255,.05)}
+/* 🪨 Медная (copper) */
+.theme-copper .cell{background:radial-gradient(circle at 50% 60%,#4a3a2a,#3d3224);box-shadow:inset 0 -6px 0 #1a130e,0 6px 12px rgba(0,0,0,.5)}
+/* 💎 Кристальная */
+.game-wrap.theme-crystal{background:linear-gradient(145deg,#10202a,#0a1520);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(0,255,255,.08),inset 0 1px 0 rgba(0,255,255,.08)}
+.theme-crystal .cell{background:radial-gradient(circle at 50% 60%,#1a3a4a,#0a2030);box-shadow:inset 0 -6px 0 #05101a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(0,255,255,.05)}
+.theme-crystal .grid{border-color:#1a4a5a;box-shadow:0 0 30px rgba(0,255,255,.05)}
+/* 💣 Опасная */
+.game-wrap.theme-danger{background:linear-gradient(145deg,#2a1010,#1f0808);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,0,0,.08),inset 0 1px 0 rgba(255,0,0,.08)}
+.theme-danger .cell{background:radial-gradient(circle at 50% 60%,#4a1a1a,#3a0a0a);box-shadow:inset 0 -6px 0 #2a0000,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(255,0,0,.05)}
+.theme-danger .grid{border-color:#5a2020;box-shadow:0 0 30px rgba(255,0,0,.05)}
+/* ⚡ Грозовая */
+.game-wrap.theme-storm{background:linear-gradient(145deg,#10182a,#080e1f);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(0,170,255,.08),inset 0 1px 0 rgba(0,170,255,.08)}
+.theme-storm .cell{background:radial-gradient(circle at 50% 60%,#182840,#0e1a30);box-shadow:inset 0 -6px 0#080e1a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(0,170,255,.05)}
+.theme-storm .grid{border-color:#203a5a;box-shadow:0 0 30px rgba(0,170,255,.05)}
+/* 🍀 Удачливая */
+.game-wrap.theme-lucky{background:linear-gradient(145deg,#102a1a,#081f10);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(0,255,100,.08),inset 0 1px 0 rgba(0,255,100,.08)}
+.theme-lucky .cell{background:radial-gradient(circle at 50% 60%,#1a4a2a,#0a3018);box-shadow:inset 0 -6px 0 #051a0a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(0,255,100,.05)}
+.theme-lucky .grid{border-color:#2a5a3a;box-shadow:0 0 30px rgba(0,255,100,.05)}
+/* 👻 Туманная */
+.game-wrap.theme-mist{background:linear-gradient(145deg,#1a102a,#100820);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(170,68,255,.08),inset 0 1px 0 rgba(200,100,255,.08)}
+.theme-mist .cell{background:radial-gradient(circle at 50% 60%,#301a40,#200a30);box-shadow:inset 0 -6px 0#10041a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(170,68,255,.05)}
+.theme-mist .grid{border-color:#40205a;box-shadow:0 0 30px rgba(170,68,255,.05)}
+/* 🔥 Вулканическая */
+.game-wrap.theme-volcano{background:linear-gradient(145deg,#2a0a00,#1f0500);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,50,0,.1),inset 0 1px 0 rgba(255,50,0,.1)}
+.theme-volcano .cell{background:radial-gradient(circle at 50% 60%,#4a1000,#3a0800);box-shadow:inset 0 -6px 0#2a0000,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(255,50,0,.05)}
+.theme-volcano .grid{border-color:#5a1800;box-shadow:0 0 30px rgba(255,50,0,.05)}
+/* ❄️ Ледяная */
+.game-wrap.theme-frozen{background:linear-gradient(145deg,#0a1a2a,#050e1f);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(100,200,255,.08),inset 0 1px 0 rgba(100,200,255,.08)}
+.theme-frozen .cell{background:radial-gradient(circle at 50% 60%,#0a2a4a,#051a30);box-shadow:inset 0 -6px 0#000e1a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(100,200,255,.05)}
+.theme-frozen .grid{border-color:#1a3a5a;box-shadow:0 0 30px rgba(100,200,255,.05)}
+/* 🌑 Теневая */
+.game-wrap.theme-shadow{background:linear-gradient(145deg,#0a0015,#050010);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(100,0,200,.06),inset 0 1px 0 rgba(100,0,200,.06)}
+.theme-shadow .cell{background:radial-gradient(circle at 50% 60%,#150025,#0a0015);box-shadow:inset 0 -6px 0#05000a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(100,0,200,.04)}
+.theme-shadow .grid{border-color:#200040;box-shadow:0 0 30px rgba(100,0,200,.04)}
+/* ☀️ Легендарная */
+.game-wrap.theme-legend{background:linear-gradient(145deg,#2a2010,#1f1508);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 120px rgba(255,215,0,.12),inset 0 1px 0 rgba(255,215,0,.1)}
+.theme-legend .cell{background:radial-gradient(circle at 50% 60%,#4a3a1a,#3a2a0a);box-shadow:inset 0 -6px 0#2a1a00,0 6px 12px rgba(0,0,0,.5),0 0 20px rgba(255,215,0,.08)}
+.theme-legend .grid{border-color:#5a4a20;box-shadow:0 0 40px rgba(255,215,0,.08)}
 
 .top-panel{display:flex;justify-content:space-between;align-items:center;color:#d4c4a8;font-weight:bold;font-size:15px;padding-bottom:6px;flex-wrap:wrap;gap:4px}
 .top-panel span,.sound-btn{background:#1a130e;padding:3px 10px;border-radius:30px;box-shadow:inset 0 2px 5px rgba(0,0,0,.7)}
@@ -373,55 +399,94 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 (function(){
 "use strict";
 
-var GRID_SIZE=4,TOTAL_CELLS=GRID_SIZE*GRID_SIZE,COLLECTION_TARGET=12;
+var GRID_SIZE=4,TOTAL_CELLS=GRID_SIZE*GRID_SIZE;
+function getMine(){return MINES[Math.min(currentMine,MINES.length-1)];}
 function getCollectionTarget(){return getActiveItems().filter(function(i){return i.points>=0;}).length;}
 
 var ITEMS=[
-	{id:'gold',emoji:'🪙',name:'Золото',rarity:.20,points:1,color:'#ffd700',minLvl:1},
-	{id:'silver',emoji:'🥈',name:'Серебро',rarity:.22,points:1,color:'#c0c0c0',minLvl:1},
-	{id:'bronze',emoji:'🥉',name:'Бронза',rarity:.25,points:0,color:'#cd7f32',minLvl:1},
-	{id:'crystal',emoji:'💎',name:'Кристалл',rarity:.10,points:3,color:'#00ffff',minLvl:1},
-	{id:'artifact',emoji:'🏺',name:'Артефакт',rarity:.05,points:5,color:'#ff69b4',minLvl:1},
-	{id:'bomb',emoji:'💣',name:'Бомба',rarity:.10,points:-2,color:'#ff4444',minLvl:1},
-	{id:'king',emoji:'👑',name:'Король',rarity:.03,points:8,color:'#ffd700',minLvl:2},
-	{id:'fast',emoji:'⚡',name:'Молния',rarity:.04,points:4,color:'#00aaff',minLvl:3},
-	{id:'ghost',emoji:'👻',name:'Призрак',rarity:.04,points:3,color:'#aa44ff',minLvl:4},
-	{id:'star',emoji:'🌟',name:'Звезда',rarity:.06,points:2,color:'#fff176',minLvl:1,needTier:2},
-	{id:'clover',emoji:'🍀',name:'Клевер',rarity:.05,points:1,color:'#66bb6a',minLvl:1,needTier:3},
-	{id:'gift',emoji:'🎁',name:'Сюрприз',rarity:.04,points:4,color:'#ff7043',minLvl:1,needTier:4},
-	// Секретные артефакты (появляются после соответствующих секретных достижений)
-	{id:'crown_legend',emoji:'🏆',name:'Корона легенды',rarity:.015,points:15,color:'#ffd700',minLvl:1,needTier:5},
-	{id:'star_master',emoji:'💫',name:'Звезда мастера',rarity:.015,points:20,color:'#ff69b4',minLvl:1,needTier:5},
-	{id:'aegis',emoji:'🛡️',name:'Эгида',rarity:.02,points:5,color:'#ff6b35',minLvl:1,needTier:5}
+	// 🪨 Медная шахта
+	{id:'gold',emoji:'🪙',name:'Золото',rarity:.18,points:1,color:'#ffd700'},
+	{id:'silver',emoji:'🥈',name:'Серебро',rarity:.20,points:1,color:'#c0c0c0'},
+	{id:'bronze',emoji:'🥉',name:'Бронза',rarity:.22,points:0,color:'#cd7f32'},
+	// 💎 Кристальная
+	{id:'crystal',emoji:'💎',name:'Кристалл',rarity:.11,points:3,color:'#00ffff'},
+	{id:'artifact',emoji:'🏺',name:'Артефакт',rarity:.06,points:5,color:'#ff69b4'},
+	// 💣 Опасная
+	{id:'bomb',emoji:'💣',name:'Бомба',rarity:.10,points:-2,color:'#ff4444'},
+	{id:'king',emoji:'👑',name:'Король',rarity:.03,points:8,color:'#ffd700'},
+	// ⚡ Грозовая
+	{id:'fast',emoji:'⚡',name:'Молния',rarity:.04,points:4,color:'#00aaff'},
+	{id:'star',emoji:'🌟',name:'Звезда',rarity:.05,points:3,color:'#fff176'},
+	// 🍀 Удачливая
+	{id:'clover',emoji:'🍀',name:'Клевер',rarity:.04,points:2,color:'#66bb6a'},
+	{id:'gift',emoji:'🎁',name:'Сюрприз',rarity:.04,points:4,color:'#ff7043'},
+	// 👻 Туманная
+	{id:'ghost',emoji:'👻',name:'Призрак',rarity:.04,points:3,color:'#aa44ff'},
+	{id:'moonstone',emoji:'🌙',name:'Лунный камень',rarity:.025,points:7,color:'#e0c0ff'},
+	// 🔥 Вулканическая
+	{id:'ruby',emoji:'🔴',name:'Рубин',rarity:.025,points:6,color:'#ff2040'},
+	{id:'ember',emoji:'🔥',name:'Искра',rarity:.03,points:4,color:'#ff6b35'},
+	// ❄️ Ледяная
+	{id:'sapphire',emoji:'🔵',name:'Сапфир',rarity:.025,points:7,color:'#4488ff'},
+	{id:'frostgem',emoji:'❄️',name:'Морозный самоцвет',rarity:.025,points:5,color:'#88eeff'},
+	// 🌑 Теневая
+	{id:'shadowgem',emoji:'🖤',name:'Теневой камень',rarity:.02,points:9,color:'#7744cc'},
+	{id:'voidgem',emoji:'🌌',name:'Камень бездны',rarity:.015,points:12,color:'#330088'},
+	// ☀️ Легендарная
+	{id:'crown_legend',emoji:'🏆',name:'Корона легенды',rarity:.012,points:18,color:'#ffd700'},
+	{id:'star_master',emoji:'💫',name:'Звезда мастера',rarity:.012,points:22,color:'#ff69b4'},
+	{id:'aegis',emoji:'🛡️',name:'Эгида',rarity:.015,points:9,color:'#ff6b35'},
+	{id:'phoenix_tear',emoji:'🪶',name:'Слеза феникса',rarity:.01,points:28,color:'#ff8800'}
 ];
 
-var TIERS=[
-	{id:'copper',name:'🪨 Медная шахта',desc:'Начни добычу!',theme:'copper',next:'🔥 Огненная шахта'},
-	{id:'fire',name:'🔥 Огненная шахта',desc:'Жарко! Новые кроты и предметы',theme:'fire',next:'❄️ Ледяная шахта'},
-	{id:'ice',name:'❄️ Ледяная шахта',desc:'Холод крепчает...',theme:'ice',next:'👻 Мистическая шахта'},
-	{id:'mystic',name:'👻 Мистическая шахта',desc:'Тайны глубин',theme:'mystic',next:'Сертификат'}
+var MINES=[
+	{id:'copper',name:'🪨 Медная',desc:'Твоя первая шахта',theme:'copper',needLvl:1},
+	{id:'crystal',name:'💎 Кристальная',desc:'Сверкающие глубины',theme:'crystal',needLvl:3},
+	{id:'danger',name:'💣 Опасная',desc:'Риск — дело благородное',theme:'danger',needLvl:5},
+	{id:'storm',name:'⚡ Грозовая',desc:'Молнии бьют чаще',theme:'storm',needLvl:8},
+	{id:'lucky',name:'🍀 Удачливая',desc:'Фортуна улыбается',theme:'lucky',needLvl:11},
+	{id:'mist',name:'👻 Туманная',desc:'Призраки в тумане',theme:'mist',needLvl:15},
+	{id:'volcano',name:'🔥 Вулканическая',desc:'Пекло',theme:'volcano',needLvl:19},
+	{id:'frozen',name:'❄️ Ледяная',desc:'Вечная мерзлота',theme:'frozen',needLvl:24},
+	{id:'shadow',name:'🌑 Теневая',desc:'Ничего не видно',theme:'shadow',needLvl:30},
+	{id:'legend',name:'☀️ Легендарная',desc:'Только для избранных',theme:'legend',needLvl:40}
 ];
+
+// Распределяем предметы по шахтам (по 2-3 на шахту)
+(function(){
+	var idx=0;
+	for(var m=0;m<MINES.length;m++){
+		var cnt=m===0?3:(m<3?2:(m===MINES.length-1?4:2));
+		MINES[m].items=[];for(var j=0;j<cnt&&idx<ITEMS.length;j++){MINES[m].items.push(ITEMS[idx].id);idx++;}
+	}
+})();
 
 var ACHIEVEMENTS=[
-	// 🪨 Медная шахта (4)
-	{id:'first_click',name:'👊 Первый удар',desc:'Сделать 1 клик',icon:'👊',tier:1},
-	{id:'gold_rush',name:'💰 Золотая лихорадка',desc:'Заработать 100 монет',icon:'💰',tier:1},
-	{id:'bomb_survivor',name:'💣 Живучий',desc:'Поймать 5 бомб',icon:'💣',tier:1},
-	{id:'fast_catcher',name:'⚡ Быстрый старт',desc:'Поймать 5 молний',icon:'⚡',tier:1},
-	// 🔥 Огненная шахта (4)
-	{id:'king_hunter',name:'👑 Королевский охотник',desc:'Поймать 5 королей',icon:'👑',tier:2},
-	{id:'star_collector',name:'🌟 Звездочёт',desc:'Найти 3 звезды',icon:'🌟',tier:2},
-	{id:'combo_master',name:'🔥 Комбо-мастер',desc:'Достичь комбо 10',icon:'🔥',tier:2},
-	{id:'strategist',name:'📊 Стратег',desc:'Достичь 5 уровня',icon:'📊',tier:2},
-	// ❄️ Ледяная шахта (4)
-	{id:'ice_catcher',name:'⚡ Ловец молний',desc:'Поймать 15 молний',icon:'⚡',tier:3},
-	{id:'clover_finder',name:'🍀 Везунчик',desc:'Найти 3 клевера',icon:'🍀',tier:3},
-	{id:'gold_million',name:'💎 Миллионер',desc:'Заработать 500 монет',icon:'💎',tier:3},
-	{id:'digger',name:'🗡️ Землекоп',desc:'Прокачать лопату до 10',icon:'🗡️',tier:3},
-	// 👻 Мистическая шахта (3)
-	{id:'ghost_hunter',name:'👻 Охотник за духами',desc:'Поймать 10 призраков',icon:'👻',tier:4},
-	{id:'gift_finder',name:'🎁 Сюрприз!',desc:'Найти 3 сюрприза',icon:'🎁',tier:4},
-	{id:'secret_legend',name:'🏆 Легенда',desc:'Собрать коллекцию 5 раз',icon:'🏆',tier:4}
+	{id:'first_click',name:'👊 Первый удар',desc:'Сделать 1 клик',icon:'👊',mine:1},
+	{id:'bronze_collector',name:'🥉 Бронзовый',desc:'Найти 3 бронзы',icon:'🥉',mine:1},
+	{id:'crystal_gatherer',name:'💎 Кристальный маг',desc:'Найти 3 кристалла',icon:'💎',mine:2},
+	{id:'artifact_hunter',name:'🏺 Археолог',desc:'Найти 3 артефакта',icon:'🏺',mine:2},
+	{id:'bomb_survivor',name:'💣 Живучий',desc:'Поймать 10 бомб',icon:'💣',mine:3},
+	{id:'king_slayer',name:'👑 Цареубийца',desc:'Поймать 10 королей',icon:'👑',mine:3},
+	{id:'lightning_rod',name:'⚡ Громоотвод',desc:'Поймать 15 молний',icon:'⚡',mine:4},
+	{id:'star_gazer',name:'🌟 Звездочёт',desc:'Найти 5 звёзд',icon:'🌟',mine:4},
+	{id:'lucky_clover',name:'🍀 Везунчик',desc:'Найти 5 клеверов',icon:'🍀',mine:5},
+	{id:'gift_wrapper',name:'🎁 Мешок сюрпризов',desc:'Найти 5 сюрпризов',icon:'🎁',mine:5},
+	{id:'ghost_buster',name:'👻 Охотник за духами',desc:'Поймать 10 призраков',icon:'👻',mine:6},
+	{id:'moon_gatherer',name:'🌙 Лунатик',desc:'Найти 3 лунных камня',icon:'🌙',mine:6},
+	{id:'volcanic',name:'🔴 Вулканолог',desc:'Найти 3 рубина',icon:'🔴',mine:7},
+	{id:'ember_catcher',name:'🔥 Искристый',desc:'Найти 5 искр',icon:'🔥',mine:7},
+	{id:'frozen_heart',name:'🔵 Хладнокровный',desc:'Найти 3 сапфира',icon:'🔵',mine:8},
+	{id:'frost_walker',name:'❄️ Морозный странник',desc:'Найти 3 морозных самоцвета',icon:'❄️',mine:8},
+	{id:'shadow_walker',name:'🖤 Теневой шаг',desc:'Найти 3 теневых камня',icon:'🖤',mine:9},
+	{id:'void_touch',name:'🌌 Касание бездны',desc:'Найти 2 камня бездны',icon:'🌌',mine:9},
+	{id:'legendary_hero',name:'🏆 Легенда',desc:'Найти 3 легендарных предмета',icon:'🏆',mine:10},
+	{id:'phoenix_rise',name:'🪶 Возрождение',desc:'Найти слезу феникса',icon:'🪶',mine:10},
+	// Бонусные
+	{id:'combo_master',name:'🔥 Комбо-мастер',desc:'Достичь комбо 20',icon:'🔥',mine:99},
+	{id:'gold_million',name:'💰 Миллионер',desc:'Заработать 2000 монет',icon:'💰',mine:99},
+	{id:'digger',name:'🗡️ Землекоп',desc:'Прокачать лопату до 15',icon:'🗡️',mine:99},
+	{id:'strategist',name:'📊 Стратег',desc:'Достичь 30 уровня',icon:'📊',mine:99}
 ];
 
 // DOM
@@ -448,9 +513,9 @@ var particleCount=0,floatTextCount=0;
 var boostLevel=0,timeLevel=0,clicksSinceNewItem=0;
 
 // Stats for achievements
-var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1,starFound:0,cloverFound:0,giftFound:0};
+var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1,itemCounts:{}};
 var unlocked={};
-var currentTier=1;
+var currentMine=0;
 var bannerTimeout=null;
 
 // Load
@@ -459,46 +524,57 @@ try{
 	if(d){
 		if(d.highScore) highScore=d.highScore;
 		if(d.stats) for(var k in d.stats) if(stats.hasOwnProperty(k)) stats[k]=d.stats[k];
+		if(d.stats&&d.stats.itemCounts) for(var k in d.stats.itemCounts) stats.itemCounts[k]=d.stats.itemCounts[k];
 		if(d.unlocked) for(var k in d.unlocked) if(d.unlocked[k]) unlocked[k]=true;
-		if(d.currentTier) currentTier=d.currentTier;
+		if(d.currentMine!==undefined) currentMine=d.currentMine;
 	}
 }catch(e){}
 checkAchievements();
 
 function saveData(){
 	try{
-		localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked,currentTier:currentTier}));
+		localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked,currentMine:currentMine}));
 	}catch(e){}
 }
 
 function getUnlockedCount(){var n=0;for(var i=0;i<ACHIEVEMENTS.length;i++)if(unlocked[ACHIEVEMENTS[i].id])n++;return n;}
-function countTierAchs(tierId){var t=0,u=0;for(var i=0;i<ACHIEVEMENTS.length;i++){var a=ACHIEVEMENTS[i];if(a.tier===tierId){t++;if(unlocked[a.id])u++;}}return{total:t,unlocked:u};}
+function countMineAchs(mineIdx){var t=0,u=0;for(var i=0;i<ACHIEVEMENTS.length;i++){var a=ACHIEVEMENTS[i];if(a.mine===mineIdx){t++;if(unlocked[a.id])u++;}}return{total:t,unlocked:u};}
+function mineUnlocked(mineIdx){return currentMine>=mineIdx;}
 
-function tierUnlocked(tierIdx){return currentTier>=tierIdx;}
+function countFinds(id){return stats.itemCounts[id]||0;}
 
 function checkAchievements(){
 	var prevCount=getUnlockedCount();
 	for(var i=0;i<ACHIEVEMENTS.length;i++){
 		var a=ACHIEVEMENTS[i];
 		if(unlocked[a.id]) continue;
-		if(a.tier>currentTier) continue;
+		if(a.mine<=10&&a.mine>currentMine+1) continue;
 		var ok=false;
 		switch(a.id){
 			case 'first_click': ok=stats.totalClicks>=1; break;
-			case 'gold_rush': ok=stats.totalEarnings>=100; break;
-			case 'bomb_survivor': ok=stats.totalBombs>=5; break;
-			case 'fast_catcher': ok=stats.totalFast>=5; break;
-			case 'king_hunter': ok=stats.totalKings>=5; break;
-			case 'star_collector': ok=stats.starFound>=3; break;
-			case 'combo_master': ok=stats.bestCombo>=10; break;
-			case 'strategist': ok=stats.maxLevel>=5; break;
-			case 'ice_catcher': ok=stats.totalFast>=15; break;
-			case 'clover_finder': ok=stats.cloverFound>=3; break;
-			case 'gold_million': ok=stats.totalEarnings>=500; break;
-			case 'digger': ok=stats.maxShovel>=10; break;
-			case 'ghost_hunter': ok=stats.totalGhosts>=10; break;
-			case 'gift_finder': ok=stats.giftFound>=3; break;
-			case 'secret_legend': ok=stats.collectionCount>=5; break;
+			case 'bronze_collector': ok=countFinds('bronze')>=3; break;
+			case 'crystal_gatherer': ok=countFinds('crystal')>=3; break;
+			case 'artifact_hunter': ok=countFinds('artifact')>=3; break;
+			case 'bomb_survivor': ok=stats.totalBombs>=10; break;
+			case 'king_slayer': ok=stats.totalKings>=10; break;
+			case 'lightning_rod': ok=stats.totalFast>=15; break;
+			case 'star_gazer': ok=countFinds('star')>=5; break;
+			case 'lucky_clover': ok=countFinds('clover')>=5; break;
+			case 'gift_wrapper': ok=countFinds('gift')>=5; break;
+			case 'ghost_buster': ok=stats.totalGhosts>=10; break;
+			case 'moon_gatherer': ok=countFinds('moonstone')>=3; break;
+			case 'volcanic': ok=countFinds('ruby')>=3; break;
+			case 'ember_catcher': ok=countFinds('ember')>=5; break;
+			case 'frozen_heart': ok=countFinds('sapphire')>=3; break;
+			case 'frost_walker': ok=countFinds('frostgem')>=3; break;
+			case 'shadow_walker': ok=countFinds('shadowgem')>=3; break;
+			case 'void_touch': ok=countFinds('voidgem')>=2; break;
+			case 'legendary_hero': ok=countFinds('crown_legend')+countFinds('star_master')+countFinds('aegis')>=3; break;
+			case 'phoenix_rise': ok=countFinds('phoenix_tear')>=1; break;
+			case 'combo_master': ok=stats.bestCombo>=20; break;
+			case 'gold_million': ok=stats.totalEarnings>=2000; break;
+			case 'digger': ok=stats.maxShovel>=15; break;
+			case 'strategist': ok=stats.maxLevel>=30; break;
 		}
 		if(ok){
 			unlocked[a.id]=true;
@@ -507,26 +583,27 @@ function checkAchievements(){
 			if(getUnlockedCount()>=ACHIEVEMENTS.length) showCertificate();
 		}
 	}
-	// Проверка завершения тира
-	var cur=countTierAchs(currentTier);
-	if(cur.unlocked===cur.total && cur.total>0 && currentTier<TIERS.length){
-		var tierName=TIERS[currentTier-1].name;
-		var nextTier=TIERS[currentTier];
-		currentTier++;
-		saveData();
-		setMessage('⬇ Проваливаешься в "'+nextTier.name+'"!');
-		applyTheme(nextTier.theme);
-		screenShake();
-		setTimeout(function(){
-			achBannerIcon.textContent='⬇';
-			achBannerTitle.textContent='🎉 Новая шахта: '+nextTier.name;
-			achBannerDesc.textContent=nextTier.desc;
-			achBanner.classList.add('show');
-			if(bannerTimeout)clearTimeout(bannerTimeout);
-			bannerTimeout=setTimeout(function(){achBanner.classList.remove('show');},4000);
-			soundRare();tryVibrate(50);
-		},800);
-		checkAchievements();
+	// Проверка достижения новой шахты
+	for(var m=0;m<MINES.length;m++){
+		if(m<=currentMine) continue;
+		if(playerLevel>=MINES[m].needLvl&&!unlocked['_mine_'+m]){
+			unlocked['_mine_'+m]=true;
+			var prevMine=getMine();
+			currentMine=m;
+			saveData();
+			setMessage('⬇ Новая шахта: '+MINES[m].name+'!');
+			applyTheme(MINES[m].theme);
+			screenShake();
+			setTimeout(function(){
+				achBannerIcon.textContent='⬇';
+				achBannerTitle.textContent='🎉 '+MINES[m].name;
+				achBannerDesc.textContent=MINES[m].desc;
+				achBanner.classList.add('show');
+				if(bannerTimeout)clearTimeout(bannerTimeout);
+				bannerTimeout=setTimeout(function(){achBanner.classList.remove('show');},4000);
+				soundRare();tryVibrate(50);
+			},800);
+		}
 	}
 	var nowCount=getUnlockedCount();
 	if(nowCount>prevCount) updateAchUI();
@@ -535,8 +612,9 @@ function checkAchievements(){
 function applyTheme(themeId){
 	var wrap=document.querySelector('.game-wrap');
 	if(!wrap)return;
-	var themes=['copper','fire','ice','mystic'];
-	themes.forEach(function(t){wrap.classList.remove('theme-'+t);});
+	var allThemes=[];
+	for(var i=0;i<MINES.length;i++){allThemes.push('theme-'+MINES[i].theme);}
+	allThemes.forEach(function(t){wrap.classList.remove(t);});
 	wrap.classList.add('theme-'+themeId);
 	wrap.style.animation='none';
 	void wrap.offsetWidth;
@@ -590,39 +668,44 @@ function closeAchievements(){
 function renderAchievements(){
 	achList.innerHTML='';
 	var totalAll=getUnlockedCount(),total=ACHIEVEMENTS.length;
-	for(var t=0;t<TIERS.length;t++){
-		if(!tierUnlocked(t+1)&&countTierAchs(t+1).unlocked===0) continue;
-		var tier=TIERS[t];
-		var cur=countTierAchs(t+1);
-		var lockedTier=!tierUnlocked(t+1);
+	for(var m=0;m<MINES.length;m++){
+		var mine=MINES[m];
+		var cur=countMineAchs(m+1);
+		if(cur.total===0) continue;
+		var lockedMine=m>currentMine+1;
+		var header=mine.name+' '+mine.desc;
 		var div=document.createElement('div');
-		div.className='ach-tier-section'+(lockedTier?' locked':'');
-		var header='<div class="ach-tier-header">'+tier.name+' <span class="ach-tier-progress">'+cur.unlocked+'/'+cur.total+'</span></div>';
+		div.className='ach-tier-section'+(lockedMine?' locked':'');
+		var h='<div class="ach-tier-header">'+mine.name+' <span class="ach-tier-progress">'+cur.unlocked+'/'+cur.total+'</span></div>';
 		var bar='<div class="ach-tier-bar"><div class="ach-tier-fill" style="width:'+(cur.total>0?cur.unlocked/cur.total*100:0)+'%"></div></div>';
-		var desc='<div class="ach-tier-desc">'+tier.desc+'</div>';
-		var items='<div class="ach-tier-items">';
+		var il='<div class="ach-tier-desc">'+mine.desc+' · ур.'+mine.needLvl+'</div><div class="ach-tier-items">';
 		for(var i=0;i<ACHIEVEMENTS.length;i++){
 			var a=ACHIEVEMENTS[i];
-			if(a.tier!==t+1) continue;
+			if(a.mine!==m+1) continue;
+			if(lockedMine) continue;
 			var u=unlocked[a.id];
-			var locked=lockedTier&&!u;
-			if(locked) continue;
-			items+='<div class="ach-item'+(u?' unlocked':'')+'"><div class="ach-icon">'+(a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+(u?'✅ ':'')+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div><div class="ach-status">'+(u?'✅':'🔒')+'</div></div>';
+			il+='<div class="ach-item'+(u?' unlocked':'')+'"><div class="ach-icon">'+(a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+(u?'✅ ':'')+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div><div class="ach-status">'+(u?'✅':'🔒')+'</div></div>';
 		}
-		items+='</div>';
-		var next='';
-		if(t<TIERS.length-1){
-			if(cur.unlocked===cur.total&&cur.total>0) next='<div class="ach-tier-next">✅ Пройдено → '+TIERS[t+1].name+'</div>';
-			else if(currentTier>t+1||(currentTier>=t+1&&cur.unlocked<cur.total)) next='<div class="ach-tier-next">🔒 Пройди все → откроется '+TIERS[t+1].name+'</div>';
-		}else{
-			if(cur.unlocked===cur.total&&cur.total>0) next='<div class="ach-tier-next">🏆 Все достижения собраны! Получи сертификат!</div>';
-			else next='<div class="ach-tier-next">🏆 Собери всё → сертификат</div>';
-		}
-		div.innerHTML=header+bar+desc+items+next;
+		il+='</div>';
+		if(m===currentMine&&cur.unlocked<cur.total) il+='<div class="ach-tier-next">🔍 Играй и выполняй!</div>';
+		else if(m<currentMine&&cur.unlocked===cur.total) il+='<div class="ach-tier-next">✅ Пройдено</div>';
+		div.innerHTML=h+bar+il;
 		achList.appendChild(div);
 	}
+	// Бонусные достижения
+	var bonusAchs=[];
+	for(var i=0;i<ACHIEVEMENTS.length;i++){
+		var a=ACHIEVEMENTS[i];if(a.mine!==99) continue;
+		var u=unlocked[a.id];
+		bonusAchs.push('<div class="ach-item'+(u?' unlocked':'')+'"><div class="ach-icon">'+(a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+(u?'✅ ':'')+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div><div class="ach-status">'+(u?'✅':'🔒')+'</div></div>');
+	}
+	if(bonusAchs.length){
+		var bd=document.createElement('div');bd.className='ach-tier-section';
+		bd.innerHTML='<div class="ach-tier-header">⭐ Бонусные <span class="ach-tier-progress">'+bonusAchs.filter(function(x){return x.indexOf('unlocked')>-1;}).length+'/'+bonusAchs.length+'</span></div>'+bonusAchs.join('');
+		achList.appendChild(bd);
+	}
 	achProgress.textContent=totalAll+' / '+total;
-	achHint.textContent='🎯 Прогресс: '+totalAll+'/'+total+' · Текущий тир: '+TIERS[Math.min(currentTier-1,TIERS.length-1)].name;
+	achHint.textContent='⛏ Шахта '+(currentMine+1)+'/'+MINES.length+' · '+getMine().name+' · 🏆 '+totalAll+'/'+total;
 	achHint.className='ach-hint revealed';
 }
 
@@ -692,10 +775,18 @@ function addCombo(){
 }
 function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 
-function getActiveItems(){return ITEMS.filter(function(i){return i.minLvl<=playerLevel&&(!i.needTier||currentTier>=i.needTier)&&(!i.needSecret||unlocked[i.needSecret]);});}
+function getActiveItems(){
+	var ids=[];
+	for(var m=0;m<=currentMine&&m<MINES.length;m++){
+		for(var j=0;j<MINES[m].items.length;j++){
+			var id=MINES[m].items[j];
+			if(ids.indexOf(id)===-1) ids.push(id);
+		}
+	}
+	return ITEMS.filter(function(i){return ids.indexOf(i.id)!==-1;});}
 
 function generateItem(){
-	var items=getActiveItems().map(function(i){return{id:i.id,emoji:i.emoji,name:i.name,rarity:i.rarity,points:i.points,color:i.color,minLvl:i.minLvl,needSecret:i.needSecret};});
+	var items=getActiveItems().map(function(i){return JSON.parse(JSON.stringify(i));});
 	// Pity: если давно не выпадал новый предмет — гарантированно даём недостающий
 	if(clicksSinceNewItem>25){
 		var missing=items.filter(function(i){return !collection.includes(i.emoji)&&i.points>=0;});
@@ -706,12 +797,13 @@ function generateItem(){
 	}
 	var lb=luckLevel*.03;
 	items.forEach(function(i){
-		if(i.id==='crystal')i.rarity+=lb;
+		if(i.points>=5)i.rarity+=lb*0.5;
+		if(i.points>=10)i.rarity+=lb*0.3;
+		else if(i.id==='crystal')i.rarity+=lb;
 		else if(i.id==='artifact')i.rarity+=lb*.5;
 		else if(i.id==='king')i.rarity+=lb*.3;
-		else 		if(i.id==='crown_legend'||i.id==='star_master')i.rarity+=lb*.2;
-		else if(i.id==='star')i.rarity+=lb*.3;
-		else if(i.id==='clover'||i.id==='gift')i.rarity+=lb*.2;
+		else if(i.id==='star')i.rarity+=lb*.4;
+		else if(i.id==='clover'||i.id==='gift')i.rarity+=lb*.3;
 		else if(i.id==='bomb')i.rarity-=lb*.5;
 	});
 	var sum=items.reduce(function(a,i){return a+Math.max(0,i.rarity);},0);
@@ -722,8 +814,8 @@ function generateItem(){
 }
 
 function checkLevelUp(){
-	var nl=1+Math.floor(score/25);
-	if(nl!==playerLevel){
+	var nl=1+Math.floor(score/(20+playerLevel*3));
+	if(nl!==playerLevel&&nl>=1){
 		playerLevel=nl;levelSpan.textContent=playerLevel;stats.maxLevel=Math.max(stats.maxLevel,playerLevel);saveData();
 		soundLevelUp();tryVibrate(30);
 		levelFlash.classList.remove('go');void levelFlash.offsetWidth;
@@ -742,17 +834,25 @@ function spawnMole(idx){
 	cellStates[idx].active=true;cellStates[idx].type=item;
 	var cell=gridEl.children[idx],mole=cell.querySelector('.mole');
 	mole.className='mole';
-	if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king'||item.id==='star'||item.id==='clover'||item.id==='gift'||item.needTier)mole.classList.add('gold');
+	if(item.points>0)mole.classList.add('gold');
 	if(item.id==='king')mole.classList.add('king');
 	else if(item.id==='fast')mole.classList.add('fast');
 	else if(item.id==='ghost')mole.classList.add('ghost');
 	else if(item.id==='bomb')mole.classList.add('bomb');
-	else 	if(item.id==='star'){mole.style.background='radial-gradient(circle at 30% 30%,#fff176,#fdd835)';mole.style.boxShadow='inset -4px -8px 15px #665200,0 0 30px #fff176,0 0 60px #fff17644';}
+	else if(item.id==='star'){mole.style.background='radial-gradient(circle at 30% 30%,#fff176,#fdd835)';mole.style.boxShadow='inset -4px -8px 15px #665200,0 0 30px #fff176,0 0 60px #fff17644';}
 	else if(item.id==='clover'){mole.style.background='radial-gradient(circle at 30% 30%,#81c784,#388e3c)';mole.style.boxShadow='inset -4px -8px 15px #1b3a1b,0 0 30px #66bb6a,0 0 60px #66bb6a44';}
 	else if(item.id==='gift'){mole.style.background='radial-gradient(circle at 30% 30%,#ff8a65,#d84315)';mole.style.boxShadow='inset -4px -8px 15px #4a1a0a,0 0 30px #ff7043,0 0 60px #ff704344';}
-	if(item.id==='crown_legend'){mole.classList.add('king');mole.style.boxShadow='inset -4px -8px 15px #8b6508,0 0 50px #ffd700,0 0 100px #ffd70044';}
+	else if(item.id==='moonstone'){mole.style.background='radial-gradient(circle at 30% 30%,#e0c0ff,#9966cc)';mole.style.boxShadow='inset -4px -8px 15px #442266,0 0 30px #e0c0ff,0 0 60px #e0c0ff44';}
+	else if(item.id==='ruby'){mole.style.background='radial-gradient(circle at 30% 30%,#ff6060,#cc0020)';mole.style.boxShadow='inset -4px -8px 15px #660010,0 0 30px #ff2040,0 0 60px #ff204044';}
+	else if(item.id==='ember'){mole.style.background='radial-gradient(circle at 30% 30%,#ff9966,#cc4400)';mole.style.boxShadow='inset -4px -8px 15px #662200,0 0 25px #ff6b35,0 0 50px #ff6b3544';}
+	else if(item.id==='sapphire'){mole.style.background='radial-gradient(circle at 30% 30%,#6699ff,#2244cc)';mole.style.boxShadow='inset -4px -8px 15px #002266,0 0 30px #4488ff,0 0 60px #4488ff44';}
+	else if(item.id==='frostgem'){mole.style.background='radial-gradient(circle at 30% 30%,#aaffff,#44aadd)';mole.style.boxShadow='inset -4px -8px 15px #004466,0 0 30px #88eeff,0 0 60px #88eeff44';}
+	else if(item.id==='shadowgem'){mole.style.background='radial-gradient(circle at 30% 30%,#9966ff,#4422aa)';mole.style.boxShadow='inset -4px -8px 15px #220066,0 0 35px #7744cc,0 0 70px #7744cc44';}
+	else if(item.id==='voidgem'){mole.style.background='radial-gradient(circle at 30% 30%,#6644cc,#110044)';mole.style.boxShadow='inset -4px -8px 15px #000033,0 0 40px #330088,0 0 80px #33008844';}
+	else if(item.id==='crown_legend'){mole.classList.add('king');mole.style.boxShadow='inset -4px -8px 15px #8b6508,0 0 50px #ffd700,0 0 100px #ffd70044';}
 	else if(item.id==='star_master'){mole.style.background='radial-gradient(circle at 30% 30%,#ff69b4,#cc3388)';mole.style.boxShadow='inset -4px -8px 15px #661144,0 0 40px #ff69b4,0 0 80px #ff69b444';}
 	else if(item.id==='aegis'){mole.style.background='radial-gradient(circle at 30% 30%,#ff8c42,#cc5500)';mole.style.boxShadow='inset -4px -8px 15px #662200,0 0 40px #ff6b35,0 0 80px #ff6b3544';}
+	else if(item.id==='phoenix_tear'){mole.style.background='radial-gradient(circle at 30% 30%,#ffbb66,#ff6600)';mole.style.boxShadow='inset -4px -8px 15px #663300,0 0 50px #ff8800,0 0 100px #ff880044';}
 	var es=mole.querySelector('.emoji');if(es)es.textContent=item.emoji;
 	mole.classList.add('show');
 	var du=1500+Math.random()*1500;
@@ -762,6 +862,8 @@ function spawnMole(idx){
 	else if(item.id==='fast')du=500+Math.random()*300;
 	else if(item.id==='ghost')du=2000+Math.random()*1000;
 	else if(item.id==='bomb')du=2000+Math.random()*1000;
+	else if(item.points>=15)du=600+Math.random()*400;
+	else if(item.points>=8)du=700+Math.random()*500;
 	du*=Math.max(.4,1-score*.00004)*(1+timeLevel*0.15);
 	if(cellStates[idx].timer)clearTimeout(cellStates[idx].timer);
 	cellStates[idx].timer=setTimeout(function(){hideMole(idx);},du);
@@ -825,15 +927,13 @@ function handleCellClick(idx){
 	if(item.id==='king')stats.totalKings++;
 	if(item.id==='fast')stats.totalFast++;
 	if(item.id==='ghost')stats.totalGhosts++;
-	if(item.id==='star')stats.starFound++;
-	if(item.id==='clover')stats.cloverFound++;
-	if(item.id==='gift')stats.giftFound++;
+	if(!stats.itemCounts[item.id])stats.itemCounts[item.id]=0;
+	stats.itemCounts[item.id]++;
 	if(pts>0){
 		score+=pts;stats.totalEarnings+=pts;
 		soundHit();
-		if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king')soundGold();
-		if(item.id==='king'){soundRare();tryVibrate(40);}
-		if(item.id==='fast')soundRare();
+		if(item.points>=3)soundGold();
+		if(item.points>=8){soundRare();tryVibrate(40);}
 		addCombo();
 		setMessage((crit?'КРИТ! ':'')+'+'+pts+' '+item.emoji);
 	}else if(pts<0){
@@ -844,13 +944,22 @@ function handleCellClick(idx){
 	spawnFloatText(pos.x-15,pos.y-20,(crit?'КРИТ! ':'')+pts,item.color||'#fff');
 	spawnParticles(pos.x,pos.y,item.color||'#ffd700',pts>0?12:18);
 	checkLevelUp();
+	// Особые эффекты для предметов
 	if(item.id==='star'){spawnParticles(pos.x,pos.y,'#fff176',20);tryVibrate(20);}
 	else if(item.id==='clover'){luckLevel++;spawnParticles(pos.x,pos.y,'#66bb6a',20);setMessage('🍀 Удача +1!');tryVibrate(20);}
 	else if(item.id==='gift'){spawnParticles(pos.x,pos.y,'#ff7043',25);tryVibrate(25);}
-	if(item.id==='king')spawnParticles(pos.x,pos.y,'#ffd700',30);
-	else if(item.id==='crown_legend'){spawnParticles(pos.x,pos.y,'#ffd700',40);tryVibrate(60);}
-	else if(item.id==='star_master'){spawnParticles(pos.x,pos.y,'#ff69b4',45);tryVibrate(60);}
-	else if(item.id==='aegis'){spawnParticles(pos.x,pos.y,'#ff6b35',35);tryVibrate(50);}
+	else if(item.id==='moonstone'){spawnParticles(pos.x,pos.y,'#e0c0ff',30);tryVibrate(30);score+=2;setMessage('🌙 Магия луны! +2');}
+	else if(item.id==='ruby'){spawnParticles(pos.x,pos.y,'#ff2040',35);tryVibrate(35);}
+	else if(item.id==='ember'){spawnParticles(pos.x,pos.y,'#ff6b35',25);tryVibrate(20);addCombo();addCombo();}
+	else if(item.id==='sapphire'){spawnParticles(pos.x,pos.y,'#4488ff',35);tryVibrate(35);}
+	else if(item.id==='frostgem'){spawnParticles(pos.x,pos.y,'#88eeff',30);tryVibrate(30);}
+	else if(item.id==='shadowgem'){spawnParticles(pos.x,pos.y,'#7744cc',40);tryVibrate(40);score+=3;}
+	else if(item.id==='voidgem'){spawnParticles(pos.x,pos.y,'#330088',50);tryVibrate(50);score+=5;screenShake();}
+	else if(item.id==='crown_legend'){spawnParticles(pos.x,pos.y,'#ffd700',45);tryVibrate(60);score+=10;}
+	else if(item.id==='star_master'){spawnParticles(pos.x,pos.y,'#ff69b4',45);tryVibrate(60);score+=8;}
+	else if(item.id==='aegis'){spawnParticles(pos.x,pos.y,'#ff6b35',40);tryVibrate(50);}
+	else if(item.id==='phoenix_tear'){spawnParticles(pos.x,pos.y,'#ff8800',60);tryVibrate(80);score+=20;setMessage('🪶 Феникс! +20!');powerup2x=true;if(powerupTimer)clearTimeout(powerupTimer);powerupTimer=setTimeout(function(){powerup2x=false;},8000);}
+	if(item.points>=8)spawnParticles(pos.x,pos.y,item.color||'#ffd700',30);
 	if(!collection.includes(item.emoji)){
 		clicksSinceNewItem=0;
 		collection.push(item.emoji);
@@ -871,7 +980,7 @@ function scheduleSpawn(){
 	var base=isMob?2800:2200,reduction=Math.min(800,Math.floor(score/50)*40),intv=Math.max(isMob?2000:1200,base-reduction)+Math.random()*600;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var maxCount=Math.min(isMob?2:3,1+Math.floor(effLvl/3)+Math.floor(Math.min(score,500)/250));
+		var maxCount=Math.min(isMob?3:5,2+Math.floor(effLvl/4)+Math.floor(Math.min(currentMine,8)/2));
 		var count=1+Math.floor(Math.random()*maxCount);
 		for(var i=0;i<count;i++){
 			setTimeout(function(n){return function(){
@@ -905,8 +1014,7 @@ function updateUI(){
 	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+ct;
 	shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;
 	shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;boostBtn.disabled=!gameActive;timeBtn.disabled=!gameActive;
-	var tier=TIERS[Math.min(currentTier-1,TIERS.length-1)];
-	D('mineDisplay').textContent=tier.name.split(' ')[0]+' '+currentTier;
+	D('mineDisplay').textContent=getMine().name.split(' ')[0]+' '+(currentMine+1);
 }
 
 function setMessage(t){
@@ -990,8 +1098,8 @@ function backToMenu(){
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	if(gameActive)saveGameState();
 	gameActive=false;gameStarted=false;menuScreen.classList.remove('hidden');
-	var mu=getUnlockedCount(),mt=ACHIEVEMENTS.length,tierName=TIERS[Math.min(currentTier-1,TIERS.length-1)].name;
-	D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+tierName;
+	var mu=getUnlockedCount(),mt=ACHIEVEMENTS.length,mine=getMine();
+	D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+mine.name+' '+(currentMine+1)+'/'+MINES.length;
 }
 
 function startGame(){
@@ -1006,7 +1114,7 @@ function startGame(){
 	}
 	gameStarted=true;gameActive=true;menuScreen.classList.add('hidden');
 	createGrid();updateCombo();updateUI();setMessage('🔨 Копай!');startSpawning();
-	applyTheme(TIERS[Math.min(currentTier-1,TIERS.length-1)].theme);
+	applyTheme(getMine().theme);
 	checkAchievements();
 }
 function startFreshGame(){
@@ -1140,8 +1248,8 @@ if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||window.innerWidth
 // Init
 if(loadGameState())playBtn.textContent='▶ ПРОДОЛЖИТЬ';
 highScoreSpan.textContent=highScore;
-var mu=getUnlockedCount(),mt=ACHIEVEMENTS.length,tierName=TIERS[Math.min(currentTier-1,TIERS.length-1)].name;
-D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+tierName;
+var mu=getUnlockedCount(),mt=ACHIEVEMENTS.length,mine=getMine();
+D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+mine.name+' '+(currentMine+1)+'/'+MINES.length;
 })();
 </script>
 </body>
