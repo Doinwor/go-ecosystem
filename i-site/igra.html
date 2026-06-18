@@ -1086,6 +1086,7 @@ function openAchievements(){
 function closeAchievements(){
 	achScreen.classList.remove('show');
 	if(gameStarted&&!gameActive)pauseOverlay.classList.add('show');
+	else if(!gameStarted)menuScreen.classList.remove('hidden');
 }
 
 function renderAchievements(){
@@ -1738,7 +1739,7 @@ D('newGameBtn').addEventListener('touchstart',function(e){e.preventDefault();sta
 
 // Profile/Shop handlers
 function openProfile(){profileScreen.classList.add('show');renderProfile();renderShop();}
-function closeProfile(){profileScreen.classList.remove('show');if(!gameStarted)menuScreen.classList.remove('hidden');}
+function closeProfile(){profileScreen.classList.remove('show');if(!gameStarted)menuScreen.classList.remove('hidden');else if(!gameActive)pauseOverlay.classList.add('show');}
 profileCloseBtn.addEventListener('click',closeProfile);
 profileCloseBtn.addEventListener('touchstart',function(e){e.preventDefault();closeProfile();},{passive:false});
 gameProfileBtn.addEventListener('click',function(){if(pauseOverlay.classList.contains('show')){pauseOverlay.classList.remove('show');}openProfile();});
