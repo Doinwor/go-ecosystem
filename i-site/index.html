@@ -259,7 +259,7 @@
       padding: 28px 32px;
       background: linear-gradient(145deg, #1f1814, #2a221a);
       cursor: pointer;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
       user-select: none;
       position: relative;
       overflow: hidden;
@@ -292,6 +292,10 @@
     .event-card:hover {
       border-color: #ffd700;
       box-shadow: 0 12px 50px rgba(255,215,0,0.18), 0 0 100px rgba(255,215,0,0.06);
+    }
+
+    .event-card:active {
+      transform: scale(0.98);
     }
 
     .event-card__header {
@@ -368,17 +372,23 @@
     }
 
     .event-card__rules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 16px;
       font-size: 12px;
       font-weight: 300;
       color: #a09080;
       line-height: 1.8;
       margin-bottom: 20px;
-      padding-left: 4px;
+      padding: 0;
     }
 
     .event-card__rules li {
       list-style: none;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .event-card__play {
@@ -403,6 +413,38 @@
 
     .event-card__play:active {
       transform: scale(0.96);
+    }
+
+    @media (max-width: 480px) {
+      .event-card {
+        padding: 20px 18px;
+        border-radius: 18px;
+      }
+      .event-card__header {
+        flex-wrap: wrap;
+      }
+      .event-card__badge {
+        font-size: 8px;
+        padding: 4px 10px;
+      }
+      .event-card__title {
+        font-size: 16px;
+        min-width: 0;
+      }
+      .event-card__rules {
+        grid-template-columns: 1fr;
+        gap: 4px;
+        font-size: 11px;
+      }
+      .event-card__desc {
+        font-size: 12px;
+      }
+      .event-card__play {
+        font-size: 12px;
+        padding: 12px 28px;
+        width: 100%;
+        text-align: center;
+      }
     }
 
     /* ─── process ─── */
@@ -819,15 +861,16 @@
         </div>
         <div class="event-card__body">
           <p class="event-card__desc">
-            Студия i. выпустила свою первую игру&nbsp;— аркаду, в&nbsp;которой нужно собирать
-            редких кротов, открывать коллекцию и&nbsp;ставить рекорды.
+            Первая игра студии i.&nbsp;— аркада, в&nbsp;которой ты стучишь по&nbsp;кротам,
+            открываешь шахты, собираешь предметы и&nbsp;ставишь рекорды.
           </p>
           <ul class="event-card__rules">
-            <li>🥇 &nbsp;Стучи по кротам — получай монеты</li>
-            <li>👑 &nbsp;Лови короля, молнию и призрака</li>
-            <li>📦 &nbsp;Собери 12 предметов коллекции</li>
-            <li>🔥 &nbsp;Строй комбо и улучшай лопату</li>
-            <li>🏆 &nbsp;Открывай достижения</li>
+            <li>⛏ &nbsp;15 шахт — от медной до бесконечной</li>
+            <li>📦 &nbsp;32 редких предмета в коллекции</li>
+            <li>🏆 &nbsp;80+ достижений с секретными тирами</li>
+            <li>🔥 &nbsp;Комбо, улучшения и два режима игры</li>
+            <li>🎯 &nbsp;Режим «Рекорд»: 3 бомбы — конец</li>
+            <li>📜 &nbsp;Найди легендарный сертификат</li>
           </ul>
           <a href="event.html" class="event-card__play">▶ Подробнее</a>
         </div>

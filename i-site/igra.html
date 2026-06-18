@@ -220,6 +220,8 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .combo-display.idle{color:#6a5a4a}
 .combo-display.active{color:#ffd700;text-shadow:0 0 10px #ffd70066;transform:scale(1.05)}
 .combo-display.hot{color:#ff6b35;text-shadow:0 0 15px #ff6b3588;transform:scale(1.1)}
+.profile-btn{background:linear-gradient(135deg,#3d3224,#1a130e);border:none;color:#ffd700;font-size:16px;padding:4px 10px;border-radius:30px;cursor:pointer;transition:all .1s;touch-action:manipulation;line-height:1;box-shadow:inset 0 2px 5px rgba(0,0,0,.7)}
+.profile-btn:active{transform:scale(.9)}
 
 .bottom-panel{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:12px;gap:6px}
 .stats{display:flex;gap:6px;background:#1a130e;padding:3px 10px;border-radius:30px;color:#d4c4a8;font-weight:bold;font-size:14px;flex-wrap:wrap;align-items:center}
@@ -272,7 +274,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 .is-mobile .top-panel span,.is-mobile .sound-btn,.is-mobile .pause-btn{padding:2px 6px;font-size:11px}
 .is-mobile .bottom-panel{margin-top:8px;gap:4px}
 .is-mobile .stats{font-size:11px;padding:2px 6px;gap:3px}
-.is-mobile .shop-btn{font-size:10px;padding:6px 8px;min-width:30px}
+.is-mobile .profile-btn{font-size:13px;padding:3px 8px}
 .is-mobile .message{font-size:11px;padding:2px 6px;min-width:50px}
 .is-mobile .combo-display{font-size:11px;padding:2px 6px;min-width:30px}
 .is-mobile .ach-banner{right:10px;left:10px;max-width:none;top:-80px}
@@ -287,6 +289,67 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 .is-mobile .mole.show{animation:none}
 .is-mobile .bg-star{width:2px;height:2px;opacity:.15}
 .is-mobile .bg-star.l{width:3px;height:3px;opacity:.25}
+
+/* ===== Profile / Shop Overlay ===== */
+.profile-screen{position:fixed;inset:0;z-index:1500;background:rgba(13,10,8,.97);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.profile-screen.show{opacity:1;pointer-events:auto}
+.profile-header{display:flex;align-items:center;justify-content:center;gap:4px;padding:14px 16px 6px;background:#1a130e;border-bottom:1px solid #2a1f18;flex-shrink:0}
+.profile-tab{background:none;border:none;color:#6a5a4a;font-size:14px;font-weight:bold;padding:8px 20px;border-radius:30px;cursor:pointer;transition:all .2s;font-family:'Unbounded',sans-serif}
+.profile-tab.active{color:#ffd700;background:#2a2218}
+.profile-tab:active{transform:scale(.95)}
+.profile-close{background:none;border:none;color:#6a5a4a;font-size:20px;cursor:pointer;position:absolute;right:16px;top:14px;transition:color .2s;padding:4px 8px}
+.profile-close:hover{color:#ff6b35}
+.profile-body{flex:1;overflow-y:auto;padding:12px 16px 24px}
+.profile-content{display:none}
+.profile-content.active{display:block}
+/* Profile card */
+.profile-card{background:linear-gradient(145deg,#2a2218,#1f1810);border-radius:24px;padding:20px;text-align:center;border:2px solid #3d3224;margin-bottom:14px}
+.profile-avatar-frame{width:80px;height:80px;border-radius:50%;margin:0 auto 8px;background:linear-gradient(135deg,#3d3224,#1a130e);display:flex;align-items:center;justify-content:center;border:3px solid #8b6b40;transition:border-color .3s,box-shadow .3s}
+.profile-avatar-frame.rare{border-color:#ffd700;box-shadow:0 0 30px rgba(255,215,0,.15)}
+.profile-avatar-frame.epic{border-color:#ff69b4;box-shadow:0 0 30px rgba(255,105,180,.15)}
+.profile-avatar-frame.legendary{border-color:#4488ff;box-shadow:0 0 30px rgba(68,136,255,.15)}
+.profile-avatar-frame.infinite{border-color:#fff;box-shadow:0 0 40px rgba(255,255,255,.2)}
+.profile-avatar{font-size:44px}
+.profile-title-badge{font-size:12px;color:#ffd700;background:#1a130e;display:inline-block;padding:3px 14px;border-radius:30px;border:1px solid #3d3224;margin-bottom:6px}
+.profile-level{font-size:14px;color:#d4c4a8;font-weight:bold;margin-bottom:2px}
+.profile-mine{font-size:12px;color:#8b7b6a}
+/* Stats grid */
+.profile-stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px}
+.profile-stat{background:#1a130e;border-radius:14px;padding:10px 6px;text-align:center;border:1px solid #2a1f18}
+.profile-stat-val{display:block;font-size:16px;font-weight:bold;color:#ffd700}
+.profile-stat-lbl{display:block;font-size:9px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+/* Shop */
+.shop-section-title{font-size:16px;color:#ffd700;font-weight:bold;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid #2a1f18}
+.shop-subsection-title{font-size:12px;color:#8b7b6a;margin:10px 0 6px}
+.shop-item{display:flex;align-items:center;gap:12px;background:#1a130e;border:1px solid #2a1f18;border-radius:16px;padding:10px 12px;width:100%;margin-bottom:6px;cursor:pointer;transition:all .15s;font-family:'Unbounded',sans-serif;text-align:left}
+.shop-item:active{transform:scale(.97)}
+.shop-item.disabled{opacity:.4;pointer-events:none}
+.shop-item.bought{border-color:#ffd70044;background:#2a2218}
+.shop-item-icon{font-size:28px;flex-shrink:0;width:40px;text-align:center}
+.shop-item-info{flex:1;min-width:0}
+.shop-item-name{display:block;font-size:13px;font-weight:bold;color:#d4c4a8}
+.shop-item-desc{display:block;font-size:9px;color:#6a5a4a;margin-top:2px}
+.shop-item-cost{font-size:12px;font-weight:bold;color:#ffd700;flex-shrink:0;padding:4px 10px;background:#2a2218;border-radius:20px}
+.shop-cosmetic-list{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.shop-cosmetic-item{background:#1a130e;border:2px solid #2a1f18;border-radius:14px;padding:8px;text-align:center;cursor:pointer;transition:all .15s}
+.shop-cosmetic-item:active{transform:scale(.95)}
+.shop-cosmetic-item.owned{border-color:#3d3224}
+.shop-cosmetic-item.equipped{border-color:#ffd700;background:#2a2218}
+.shop-cosmetic-item.locked{opacity:.3;pointer-events:none}
+.shop-cosmetic-icon{font-size:22px;display:block;margin-bottom:4px}
+.shop-cosmetic-name{font-size:10px;color:#d4c4a8;font-weight:bold;display:block}
+.shop-cosmetic-status{font-size:9px;color:#6a5a4a;display:block;margin-top:2px}
+.shop-cosmetic-item.owned .shop-cosmetic-status{color:#c49a6c}
+.shop-cosmetic-item.equipped .shop-cosmetic-status{color:#ffd700}
+@media(max-width:500px){
+	.profile-avatar-frame{width:60px;height:60px}
+	.profile-avatar{font-size:34px}
+	.profile-stat-val{font-size:14px}
+	.shop-item-icon{font-size:22px;width:32px}
+	.shop-item-name{font-size:12px}
+	.shop-cosmetic-list{grid-template-columns:1fr 1fr}
+}
+
 </style>
 </head>
 <body>
@@ -301,7 +364,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<button class="menu-btn menu-btn-play" id="playBtn">▶ ПРОДОЛЖИТЬ</button>
 		<button class="menu-btn menu-btn-sub" id="newGameBtn">🔄 Новая игра</button>
 		<button class="menu-btn" id="menuAchBtn">🏆 Достижения</button>
-		<button class="menu-btn menu-btn-sub" id="modeToggleBtn">∞ Бесконечный режим</button>
+		<button class="menu-btn menu-btn-sub" id="modeToggleBtn">🎯 Рекорд</button>
 		<button class="menu-btn menu-btn-sub" id="menuBackBtn">← На сайт</button>
 	</div>
 	<div class="menu-stats-line" id="menuStatsLine">🏆 0/15 · 🌱 Новичок</div>
@@ -375,15 +438,10 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 			<span>🗡️ <span id="shovelLevel">1</span></span>
 			<span>🎯 <span id="luckLevel">0</span></span>
 			<span class="combo-display idle" id="comboDisplay">🔥 x1</span>
+			<button class="profile-btn" id="gameProfileBtn">👤</button>
+			<button class="profile-btn reset-btn" id="gameResetBtn" style="color:#6a5a4a;font-size:12px">🔄</button>
 		</div>
 		<div class="message" id="messageDisplay">🔨 Копай!</div>
-		<div class="shop">
-			<button class="shop-btn" id="shovelUpgrade">⬆ Лопата</button>
-			<button class="shop-btn" id="luckUpgrade">🍀 Удача</button>
-			<button class="shop-btn" id="boostUpgrade">⚡ Ускорение</button>
-			<button class="shop-btn" id="timeUpgrade">⏱ Время</button>
-			<button class="shop-btn restart" id="resetBtn">🔄</button>
-		</div>
 	</div>
 </div>
 
@@ -392,11 +450,75 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="pause-btn-group">
 		<button class="pause-continue" id="pauseContinueBtn">▶ Продолжить</button>
 		<button id="pauseAchBtn">🏆 Достижения</button>
+		<button id="pauseProfileBtn">👤 Профиль</button>
 		<button id="pauseSoundBtn">🔊 Звук</button>
 		<button id="pauseMenuBtn">🏠 В меню</button>
 		<button class="pause-danger" id="pauseSiteBtn">← На сайт</button>
 	</div>
 	<div style="margin-top:20px;font-size:10px;color:#3d3224;text-align:center">🧹 <span id="fullResetBtn" style="cursor:pointer;color:#6a5a4a;text-decoration:underline;text-underline-offset:3px">сбросить весь прогресс</span></div>
+</div>
+
+<!-- Profile/Shop overlay -->
+<div class="profile-screen" id="profileScreen">
+	<div class="profile-header">
+		<button class="profile-tab active" data-tab="profile">👤 Профиль</button>
+		<button class="profile-tab" data-tab="shop">🛒 Магазин</button>
+		<button class="profile-close" id="profileCloseBtn">✕</button>
+	</div>
+	<div class="profile-body">
+		<!-- TAB: Профиль -->
+		<div class="profile-content active" id="profileTab">
+			<div class="profile-card" id="profileCard">
+				<div class="profile-avatar-frame" id="profileAvatarFrame">
+					<span class="profile-avatar">🐹</span>
+				</div>
+				<div class="profile-title-badge" id="profileTitleBadge">🌱 Новичок</div>
+				<div class="profile-level">Уровень <span id="profileLevelDisplay">1</span></div>
+				<div class="profile-mine">⛏ <span id="profileMineDisplay">Медная</span></div>
+			</div>
+			<div class="profile-stats-grid">
+				<div class="profile-stat"><span class="profile-stat-val" id="profileStatScore">0</span><span class="profile-stat-lbl">Монет</span></div>
+				<div class="profile-stat"><span class="profile-stat-val" id="profileStatAchs">0/79</span><span class="profile-stat-lbl">Достижения</span></div>
+				<div class="profile-stat"><span class="profile-stat-val" id="profileStatCombo">x1</span><span class="profile-stat-lbl">Лучшее комбо</span></div>
+				<div class="profile-stat"><span class="profile-stat-val" id="profileStatShovel">1</span><span class="profile-stat-lbl">Лопата</span></div>
+				<div class="profile-stat"><span class="profile-stat-val" id="profileStatColl">0</span><span class="profile-stat-lbl">Коллекций</span></div>
+				<div class="profile-stat"><span class="profile-stat-val" id="profileStatClicks">0</span><span class="profile-stat-lbl">Кликов</span></div>
+			</div>
+		</div>
+		<!-- TAB: Магазин -->
+		<div class="profile-content" id="shopTab">
+			<div class="shop-upgrades">
+				<div class="shop-section-title">⚙️ Улучшения</div>
+				<button class="shop-item" id="shopShovelBtn">
+					<span class="shop-item-icon">🗡️</span>
+					<span class="shop-item-info"><span class="shop-item-name">Лопата <span id="shopShovelLvl">1</span></span><span class="shop-item-desc">+1 к очкам за клик</span></span>
+					<span class="shop-item-cost" id="shopShovelCost">15💰</span>
+				</button>
+				<button class="shop-item" id="shopLuckBtn">
+					<span class="shop-item-icon">🍀</span>
+					<span class="shop-item-info"><span class="shop-item-name">Удача <span id="shopLuckLvl">0</span></span><span class="shop-item-desc">+3% к редкости за уровень</span></span>
+					<span class="shop-item-cost" id="shopLuckCost">20💰</span>
+				</button>
+				<button class="shop-item" id="shopBoostBtn">
+					<span class="shop-item-icon">⚡</span>
+					<span class="shop-item-info"><span class="shop-item-name">Ускорение <span id="shopBoostLvl">0</span></span><span class="shop-item-desc">+50% к очкам за уровень</span></span>
+					<span class="shop-item-cost" id="shopBoostCost">100💰</span>
+				</button>
+				<button class="shop-item" id="shopTimeBtn">
+					<span class="shop-item-icon">⏱</span>
+					<span class="shop-item-info"><span class="shop-item-name">Время <span id="shopTimeLvl">0</span></span><span class="shop-item-desc">+15% длительности за уровень</span></span>
+					<span class="shop-item-cost" id="shopTimeCost">100💰</span>
+				</button>
+			</div>
+			<div class="shop-cosmetics">
+				<div class="shop-section-title">🎨 Оформление профиля</div>
+				<div class="shop-subsection-title">Рамки</div>
+				<div class="shop-cosmetic-list" id="shopFrameList"></div>
+				<div class="shop-subsection-title">Титулы</div>
+				<div class="shop-cosmetic-list" id="shopTitleList"></div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script>
@@ -486,70 +608,123 @@ var MINES=[
 })();
 
 var ACHIEVEMENTS=[
-	{id:'first_click',name:'Первый удар',desc:'Сделать 1 клик',icon:'👊',mine:1},
-	{id:'bronze_collector',name:'Бронзовый',desc:'Найти 3 бронзы',icon:'🥉',mine:1},
-	{id:'silver_fever',name:'Серебряная лихорадка',desc:'Найти 5 серебра',icon:'🥈',mine:1},
-	{id:'gold_rush',name:'Золотая жила',desc:'Найти 10 золота',icon:'🪙',mine:1},
-	{id:'crystal_gatherer',name:'Кристальный маг',desc:'Найти 3 кристалла',icon:'💎',mine:2},
-	{id:'artifact_hunter',name:'Археолог',desc:'Найти 3 артефакта',icon:'🏺',mine:2},
-	{id:'crystal_master',name:'Кристальный король',desc:'Найти 10 кристаллов',icon:'💎',mine:2},
-	{id:'artifact_expert',name:'Профессор археологии',desc:'Найти 8 артефактов',icon:'🏺',mine:2},
-	{id:'bomb_survivor',name:'Живучий',desc:'Поймать 10 бомб',icon:'💣',mine:3},
-	{id:'king_slayer',name:'Цареубийца',desc:'Поймать 10 королей',icon:'👑',mine:3},
-	{id:'bomb_proof',name:'Бомбоустойчивый',desc:'Поймать 25 бомб',icon:'💣',mine:3},
-	{id:'king_of_kings',name:'Король королей',desc:'Поймать 20 королей',icon:'👑',mine:3},
-	{id:'lightning_rod',name:'Громоотвод',desc:'Поймать 15 молний',icon:'⚡',mine:4},
-	{id:'star_gazer',name:'Звездочёт',desc:'Найти 5 звёзд',icon:'🌟',mine:4},
-	{id:'storm_chaser',name:'Охотник за бурей',desc:'Поймать 30 молний',icon:'⚡',mine:4},
-	{id:'supernova',name:'Сверхновая',desc:'Найти 10 звёзд',icon:'🌟',mine:4},
-	{id:'lucky_clover',name:'Везунчик',desc:'Найти 5 клеверов',icon:'🍀',mine:5},
-	{id:'gift_wrapper',name:'Мешок сюрпризов',desc:'Найти 5 сюрпризов',icon:'🎁',mine:5},
-	{id:'fortune_cookie',name:'Баловень судьбы',desc:'Найти 15 клеверов',icon:'🍀',mine:5},
-	{id:'ghost_buster',name:'Охотник за духами',desc:'Поймать 10 призраков',icon:'👻',mine:6},
-	{id:'moon_gatherer',name:'Лунатик',desc:'Найти 3 лунных камня',icon:'🌙',mine:6},
-	{id:'ghost_hunter',name:'Истребитель призраков',desc:'Поймать 25 призраков',icon:'👻',mine:6},
-	{id:'moon_collector',name:'Коллекционер лун',desc:'Найти 8 лунных камней',icon:'🌙',mine:6},
-	{id:'volcanic',name:'Вулканолог',desc:'Найти 3 рубина',icon:'🔴',mine:7},
-	{id:'ember_catcher',name:'Искристый',desc:'Найти 5 искр',icon:'🔥',mine:7},
-	{id:'lava_collector',name:'Ходячий вулкан',desc:'Найти 10 рубинов',icon:'🔴',mine:7},
-	{id:'frozen_heart',name:'Хладнокровный',desc:'Найти 3 сапфира',icon:'🔵',mine:8},
-	{id:'frost_walker',name:'Морозный странник',desc:'Найти 3 морозных самоцвета',icon:'❄️',mine:8},
-	{id:'ice_king',name:'Ледяной король',desc:'Найти 8 сапфиров',icon:'🔵',mine:8},
-	{id:'shadow_walker',name:'Теневой шаг',desc:'Найти 3 теневых камня',icon:'🖤',mine:9},
-	{id:'void_touch',name:'Касание бездны',desc:'Найти 2 камня бездны',icon:'🌌',mine:9},
-	{id:'void_master',name:'Властелин бездны',desc:'Найти 6 камней бездны',icon:'🌌',mine:9},
-	{id:'legendary_hero',name:'Легенда',desc:'Найти 3 легендарных предмета',icon:'🏆',mine:10},
-	{id:'phoenix_rise',name:'Возрождение',desc:'Найти слезу феникса',icon:'🪶',mine:10},
-	{id:'immortal',name:'Бессмертный',desc:'Найти 3 слезы феникса',icon:'🪶',mine:10},
-	{id:'magma_walker',name:'Магма-ходок',desc:'Найти 5 магма-камней',icon:'🪨',mine:11},
-	{id:'flame_keeper',name:'Хранитель огня',desc:'Найти 8 пламён',icon:'🔥',mine:11},
-	{id:'volcano_god',name:'Бог огня',desc:'Собрать все предметы шахты 11',icon:'🌋',mine:11},
-	{id:'stardust_gatherer',name:'Звёздный пылесос',desc:'Найти 5 космической пыли',icon:'✨',mine:12},
-	{id:'nebula_seer',name:'Провидец туманностей',desc:'Найти 4 туманности',icon:'🌌',mine:12},
-	{id:'cosmic_master',name:'Властелин космоса',desc:'Собрать все предметы шахты 12',icon:'🌀',mine:12},
-	{id:'prism_collector',name:'Призматик',desc:'Найти 5 призм',icon:'🔮',mine:13},
-	{id:'rainbow_hunter',name:'Охотник за радугой',desc:'Найти 3 радужных самоцвета',icon:'🌈',mine:13},
-	{id:'rainbow_warrior',name:'Радужный воин',desc:'Собрать все предметы шахты 13',icon:'🌈',mine:13},
-	{id:'dragon_scales',name:'Чешуйчатый',desc:'Найти 8 чешуй дракона',icon:'🟩',mine:14},
-	{id:'dragon_eye_collector',name:'Драконий глаз',desc:'Найти 3 ока дракона',icon:'👁️',mine:14},
-	{id:'dragon_slayer',name:'Убийца драконов',desc:'Собрать все предметы шахты 14',icon:'🐉',mine:14},
-	{id:'infinity_reach',name:'Дотянуться до звёзд',desc:'Найти 5 звёзд бесконечности',icon:'💫',mine:15},
-	{id:'eternal_seeker',name:'Искатель вечности',desc:'Найти 3 вечных кристалла',icon:'💠',mine:15},
-	{id:'infinite_one',name:'Бесконечный',desc:'Собрать все предметы шахты 15',icon:'∞',mine:15},
-	// Бонусные
-	{id:'combo_master',name:'Комбо-мастер',desc:'Достичь комбо 20',icon:'🔥',mine:99},
-	{id:'gold_million',name:'Миллионер',desc:'Заработать 2000 монет',icon:'💰',mine:99},
-	{id:'digger',name:'Землекоп',desc:'Прокачать лопату до 15',icon:'🗡️',mine:99},
-	{id:'strategist',name:'Стратег',desc:'Достичь 30 уровня',icon:'📊',mine:99},
-	{id:'combo_legend',name:'Легенда комбо',desc:'Достичь комбо 50',icon:'🔥',mine:99},
-	{id:'billionaire',name:'Миллиардер',desc:'Заработать 10000 монет',icon:'💰',mine:99},
-	{id:'shovel_legend',name:'Легендарная лопата',desc:'Прокачать лопату до 25',icon:'🗡️',mine:99},
-	{id:'ultra_level',name:'Ультра-уровень',desc:'Достичь 50 уровня',icon:'📊',mine:99},
-	{id:'click_frenzy',name:'Клик-маньяк',desc:'Сделать 5000 кликов',icon:'👆',mine:99},
-	{id:'bomb_immune',name:'Неуязвимый',desc:'Поймать 100 бомб',icon:'💣',mine:99},
-	{id:'speed_demon',name:'Демон скорости',desc:'Прокачать ускорение до 10',icon:'⚡',mine:99},
-	{id:'time_wizard',name:'Маг времени',desc:'Прокачать время до 10',icon:'⏱',mine:99},
-	{id:'explorer',name:'Исследователь',desc:'Открыть все 15 шахт',icon:'🗺️',mine:99}
+	// 🪨 Медная — Normal
+	{id:'first_click',name:'Первый удар',desc:'Сделать 1 клик',icon:'👊',mine:1,tier:'normal'},
+	{id:'bronze_collector',name:'Бронзовый',desc:'Найти 3 бронзы',icon:'🥉',mine:1,tier:'normal'},
+	{id:'silver_fever',name:'Серебряная лихорадка',desc:'Найти 5 серебра',icon:'🥈',mine:1,tier:'normal'},
+	{id:'gold_rush',name:'Золотая жила',desc:'Найти 10 золота',icon:'🪙',mine:1,tier:'normal'},
+	// Медная — Hard
+	{id:'silver_master',name:'Серебряный король',desc:'Найти 25 серебра',icon:'🥈',mine:1,tier:'hard'},
+	{id:'gold_hoarder',name:'Золотой скряга',desc:'Найти 30 золота',icon:'🪙',mine:1,tier:'hard'},
+	// 💎 Кристальная — Normal
+	{id:'crystal_gatherer',name:'Кристальный маг',desc:'Найти 3 кристалла',icon:'💎',mine:2,tier:'normal'},
+	{id:'artifact_hunter',name:'Археолог',desc:'Найти 3 артефакта',icon:'🏺',mine:2,tier:'normal'},
+	// Кристальная — Hard
+	{id:'crystal_master',name:'Кристальный король',desc:'Найти 10 кристаллов',icon:'💎',mine:2,tier:'hard'},
+	{id:'artifact_expert',name:'Профессор археологии',desc:'Найти 8 артефактов',icon:'🏺',mine:2,tier:'hard'},
+	// 💣 Опасная — Normal
+	{id:'bomb_survivor',name:'Живучий',desc:'Поймать 10 бомб',icon:'💣',mine:3,tier:'normal'},
+	{id:'king_slayer',name:'Цареубийца',desc:'Поймать 10 королей',icon:'👑',mine:3,tier:'normal'},
+	// Опасная — Hard
+	{id:'bomb_proof',name:'Бомбоустойчивый',desc:'Поймать 25 бомб',icon:'💣',mine:3,tier:'hard'},
+	{id:'king_of_kings',name:'Король королей',desc:'Поймать 20 королей',icon:'👑',mine:3,tier:'hard'},
+	// Опасная — Extreme
+	{id:'bomb_void',name:'Чёрная дыра',desc:'Поймать 50 бомб',icon:'🕳️',mine:3,tier:'extreme'},
+	// ⚡ Грозовая — Normal
+	{id:'lightning_rod',name:'Громоотвод',desc:'Поймать 15 молний',icon:'⚡',mine:4,tier:'normal'},
+	{id:'star_gazer',name:'Звездочёт',desc:'Найти 5 звёзд',icon:'🌟',mine:4,tier:'normal'},
+	// Грозовая — Hard
+	{id:'storm_chaser',name:'Охотник за бурей',desc:'Поймать 30 молний',icon:'⚡',mine:4,tier:'hard'},
+	{id:'supernova',name:'Сверхновая',desc:'Найти 10 звёзд',icon:'🌟',mine:4,tier:'hard'},
+	// 🍀 Удачливая — Normal
+	{id:'lucky_clover',name:'Везунчик',desc:'Найти 5 клеверов',icon:'🍀',mine:5,tier:'normal'},
+	{id:'gift_wrapper',name:'Мешок сюрпризов',desc:'Найти 5 сюрпризов',icon:'🎁',mine:5,tier:'normal'},
+	// Удачливая — Hard
+	{id:'fortune_cookie',name:'Баловень судьбы',desc:'Найти 15 клеверов',icon:'🍀',mine:5,tier:'hard'},
+	{id:'gift_mountain',name:'Гора подарков',desc:'Найти 15 сюрпризов',icon:'🎁',mine:5,tier:'hard'},
+	// 👻 Туманная — Normal
+	{id:'ghost_buster',name:'Охотник за духами',desc:'Поймать 10 призраков',icon:'👻',mine:6,tier:'normal'},
+	{id:'moon_gatherer',name:'Лунатик',desc:'Найти 3 лунных камня',icon:'🌙',mine:6,tier:'normal'},
+	// Туманная — Hard
+	{id:'ghost_hunter',name:'Истребитель призраков',desc:'Поймать 25 призраков',icon:'👻',mine:6,tier:'hard'},
+	{id:'moon_collector',name:'Коллекционер лун',desc:'Найти 8 лунных камней',icon:'🌙',mine:6,tier:'hard'},
+	// 🔥 Вулканическая — Normal
+	{id:'volcanic',name:'Вулканолог',desc:'Найти 3 рубина',icon:'🔴',mine:7,tier:'normal'},
+	{id:'ember_catcher',name:'Искристый',desc:'Найти 5 искр',icon:'🔥',mine:7,tier:'normal'},
+	// Вулканическая — Hard
+	{id:'lava_collector',name:'Ходячий вулкан',desc:'Найти 10 рубинов',icon:'🔴',mine:7,tier:'hard'},
+	{id:'ember_master',name:'Повелитель искр',desc:'Найти 15 искр',icon:'🔥',mine:7,tier:'hard'},
+	// ❄️ Ледяная — Normal
+	{id:'frozen_heart',name:'Хладнокровный',desc:'Найти 3 сапфира',icon:'🔵',mine:8,tier:'normal'},
+	{id:'frost_walker',name:'Морозный странник',desc:'Найти 3 морозных самоцвета',icon:'❄️',mine:8,tier:'normal'},
+	// Ледяная — Hard
+	{id:'ice_king',name:'Ледяной король',desc:'Найти 8 сапфиров',icon:'🔵',mine:8,tier:'hard'},
+	// 🌑 Теневая — Normal
+	{id:'shadow_walker',name:'Теневой шаг',desc:'Найти 3 теневых камня',icon:'🖤',mine:9,tier:'normal'},
+	{id:'void_touch',name:'Касание бездны',desc:'Найти 2 камня бездны',icon:'🌌',mine:9,tier:'normal'},
+	// Теневая — Hard
+	{id:'void_master',name:'Властелин бездны',desc:'Найти 6 камней бездны',icon:'🌌',mine:9,tier:'hard'},
+	// Теневая — Extreme
+	{id:'abyss_king',name:'Король бездны',desc:'Найти 12 камней бездны',icon:'🌌',mine:9,tier:'extreme'},
+	// ☀️ Легендарная — Normal
+	{id:'legendary_hero',name:'Легенда',desc:'Найти 3 легендарных предмета',icon:'🏆',mine:10,tier:'normal'},
+	{id:'phoenix_rise',name:'Возрождение',desc:'Найти слезу феникса',icon:'🪶',mine:10,tier:'normal'},
+	// Легендарная — Hard
+	{id:'immortal',name:'Бессмертный',desc:'Найти 3 слезы феникса',icon:'🪶',mine:10,tier:'hard'},
+	{id:'aegis_bearer',name:'Эгида',desc:'Найти 10 эгид',icon:'🛡️',mine:10,tier:'hard'},
+	// Легендарная — Extreme
+	{id:'legend_collector',name:'Коллекционер легенд',desc:'Найти 8 легендарных предметов',icon:'🏆',mine:10,tier:'extreme'},
+	// Легендарная — Epic
+	{id:'god_of_legends',name:'Бог легенд',desc:'Найти 15 легендарных предметов',icon:'👑',mine:10,tier:'epic'},
+	// 🌋 Магматическая — Normal
+	{id:'magma_walker',name:'Магма-ходок',desc:'Найти 5 магма-камней',icon:'🪨',mine:11,tier:'normal'},
+	{id:'flame_keeper',name:'Хранитель огня',desc:'Найти 8 пламён',icon:'🔥',mine:11,tier:'normal'},
+	{id:'volcano_god',name:'Бог огня',desc:'Собрать все предметы шахты 11',icon:'🌋',mine:11,tier:'hard'},
+	// 🌀 Космическая — Normal
+	{id:'stardust_gatherer',name:'Звёздный пылесос',desc:'Найти 5 космической пыли',icon:'✨',mine:12,tier:'normal'},
+	{id:'nebula_seer',name:'Провидец туманностей',desc:'Найти 4 туманности',icon:'🌌',mine:12,tier:'hard'},
+	{id:'cosmic_master',name:'Властелин космоса',desc:'Собрать все предметы шахты 12',icon:'🌀',mine:12,tier:'hard'},
+	// Космическая — Extreme
+	{id:'supernova_god',name:'Сверхновая звезда',desc:'Найти 10 туманностей',icon:'💥',mine:12,tier:'extreme'},
+	// 🌈 Радужная — Normal
+	{id:'prism_collector',name:'Призматик',desc:'Найти 5 призм',icon:'🔮',mine:13,tier:'normal'},
+	{id:'rainbow_hunter',name:'Охотник за радугой',desc:'Найти 3 радужных самоцвета',icon:'🌈',mine:13,tier:'hard'},
+	{id:'rainbow_warrior',name:'Радужный воин',desc:'Собрать все предметы шахты 13',icon:'🌈',mine:13,tier:'hard'},
+	// 🐉 Драконья — Normal
+	{id:'dragon_scales',name:'Чешуйчатый',desc:'Найти 8 чешуй дракона',icon:'🟩',mine:14,tier:'normal'},
+	{id:'dragon_eye_collector',name:'Драконий глаз',desc:'Найти 3 ока дракона',icon:'👁️',mine:14,tier:'hard'},
+	{id:'dragon_slayer',name:'Убийца драконов',desc:'Собрать все предметы шахты 14',icon:'🐉',mine:14,tier:'hard'},
+	// Драконья — Extreme
+	{id:'dragon_lord',name:'Властелин драконов',desc:'Найти 10 оков дракона',icon:'🐉',mine:14,tier:'extreme'},
+	// ∞ Бесконечная — Normal
+	{id:'infinity_reach',name:'Дотянуться до звёзд',desc:'Найти 5 звёзд бесконечности',icon:'💫',mine:15,tier:'normal'},
+	{id:'eternal_seeker',name:'Искатель вечности',desc:'Найти 3 вечных кристалла',icon:'💠',mine:15,tier:'hard'},
+	{id:'infinite_one',name:'Бесконечный',desc:'Собрать все предметы шахты 15',icon:'∞',mine:15,tier:'hard'},
+	// Бесконечная — Epic
+	{id:'eternal_legend',name:'Вечная легенда',desc:'Найти 7 вечных кристаллов',icon:'💠',mine:15,tier:'epic'},
+	// Бонусные — Normal
+	{id:'combo_master',name:'Комбо-мастер',desc:'Достичь комбо 20',icon:'🔥',mine:99,tier:'normal'},
+	{id:'gold_million',name:'Миллионер',desc:'Заработать 2000 монет',icon:'💰',mine:99,tier:'normal'},
+	{id:'digger',name:'Землекоп',desc:'Прокачать лопату до 15',icon:'🗡️',mine:99,tier:'normal'},
+	{id:'strategist',name:'Стратег',desc:'Достичь 30 уровня',icon:'📊',mine:99,tier:'normal'},
+	// Бонусные — Hard
+	{id:'speed_demon',name:'Демон скорости',desc:'Прокачать ускорение до 10',icon:'⚡',mine:99,tier:'hard'},
+	{id:'time_wizard',name:'Маг времени',desc:'Прокачать время до 10',icon:'⏱',mine:99,tier:'hard'},
+	{id:'explorer',name:'Исследователь',desc:'Открыть все 15 шахт',icon:'🗺️',mine:99,tier:'hard'},
+	// Бонусные — Extreme
+	{id:'combo_legend',name:'Легенда комбо',desc:'Достичь комбо 50',icon:'🔥',mine:99,tier:'extreme'},
+	{id:'billionaire',name:'Миллиардер',desc:'Заработать 10000 монет',icon:'💰',mine:99,tier:'extreme'},
+	{id:'shovel_legend',name:'Легендарная лопата',desc:'Прокачать лопату до 25',icon:'🗡️',mine:99,tier:'extreme'},
+	{id:'ultra_level',name:'Ультра-уровень',desc:'Достичь 50 уровня',icon:'📊',mine:99,tier:'extreme'},
+	{id:'click_frenzy',name:'Клик-маньяк',desc:'Сделать 5000 кликов',icon:'👆',mine:99,tier:'extreme'},
+	{id:'bomb_immune',name:'Неуязвимый',desc:'Поймать 100 бомб',icon:'💣',mine:99,tier:'extreme'},
+	{id:'lucky_god',name:'Бог удачи',desc:'Прокачать удачу до 20',icon:'🍀',mine:99,tier:'extreme'},
+	// Бонусные — Epic
+	{id:'combo_god',name:'Бог комбо',desc:'Достичь комбо 100',icon:'🔥',mine:99,tier:'epic'},
+	{id:'trillionaire',name:'Триллионер',desc:'Заработать 50000 монет',icon:'💰',mine:99,tier:'epic'},
+	{id:'max_level',name:'Максимальный уровень',desc:'Достичь 100 уровня',icon:'📊',mine:99,tier:'epic'},
+	{id:'true_immortal',name:'Бессмертный',desc:'Сделать 25000 кликов',icon:'👆',mine:99,tier:'epic'},
+	{id:'perfectionist',name:'Перфекционист',desc:'Найти все предметы всех шахт',icon:'💎',mine:99,tier:'epic'}
 ];
 
 // DOM
@@ -564,8 +739,41 @@ var scoreSpan=D('scoreDisplay'),highScoreSpan=D('highScoreDisplay'),collectionSp
 var progressBar=D('progressBar'),progressLabel=D('progressLabel');
 var shovelLevelSpan=D('shovelLevel'),luckLevelSpan=D('luckLevel'),comboDisplay=D('comboDisplay');
 var messageEl=D('messageDisplay'),soundBtn=D('soundBtn');
-var shovelBtn=D('shovelUpgrade'),luckBtn=D('luckUpgrade'),boostBtn=D('boostUpgrade'),timeBtn=D('timeUpgrade'),resetBtn=D('resetBtn');
-var pauseBtn=D('pauseBtn'),pauseOverlay=D('pauseOverlay');
+var pauseBtn=D('pauseBtn'),pauseOverlay=D('pauseOverlay'),pauseProfileBtn=D('pauseProfileBtn');
+var profileScreen=D('profileScreen'),profileCloseBtn=D('profileCloseBtn'),profileTab=D('profileTab'),shopTab=D('shopTab');
+var profileCard=D('profileCard'),profileAvatarFrame=D('profileAvatarFrame'),profileTitleBadge=D('profileTitleBadge');
+var profileLevelDisplay=D('profileLevelDisplay'),profileMineDisplay=D('profileMineDisplay');
+var profileStatScore=D('profileStatScore'),profileStatAchs=D('profileStatAchs'),profileStatCombo=D('profileStatCombo');
+var profileStatShovel=D('profileStatShovel'),profileStatColl=D('profileStatColl'),profileStatClicks=D('profileStatClicks');
+var shopShovelBtn=D('shopShovelBtn'),shopLuckBtn=D('shopLuckBtn'),shopBoostBtn=D('shopBoostBtn'),shopTimeBtn=D('shopTimeBtn');
+var shopShovelLvl=D('shopShovelLvl'),shopLuckLvl=D('shopLuckLvl'),shopBoostLvl=D('shopBoostLvl'),shopTimeLvl=D('shopTimeLvl');
+var shopShovelCost=D('shopShovelCost'),shopLuckCost=D('shopLuckCost'),shopBoostCost=D('shopBoostCost'),shopTimeCost=D('shopTimeCost');
+var shopFrameList=D('shopFrameList'),shopTitleList=D('shopTitleList');
+var gameProfileBtn=D('gameProfileBtn');
+
+// Profile cosmetics
+var PROFILE_FRAMES=[
+	{id:'default',name:'Классическая',icon:'⬜',cost:0,cls:''},
+	{id:'copper',name:'Медная',icon:'🟫',cost:500,cls:'rare'},
+	{id:'silver',name:'Серебряная',icon:'⬜',cost:2000,cls:'rare'},
+	{id:'gold',name:'Золотая',icon:'🟨',cost:5000,cls:'epic'},
+	{id:'crystal',name:'Кристальная',icon:'💎',cost:10000,cls:'epic'},
+	{id:'dark',name:'Теневая',icon:'⬛',cost:15000,cls:'legendary'},
+	{id:'legend',name:'Легендарная',icon:'🏆',cost:25000,cls:'legendary'},
+	{id:'infinite',name:'Бесконечная',icon:'∞',cost:50000,cls:'infinite'}
+];
+var PROFILE_TITLES=[
+	{id:'novice',name:'Новичок',icon:'🌱',cost:0,needLevel:1},
+	{id:'digger',name:'Копатель',icon:'🗡️',cost:1000,needLevel:5},
+	{id:'miner',name:'Шахтёр',icon:'⛏️',cost:3000,needLevel:10},
+	{id:'explorer',name:'Исследователь',icon:'🗺️',cost:8000,needLevel:20},
+	{id:'master',name:'Мастер',icon:'👑',cost:15000,needLevel:35},
+	{id:'legend',name:'Легенда',icon:'🏆',cost:30000,needLevel:50},
+	{id:'infinite',name:'Бесконечный',icon:'∞',cost:60000,needLevel:80}
+];
+
+// Profile state
+var profileState={equippedFrame:'default',equippedTitle:'novice',ownedFrames:['default'],ownedTitles:['novice']};
 
 // State
 var score=0,highScore=0,collection=[],shovelLevel=1,luckLevel=0,playerLevel=1;
@@ -580,8 +788,9 @@ var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,t
 var unlocked={};
 var currentMine=0;
 var bannerTimeout=null;
-var gameMode='normal'; // 'normal' or 'endless'
-var endlessHighScore=0;
+var gameMode='adventure'; // 'adventure' or 'score'
+var scoreModeHighScore=0;
+var bombHits=0;
 
 // Load
 try{
@@ -592,13 +801,19 @@ try{
 		if(d.stats&&d.stats.itemCounts) for(var k in d.stats.itemCounts) stats.itemCounts[k]=d.stats.itemCounts[k];
 		if(d.unlocked) for(var k in d.unlocked) if(d.unlocked[k]) unlocked[k]=true;
 		if(d.currentMine!==undefined) currentMine=d.currentMine;
+		if(d.profile){profileState.equippedFrame=d.profile.equippedFrame||'default';profileState.equippedTitle=d.profile.equippedTitle||'novice';profileState.ownedFrames=d.profile.ownedFrames||['default'];profileState.ownedTitles=d.profile.ownedTitles||['novice'];}
 	}
 }catch(e){}
+// Load muted state
+try{muted=localStorage.getItem('moleMuted')==='1';}catch(e){}
+var muteIcon=muted?'🔇':'🔊';
+menuSoundBtn.textContent=muteIcon;
+soundBtn.textContent=muteIcon;
 checkAchievements();
 
 function saveData(){
 	try{
-		localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked,currentMine:currentMine}));
+		localStorage.setItem('moleData',JSON.stringify({highScore:highScore,stats:stats,unlocked:unlocked,currentMine:currentMine,profile:profileState}));
 	}catch(e){}
 }
 
@@ -615,6 +830,8 @@ function checkAchievements(){
 		bronze_collector:function(){return countFinds('bronze')>=3;},
 		silver_fever:function(){return countFinds('silver')>=5;},
 		gold_rush:function(){return countFinds('gold')>=10;},
+		silver_master:function(){return countFinds('silver')>=25;},
+		gold_hoarder:function(){return countFinds('gold')>=30;},
 		crystal_gatherer:function(){return countFinds('crystal')>=3;},
 		artifact_hunter:function(){return countFinds('artifact')>=3;},
 		crystal_master:function(){return countFinds('crystal')>=10;},
@@ -623,6 +840,7 @@ function checkAchievements(){
 		king_slayer:function(){return stats.totalKings>=10;},
 		bomb_proof:function(){return stats.totalBombs>=25;},
 		king_of_kings:function(){return stats.totalKings>=20;},
+		bomb_void:function(){return stats.totalBombs>=50;},
 		lightning_rod:function(){return stats.totalFast>=15;},
 		star_gazer:function(){return countFinds('star')>=5;},
 		storm_chaser:function(){return stats.totalFast>=30;},
@@ -630,6 +848,7 @@ function checkAchievements(){
 		lucky_clover:function(){return countFinds('clover')>=5;},
 		gift_wrapper:function(){return countFinds('gift')>=5;},
 		fortune_cookie:function(){return countFinds('clover')>=15;},
+		gift_mountain:function(){return countFinds('gift')>=15;},
 		ghost_buster:function(){return stats.totalGhosts>=10;},
 		moon_gatherer:function(){return countFinds('moonstone')>=3;},
 		ghost_hunter:function(){return stats.totalGhosts>=25;},
@@ -637,30 +856,38 @@ function checkAchievements(){
 		volcanic:function(){return countFinds('ruby')>=3;},
 		ember_catcher:function(){return countFinds('ember')>=5;},
 		lava_collector:function(){return countFinds('ruby')>=10;},
+		ember_master:function(){return countFinds('ember')>=15;},
 		frozen_heart:function(){return countFinds('sapphire')>=3;},
 		frost_walker:function(){return countFinds('frostgem')>=3;},
 		ice_king:function(){return countFinds('sapphire')>=8;},
 		shadow_walker:function(){return countFinds('shadowgem')>=3;},
 		void_touch:function(){return countFinds('voidgem')>=2;},
 		void_master:function(){return countFinds('voidgem')>=6;},
+		abyss_king:function(){return countFinds('voidgem')>=12;},
 		legendary_hero:function(){return countFinds('crown_legend')+countFinds('star_master')+countFinds('aegis')>=3;},
 		phoenix_rise:function(){return countFinds('phoenix_tear')>=1;},
 		immortal:function(){return countFinds('phoenix_tear')>=3;},
+		aegis_bearer:function(){return countFinds('aegis')>=10;},
+		legend_collector:function(){return countFinds('crown_legend')+countFinds('star_master')+countFinds('aegis')+countFinds('phoenix_tear')>=8;},
+		god_of_legends:function(){return countFinds('crown_legend')+countFinds('star_master')+countFinds('aegis')+countFinds('phoenix_tear')>=15;},
 		magma_walker:function(){return countFinds('magma_stone')>=5;},
 		flame_keeper:function(){return countFinds('flame')>=8;},
 		volcano_god:function(){var m=MINES[10];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
 		stardust_gatherer:function(){return countFinds('cosmic_dust')>=5;},
 		nebula_seer:function(){return countFinds('nebula')>=4;},
 		cosmic_master:function(){var m=MINES[11];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
+		supernova_god:function(){return countFinds('nebula')>=10;},
 		prism_collector:function(){return countFinds('prism')>=5;},
 		rainbow_hunter:function(){return countFinds('rainbow_gem')>=3;},
 		rainbow_warrior:function(){var m=MINES[12];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
 		dragon_scales:function(){return countFinds('dragon_scale')>=8;},
 		dragon_eye_collector:function(){return countFinds('dragon_eye')>=3;},
 		dragon_slayer:function(){var m=MINES[13];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
+		dragon_lord:function(){return countFinds('dragon_eye')>=10;},
 		infinity_reach:function(){return countFinds('infinity_star')>=5;},
 		eternal_seeker:function(){return countFinds('eternal_crystal')>=3;},
 		infinite_one:function(){var m=MINES[14];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
+		eternal_legend:function(){return countFinds('eternal_crystal')>=7;},
 		combo_master:function(){return stats.bestCombo>=20;},
 		gold_million:function(){return stats.totalEarnings>=2000;},
 		digger:function(){return stats.maxShovel>=15;},
@@ -671,6 +898,12 @@ function checkAchievements(){
 		ultra_level:function(){return stats.maxLevel>=50;},
 		click_frenzy:function(){return stats.totalClicks>=5000;},
 		bomb_immune:function(){return stats.totalBombs>=100;},
+		lucky_god:function(){return luckLevel>=20;},
+		combo_god:function(){return stats.bestCombo>=100;},
+		trillionaire:function(){return stats.totalEarnings>=50000;},
+		max_level:function(){return stats.maxLevel>=100;},
+		true_immortal:function(){return stats.totalClicks>=25000;},
+		perfectionist:function(){var all=ITEMS.filter(function(i){return i.points>=0;});return all.every(function(i){return collection.indexOf(i.emoji)>-1;});},
 		speed_demon:function(){return boostLevel>=10;},
 		time_wizard:function(){return timeLevel>=10;},
 		explorer:function(){return currentMine>=14;}
@@ -776,8 +1009,9 @@ function renderAchievements(){
 	for(var i=0;i<ACHIEVEMENTS.length;i++){
 		var a=ACHIEVEMENTS[i];
 		if(a.mine<=15&&a.mine>currentMine+1) continue;
-		shown++;
 		var u=unlocked[a.id];
+		if(!u&&(a.tier==='extreme'||a.tier==='epic')) continue;
+		shown++;
 		var div=document.createElement('div');
 		div.className='ach-item'+(u?' unlocked':'');
 		div.innerHTML='<div class="ach-icon">'+(a.icon||'🏆')+'</div><div class="ach-info"><div class="ach-name">'+(u?'✅ ':'')+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div><div class="ach-status">'+(u?'✅':'🔒')+'</div>';
@@ -787,8 +1021,10 @@ function renderAchievements(){
 	var hintParts=[];
 	hintParts.push('⛏ Шахта '+(currentMine+1)+'/'+MINES.length+' · '+getMine().name);
 	hintParts.push('🏆 '+totalAll+'/'+total);
-	var rem=ACHIEVEMENTS.filter(function(a){return a.mine===99||(a.mine<=currentMine+1&&!unlocked[a.id]);}).length;
+	var visibleAchs=ACHIEVEMENTS.filter(function(a){return (a.tier!=='extreme'&&a.tier!=='epic')||unlocked[a.id];});
+	var rem=visibleAchs.filter(function(a){return a.mine===99||(a.mine<=currentMine+1&&!unlocked[a.id]);}).length;
 	hintParts.push('🔍 осталось '+rem);
+	hintParts.push('🟢норм/🟡сложн · 🔴экстрим/🟣эпик скрыты');
 	achHint.textContent=hintParts.join(' · ');
 	achHint.className='ach-hint revealed';
 }
@@ -822,9 +1058,9 @@ function spawnFloatText(x,y,t,c){
 	setTimeout(function(){if(e.parentNode)e.remove();floatTextCount--;},700);
 }
 function spawnParticles(x,y,c,n){
-	n=n||8;if(particleCount>25)return;
-	if(document.body.classList.contains('is-mobile'))n=Math.min(n,4);
-	if(document.body.classList.contains('is-mobile')&&particleCount>10)return;
+	n=n||6;if(particleCount>20)return;
+	if(document.body.classList.contains('is-mobile'))n=Math.min(n,3);
+	if(document.body.classList.contains('is-mobile')&&particleCount>8)return;
 	for(var i=0;i<n;i++){
 		var p=document.createElement('div');p.className='particle';
 		var a=Math.random()*Math.PI*2,d=20+Math.random()*40;
@@ -856,7 +1092,7 @@ function addCombo(){
 function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 
 function getActiveItems(){
-	if(gameMode==='endless')return ITEMS.filter(function(i){return ['gold','silver','bronze','bomb','king','fast'].indexOf(i.id)>-1;});
+	if(gameMode==='score')return ITEMS.filter(function(i){return ['gold','silver','bronze','bomb','king','fast'].indexOf(i.id)>-1;});
 	var ids=[];
 	for(var m=0;m<=currentMine&&m<MINES.length;m++){
 		for(var j=0;j<MINES[m].items.length;j++){
@@ -900,7 +1136,7 @@ function generateItem(){
 }
 
 function checkLevelUp(){
-	if(gameMode==='endless')return;
+	if(gameMode==='score')return;
 	var nl=1+Math.floor(score/(20+playerLevel*3));
 	if(nl!==playerLevel&&nl>=1){
 		playerLevel=nl;levelSpan.textContent=playerLevel;stats.maxLevel=Math.max(stats.maxLevel,playerLevel);saveData();
@@ -1021,42 +1257,51 @@ function handleCellClick(idx){
 		score=Math.max(0,score+pts);
 		soundBomb();combo=0;updateCombo();screenShake();
 		setMessage('💥 '+item.name);
+		if(gameMode==='score'){
+			bombHits++;
+			setMessage('💥 Бомба! ('+bombHits+'/3)');
+			if(bombHits>=3){
+				gameActive=false;if(spawnTimeout)clearTimeout(spawnTimeout);
+				setMessage('💀 Игра окончена! Счёт: '+score);
+				updateUI();return;
+			}
+		}
 	}else{setMessage('😐 '+item.emoji);}
 	spawnFloatText(pos.x-15,pos.y-20,(crit?'КРИТ! ':'')+pts,item.color||'#fff');
-	spawnParticles(pos.x,pos.y,item.color||'#ffd700',pts>0?12:18);
+	spawnParticles(pos.x,pos.y,item.color||'#ffd700',pts>0?8:14);
 	checkLevelUp();
 	// Особые эффекты для предметов
-	if(item.id==='star'){spawnParticles(pos.x,pos.y,'#fff176',20);tryVibrate(20);}
-	else if(item.id==='clover'){luckLevel++;spawnParticles(pos.x,pos.y,'#66bb6a',20);setMessage('🍀 Удача +1!');tryVibrate(20);}
-	else if(item.id==='gift'){spawnParticles(pos.x,pos.y,'#ff7043',25);tryVibrate(25);}
-	else if(item.id==='moonstone'){spawnParticles(pos.x,pos.y,'#e0c0ff',30);tryVibrate(30);score+=2;setMessage('🌙 Магия луны! +2');}
-	else if(item.id==='ruby'){spawnParticles(pos.x,pos.y,'#ff2040',35);tryVibrate(35);}
-	else if(item.id==='ember'){spawnParticles(pos.x,pos.y,'#ff6b35',25);tryVibrate(20);addCombo();addCombo();}
-	else if(item.id==='sapphire'){spawnParticles(pos.x,pos.y,'#4488ff',35);tryVibrate(35);}
-	else if(item.id==='frostgem'){spawnParticles(pos.x,pos.y,'#88eeff',30);tryVibrate(30);}
-	else if(item.id==='shadowgem'){spawnParticles(pos.x,pos.y,'#7744cc',40);tryVibrate(40);score+=3;}
-	else if(item.id==='voidgem'){spawnParticles(pos.x,pos.y,'#330088',50);tryVibrate(50);score+=5;screenShake();}
-	else if(item.id==='crown_legend'){spawnParticles(pos.x,pos.y,'#ffd700',45);tryVibrate(60);score+=10;}
-	else if(item.id==='star_master'){spawnParticles(pos.x,pos.y,'#ff69b4',45);tryVibrate(60);score+=8;}
-	else if(item.id==='aegis'){spawnParticles(pos.x,pos.y,'#ff6b35',40);tryVibrate(50);}
-	else if(item.id==='phoenix_tear'){spawnParticles(pos.x,pos.y,'#ff8800',60);tryVibrate(80);score+=20;setMessage('🪶 Феникс! +20!');powerup2x=true;if(powerupTimer)clearTimeout(powerupTimer);powerupTimer=setTimeout(function(){powerup2x=false;},8000);}
-	else if(item.id==='magma_stone'){spawnParticles(pos.x,pos.y,'#ff4500',25);tryVibrate(25);}
-	else if(item.id==='flame'){spawnParticles(pos.x,pos.y,'#ff6600',30);tryVibrate(30);score+=2;setMessage('🔥 Жар! +2');}
-	else if(item.id==='cosmic_dust'){spawnParticles(pos.x,pos.y,'#c0c0ff',25);tryVibrate(25);}
-	else if(item.id==='nebula'){spawnParticles(pos.x,pos.y,'#8844ff',40);tryVibrate(45);score+=4;}
-	else if(item.id==='prism'){spawnParticles(pos.x,pos.y,'#ff88ff',30);tryVibrate(30);}
-	else if(item.id==='rainbow_gem'){spawnParticles(pos.x,pos.y,'#ff4488',45);tryVibrate(55);score+=5;setMessage('🌈 Радуга! +5');}
-	else if(item.id==='dragon_scale'){spawnParticles(pos.x,pos.y,'#44cc44',30);tryVibrate(30);}
-	else if(item.id==='dragon_eye'){spawnParticles(pos.x,pos.y,'#ff4444',50);tryVibrate(65);score+=8;screenShake();setMessage('👁️ Око! +8');}
-	else if(item.id==='infinity_star'){spawnParticles(pos.x,pos.y,'#ffd700',55);tryVibrate(70);score+=12;setMessage('💫 Бесконечность! +12');if(powerupTimer)clearTimeout(powerupTimer);powerup2x=true;powerupTimer=setTimeout(function(){powerup2x=false;},5000);}
-	else if(item.id==='eternal_crystal'){spawnParticles(pos.x,pos.y,'#ffffff',70);tryVibrate(100);score+=25;screenShake();setMessage('💠 Вечность! +25');}
-	if(item.points>=8)spawnParticles(pos.x,pos.y,item.color||'#ffd700',30);
-	if(gameMode!=='endless'&&!collection.includes(item.emoji)){
+	if(item.id==='star'){spawnParticles(pos.x,pos.y,'#fff176',12);tryVibrate(20);}
+	else if(item.id==='clover'){luckLevel++;spawnParticles(pos.x,pos.y,'#66bb6a',12);setMessage('🍀 Удача +1!');tryVibrate(20);}
+	else if(item.id==='gift'){spawnParticles(pos.x,pos.y,'#ff7043',15);tryVibrate(25);}
+	else if(item.id==='moonstone'){spawnParticles(pos.x,pos.y,'#e0c0ff',18);tryVibrate(30);score+=2;setMessage('🌙 Магия луны! +2');}
+	else if(item.id==='ruby'){spawnParticles(pos.x,pos.y,'#ff2040',20);tryVibrate(35);}
+	else if(item.id==='ember'){spawnParticles(pos.x,pos.y,'#ff6b35',15);tryVibrate(20);addCombo();addCombo();}
+	else if(item.id==='sapphire'){spawnParticles(pos.x,pos.y,'#4488ff',20);tryVibrate(35);}
+	else if(item.id==='frostgem'){spawnParticles(pos.x,pos.y,'#88eeff',18);tryVibrate(30);}
+	else if(item.id==='shadowgem'){spawnParticles(pos.x,pos.y,'#7744cc',22);tryVibrate(40);score+=3;}
+	else if(item.id==='voidgem'){spawnParticles(pos.x,pos.y,'#330088',28);tryVibrate(50);score+=5;screenShake();}
+	else if(item.id==='crown_legend'){spawnParticles(pos.x,pos.y,'#ffd700',25);tryVibrate(60);score+=10;}
+	else if(item.id==='star_master'){spawnParticles(pos.x,pos.y,'#ff69b4',25);tryVibrate(60);score+=8;}
+	else if(item.id==='aegis'){spawnParticles(pos.x,pos.y,'#ff6b35',22);tryVibrate(50);}
+	else if(item.id==='phoenix_tear'){spawnParticles(pos.x,pos.y,'#ff8800',35);tryVibrate(80);score+=20;setMessage('🪶 Феникс! +20!');powerup2x=true;if(powerupTimer)clearTimeout(powerupTimer);powerupTimer=setTimeout(function(){powerup2x=false;},8000);}
+	else if(item.id==='magma_stone'){spawnParticles(pos.x,pos.y,'#ff4500',15);tryVibrate(25);}
+	else if(item.id==='flame'){spawnParticles(pos.x,pos.y,'#ff6600',18);tryVibrate(30);score+=2;setMessage('🔥 Жар! +2');}
+	else if(item.id==='cosmic_dust'){spawnParticles(pos.x,pos.y,'#c0c0ff',15);tryVibrate(25);}
+	else if(item.id==='nebula'){spawnParticles(pos.x,pos.y,'#8844ff',22);tryVibrate(45);score+=4;}
+	else if(item.id==='prism'){spawnParticles(pos.x,pos.y,'#ff88ff',18);tryVibrate(30);}
+	else if(item.id==='rainbow_gem'){spawnParticles(pos.x,pos.y,'#ff4488',25);tryVibrate(55);score+=5;setMessage('🌈 Радуга! +5');}
+	else if(item.id==='dragon_scale'){spawnParticles(pos.x,pos.y,'#44cc44',18);tryVibrate(30);}
+	else if(item.id==='dragon_eye'){spawnParticles(pos.x,pos.y,'#ff4444',30);tryVibrate(65);score+=8;screenShake();setMessage('👁️ Око! +8');}
+	else if(item.id==='infinity_star'){spawnParticles(pos.x,pos.y,'#ffd700',32);tryVibrate(70);score+=12;setMessage('💫 Бесконечность! +12');if(powerupTimer)clearTimeout(powerupTimer);powerup2x=true;powerupTimer=setTimeout(function(){powerup2x=false;},5000);}
+	else if(item.id==='eternal_crystal'){spawnParticles(pos.x,pos.y,'#ffffff',40);tryVibrate(100);score+=25;screenShake();setMessage('💠 Вечность! +25');}
+	if(item.points>=8)spawnParticles(pos.x,pos.y,item.color||'#ffd700',18);
+	if(gameMode!=='score'&&!collection.includes(item.emoji)){
 		clicksSinceNewItem=0;
 		collection.push(item.emoji);
 		var ct=getCollectionTarget();
 		if(collection.length<ct){setMessage('⭐ '+item.emoji);tryVibrate(30);spawnParticles(pos.x,pos.y,'#ffd700',20);}
-	}else if(pts>0&&gameMode!=='endless'){
+	}else if(pts>0&&gameMode!=='score'){
 		clicksSinceNewItem++;
 	}
 	updateUI();saveData();checkAchievements();
@@ -1071,21 +1316,21 @@ function handleCellClick(idx){
 function scheduleSpawn(){
 	if(!gameActive)return;
 	var isMob=document.body.classList.contains('is-mobile');
-	var endless=gameMode==='endless';
-	var effLvl=endless?20:Math.min(playerLevel,20);
-	var base=endless?(isMob?1500:1000):(isMob?2800:2200);
-	var reduction=endless?Math.min(1500,Math.floor(score/30)*30):Math.min(800,Math.floor(score/50)*40);
-	var intv=Math.max(endless?(isMob?800:500):(isMob?2000:1200),base-reduction)+Math.random()*400;
+	var scoreMode=gameMode==='score';
+	var effLvl=scoreMode?20:Math.min(playerLevel,20);
+	var base=scoreMode?(isMob?2200:1600):(isMob?3500:2800);
+	var reduction=scoreMode?Math.min(1200,Math.floor(score/40)*25):Math.min(600,Math.floor(score/60)*30);
+	var intv=Math.max(scoreMode?(isMob?1200:800):(isMob?2500:1800),base-reduction)+Math.random()*500;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var maxCount=endless?(isMob?5:8):Math.min(isMob?3:5,2+Math.floor(effLvl/4)+Math.floor(Math.min(currentMine,8)/2));
+		var maxCount=scoreMode?(isMob?3:5):Math.min(isMob?2:3,1+Math.floor(effLvl/5)+Math.floor(Math.min(currentMine,6)/3));
 		var count=1+Math.floor(Math.random()*maxCount);
 		for(var i=0;i<count;i++){
 			setTimeout(function(n){return function(){
 				if(!gameActive)return;
 				var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}
 				if(inv.length>0){var idx=inv[Math.floor(Math.random()*inv.length)];spawnMole(idx);}
-			};}(i),i*150);
+			};}(i),i*200);
 		}
 		scheduleSpawn();
 	},intv);
@@ -1102,22 +1347,19 @@ function startSpawning(){
 
 
 function updateUI(){
-	var endless=gameMode==='endless';
+	var scoreMode=gameMode==='score';
 	scoreSpan.textContent=score;
-	if(!endless&&score>highScore){highScore=score;saveData();}
-	if(endless&&score>endlessHighScore){endlessHighScore=score;}
-	highScoreSpan.textContent=endless?endlessHighScore:highScore;
-	levelSpan.textContent=endless?'∞':playerLevel;
-	collectionSpan.textContent=endless?'-':collection.length;
-	var ct=endless?1:getCollectionTarget();
+	if(!scoreMode&&score>highScore){highScore=score;saveData();}
+	if(scoreMode&&score>scoreModeHighScore){scoreModeHighScore=score;}
+	highScoreSpan.textContent=scoreMode?scoreModeHighScore:highScore;
+	levelSpan.textContent=scoreMode?'∞':playerLevel;
+	collectionSpan.textContent=scoreMode?'-':collection.length;
+	var ct=scoreMode?1:getCollectionTarget();
 	D('collectionTargetDisplay').textContent=ct;
-	var pct=endless?0:collection.length/ct*100;
-	progressBar.style.width=pct+'%';progressLabel.textContent=endless?'∞':collection.length+'/'+ct;
-	shovelLevelSpan.textContent=endless?'-':shovelLevel;luckLevelSpan.textContent=endless?'-':luckLevel;
-	var shopVis=endless?'none':'';
-	shovelBtn.style.display=shopVis;luckBtn.style.display=shopVis;boostBtn.style.display=shopVis;timeBtn.style.display=shopVis;resetBtn.style.display=shopVis;
-	shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;boostBtn.disabled=!gameActive;timeBtn.disabled=!gameActive;
-	D('mineDisplay').textContent=endless?'∞':getMine().name.split(' ')[0]+' '+(currentMine+1);
+	var pct=scoreMode?0:collection.length/ct*100;
+	progressBar.style.width=pct+'%';progressLabel.textContent=scoreMode?'∞':collection.length+'/'+ct;
+	shovelLevelSpan.textContent=scoreMode?'-':shovelLevel;luckLevelSpan.textContent=scoreMode?'-':luckLevel;
+	D('mineDisplay').textContent=scoreMode?'∞':getMine().name.split(' ')[0]+' '+(currentMine+1);
 }
 
 function setMessage(t){
@@ -1127,30 +1369,107 @@ function setMessage(t){
 }
 
 function upgradeShovel(){
-	if(!gameActive||gameMode==='endless')return;
-	var cost=Math.floor(15*Math.pow(1.5,shovelLevel-1));if(score<cost){setMessage('💰 '+cost);return;}
+	if(!gameActive||gameMode==='score')return;
+	var cost=Math.floor(15*Math.pow(1.5,shovelLevel-1));if(score<cost){setMessage('💰 Нужно '+cost);return;}
 	score-=cost;shovelLevel++;if(shovelLevel>stats.maxShovel){stats.maxShovel=shovelLevel;saveData();}
-	soundGold();setMessage('⬆ Лопата '+shovelLevel);updateUI();checkAchievements();
+	soundGold();setMessage('⬆ Лопата '+shovelLevel);updateUI();checkAchievements();renderShop();
 }
 function upgradeLuck(){
 	if(!gameActive)return;
-	var cost=Math.floor(20*Math.pow(1.5,luckLevel));if(score<cost){setMessage('💰 '+cost);return;}
-	score-=cost;luckLevel++;soundGold();setMessage('🍀 Удача '+luckLevel);updateUI();
+	var cost=Math.floor(20*Math.pow(1.5,luckLevel));if(score<cost){setMessage('💰 Нужно '+cost);return;}
+	score-=cost;luckLevel++;soundGold();setMessage('🍀 Удача '+luckLevel);updateUI();renderShop();
 }
 function upgradeBoost(){
 	if(!gameActive)return;
-	var cost=Math.floor(100*Math.pow(2,boostLevel));if(score<cost){setMessage('💰 '+cost);return;}
-	score-=cost;boostLevel++;soundGold();setMessage('⚡ Ускорение '+boostLevel);updateUI();
+	var cost=Math.floor(100*Math.pow(2,boostLevel));if(score<cost){setMessage('💰 Нужно '+cost);return;}
+	score-=cost;boostLevel++;soundGold();setMessage('⚡ Ускорение '+boostLevel);updateUI();renderShop();
 }
 function upgradeTime(){
 	if(!gameActive)return;
-	var cost=Math.floor(80*Math.pow(2,timeLevel));if(score<cost){setMessage('💰 '+cost);return;}
-	score-=cost;timeLevel++;soundGold();setMessage('⏱ Время '+timeLevel);updateUI();
+	var cost=Math.floor(80*Math.pow(2,timeLevel));if(score<cost){setMessage('💰 Нужно '+cost);return;}
+	score-=cost;timeLevel++;soundGold();setMessage('⏱ Время '+timeLevel);updateUI();renderShop();
+}
+
+// ===== Profile & Shop =====
+function renderProfile(){
+	var isScore=gameMode==='score';
+	profileLevelDisplay.textContent=isScore?'∞':playerLevel;
+	profileMineDisplay.textContent=isScore?'∞':getMine().name+' '+(currentMine+1)+'/'+MINES.length;
+	profileStatScore.textContent=score;
+	var achs=getUnlockedCount();
+	profileStatAchs.textContent=achs+'/'+ACHIEVEMENTS.length;
+	profileStatCombo.textContent='x'+stats.bestCombo;
+	profileStatShovel.textContent=shovelLevel;
+	profileStatColl.textContent=stats.collectionCount;
+	profileStatClicks.textContent=stats.totalClicks;
+	// Apply cosmetics
+	var frame=PROFILE_FRAMES.find(function(f){return f.id===profileState.equippedFrame;});
+	if(frame){profileAvatarFrame.className='profile-avatar-frame'+(frame.cls?' '+frame.cls:'');}
+	var title=PROFILE_TITLES.find(function(t){return t.id===profileState.equippedTitle;});
+	if(title){profileTitleBadge.textContent=title.icon+' '+title.name;}
+}
+function renderShop(){
+	if(gameMode==='score'){shopShovelBtn.classList.add('disabled');shopLuckBtn.classList.add('disabled');shopBoostBtn.classList.add('disabled');shopTimeBtn.classList.add('disabled');}else{
+		shopShovelBtn.classList.remove('disabled');shopLuckBtn.classList.remove('disabled');shopBoostBtn.classList.remove('disabled');shopTimeBtn.classList.remove('disabled');
+	}
+	shopShovelLvl.textContent=shovelLevel;shopLuckLvl.textContent=luckLevel;shopBoostLvl.textContent=boostLevel;shopTimeLvl.textContent=timeLevel;
+	var sc=score||0;
+	var scost=Math.floor(15*Math.pow(1.5,shovelLevel-1));shopShovelCost.textContent=scost+'💰';shopShovelBtn.classList.toggle('disabled',gameMode==='score'||sc<scost);
+	var lcost=Math.floor(20*Math.pow(1.5,luckLevel));shopLuckCost.textContent=lcost+'💰';shopLuckBtn.classList.toggle('disabled',gameMode==='score'||sc<lcost);
+	var bcost=Math.floor(100*Math.pow(2,boostLevel));shopBoostCost.textContent=bcost+'💰';shopBoostBtn.classList.toggle('disabled',gameMode==='score'||sc<bcost);
+	var tcost=Math.floor(80*Math.pow(2,timeLevel));shopTimeCost.textContent=tcost+'💰';shopTimeBtn.classList.toggle('disabled',gameMode==='score'||sc<tcost);
+	renderCosmetics();
+}
+function renderCosmetics(){
+	// Frames
+	shopFrameList.innerHTML='';
+	PROFILE_FRAMES.forEach(function(f){
+		var owned=profileState.ownedFrames.indexOf(f.id)>-1;
+		var equipped=profileState.equippedFrame===f.id;
+		var canBuy=!owned&&score>=f.cost;
+		var div=document.createElement('div');
+		div.className='shop-cosmetic-item'+(owned?' owned':'')+(equipped?' equipped':'')+(f.cost>0&&!owned&&score<f.cost?' locked':'');
+		div.innerHTML='<span class="shop-cosmetic-icon">'+f.icon+'</span><span class="shop-cosmetic-name">'+f.name+'</span><span class="shop-cosmetic-status">'+(equipped?'✅':(owned?'В наличии':'💰'+f.cost))+'</span>';
+		div.addEventListener('click',function(){buyOrEquipFrame(f.id,owned,equipped);});
+		shopFrameList.appendChild(div);
+	});
+	// Titles
+	shopTitleList.innerHTML='';
+	PROFILE_TITLES.forEach(function(t){
+		var owned=profileState.ownedTitles.indexOf(t.id)>-1;
+		var equipped=profileState.equippedTitle===t.id;
+		var canBuy=!owned&&score>=t.cost&&playerLevel>=t.needLevel;
+		var locked=!owned&&(score<t.cost||playerLevel<t.needLevel);
+		var div=document.createElement('div');
+		div.className='shop-cosmetic-item'+(owned?' owned':'')+(equipped?' equipped':'')+(locked?' locked':'');
+		div.innerHTML='<span class="shop-cosmetic-icon">'+t.icon+'</span><span class="shop-cosmetic-name">'+t.name+'</span><span class="shop-cosmetic-status">'+(equipped?'✅':(owned?'В наличии':(playerLevel<t.needLevel?'📊ур.'+t.needLevel:'💰'+t.cost)))+'</span>';
+		div.addEventListener('click',function(){buyOrEquipTitle(t.id,owned,equipped);});
+		shopTitleList.appendChild(div);
+	});
+}
+function buyOrEquipFrame(id,owned,equipped){
+	if(equipped)return;
+	if(owned){profileState.equippedFrame=id;saveData();renderCosmetics();renderProfile();return;}
+	var f=PROFILE_FRAMES.find(function(x){return x.id===id;});
+	if(!f||score<f.cost)return;
+	score-=f.cost;profileState.ownedFrames.push(id);profileState.equippedFrame=id;saveData();
+	updateUI();setMessage('🖼 Рамка "'+f.name+'" куплена!');soundGold();renderCosmetics();renderProfile();
+}
+function buyOrEquipTitle(id,owned,equipped){
+	if(equipped)return;
+	if(owned){profileState.equippedTitle=id;saveData();renderCosmetics();renderProfile();return;}
+	var t=PROFILE_TITLES.find(function(x){return x.id===id;});
+	if(!t||score<t.cost||playerLevel<t.needLevel)return;
+	score-=t.cost;profileState.ownedTitles.push(id);profileState.equippedTitle=id;saveData();
+	updateUI();setMessage('🎖 Титул "'+t.name+'" куплен!');soundGold();renderCosmetics();renderProfile();
 }
 
 function toggleSound(){
 	muted=!muted;var icon=muted?'🔇':'🔊';
 	soundBtn.textContent=icon;menuSoundBtn.textContent=icon;
+	// Update pause menu sound button too
+	var pBtn=D('pauseSoundBtn');if(pBtn)pBtn.textContent=icon+' Звук';
+	try{localStorage.setItem('moleMuted',muted?'1':'0');}catch(e){}
 	if(gameStarted)setMessage(muted?'🔇 Без звука':'🔊 Звук включён');
 }
 
@@ -1187,7 +1506,7 @@ var _resetGame=function(){
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	achBanner.classList.remove('show');
 	pauseOverlay.classList.remove('show');
-	if(gameMode==='endless'){score=0;combo=0;updateCombo();gameActive=true;updateUI();setMessage('🔄 Новый забег');startSpawning();return;}
+	if(gameMode==='score'){score=0;combo=0;bombHits=0;updateCombo();gameActive=true;updateUI();setMessage('🔄 Новый забег');startSpawning();return;}
 	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
 	updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
 	setTimeout(function(){setMessage('🔨 Копай!');},2000);
@@ -1230,7 +1549,7 @@ function startGame(){
 }
 function startFreshGame(){
 	clearGameState();
-	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
+	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;bombHits=0;
 	startGame();
 }
 
@@ -1275,22 +1594,39 @@ menuBackBtn.addEventListener('click',function(){window.location.href='index.html
 menuBackBtn.addEventListener('touchstart',function(e){e.preventDefault();window.location.href='index.html';},{passive:false});
 achCloseBtn.addEventListener('click',closeAchievements);
 certCloseBtn.addEventListener('click',closeCertificate);
-shovelBtn.addEventListener('click',upgradeShovel);
-luckBtn.addEventListener('click',upgradeLuck);
-resetBtn.addEventListener('click',resetGame);
 soundBtn.addEventListener('click',toggleSound);
 soundBtn.addEventListener('touchstart',function(e){e.preventDefault();toggleSound();},{passive:false});
-shovelBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeShovel();},{passive:false});
-luckBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeLuck();},{passive:false});
-boostBtn.addEventListener('click',upgradeBoost);
-boostBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeBoost();},{passive:false});
-timeBtn.addEventListener('click',upgradeTime);
-timeBtn.addEventListener('touchstart',function(e){e.preventDefault();upgradeTime();},{passive:false});
-resetBtn.addEventListener('touchstart',function(e){e.preventDefault();resetGame();},{passive:false});
 D('fullResetBtn').addEventListener('click',fullReset);
 D('fullResetBtn').addEventListener('touchstart',function(e){e.preventDefault();fullReset();},{passive:false});
 D('newGameBtn').addEventListener('click',startFreshGame);
 D('newGameBtn').addEventListener('touchstart',function(e){e.preventDefault();startFreshGame();},{passive:false});
+
+// Profile/Shop handlers
+function openProfile(){profileScreen.classList.add('show');renderProfile();renderShop();}
+function closeProfile(){profileScreen.classList.remove('show');}
+profileCloseBtn.addEventListener('click',closeProfile);
+profileCloseBtn.addEventListener('touchstart',function(e){e.preventDefault();closeProfile();},{passive:false});
+gameProfileBtn.addEventListener('click',function(){if(pauseOverlay.classList.contains('show')){pauseOverlay.classList.remove('show');}openProfile();});
+gameProfileBtn.addEventListener('touchstart',function(e){e.preventDefault();if(pauseOverlay.classList.contains('show')){pauseOverlay.classList.remove('show');}openProfile();},{passive:false});
+D('gameResetBtn').addEventListener('click',resetGame);
+D('gameResetBtn').addEventListener('touchstart',function(e){e.preventDefault();resetGame();},{passive:false});
+
+// Tab switching
+document.querySelectorAll('.profile-tab').forEach(function(btn){
+	btn.addEventListener('click',function(){
+		document.querySelectorAll('.profile-tab').forEach(function(b){b.classList.remove('active');});
+		btn.classList.add('active');
+		document.querySelectorAll('.profile-content').forEach(function(c){c.classList.remove('active');});
+		D(btn.dataset.tab+'Tab').classList.add('active');
+		if(btn.dataset.tab==='shop')renderShop();
+	});
+});
+
+// Shop upgrade handlers
+shopShovelBtn.addEventListener('click',upgradeShovel);
+shopLuckBtn.addEventListener('click',upgradeLuck);
+shopBoostBtn.addEventListener('click',upgradeBoost);
+shopTimeBtn.addEventListener('click',upgradeTime);
 
 function handlePauseAch(){
 	pauseOverlay.classList.remove('show');
@@ -1301,12 +1637,18 @@ function handlePauseSound(){
 	var icon=muted?'🔇':'🔊';
 	var el=D('pauseSoundBtn');if(el)el.textContent=icon+' Звук';
 }
+function handlePauseProfile(){
+	pauseOverlay.classList.remove('show');
+	openProfile();
+}
 pauseBtn.addEventListener('click',togglePause);
 pauseBtn.addEventListener('touchstart',function(e){e.preventDefault();togglePause();},{passive:false});
 D('pauseContinueBtn').addEventListener('click',togglePause);
 D('pauseContinueBtn').addEventListener('touchstart',function(e){e.preventDefault();togglePause();},{passive:false});
 D('pauseAchBtn').addEventListener('click',handlePauseAch);
 D('pauseAchBtn').addEventListener('touchstart',function(e){e.preventDefault();handlePauseAch();},{passive:false});
+D('pauseProfileBtn').addEventListener('click',handlePauseProfile);
+D('pauseProfileBtn').addEventListener('touchstart',function(e){e.preventDefault();handlePauseProfile();},{passive:false});
 D('pauseSoundBtn').addEventListener('click',handlePauseSound);
 D('pauseSoundBtn').addEventListener('touchstart',function(e){e.preventDefault();handlePauseSound();},{passive:false});
 D('pauseMenuBtn').addEventListener('click',function(){pauseOverlay.classList.remove('show');backToMenu();});
@@ -1315,12 +1657,7 @@ D('pauseSiteBtn').addEventListener('click',function(){window.location.href='inde
 D('pauseSiteBtn').addEventListener('touchstart',function(e){e.preventDefault();window.location.href='index.html';},{passive:false});
 document.addEventListener('keydown',function(e){
 	if(!gameStarted)return;
-	if(e.key==='Escape'){if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(pauseOverlay.classList.contains('show'))togglePause();else togglePause();}
-	else if(e.key==='r'||e.key==='R')resetGame();
-	else if(e.key==='s'||e.key==='S')upgradeShovel();
-	else if(e.key==='l'||e.key==='L')upgradeLuck();
-	else if(e.key==='b'||e.key==='B')upgradeBoost();
-	else if(e.key==='t'||e.key==='T')upgradeTime();
+	if(e.key==='Escape'){if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(profileScreen.classList.contains('show'))closeProfile();else if(pauseOverlay.classList.contains('show'))togglePause();else togglePause();}
 	else if(e.key==='m'||e.key==='M')toggleSound();
 });
 
@@ -1363,11 +1700,12 @@ D('menuStatsLine').textContent='🏆 '+mu+'/'+mt+' · '+mine.name+' '+(currentMi
 D('modeToggleBtn').addEventListener('click',toggleMode);
 D('modeToggleBtn').addEventListener('touchstart',function(e){e.preventDefault();toggleMode();},{passive:false});
 function toggleMode(){
-	gameMode=(gameMode==='normal'?'endless':'normal');
-	var isEndless=gameMode==='endless';
-	D('modeToggleBtn').textContent=isEndless?'🎯 Обычный режим':'∞ Бесконечный режим';
-	D('menuSub').textContent=isEndless?'∞ Бесконечно тыкай и ставь рекорды!':'Стучи по кротам, собирай коллекцию!';
-	D('playBtn').textContent=isEndless?'∞ ИГРАТЬ':'▶ ПРОДОЛЖИТЬ';
+	gameMode=(gameMode==='adventure'?'score':'adventure');
+	var isScore=gameMode==='score';
+	D('modeToggleBtn').textContent=isScore?'⛏ Приключение':'🎯 Рекорд';
+	D('menuSub').textContent=isScore?'🎯 3 бомбы — игра окончена. Держись!':'Стучи по кротам, собирай коллекцию!';
+	D('playBtn').textContent=isScore?'🎯 ИГРАТЬ':'▶ ПРОДОЛЖИТЬ';
+	bombHits=0;
 }
 })();
 </script>
