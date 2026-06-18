@@ -66,24 +66,30 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 
 .cert-screen{position:fixed;inset:0;z-index:9999;background:rgba(13,10,8,.95);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .6s ease}
 .cert-screen.show{opacity:1;pointer-events:auto}
-.cert-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);border:2px solid #ffd700;border-radius:24px;padding:36px 32px;max-width:420px;width:100%;text-align:center;box-shadow:0 0 60px rgba(255,215,0,.08),inset 0 0 60px rgba(255,215,0,.02);position:relative}
-.cert-wrap::before{content:'';position:absolute;inset:-1px;border-radius:24px;padding:1px;background:linear-gradient(135deg,#ffd70066,#ff8c0044,#ffd70022);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-.cert-badge{font-size:56px;margin-bottom:8px}
-.cert-title{font-size:28px;font-weight:900;color:#ffd700;letter-spacing:-.02em;margin-bottom:4px}
-.cert-sub{font-size:12px;color:#8b7b6a;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
-.cert-body{font-size:13px;color:#c4b8a8;line-height:1.7;margin-bottom:16px}
-.cert-body span{color:#ffd700;font-weight:600}
-.cert-steps{margin-bottom:16px;text-align:left;background:#1a130e;border-radius:14px;padding:12px 16px;border:1px solid #3d3224}
-.cert-step{font-size:12px;color:#a09080;line-height:1.8;padding:2px 0}
-.cert-step strong{color:#c49a6c}
-.cert-code{background:#1a130e;border-radius:16px;padding:14px;margin-bottom:16px;border:1px solid #3d3224}
-.cert-code-label{font-size:9px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.2em;margin-bottom:6px}
-.cert-code-value{font-size:20px;font-weight:700;color:#ffd700;letter-spacing:.15em;font-family:monospace}
-.cert-footer{font-size:11px;color:#8b7b6a;line-height:1.6;margin-bottom:20px}
+.cert-wrap{background:linear-gradient(160deg,#2a221a,#1f1814);border:2px solid #ffd700;border-radius:28px;padding:36px 28px;max-width:440px;width:100%;text-align:center;box-shadow:0 0 80px rgba(255,215,0,.1),inset 0 0 80px rgba(255,215,0,.02);position:relative;overflow:hidden}
+.cert-wrap::before{content:'';position:absolute;inset:-1px;border-radius:28px;padding:1px;background:linear-gradient(135deg,#ffd70088,#ff8c0044,#ffd70022,#ffd70088);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.cert-wrap::after{content:'✦ ✦ ✦';position:absolute;top:12px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:8px;color:#ffd70044;pointer-events:none}
+.cert-mole{font-size:64px;margin-bottom:4px;display:block;filter:drop-shadow(0 4px 20px rgba(255,215,0,.3));animation:certMole 3s ease-in-out infinite}
+@keyframes certMole{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+.cert-seal{font-size:32px;margin-bottom:6px;opacity:.7}
+.cert-title{font-size:26px;font-weight:900;color:#ffd700;letter-spacing:-.01em;margin-bottom:2px;text-shadow:0 2px 20px rgba(255,215,0,.15)}
+.cert-sub{font-size:10px;color:#8b7b6a;letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px}
+.cert-divider{width:60%;height:1px;background:linear-gradient(90deg,transparent,#ffd70044,transparent);margin:10px auto}
+.cert-body{font-size:12px;color:#c4b8a8;line-height:1.6;margin-bottom:12px;padding:0 4px}
+.cert-body strong{color:#ffd700}
+.cert-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;text-align:center}
+.cert-stat{background:#1a130e;border-radius:12px;padding:8px 6px;border:1px solid #3d3224}
+.cert-stat-val{font-size:16px;font-weight:700;color:#ffd700;display:block}
+.cert-stat-lbl{font-size:8px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:2px}
+.cert-stat-wide{grid-column:1/-1;background:linear-gradient(135deg,#1a130e,#221a14);border:1px solid #ffd70033}
+.cert-code{border-top:1px dashed #3d3224;padding-top:12px;margin-bottom:14px}
+.cert-code-label{font-size:8px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.2em;margin-bottom:5px}
+.cert-code-value{font-size:15px;font-weight:700;color:#ffd700;letter-spacing:.12em;font-family:monospace;background:#1a130e;display:inline-block;padding:4px 14px;border-radius:8px;border:1px solid #3d3224}
+.cert-footer{font-size:10px;color:#6a5a4a;line-height:1.5;margin-bottom:16px}
 .cert-footer strong{color:#c49a6c}
 .cert-close-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:14px;font-weight:bold;padding:10px 30px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation;font-family:'Unbounded',sans-serif}
 .cert-close-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
-@media(max-width:500px){.cert-wrap{padding:28px 20px}.cert-badge{font-size:44px}.cert-title{font-size:24px}.cert-code-value{font-size:17px}}
+@media(max-width:500px){.cert-wrap{padding:24px 16px;border-radius:20px}.cert-mole{font-size:48px}.cert-title{font-size:22px}.cert-stat-val{font-size:14px}.cert-code-value{font-size:13px}}
 
 .pause-btn{background:#1a130e;border:none;color:#d4c4a8;font-size:18px;cursor:pointer;transition:.1s;padding:3px 8px;border-radius:30px;box-shadow:inset 0 2px 5px rgba(0,0,0,.7);line-height:1}
 .pause-btn:active{transform:scale(.9)}
@@ -257,24 +263,29 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 </div>
 <div class="cert-screen" id="certScreen">
 	<div class="cert-wrap">
-		<div class="cert-badge">👑</div>
+		<span class="cert-mole">🐹</span>
+		<div class="cert-seal">📜</div>
 		<div class="cert-title">Сертификат</div>
 		<div class="cert-sub">Студия i. подтверждает</div>
+		<div class="cert-divider"></div>
 		<div class="cert-body">
-			Что игрок выполнил <strong>все достижения</strong> в игре
-			«Крот-собиратель» и навсегда вписал своё имя
-			в историю студии.
+			Игрок выполнил <strong>все 15 достижений</strong><br>
+			в игре «Крот-собиратель» и навсегда<br>
+			вписал своё имя в историю студии.
 		</div>
-		<div class="cert-steps">
-			<div class="cert-step">1. Скопируй код ниже</div>
-			<div class="cert-step">2. Напиши на <strong>olehmudruk@yandex.by</strong></div>
-			<div class="cert-step">3. Получи место на стене почёта студии i.</div>
+		<div class="cert-stats" id="certStats">
+			<div class="cert-stat"><span class="cert-stat-val" id="certScore">0</span><span class="cert-stat-lbl">Очков</span></div>
+			<div class="cert-stat"><span class="cert-stat-val" id="certAchs">0</span><span class="cert-stat-lbl">Достижений</span></div>
+			<div class="cert-stat"><span class="cert-stat-val" id="certCombo">x1</span><span class="cert-stat-lbl">Лучшее комбо</span></div>
+			<div class="cert-stat"><span class="cert-stat-val" id="certShovel">1</span><span class="cert-stat-lbl">Лопата</span></div>
+			<div class="cert-stat cert-stat-wide"><span class="cert-stat-val" id="certCollection">0</span><span class="cert-stat-lbl">Коллекций собрано</span></div>
 		</div>
 		<div class="cert-code">
-			<div class="cert-code-label">Код подтверждения</div>
+			<div class="cert-code-label">Код сертификата</div>
 			<div class="cert-code-value" id="certCode">------</div>
 		</div>
-		<button class="cert-close-btn" id="certCloseBtn">✓ Принято</button>
+		<div class="cert-footer">Сделай скриншот и отправь на <strong>olehmudruk@yandex.by</strong><br>с твоим ником — мы ответим!</div>
+		<button class="cert-close-btn" id="certCloseBtn">✓ Готово</button>
 	</div>
 </div>
 <div class="game-wrap" id="gameWrap">
@@ -379,7 +390,7 @@ var ACHIEVEMENTS=[
 var D=function(id){return document.getElementById(id);};
 var menuScreen=D('menuScreen'),playBtn=D('playBtn'),menuSoundBtn=D('menuSoundBtn'),menuAchBtn=D('menuAchBtn');
 var achScreen=D('achScreen'),achList=D('achList'),achCloseBtn=D('achCloseBtn'),achProgress=D('achProgress'),achHint=D('achHint');
-var certScreen=D('certScreen'),certCode=D('certCode'),certCloseBtn=D('certCloseBtn');
+var certScreen=D('certScreen'),certCode=D('certCode'),certCloseBtn=D('certCloseBtn'),certScore=D('certScore'),certAchs=D('certAchs'),certCombo=D('certCombo'),certShovel=D('certShovel'),certCollection=D('certCollection');
 var achBanner=D('achBanner'),achBannerIcon=D('achBannerIcon'),achBannerTitle=D('achBannerTitle'),achBannerDesc=D('achBannerDesc');
 var gameWrap=D('gameWrap'),gridEl=D('grid'),levelFlash=D('levelFlash');
 var gameoverScreen=D('gameoverScreen'),goScore=D('goScore'),goCollection=D('goCollection'),goHighScore=D('goHighScore'),goMenuBtn=D('goMenuBtn'),goAgainBtn=D('goAgainBtn'),gameoverAchs=D('gameoverAchs');
@@ -492,6 +503,12 @@ function generateCertCode(){
 }
 function showCertificate(){
 	certCode.textContent=generateCertCode();
+	certScore.textContent=highScore;
+	var achs=0;for(var i=0;i<ACHIEVEMENTS.length;i++)if(unlocked[ACHIEVEMENTS[i].id])achs++;
+	certAchs.textContent=achs+'/15';
+	certCombo.textContent='x'+stats.bestCombo;
+	certShovel.textContent=stats.maxShovel;
+	certCollection.textContent=stats.collectionCount;
 	certScreen.classList.add('show');
 	tryVibrate(100);
 	soundRare();
