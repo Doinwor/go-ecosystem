@@ -23,18 +23,15 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .menu-sub{font-size:15px;color:#8b7b6a;margin-bottom:36px}
 .menu-play{background:linear-gradient(180deg,#f0c896,#c49a6c);border:none;color:#1f1814;font-size:24px;font-weight:bold;padding:18px 70px;border-radius:60px;box-shadow:0 8px 0 #8b6b40,0 0 40px rgba(196,154,108,.2);cursor:pointer;transition:all .08s linear;touch-action:manipulation;margin-bottom:14px;letter-spacing:1px}
 .menu-play:active{transform:translateY(6px);box-shadow:0 2px 0 #8b6b40,0 0 40px rgba(196,154,108,.2)}
-.menu-sound{background:none;border:2px solid #3d3224;color:#8b7b6a;font-size:22px;cursor:pointer;padding:8px 18px;border-radius:40px;transition:all .2s;touch-action:manipulation;margin-bottom:12px}
-.menu-sound:active{transform:scale(.9)}
-.menu-ach-btn{background:none;border:2px solid #3d3224;color:#c49a6c;font-size:15px;cursor:pointer;padding:8px 20px;border-radius:40px;transition:all .2s;touch-action:manipulation;margin-bottom:10px}
-.menu-ach-btn:active{transform:scale(.95)}
+.menu-btn-group{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:260px}
+.menu-btn{display:block;width:100%;font-family:'Unbounded','Segoe UI',sans-serif;background:#1a130e;border:2px solid #3d3224;color:#c49a6c;font-size:14px;cursor:pointer;padding:10px 20px;border-radius:40px;transition:all .2s;touch-action:manipulation;text-align:center;letter-spacing:.03em}
+.menu-btn:hover{color:#d4c4a8;border-color:#8b6b40;background:#221a14;box-shadow:0 0 20px rgba(196,154,108,.05)}
+.menu-btn:active{transform:scale(.95)}
+.menu-btn-sub{color:#8b7b6a;border-color:#3d3224;font-size:13px}
+.menu-btn-sub:hover{color:#ff6b35;border-color:#ff6b3566}
 .menu-credits{color:#4a3a2a;font-size:14px;position:absolute;bottom:30px}
 .menu-credits a{color:#8b6b40;text-decoration:none;transition:color .2s}
 .menu-credits a:hover{color:#d4c4a8}
-.menu-back{background:#1a130e;border:2px solid #3d3224;color:#8b7b6a;font-size:13px;cursor:pointer;padding:10px 24px;border-radius:40px;transition:all .2s;touch-action:manipulation;margin-bottom:10px;font-family:'Unbounded','Segoe UI',sans-serif;letter-spacing:.03em}
-.menu-back:hover{color:#d4c4a8;border-color:#8b6b40;background:#221a14;box-shadow:0 0 20px rgba(196,154,108,.05)}
-.menu-back:active{transform:scale(.95)}
-.menu-back .arrow{display:inline-block;transition:transform .2s}
-.menu-back:hover .arrow{transform:translateX(-3px)}
 
 .ach-screen{position:fixed;inset:0;z-index:1100;background:rgba(13,10,8,.95);display:flex;flex-direction:column;align-items:center;padding:30px 20px;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .3s ease}
 .ach-screen.show{opacity:1;pointer-events:auto}
@@ -164,7 +161,7 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 
 @media(max-width:640px){
 .menu-play{font-size:20px;padding:16px 44px}.menu-title{font-size:28px}.menu-icon{font-size:56px}
-.menu-sound,.menu-ach-btn,.menu-back{font-size:14px;padding:10px 20px}
+.menu-btn{font-size:13px;padding:9px 16px}
 }
 @media(max-width:500px){
 body{padding:6px}.game-wrap{padding:10px;border-radius:28px}.grid{gap:6px;padding:5px;border-radius:20px}
@@ -230,10 +227,12 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	<div class="menu-title">Крот-собиратель</div>
 	<div class="menu-sub">Стучи по кротам, собирай коллекцию!</div>
 	<button class="menu-play" id="playBtn">▶ ПРОДОЛЖИТЬ</button>
-	<button class="menu-ach-btn" id="newGameBtn" style="background:none;border:2px solid #3d3224;color:#8b7b6a;font-size:13px;cursor:pointer;padding:8px 20px;border-radius:40px;transition:all .2s;touch-action:manipulation;margin-bottom:6px;font-family:'Unbounded',sans-serif">🔄 Новая игра</button>
-	<button class="menu-sound" id="menuSoundBtn">🔊</button>
-	<button class="menu-ach-btn" id="menuAchBtn">🏆 Достижения</button>
-	<button class="menu-back" id="menuBackBtn"><span class="arrow">←</span> На сайт</button>
+	<div class="menu-btn-group">
+		<button class="menu-btn menu-btn-sub" id="newGameBtn">🔄 Новая игра</button>
+		<button class="menu-btn" id="menuAchBtn">🏆 Достижения</button>
+		<button class="menu-btn" id="menuSoundBtn">🔊</button>
+		<button class="menu-btn menu-btn-sub" id="menuBackBtn">← На сайт</button>
+	</div>
 	<div class="menu-credits">Сделано студией <a href="index.html" class="menu-credit-link">i.</a></div>
 </div>
 
