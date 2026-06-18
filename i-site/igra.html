@@ -591,7 +591,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<span>💰 <span id="scoreDisplay">0</span></span>
 		<span class="level-badge">📊 <span id="levelDisplay">1</span></span>
 		<span class="high-score">🏆 <span id="highScoreDisplay">0</span></span>
-		<span>⭐ <span id="collectionDisplay">0</span>/<span id="collectionTargetDisplay">12</span></span>
+		<span>⭐ <span id="collectionDisplay">0</span>/<span id="collectionTargetDisplay">?</span></span>
 		<span id="mineDisplay" style="font-size:10px;color:#8b7b6a">🪨 1</span>
 		<span id="charmDisplay" style="font-size:12px;display:none" title="Анти-бомба активна">🛡️</span>
 		<button class="sound-btn" id="soundBtn">🔊</button>
@@ -1655,15 +1655,15 @@ function spawnMole(idx){
 	else if(item.id==='eternal_crystal'){mole.style.background='radial-gradient(circle at 30% 30%,#ffffff,#bbddff)';mole.style.boxShadow='inset -4px -8px 15px #446688,0 0 60px #ffffff,0 0 120px #ffffff44';}
 	var es=mole.querySelector('.emoji');if(es)es.textContent=item.emoji;
 	mole.classList.add('show');
-	var du=1500+Math.random()*1500;
-	if(item.id==='gold')du=1000+Math.random()*800;
-	else if(item.id==='artifact')du=800+Math.random()*600;
-	else if(item.id==='king')du=900+Math.random()*600;
-	else if(item.id==='fast')du=500+Math.random()*300;
-	else if(item.id==='ghost')du=2000+Math.random()*1000;
-	else if(item.id==='bomb')du=2000+Math.random()*1000;
-	else if(item.points>=15)du=600+Math.random()*400;
-	else if(item.points>=8)du=700+Math.random()*500;
+	var du=2200+Math.random()*1800;
+	if(item.id==='gold')du=1800+Math.random()*1200;
+	else if(item.id==='artifact')du=1500+Math.random()*1000;
+	else if(item.id==='king')du=1800+Math.random()*1200;
+	else if(item.id==='fast')du=1400+Math.random()*800;
+	else if(item.id==='ghost')du=3000+Math.random()*1500;
+	else if(item.id==='bomb')du=3000+Math.random()*1500;
+	else if(item.points>=15)du=1400+Math.random()*1000;
+	else if(item.points>=8)du=1600+Math.random()*1200;
 	du*=(1+timeLevel*0.15);
 	if(cellStates[idx].timer)clearTimeout(cellStates[idx].timer);
 	cellStates[idx].timer=setTimeout(function(){hideMole(idx);},du);
@@ -1784,12 +1784,12 @@ function handleCellClick(idx){
 function scheduleSpawn(){
 	if(!gameActive)return;
 	var isMob=document.body.classList.contains('is-mobile');
-	var base=(isMob?2800:2000);
-	var comboBonus=Math.min(1000,Math.floor(combo/4)*60);
-	var intv=Math.max((isMob?1200:700),base-comboBonus)+Math.random()*400;
+	var base=(isMob?3500:2800);
+	var comboBonus=Math.min(600,Math.floor(combo/6)*50);
+	var intv=Math.max((isMob?1800:1400),base-comboBonus)+Math.random()*600;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var maxCount=Math.min(isMob?3:5,2+Math.floor(combo/10)+Math.floor(Math.min(currentMine,10)/4));
+		var maxCount=Math.min(isMob?5:7,3+Math.floor(combo/8)+Math.floor(Math.min(currentMine,15)/5));
 		var count=1+Math.floor(Math.random()*maxCount);
 		for(var i=0;i<count;i++){
 			setTimeout(function(n){return function(){
@@ -1819,8 +1819,9 @@ function updateUI(){
 	levelSpan.textContent=playerLevel;
 	collectionSpan.textContent=collection.length;
 	var ct=getCollectionTarget();
+	if(collection.length>ct)ct=collection.length;
 	D('collectionTargetDisplay').textContent=ct;
-	var pct=collection.length/ct*100;
+	var pct=Math.min(100,collection.length/ct*100);
 	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+ct;
 	shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;
 	D('mineDisplay').textContent=getMine().name.split(' ')[0]+' '+(currentMine+1);
