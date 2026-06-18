@@ -1108,7 +1108,7 @@ function mineUnlocked(mineIdx){return currentMine>=mineIdx;}
 function checkMineProgression(){
 	while(true){
 		var sinceLast=stats.totalClicks-lastMineAtClicks;
-		var needed=40+currentMine*5;
+		var needed=25+currentMine*2;
 		if(sinceLast<needed)break;
 		lastMineAtClicks=stats.totalClicks;
 		var nextMine=currentMine+1;
@@ -1572,7 +1572,7 @@ function spawnMole(idx){
 	else if(item.id==='bomb')du=2000+Math.random()*1000;
 	else if(item.points>=15)du=600+Math.random()*400;
 	else if(item.points>=8)du=700+Math.random()*500;
-	du*=Math.max(.4,1-score*.00004)*(1+timeLevel*0.15);
+	du*=(1+timeLevel*0.15);
 	if(cellStates[idx].timer)clearTimeout(cellStates[idx].timer);
 	cellStates[idx].timer=setTimeout(function(){hideMole(idx);},du);
 	// Ghost teleport
@@ -1692,13 +1692,12 @@ function handleCellClick(idx){
 function scheduleSpawn(){
 	if(!gameActive)return;
 	var isMob=document.body.classList.contains('is-mobile');
-	var effLvl=Math.min(playerLevel,20);
-	var base=(isMob?3500:2800);
-	var reduction=Math.min(600,Math.floor(score/60)*30);
-	var intv=Math.max((isMob?2500:1800),base-reduction)+Math.random()*500;
+	var base=(isMob?2800:2000);
+	var comboBonus=Math.min(1000,Math.floor(combo/4)*60);
+	var intv=Math.max((isMob?1200:700),base-comboBonus)+Math.random()*400;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var maxCount=Math.min(isMob?2:3,1+Math.floor(effLvl/5)+Math.floor(Math.min(currentMine,6)/3));
+		var maxCount=Math.min(isMob?3:5,2+Math.floor(combo/10)+Math.floor(Math.min(currentMine,10)/4));
 		var count=1+Math.floor(Math.random()*maxCount);
 		for(var i=0;i<count;i++){
 			setTimeout(function(n){return function(){
