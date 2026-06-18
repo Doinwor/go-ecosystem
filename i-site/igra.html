@@ -128,6 +128,21 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);padding:15px;border-radius:40px;box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,215,0,.04),inset 0 1px 0 rgba(255,255,255,.05);max-width:500px;width:100%;position:relative;overflow:hidden;will-change:transform;transform:translateZ(0)}
 .game-wrap.shake{animation:shake .3s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px) rotate(-.5deg)}40%{transform:translateX(8px) rotate(.5deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@keyframes themeTransition{0%{transform:scale(.95);opacity:.6}100%{transform:scale(1);opacity:1}}
+/* 🪨 Медная шахта (по умолчанию) */
+.game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,215,0,.04),inset 0 1px 0 rgba(255,255,255,.05)}
+/* 🔥 Огненная шахта */
+.game-wrap.theme-fire{background:linear-gradient(145deg,#2a1a10,#1f1008);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,69,0,.08),inset 0 1px 0 rgba(255,100,0,.08)}
+.theme-fire .cell{background:radial-gradient(circle at 50% 60%,#5a3020,#4a2210);box-shadow:inset 0 -6px 0 #2a1008,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(255,69,0,.05)}
+.theme-fire .grid{border-color:#6a3a20;box-shadow:0 0 30px rgba(255,69,0,.05)}
+/* ❄️ Ледяная шахта */
+.game-wrap.theme-ice{background:linear-gradient(145deg,#10202a,#08101f);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(0,170,255,.08),inset 0 1px 0 rgba(0,200,255,.08)}
+.theme-ice .cell{background:radial-gradient(circle at 50% 60%,#204060,#102040);box-shadow:inset 0 -6px 0 #08102a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(0,170,255,.05)}
+.theme-ice .grid{border-color:#204060;box-shadow:0 0 30px rgba(0,170,255,.05)}
+/* 👻 Мистическая шахта */
+.game-wrap.theme-mystic{background:linear-gradient(145deg,#20102a,#10081f);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(170,68,255,.08),inset 0 1px 0 rgba(200,100,255,.08)}
+.theme-mystic .cell{background:radial-gradient(circle at 50% 60%,#402060,#301050);box-shadow:inset 0 -6px 0 #20082a,0 6px 12px rgba(0,0,0,.5),0 0 15px rgba(170,68,255,.05)}
+.theme-mystic .grid{border-color:#503070;box-shadow:0 0 30px rgba(170,68,255,.05)}
 
 .top-panel{display:flex;justify-content:space-between;align-items:center;color:#d4c4a8;font-weight:bold;font-size:15px;padding-bottom:6px;flex-wrap:wrap;gap:4px}
 .top-panel span,.sound-btn{background:#1a130e;padding:3px 10px;border-radius:30px;box-shadow:inset 0 2px 5px rgba(0,0,0,.7)}
@@ -314,6 +329,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<span class="level-badge">📊 <span id="levelDisplay">1</span></span>
 		<span class="high-score">🏆 <span id="highScoreDisplay">0</span></span>
 		<span>⭐ <span id="collectionDisplay">0</span>/<span id="collectionTargetDisplay">12</span></span>
+		<span id="mineDisplay" style="font-size:10px;color:#8b7b6a">🪨 1</span>
 		<button class="sound-btn" id="soundBtn">🔊</button>
 		<button class="pause-btn" id="pauseBtn">☰</button>
 	</div>
@@ -358,7 +374,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 "use strict";
 
 var GRID_SIZE=4,TOTAL_CELLS=GRID_SIZE*GRID_SIZE,COLLECTION_TARGET=12;
-function getCollectionTarget(){return getActiveItems().filter(function(i){return i.points>=0&&!i.needSecret;}).length;}
+function getCollectionTarget(){return getActiveItems().filter(function(i){return i.points>=0;}).length;}
 
 var ITEMS=[
 	{id:'gold',emoji:'🪙',name:'Золото',rarity:.20,points:1,color:'#ffd700',minLvl:1},
@@ -374,34 +390,38 @@ var ITEMS=[
 	{id:'clover',emoji:'🍀',name:'Клевер',rarity:.05,points:1,color:'#66bb6a',minLvl:1,needTier:3},
 	{id:'gift',emoji:'🎁',name:'Сюрприз',rarity:.04,points:4,color:'#ff7043',minLvl:1,needTier:4},
 	// Секретные артефакты (появляются после соответствующих секретных достижений)
-	{id:'crown_legend',emoji:'🏆',name:'Корона легенды',rarity:.015,points:15,color:'#ffd700',minLvl:1,needSecret:'secret_legend'},
-	{id:'star_master',emoji:'💫',name:'Звезда мастера',rarity:.015,points:20,color:'#ff69b4',minLvl:1,needSecret:'secret_master'},
-	{id:'aegis',emoji:'🛡️',name:'Эгида',rarity:.02,points:5,color:'#ff6b35',minLvl:1,needSecret:'secret_invincible'}
+	{id:'crown_legend',emoji:'🏆',name:'Корона легенды',rarity:.015,points:15,color:'#ffd700',minLvl:1,needTier:5},
+	{id:'star_master',emoji:'💫',name:'Звезда мастера',rarity:.015,points:20,color:'#ff69b4',minLvl:1,needTier:5},
+	{id:'aegis',emoji:'🛡️',name:'Эгида',rarity:.02,points:5,color:'#ff6b35',minLvl:1,needTier:5}
 ];
 
 var TIERS=[
-	{id:'tier1',name:'🌱 Новичок',desc:'Сделай первые шаги',unlockItem:'🍀',next:'🔥 Охотник'},
-	{id:'tier2',name:'🔥 Охотник',desc:'Становись сильнее',unlockItem:'🌟',next:'👑 Мастер'},
-	{id:'tier3',name:'👑 Мастер',desc:'Покажи мастерство',unlockItem:'🎁',next:'💫 Легенда'},
-	{id:'tier4',name:'💫 Легенда',desc:'Для избранных',unlockItem:'🏆',next:'Сертификат'}
+	{id:'copper',name:'🪨 Медная шахта',desc:'Начни добычу!',theme:'copper',next:'🔥 Огненная шахта'},
+	{id:'fire',name:'🔥 Огненная шахта',desc:'Жарко! Новые кроты и предметы',theme:'fire',next:'❄️ Ледяная шахта'},
+	{id:'ice',name:'❄️ Ледяная шахта',desc:'Холод крепчает...',theme:'ice',next:'👻 Мистическая шахта'},
+	{id:'mystic',name:'👻 Мистическая шахта',desc:'Тайны глубин',theme:'mystic',next:'Сертификат'}
 ];
 
 var ACHIEVEMENTS=[
+	// 🪨 Медная шахта (4)
 	{id:'first_click',name:'👊 Первый удар',desc:'Сделать 1 клик',icon:'👊',tier:1},
 	{id:'gold_rush',name:'💰 Золотая лихорадка',desc:'Заработать 100 монет',icon:'💰',tier:1},
 	{id:'bomb_survivor',name:'💣 Живучий',desc:'Поймать 5 бомб',icon:'💣',tier:1},
-	{id:'fast_catcher',name:'⚡ Молния',desc:'Поймать 5 молний',icon:'⚡',tier:1},
+	{id:'fast_catcher',name:'⚡ Быстрый старт',desc:'Поймать 5 молний',icon:'⚡',tier:1},
+	// 🔥 Огненная шахта (4)
 	{id:'king_hunter',name:'👑 Королевский охотник',desc:'Поймать 5 королей',icon:'👑',tier:2},
-	{id:'ghost_hunter',name:'👻 Охотник за призраками',desc:'Поймать 5 призраков',icon:'👻',tier:2},
+	{id:'star_collector',name:'🌟 Звездочёт',desc:'Найти 3 звезды',icon:'🌟',tier:2},
 	{id:'combo_master',name:'🔥 Комбо-мастер',desc:'Достичь комбо 10',icon:'🔥',tier:2},
 	{id:'strategist',name:'📊 Стратег',desc:'Достичь 5 уровня',icon:'📊',tier:2},
+	// ❄️ Ледяная шахта (4)
+	{id:'ice_catcher',name:'⚡ Ловец молний',desc:'Поймать 15 молний',icon:'⚡',tier:3},
+	{id:'clover_finder',name:'🍀 Везунчик',desc:'Найти 3 клевера',icon:'🍀',tier:3},
 	{id:'gold_million',name:'💎 Миллионер',desc:'Заработать 500 монет',icon:'💎',tier:3},
-	{id:'collector_1',name:'⭐ Коллекционер',desc:'Собрать коллекцию 1 раз',icon:'⭐',tier:3},
-	{id:'collector_3',name:'🌟 Мастер-коллекционер',desc:'Собрать коллекцию 3 раза',icon:'🌟',tier:3},
 	{id:'digger',name:'🗡️ Землекоп',desc:'Прокачать лопату до 10',icon:'🗡️',tier:3},
-	{id:'secret_legend',name:'👑 Легенда',desc:'Собрать коллекцию 5 раз',icon:'👑',tier:4},
-	{id:'secret_invincible',name:'🛡️ Неуязвимый',desc:'Достичь 10 уровня',icon:'🛡️',tier:4},
-	{id:'secret_master',name:'💫 Мастер игры',desc:'Заработать 10000 монет всего',icon:'💫',tier:4}
+	// 👻 Мистическая шахта (3)
+	{id:'ghost_hunter',name:'👻 Охотник за духами',desc:'Поймать 10 призраков',icon:'👻',tier:4},
+	{id:'gift_finder',name:'🎁 Сюрприз!',desc:'Найти 3 сюрприза',icon:'🎁',tier:4},
+	{id:'secret_legend',name:'🏆 Легенда',desc:'Собрать коллекцию 5 раз',icon:'🏆',tier:4}
 ];
 
 // DOM
@@ -428,7 +448,7 @@ var particleCount=0,floatTextCount=0;
 var boostLevel=0,timeLevel=0,clicksSinceNewItem=0;
 
 // Stats for achievements
-var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1};
+var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1,starFound:0,cloverFound:0,giftFound:0};
 var unlocked={};
 var currentTier=1;
 var bannerTimeout=null;
@@ -466,19 +486,19 @@ function checkAchievements(){
 		switch(a.id){
 			case 'first_click': ok=stats.totalClicks>=1; break;
 			case 'gold_rush': ok=stats.totalEarnings>=100; break;
-			case 'gold_million': ok=stats.totalEarnings>=500; break;
 			case 'bomb_survivor': ok=stats.totalBombs>=5; break;
-			case 'king_hunter': ok=stats.totalKings>=5; break;
 			case 'fast_catcher': ok=stats.totalFast>=5; break;
-			case 'ghost_hunter': ok=stats.totalGhosts>=5; break;
+			case 'king_hunter': ok=stats.totalKings>=5; break;
+			case 'star_collector': ok=stats.starFound>=3; break;
 			case 'combo_master': ok=stats.bestCombo>=10; break;
 			case 'strategist': ok=stats.maxLevel>=5; break;
-			case 'collector_1': ok=stats.collectionCount>=1; break;
-			case 'collector_3': ok=stats.collectionCount>=3; break;
+			case 'ice_catcher': ok=stats.totalFast>=15; break;
+			case 'clover_finder': ok=stats.cloverFound>=3; break;
+			case 'gold_million': ok=stats.totalEarnings>=500; break;
 			case 'digger': ok=stats.maxShovel>=10; break;
+			case 'ghost_hunter': ok=stats.totalGhosts>=10; break;
+			case 'gift_finder': ok=stats.giftFound>=3; break;
 			case 'secret_legend': ok=stats.collectionCount>=5; break;
-			case 'secret_invincible': ok=stats.maxLevel>=10; break;
-			case 'secret_master': ok=stats.totalEarnings>=10000; break;
 		}
 		if(ok){
 			unlocked[a.id]=true;
@@ -491,13 +511,16 @@ function checkAchievements(){
 	var cur=countTierAchs(currentTier);
 	if(cur.unlocked===cur.total && cur.total>0 && currentTier<TIERS.length){
 		var tierName=TIERS[currentTier-1].name;
+		var nextTier=TIERS[currentTier];
 		currentTier++;
 		saveData();
-		setMessage('🎉 Тир "'+tierName+'" пройден! Открыт "'+TIERS[currentTier-1].name+'"');
+		setMessage('⬇ Проваливаешься в "'+nextTier.name+'"!');
+		applyTheme(nextTier.theme);
+		screenShake();
 		setTimeout(function(){
-			achBannerIcon.textContent=TIERS[currentTier-2].unlockItem;
-			achBannerTitle.textContent='🎉 Тир пройден: '+tierName;
-			achBannerDesc.textContent='Открыт новый этап: '+TIERS[currentTier-1].name;
+			achBannerIcon.textContent='⬇';
+			achBannerTitle.textContent='🎉 Новая шахта: '+nextTier.name;
+			achBannerDesc.textContent=nextTier.desc;
 			achBanner.classList.add('show');
 			if(bannerTimeout)clearTimeout(bannerTimeout);
 			bannerTimeout=setTimeout(function(){achBanner.classList.remove('show');},4000);
@@ -507,6 +530,17 @@ function checkAchievements(){
 	}
 	var nowCount=getUnlockedCount();
 	if(nowCount>prevCount) updateAchUI();
+}
+
+function applyTheme(themeId){
+	var wrap=document.querySelector('.game-wrap');
+	if(!wrap)return;
+	var themes=['copper','fire','ice','mystic'];
+	themes.forEach(function(t){wrap.classList.remove('theme-'+t);});
+	wrap.classList.add('theme-'+themeId);
+	wrap.style.animation='none';
+	void wrap.offsetWidth;
+	wrap.style.animation='themeTransition .6s ease';
 }
 
 function showAchievementBanner(a){
@@ -708,7 +742,7 @@ function spawnMole(idx){
 	cellStates[idx].active=true;cellStates[idx].type=item;
 	var cell=gridEl.children[idx],mole=cell.querySelector('.mole');
 	mole.className='mole';
-	if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king'||item.id==='star'||item.id==='clover'||item.id==='gift'||item.needSecret)mole.classList.add('gold');
+	if(item.id==='gold'||item.id==='crystal'||item.id==='artifact'||item.id==='king'||item.id==='star'||item.id==='clover'||item.id==='gift'||item.needTier)mole.classList.add('gold');
 	if(item.id==='king')mole.classList.add('king');
 	else if(item.id==='fast')mole.classList.add('fast');
 	else if(item.id==='ghost')mole.classList.add('ghost');
@@ -791,6 +825,9 @@ function handleCellClick(idx){
 	if(item.id==='king')stats.totalKings++;
 	if(item.id==='fast')stats.totalFast++;
 	if(item.id==='ghost')stats.totalGhosts++;
+	if(item.id==='star')stats.starFound++;
+	if(item.id==='clover')stats.cloverFound++;
+	if(item.id==='gift')stats.giftFound++;
 	if(pts>0){
 		score+=pts;stats.totalEarnings+=pts;
 		soundHit();
@@ -868,6 +905,8 @@ function updateUI(){
 	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+ct;
 	shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;
 	shovelBtn.disabled=!gameActive;luckBtn.disabled=!gameActive;boostBtn.disabled=!gameActive;timeBtn.disabled=!gameActive;
+	var tier=TIERS[Math.min(currentTier-1,TIERS.length-1)];
+	D('mineDisplay').textContent=tier.name.split(' ')[0]+' '+currentTier;
 }
 
 function setMessage(t){
@@ -967,6 +1006,7 @@ function startGame(){
 	}
 	gameStarted=true;gameActive=true;menuScreen.classList.add('hidden');
 	createGrid();updateCombo();updateUI();setMessage('🔨 Копай!');startSpawning();
+	applyTheme(TIERS[Math.min(currentTier-1,TIERS.length-1)].theme);
 	checkAchievements();
 }
 function startFreshGame(){
