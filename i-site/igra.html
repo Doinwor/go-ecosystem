@@ -91,32 +91,42 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .ach-banner-desc{color:#c49a6c;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(max-width:640px){.ach-banner{right:10px;left:10px;max-width:none}.ach-banner.show{top:10px}}
 
-.cert-screen{position:fixed;inset:0;z-index:9999;background:rgba(13,10,8,.95);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .6s ease}
+.cert-screen{position:fixed;inset:0;z-index:9999;background:rgba(13,10,8,.95);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .8s ease}
 .cert-screen.show{opacity:1;pointer-events:auto}
-.cert-wrap{background:linear-gradient(160deg,#2a221a,#1f1814);border:2px solid #ffd700;border-radius:28px;padding:36px 28px;max-width:440px;width:100%;text-align:center;box-shadow:0 0 80px rgba(255,215,0,.1),inset 0 0 80px rgba(255,215,0,.02);position:relative;overflow:hidden}
-.cert-wrap::before{content:'';position:absolute;inset:-1px;border-radius:28px;padding:1px;background:linear-gradient(135deg,#ffd70088,#ff8c0044,#ffd70022,#ffd70088);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-.cert-wrap::after{content:'✦ ✦ ✦';position:absolute;top:12px;left:50%;transform:translateX(-50%);font-size:10px;letter-spacing:8px;color:#ffd70044;pointer-events:none}
-.cert-mole{font-size:64px;margin-bottom:4px;display:block;filter:drop-shadow(0 4px 20px rgba(255,215,0,.3));animation:certMole 3s ease-in-out infinite}
-@keyframes certMole{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(2deg)}}
-.cert-seal{font-size:32px;margin-bottom:6px;opacity:.7}
-.cert-title{font-size:26px;font-weight:900;color:#ffd700;letter-spacing:-.01em;margin-bottom:2px;text-shadow:0 2px 20px rgba(255,215,0,.15)}
-.cert-sub{font-size:10px;color:#8b7b6a;letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px}
-.cert-divider{width:60%;height:1px;background:linear-gradient(90deg,transparent,#ffd70044,transparent);margin:10px auto}
-.cert-body{font-size:12px;color:#c4b8a8;line-height:1.6;margin-bottom:12px;padding:0 4px}
-.cert-body strong{color:#ffd700}
-.cert-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;text-align:center}
-.cert-stat{background:#1a130e;border-radius:12px;padding:8px 6px;border:1px solid #3d3224}
-.cert-stat-val{font-size:16px;font-weight:700;color:#ffd700;display:block}
-.cert-stat-lbl{font-size:8px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:2px}
-.cert-stat-wide{grid-column:1/-1;background:linear-gradient(135deg,#1a130e,#221a14);border:1px solid #ffd70033}
-.cert-code{border-top:1px dashed #3d3224;padding-top:12px;margin-bottom:14px}
-.cert-code-label{font-size:8px;color:#6a5a4a;text-transform:uppercase;letter-spacing:.2em;margin-bottom:5px}
-.cert-code-value{font-size:15px;font-weight:700;color:#ffd700;letter-spacing:.12em;font-family:monospace;background:#1a130e;display:inline-block;padding:4px 14px;border-radius:8px;border:1px solid #3d3224}
-.cert-footer{font-size:10px;color:#6a5a4a;line-height:1.5;margin-bottom:16px}
-.cert-footer strong{color:#c49a6c}
-.cert-close-btn{background:#3d3224;border:none;color:#d4c4a8;font-size:14px;font-weight:bold;padding:10px 30px;border-radius:40px;box-shadow:0 4px 0 #1a130e;cursor:pointer;transition:all .06s linear;touch-action:manipulation;font-family:'Unbounded',sans-serif}
+@keyframes certAppear{0%{transform:scale(.7) rotate(-2deg);opacity:0}60%{transform:scale(1.02) rotate(.5deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}
+.cert-wrap{background:linear-gradient(160deg,#2a221a,#1f1814);border:2px solid #ffd700;border-radius:28px;padding:36px 28px;max-width:440px;width:100%;text-align:center;box-shadow:0 0 100px rgba(255,215,0,.15),0 0 200px rgba(255,215,0,.05),inset 0 0 80px rgba(255,215,0,.02);position:relative;overflow:hidden;animation:certAppear .8s ease-out both}
+.cert-wrap::before{content:'';position:absolute;inset:-1px;border-radius:28px;padding:1px;background:linear-gradient(135deg,#ffd700,#ff8c00,#ffd700,#ffd70088,#ffd700);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;animation:certBorderGlow 3s ease-in-out infinite}
+@keyframes certBorderGlow{0%,100%{opacity:.6}50%{opacity:1}}
+.cert-wrap::after{content:'✦ ✦ ✦ ✦ ✦';position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:12px;color:#ffd70033;pointer-events:none;animation:certStars 4s ease-in-out infinite}
+@keyframes certStars{0%,100%{opacity:.3}50%{opacity:.7}}
+.cert-ribbon{position:absolute;top:20px;right:-30px;width:100px;height:26px;background:linear-gradient(90deg,#c49a2a,#ffd700,#c49a2a);transform:rotate(45deg);box-shadow:0 2px 8px rgba(0,0,0,.4);z-index:1;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#1a0a00;letter-spacing:2px;text-transform:uppercase}
+.cert-ribbon-left{position:absolute;top:40px;left:-36px;width:100px;height:22px;background:linear-gradient(90deg,#c49a2a,#ffd700,#c49a2a);transform:rotate(-45deg);box-shadow:0 2px 8px rgba(0,0,0,.4);z-index:1;font-size:7px;font-weight:700;color:#1a0a00;display:flex;align-items:center;justify-content:center;letter-spacing:1px}
+.cert-mole{font-size:72px;margin-bottom:2px;display:block;filter:drop-shadow(0 4px 30px rgba(255,215,0,.4));animation:certMole 4s ease-in-out infinite;position:relative;z-index:2}
+@keyframes certMole{0%,100%{transform:translateY(0) rotate(0deg) scale(1)}50%{transform:translateY(-8px) rotate(3deg) scale(1.05)}}
+.cert-stamp{position:absolute;bottom:100px;right:20px;font-size:44px;opacity:.15;transform:rotate(15deg);pointer-events:none;z-index:0}
+.cert-seal{font-size:38px;margin-bottom:4px;opacity:.9;filter:drop-shadow(0 0 12px rgba(255,215,0,.3));position:relative;z-index:2}
+.cert-title{font-size:28px;font-weight:900;color:#ffd700;letter-spacing:-.01em;margin-bottom:1px;text-shadow:0 2px 30px rgba(255,215,0,.2),0 0 60px rgba(255,215,0,.1);position:relative;z-index:2}
+.cert-sub{font-size:9px;color:#a08a7a;letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;position:relative;z-index:2}
+.cert-divider{width:70%;height:1px;background:linear-gradient(90deg,transparent,#ffd70066,transparent);margin:12px auto}
+.cert-body{font-size:13px;color:#c4b8a8;line-height:1.7;margin-bottom:14px;padding:0 6px;position:relative;z-index:2}
+.cert-body strong{color:#ffd700;text-shadow:0 0 8px rgba(255,215,0,.15)}
+.cert-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px;text-align:center;position:relative;z-index:2}
+.cert-stat{background:linear-gradient(180deg,#1e1610,#16100a);border-radius:12px;padding:8px 6px;border:1px solid #3d3224;transition:all .3s}
+.cert-stat:hover{border-color:#ffd70044}
+.cert-stat-val{font-size:17px;font-weight:700;color:#ffd700;display:block;text-shadow:0 0 10px rgba(255,215,0,.1)}
+.cert-stat-lbl{font-size:7px;color:#7a6a5a;text-transform:uppercase;letter-spacing:.12em;display:block;margin-top:2px}
+.cert-stat-wide{grid-column:1/-1;background:linear-gradient(135deg,#1e1610,#261e14);border:1px solid #ffd70044}
+.cert-code{border-top:1px dashed #4a3a2a;padding-top:14px;margin-bottom:14px;position:relative;z-index:2}
+.cert-code-label{font-size:7px;color:#7a6a5a;text-transform:uppercase;letter-spacing:.25em;margin-bottom:5px}
+.cert-code-value{font-size:16px;font-weight:700;color:#ffd700;letter-spacing:.15em;font-family:monospace;background:linear-gradient(180deg,#1a130e,#12100a);display:inline-block;padding:5px 16px;border-radius:10px;border:1px solid #ffd70033;text-shadow:0 0 6px rgba(255,215,0,.1)}
+.cert-footer{font-size:10px;color:#7a6a5a;line-height:1.6;margin-bottom:16px;position:relative;z-index:2}
+.cert-footer strong{color:#d4a86a}
+.cert-close-btn{background:linear-gradient(180deg,#4a3a2a,#2a1f18);border:1px solid #ffd70066;color:#ffd700;font-size:14px;font-weight:bold;padding:10px 34px;border-radius:40px;box-shadow:0 4px 0 #1a130e,0 0 20px rgba(255,215,0,.05);cursor:pointer;transition:all .08s linear;touch-action:manipulation;font-family:'Unbounded',sans-serif;position:relative;z-index:2;letter-spacing:.05em}
+.cert-close-btn:hover{background:linear-gradient(180deg,#5a4a3a,#3a2a1a);box-shadow:0 4px 0 #1a130e,0 0 30px rgba(255,215,0,.1)}
 .cert-close-btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1a130e}
-@media(max-width:500px){.cert-wrap{padding:24px 16px;border-radius:20px}.cert-mole{font-size:48px}.cert-title{font-size:22px}.cert-stat-val{font-size:14px}.cert-code-value{font-size:13px}}
+@keyframes certParticle{0%{opacity:0;transform:translateY(0) scale(0)}20%{opacity:1}80%{opacity:1}100%{opacity:0;transform:translateY(-80px) scale(1.5)}}
+.cert-particle{position:absolute;pointer-events:none;font-size:10px;z-index:0;animation:certParticle 3s ease-out infinite}
+@media(max-width:500px){.cert-wrap{padding:24px 14px;border-radius:20px}.cert-mole{font-size:52px}.cert-title{font-size:22px}.cert-stat-val{font-size:14px}.cert-code-value{font-size:13px}.cert-ribbon,.cert-ribbon-left{display:none}}
 
 .pause-btn{background:#1a130e;border:none;color:#d4c4a8;font-size:18px;cursor:pointer;transition:.1s;padding:3px 8px;border-radius:30px;box-shadow:inset 0 2px 5px rgba(0,0,0,.7);line-height:1}
 .pause-btn:active{transform:scale(.9)}
@@ -689,6 +699,38 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 .collect-slot.tier-mythic.filled{border-color:#cc22aa;background:linear-gradient(180deg,#1a130e,#1a0020);box-shadow:0 0 40px rgba(200,30,170,.1)}
 .collect-slot.tier-mythic.filled .collect-slot-icon{animation:collectMythicGlow 2s ease-in-out infinite;filter:drop-shadow(0 0 12px rgba(200,30,170,.4))}
 .collect-slot.tier-mythic.filled::before{content:'';position:absolute;inset:-2px;border-radius:16px;padding:2px;background:conic-gradient(from 0deg,rgba(200,30,170,.15),rgba(255,0,238,.15),rgba(100,0,255,.15),rgba(200,30,170,.15));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:collectMythicSpin 3s linear infinite;pointer-events:none}
+.profile-xp-bar{width:80%;height:6px;background:#1a130e;border-radius:3px;margin:4px auto;overflow:hidden;border:1px solid #2a1f18}
+.profile-xp-fill{height:100%;background:linear-gradient(90deg,#ffd700,#ff8c00);border-radius:3px;transition:width .3s}
+.collect-count{position:absolute;top:-4px;right:-4px;background:#ffd700;color:#1a0a00;font-size:9px;font-weight:bold;border-radius:8px;padding:0 5px;line-height:16px;z-index:2;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+.lore-popup{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .3s}
+.lore-popup.show{opacity:1;pointer-events:auto}
+.lore-popup-card{background:linear-gradient(180deg,#2a1f18,#1a130e);border:2px solid #3d3024;border-radius:20px;padding:24px;max-width:320px;width:90%;text-align:center;position:relative}
+.lore-popup-icon{font-size:56px;display:block;margin:0 auto 8px}
+.lore-popup-name{font-size:18px;color:#ffd700;font-weight:bold;margin-bottom:4px}
+.lore-popup-tier{font-size:11px;margin-bottom:12px;opacity:.7}
+.lore-popup-desc{font-size:13px;color:#c4b49a;margin-bottom:8px;line-height:1.4}
+.lore-popup-lore{font-size:12px;color:#a08070;font-style:italic;border-top:1px solid #2a1f18;padding-top:10px;margin-top:10px;line-height:1.4}
+.lore-popup-count{font-size:11px;color:#ffd700;margin-bottom:10px}
+.lore-popup-close,.lore-popup-puzzle{margin-top:8px;padding:8px 24px;border-radius:10px;font-size:14px;cursor:pointer;transition:all .2s;display:inline-block}
+.lore-popup-close{background:linear-gradient(180deg,#3d3024,#2a1f18);border:1px solid #5a4a3a;color:#c4b49a}
+.lore-popup-close:hover{background:linear-gradient(180deg,#5a4a3a,#3d3024);color:#fff}
+.lore-popup-puzzle{background:linear-gradient(180deg,#2a3a1a,#1a2a0a);border:1px solid #4a6a2a;color:#8aca4a;margin-right:6px}
+.lore-popup-puzzle:hover{background:linear-gradient(180deg,#3a5a2a,#2a3a1a);color:#aaff6a}
+.lore-popup-puzzle.solved{background:linear-gradient(180deg,#2a2a1a,#1a1a0a);border-color:#5a5a2a;color:#6a6a3a;pointer-events:none;opacity:.6}
+.puzzle-option{display:inline-block;padding:10px 18px;margin:4px;border:2px solid #3d3024;border-radius:10px;cursor:pointer;font-size:18px;transition:all .2s;background:#1a130e;color:#c4b49a;min-width:40px;text-align:center}
+.puzzle-option:hover{border-color:#ffd700;background:#2a1f18;transform:scale(1.05)}
+.puzzle-option.selected{border-color:#00cc44;background:#0a2a0a;color:#44ff88}
+.puzzle-option.wrong{border-color:#cc2222;background:#2a0a0a;color:#ff4444}
+.puzzle-input{background:#1a130e;border:2px solid #3d3024;border-radius:10px;padding:10px 16px;color:#c4b49a;font-size:16px;width:200px;text-align:center;outline:none;transition:border-color .2s}
+.puzzle-input:focus{border-color:#ffd700}
+.puzzle-submit{display:block;margin:8px auto;padding:8px 24px;background:linear-gradient(180deg,#3d3024,#2a1f18);border:1px solid #5a4a3a;border-radius:10px;color:#c4b49a;font-size:14px;cursor:pointer}
+.puzzle-submit:hover{background:linear-gradient(180deg,#5a4a3a,#3d3024);color:#fff}
+.puzzle-seq-grid{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+.puzzle-seq-cell{width:48px;height:48px;border:2px solid #3d3024;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;background:#1a130e;cursor:pointer;transition:all .2s}
+.puzzle-seq-cell:hover{border-color:#ffd700;background:#2a1f18}
+.puzzle-seq-cell.active{border-color:#00cc44;background:#0a2a0a}
+.puzzle-seq-cell.highlight{border-color:#ffd700;background:#2a2a0a;animation:pulse .5s}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 @keyframes collectSlotAppear{0%{opacity:0;transform:translateY(8px) scale(.9)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes collectShimmer{0%,100%{opacity:.7}50%{opacity:1}}
 @keyframes collectPulseBlue{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.08);opacity:1}}
@@ -748,11 +790,14 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 	</div>
 </div>
 <div class="cert-screen" id="certScreen">
-	<div class="cert-wrap">
+	<div class="cert-wrap" id="certWrap">
+		<div class="cert-ribbon">★ ЛЕГЕНДА ★</div>
+		<div class="cert-ribbon-left">СЕРТИФИКАТ</div>
+		<div class="cert-stamp">🏛️</div>
 		<span class="cert-mole">🐹</span>
 		<div class="cert-seal">📜</div>
-		<div class="cert-title">📜 Легендарный сертификат</div>
-		<div class="cert-sub">Ты нашёл его в глубинах шахты</div>
+		<div class="cert-title">Легендарный сертификат</div>
+		<div class="cert-sub">✦ Найден в глубинах шахты ✦</div>
 		<div class="cert-divider"></div>
 		<div class="cert-body" id="certBody">
 			Игрок выполнил <strong>все достижения</strong><br>
@@ -762,8 +807,10 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<div class="cert-stats" id="certStats">
 			<div class="cert-stat"><span class="cert-stat-val" id="certScore">0</span><span class="cert-stat-lbl">Очков</span></div>
 			<div class="cert-stat"><span class="cert-stat-val" id="certAchs">0</span><span class="cert-stat-lbl">Достижений</span></div>
-			<div class="cert-stat"><span class="cert-stat-val" id="certCombo">x1</span><span class="cert-stat-lbl">Лучшее комбо</span></div>
+			<div class="cert-stat"><span class="cert-stat-val" id="certCombo">x1</span><span class="cert-stat-lbl">Комбо</span></div>
 			<div class="cert-stat"><span class="cert-stat-val" id="certShovel">1</span><span class="cert-stat-lbl">Лопата</span></div>
+			<div class="cert-stat"><span class="cert-stat-val" id="certLevel">1</span><span class="cert-stat-lbl">Уровень</span></div>
+			<div class="cert-stat"><span class="cert-stat-val" id="certMine">1</span><span class="cert-stat-lbl">Шахта</span></div>
 			<div class="cert-stat cert-stat-wide"><span class="cert-stat-val" id="certCollection">0</span><span class="cert-stat-lbl">Коллекций собрано</span></div>
 		</div>
 		<div class="cert-code">
@@ -771,7 +818,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 			<div class="cert-code-value" id="certCode">------</div>
 		</div>
 		<div class="cert-footer">Сделай скриншот и отправь на <strong>olehmudruk@yandex.by</strong><br>с твоим ником — мы ответим!</div>
-		<button class="cert-close-btn" id="certCloseBtn">✓ Готово</button>
+		<button class="cert-close-btn" id="certCloseBtn">✦ Готово ✦</button>
 	</div>
 </div>
 <div class="game-wrap" id="gameWrap">
@@ -837,6 +884,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 				</div>
 				<div class="profile-title-badge" id="profileTitleBadge">🌱 Новичок</div>
 				<div class="profile-level">Уровень <span id="profileLevelDisplay">1</span></div>
+				<div class="profile-xp-bar"><div class="profile-xp-fill" id="profileXPBar" style="width:0%"></div></div>
 				<div class="profile-mine">⛏ <span id="profileMineDisplay">Медная</span></div>
 			</div>
 			<div class="profile-stats-grid">
@@ -950,6 +998,27 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<button class="collectibles-close" id="collectiblesCloseBtn">✕</button>
 	</div>
 	<div class="collectibles-grid" id="collectiblesGrid"></div>
+</div>
+<div class="lore-popup" id="lorePopup">
+	<div class="lore-popup-card">
+		<span class="lore-popup-icon" id="loreIcon"></span>
+		<div class="lore-popup-name" id="loreName"></div>
+		<div class="lore-popup-tier" id="loreTier"></div>
+		<div class="lore-popup-count" id="loreCount"></div>
+		<div class="lore-popup-desc" id="loreDesc"></div>
+		<div class="lore-popup-lore" id="loreText"></div>
+		<button class="lore-popup-puzzle" id="lorePuzzleBtn">🧩 Решить загадку</button>
+		<button class="lore-popup-close" id="loreCloseBtn">Закрыть</button>
+	</div>
+</div>
+<div class="lore-popup" id="puzzlePopup">
+	<div class="lore-popup-card" style="max-width:360px">
+		<div class="lore-popup-icon" id="puzzleIcon" style="font-size:40px">🧩</div>
+		<div class="lore-popup-name" id="puzzleTitle">Загадка</div>
+		<div id="puzzleContent" style="min-height:80px;padding:8px 0"></div>
+		<div id="puzzleResult" style="font-size:13px;min-height:20px;margin:4px 0"></div>
+		<div id="puzzleActions"></div>
+	</div>
 </div>
 
 <script>
@@ -1476,7 +1545,7 @@ var ACHIEVEMENTS=[
 var D=function(id){return document.getElementById(id);};
 var menuScreen=D('menuScreen'),playBtn=D('playBtn'),menuSoundBtn=D('menuSoundBtn');
 var achScreen=D('achScreen'),achList=D('achList'),achCloseBtn=D('achCloseBtn'),achProgress=D('achProgress'),achHint=D('achHint');
-var certScreen=D('certScreen'),certCode=D('certCode'),certCloseBtn=D('certCloseBtn'),certScore=D('certScore'),certAchs=D('certAchs'),certCombo=D('certCombo'),certShovel=D('certShovel'),certCollection=D('certCollection');
+var certScreen=D('certScreen'),certCode=D('certCode'),certCloseBtn=D('certCloseBtn'),certScore=D('certScore'),certAchs=D('certAchs'),certCombo=D('certCombo'),certShovel=D('certShovel'),certCollection=D('certCollection'),certLevel=D('certLevel'),certMine=D('certMine');
 var achBanner=D('achBanner'),achBannerIcon=D('achBannerIcon'),achBannerTitle=D('achBannerTitle'),achBannerDesc=D('achBannerDesc');
 var gameWrap=D('gameWrap'),gridEl=D('grid'),levelFlash=D('levelFlash');
 
@@ -1501,18 +1570,20 @@ var chestOpenResultOverlay=D('chestOpenResultOverlay'),chestResultIcon=D('chestR
 
 // Profile cosmetics
 var PROFILE_FRAMES=[
-	{id:'default',name:'Классическая',icon:'⬜',cost:0,eff:''},
-	{id:'copper',name:'Медное сияние',icon:'🟫',cost:500,eff:'frame-copper'},
-	{id:'silver',name:'Серебряный блеск',icon:'⬜',cost:2000,eff:'frame-silver'},
-	{id:'gold',name:'Золотое свечение',icon:'🟨',cost:5000,eff:'frame-gold'},
-	{id:'crystal',name:'Хрустальная призма',icon:'💎',cost:10000,eff:'frame-crystal'},
-	{id:'neon',name:'Неоновый контур',icon:'🌈',cost:18000,eff:'frame-neon'},
-	{id:'flame',name:'Пламенный ореол',icon:'🔥',cost:25000,eff:'frame-flame'},
-	{id:'shadow',name:'Теневой силуэт',icon:'🌑',cost:35000,eff:'frame-shadow'},
-	{id:'cosmic',name:'Космическая бездна',icon:'🌌',cost:50000,eff:'frame-cosmic'},
-	{id:'royal',name:'Королевская корона',icon:'👑',cost:75000,eff:'frame-royal'},
-	{id:'prism',name:'Радужный спектр',icon:'🌈',cost:100000,eff:'frame-prism'},
-	{id:'void',name:'Чёрная дыра',icon:'🕳️',cost:150000,eff:'frame-void'}
+	{id:'default',name:'Классическая',icon:'⬜',cost:0,eff:'',minLevel:1},
+	{id:'copper',name:'Медное сияние',icon:'🟫',cost:500,eff:'frame-copper',minLevel:1},
+	{id:'silver',name:'Серебряный блеск',icon:'⬜',cost:2000,eff:'frame-silver',minLevel:1},
+	{id:'gold',name:'Золотое свечение',icon:'🟨',cost:5000,eff:'frame-gold',minLevel:2},
+	{id:'crystal',name:'Хрустальная призма',icon:'💎',cost:10000,eff:'frame-crystal',minLevel:3},
+	{id:'neon',name:'Неоновый контур',icon:'🌈',cost:18000,eff:'frame-neon',minLevel:5},
+	{id:'flame',name:'Пламенный ореол',icon:'🔥',cost:25000,eff:'frame-flame',minLevel:7},
+	{id:'shadow',name:'Теневой силуэт',icon:'🌑',cost:35000,eff:'frame-shadow',minLevel:10},
+	{id:'cosmic',name:'Космическая бездна',icon:'🌌',cost:50000,eff:'frame-cosmic',minLevel:12},
+	{id:'royal',name:'Королевская корона',icon:'👑',cost:75000,eff:'frame-royal',minLevel:15},
+	{id:'prism',name:'Радужный спектр',icon:'🌈',cost:100000,eff:'frame-prism',minLevel:20},
+	{id:'void',name:'Чёрная дыра',icon:'🕳️',cost:150000,eff:'frame-void',minLevel:25},
+	{id:'puzzle_solver',name:'Головоломщик',icon:'🧩',cost:0,eff:'frame-puzzle-solver',minLevel:1},
+	{id:'rune_master',name:'Мастер рун',icon:'🔮',cost:0,eff:'frame-rune-master',minLevel:1}
 ];
 var PROFILE_TITLES=[
 	{id:'novice',name:'Новичок',icon:'🌱',cost:0,needLevel:1,eff:''},
@@ -1523,7 +1594,9 @@ var PROFILE_TITLES=[
 	{id:'legend',name:'Легенда шахт',icon:'🏆',cost:30000,needLevel:50,eff:'title-legend'},
 	{id:'infinite',name:'Бесконечный',icon:'∞',cost:60000,needLevel:80,eff:'title-infinite'},
 	{id:'abyss',name:'Хранитель бездны',icon:'🌀',cost:100000,needLevel:100,eff:'title-abyss'},
-	{id:'eternal',name:'Вечность',icon:'✨',cost:200000,needLevel:150,eff:'title-eternal'}
+	{id:'eternal',name:'Вечность',icon:'✨',cost:200000,needLevel:150,eff:'title-eternal'},
+	{id:'riddler',name:'Разгадчик',icon:'❓',cost:0,needLevel:1,eff:'title-riddler'},
+	{id:'puzzle_master',name:'Мастер загадок',icon:'🧠',cost:0,needLevel:1,eff:'title-puzzle-master'}
 ];
 
 // Profile state
@@ -1533,79 +1606,91 @@ var profileState={equippedFrame:'default',equippedTitle:'novice',ownedFrames:['d
 var ACHIEVEMENTS_ORDER=ACHIEVEMENTS.map(function(a){return a.id;});
 var CHEST_ITEMS=[
 	// Обычные (common)
-	{id:'antique_coin',name:'Древняя монета',icon:'🪙',desc:'Монета затонувшей цивилизации. На аверсе — корона, на реверсе — пустота.',tier:'common'},
-	{id:'clay_tablet',name:'Глиняная табличка',icon:'📜',desc:'Покрыта письменами на языке, который никто не может прочесть. Они шевелятся.',tier:'common'},
-	{id:'broken_amulet',name:'Сломанный амулет',icon:'📿',desc:'Треснувший камень внутри всё ещё хранит отголосок древней магии.',tier:'common'},
-	{id:'wanderer_feather',name:'Перо странника',icon:'🪶',desc:'Упало с неба в день солнечного затмения. Ни одна птица не пролетала.',tier:'common'},
+	{id:'antique_coin',name:'Древняя монета',icon:'🪙',desc:'Монета затонувшей цивилизации. На аверсе — корона, на реверсе — пустота.',tier:'common',lore:'Ходила по рукам семи королевств, пока все они не ушли под воду. Говорят, если бросить её в колодец — услышишь голоса утонувших городов.'},
+	{id:'clay_tablet',name:'Глиняная табличка',icon:'📜',desc:'Покрыта письменами на языке, который никто не может прочесть. Они шевелятся.',tier:'common',lore:'Расшифровано только одно слово — «ПРОСНИСЬ». Оно повторяется ровно 666 раз. Глина всё ещё влажная.'},
+	{id:'broken_amulet',name:'Сломанный амулет',icon:'📿',desc:'Треснувший камень внутри всё ещё хранит отголосок древней магии.',tier:'common',lore:'Принадлежал жрецу, который пытался остановить конец света. Амулет треснул. Жрец исчез. Конец света перенесли.'},
+	{id:'wanderer_feather',name:'Перо странника',icon:'🪶',desc:'Упало с неба в день солнечного затмения. Ни одна птица не пролетала.',tier:'common',lore:'Перо принадлежит не птице. Оно падало три дня. Тот, кто его потерял, всё ещё ищет. Иногда ночью слышен шелест крыльев над крышей.'},
 	// Необычные (uncommon)
-	{id:'moon_shard',name:'Лунный осколок',icon:'🌙',desc:'Испускает мягкое голубое свечение в полнолуние. Тёплый на ощупь.',tier:'uncommon'},
-	{id:'dragon_eye',name:'Глаз дракона',icon:'👁️',desc:'Кажется, он следит за тобой. Лучше не отворачиваться.',tier:'uncommon'},
-	{id:'ether_dust',name:'Эфирная пыль',icon:'✨',desc:'Светится в темноте и тихо шепчет. Если прислушаться — узнаешь будущее.',tier:'uncommon'},
-	{id:'shadow_mask',name:'Маска теней',icon:'🎭',desc:'Надевший её становится невидимым для духов. Но духи всё равно знают.',tier:'uncommon'},
+	{id:'moon_shard',name:'Лунный осколок',icon:'🌙',desc:'Испускает мягкое голубое свечение в полнолуние. Тёплый на ощупь.',tier:'uncommon',lore:'Осколок упал с луны в ночь кровавого затмения. Каждое полнолуние он тяжелеет ровно на грамм. Учёные разводят руками. Шаманы — прячут лица.',puzzle:{type:'riddle',question:'Что тяжелеет в полнолуние, но легчает на рассвете? (одно слово)',answer:'луна',rewardXP:30}},
+	{id:'dragon_eye',name:'Глаз дракона',icon:'👁️',desc:'Кажется, он следит за тобой. Лучше не отворачиваться.',tier:'uncommon',lore:'Последний дракон отдал свой глаз добровольно. Сказал: «Теперь я буду видеть мир твоими глазами». Иногда ты чувствуешь чужой взгляд. Это он.'},
+	{id:'ether_dust',name:'Эфирная пыль',icon:'✨',desc:'Светится в темноте и тихо шепчет. Если прислушаться — узнаешь будущее.',tier:'uncommon',lore:'Пыльца цветущего эфира. Собирают её только слепые монахи в безлунные ночи. Шёпот пыльцы — это голоса тех, кого ещё нет. Они рассказывают твоё будущее.'},
+	{id:'shadow_mask',name:'Маска теней',icon:'🎭',desc:'Надевший её становится невидимым для духов. Но духи всё равно знают.',tier:'uncommon',lore:'Вырезана из тени, отброшенной несуществующим предметом. Духи не видят тех, кто в маске. Но они чувствуют запах страха. Не бойся — и пройдёшь незамеченным.',puzzle:{type:'riddle',question:'Чего боятся тени больше, чем света? (одно слово)',answer:'тишина',rewardXP:30}},
 	// Редкие (rare)
-	{id:'kings_crown',name:'Корона короля',icon:'👑',desc:'Потеряна тысячу лет назад. Всё ещё тёплая, будто её только что сняли.',tier:'rare'},
-	{id:'spellbook',name:'Книга заклинаний',icon:'📖',desc:'Страницы перелистываются сами, когда никто не смотрит. Лучше не читать вслух.',tier:'rare'},
-	{id:'abyss_pearl',name:'Жемчужина бездны',icon:'🦪',desc:'Чёрная как сама бездна. Внутри неё горит одна-единственная звезда.',tier:'rare'},
-	{id:'justice_sword',name:'Меч правосудия',icon:'🗡️',desc:'В руках праведника вспыхивает синим пламенем. В руках лжеца — гаснет.',tier:'rare'},
+	{id:'kings_crown',name:'Корона короля',icon:'👑',desc:'Потеряна тысячу лет назад. Всё ещё тёплая, будто её только что сняли.',tier:'rare',lore:'Корона последнего короля, что правил миром без войн. Когда он умер, корона исчезла. Легенда гласит: кто наденет её — вспомнит всё, что люди забыли. Тепло — это его ладони.',puzzle:{type:'riddle',question:'Что король потерял вместе с короной? (одно слово)',answer:'память',rewardXP:50}},
+	{id:'spellbook',name:'Книга заклинаний',icon:'📖',desc:'Страницы перелистываются сами, когда никто не смотрит. Лучше не читать вслух.',tier:'rare',lore:'Книга на 666 страницах. Страница 404 — пустая, но если долго смотреть — видишь свою смерть. Последнее заклинание в книге — твоё имя.',puzzle:{type:'pattern',question:'Какая страница следующая?',sequence:['📜','📜📜','📜📜📜'],options:['📜📜📜📜','📜📜','📖'],answer:0,rewardXP:50}},
+	{id:'abyss_pearl',name:'Жемчужина бездны',icon:'🦪',desc:'Чёрная как сама бездна. Внутри неё горит одна-единственная звезда.',tier:'rare',lore:'Раковину, в которой росла эта жемчужина, нашёл слепой ныряльщик на глубине, где свет не существует. Звезда внутри — это его душа. Он так и не всплыл.',puzzle:{type:'riddle',question:'Что можно увидеть только закрыв глаза? (одно слово)',answer:'сон',rewardXP:50}},
+	{id:'justice_sword',name:'Меч правосудия',icon:'🗡️',desc:'В руках праведника вспыхивает синим пламенем. В руках лжеца — гаснет.',tier:'rare',lore:'Выкован из метеорита, упавшего в день, когда был казнён невиновный. С тех пор меч ищет своего хозяина. Если ты врёшь — он жжёт руку. Проверь себя.',puzzle:{type:'riddle',question:'Чем меч правосудия отличается от обычного? (одно слово)',answer:'правда',rewardXP:50}},
 	// Эпические (epic)
-	{id:'phoenix_feather',name:'Перо Феникса',icon:'🔥',desc:'Всё ещё горит. Обжигает даже сквозь перчатки. Уронить нельзя — рассыплется в пепел.',tier:'epic'},
-	{id:'time_crystal',name:'Кристалл времени',icon:'⏳',desc:'Внутри застыл миг рождения вселенной. Если долго смотреть — видно, как всё начиналось.',tier:'epic'},
-	{id:'star_map',name:'Карта звёзд',icon:'🌌',desc:'Созвездия на ней меняются каждую ночь. Показывает путь к тому, что ты ищешь.',tier:'epic'},
-	{id:'invisibility_cloak',name:'Плащ невидимки',icon:'🫧',desc:'Легче воздуха. Ткань переливается радугой. Накинь — и тебя нет.',tier:'epic'},
+	{id:'phoenix_feather',name:'Перо Феникса',icon:'🔥',desc:'Всё ещё горит. Обжигает даже сквозь перчатки. Уронить нельзя — рассыплется в пепел.',tier:'epic',lore:'Феникс сгорел дотла в день твоего рождения. Это перо — всё, что от него осталось. Если загадать желание и подуть на него — пламя вспыхнет сильнее. Феникс возродится, когда перо догорит.',puzzle:{type:'sequence',question:'Повтори танец феникса! (нажми в правильном порядке)',symbols:['🔥','✨','🔥','🌟'],rewardXP:80}},
+	{id:'time_crystal',name:'Кристалл времени',icon:'⏳',desc:'Внутри застыл миг рождения вселенной. Если долго смотреть — видно, как всё начиналось.',tier:'epic',lore:'Хранитель времени уронил его, когда спешил на конец света. Внутри кристалла — первый вздох вселенной. Говорят, если разбить — время пойдёт вспять. Но разбить нельзя — ты не захочешь.',puzzle:{type:'pattern',question:'Какой символ продолжает временной узор?',sequence:['⏳','⌛','⏳','⌛'],options:['⏳','⌛','🕰️'],answer:1,rewardXP:80}},
+	{id:'star_map',name:'Карта звёзд',icon:'🌌',desc:'Созвездия на ней меняются каждую ночь. Показывает путь к тому, что ты ищешь.',tier:'epic',lore:'Нарисована на шкуре существа, которое видело всё. Каждая новая звезда на небе — ещё одна прожитая тобой секунда. Карта ведёт к тому, что ты ищешь. Но она не говорит, что найдёшь.',puzzle:{type:'riddle',question:'Что ищешь ты, но не найдёшь, пока не перестанешь искать? (одно слово)',answer:'себя',rewardXP:80}},
+	{id:'invisibility_cloak',name:'Плащ невидимки',icon:'🫧',desc:'Легче воздуха. Ткань переливается радугой. Накинь — и тебя нет.',tier:'epic',lore:'Сшит из лунного света пауками-призраками. Владелец становится невидимым, но не бесшумным. И не неосязаемым. Однажды владелец накинул плащ и забыл, кто он. Его до сих пор ищут.',puzzle:{type:'riddle',question:'Что нельзя спрятать, даже став невидимым? (одно слово)',answer:'мысль',rewardXP:80}},
 	// Легендарные (legendary)
-	{id:'universe_key',name:'Ключ от вселенной',icon:'🗝️',desc:'Говорят, открывает любую дверь. Даже ту, которой не существует.',tier:'legendary'},
-	{id:'eternity_crystal',name:'Кристалл вечности',icon:'💠',desc:'Внутри видно рождение и смерть галактик. Не смотри слишком долго.',tier:'legendary'},
-	{id:'jar_star',name:'Звезда в банке',icon:'⭐',desc:'Настоящая звезда. Уменьшена до размеров банки. Тёплая. Стекло не плавится — секрет.',tier:'legendary'},
-	{id:'fate_tablet',name:'Скрижаль судьбы',icon:'🏛️',desc:'На ней высечено твоё имя. Оно меняется каждую секунду. Ты жив, пока читаешь.',tier:'legendary'},
+	{id:'universe_key',name:'Ключ от вселенной',icon:'🗝️',desc:'Говорят, открывает любую дверь. Даже ту, которой не существует.',tier:'legendary',lore:'Ключ из металла, которого нет в таблице Менделеева. Продавец сказал: «Он открывает всё. Но не говори мне, что ты собираешься открыть». Я открыл шкаф. Оттуда пахло бесконечностью.',puzzle:{type:'riddle',question:'Что открывает ключ, у которого нет замка? (одно слово)',answer:'возможность',rewardXP:120}},
+	{id:'eternity_crystal',name:'Кристалл вечности',icon:'💠',desc:'Внутри видно рождение и смерть галактик. Не смотри слишком долго.',tier:'legendary',lore:'Внутри кристалла — замёрзшая вечность. Один взгляд — и ты видишь рождение своей первой клетки. Второй — как угасает последняя звезда. Третий взгляд будет последним. Не смотри третий раз.',puzzle:{type:'pattern',question:'Что будет после бесконечности?',sequence:['1','2','3','…'],options:['4','∞','0'],answer:1,rewardXP:120}},
+	{id:'jar_star',name:'Звезда в банке',icon:'⭐',desc:'Настоящая звезда. Уменьшена до размеров банки. Тёплая. Стекло не плавится — секрет.',tier:'legendary',lore:'Звездолов поймал её сачком для бабочек. Звезда согласилась жить в банке в обмен на одно желание в год. Крышку не откручивай — звезда улетит, а с ней и все желания.',puzzle:{type:'math',question:'Звезда даёт 3 желания в год. Сколько желаний она даст за 7 лет?',answer:'21',rewardXP:120}},
+	{id:'fate_tablet',name:'Скрижаль судьбы',icon:'🏛️',desc:'На ней высечено твоё имя. Оно меняется каждую секунду. Ты жив, пока читаешь.',tier:'legendary',lore:'Каменная плита из храма, где боги записывают имена смертных. Твоё имя уже было тут — тысячу разных версий тебя. Когда имя перестанет меняться — ты станешь богом. Или исчезнешь.',puzzle:{type:'riddle',question:'Что меняется каждую секунду, но остаётся твоим навсегда? (одно слово)',answer:'имя',rewardXP:120}},
 	// Мифические (mythic)
-	{id:'galaxy_heart',name:'Сердце галактики',icon:'🌀',desc:'Пульсирует в такт с твоим сердцем. Однажды они забьются в унисон.',tier:'mythic'},
-	{id:'primordial_light',name:'Первобытный свет',icon:'🌠',desc:'Первый свет, вспыхнувший после Большого взрыва. Заперт в хрустальной сфере.',tier:'mythic'},
-	{id:'philosopher_stone',name:'Философский камень',icon:'🜁',desc:'Превращает мечты в реальность. По капле. Не торопись — реальность хрупка.',tier:'mythic'},
-	{id:'infinity_ring',name:'Кольцо бесконечности',icon:'∞',desc:'Надпись внутри кольца: «Всё, что ты ищешь, уже внутри тебя». Примерь — почувствуешь.',tier:'mythic'},
+	{id:'galaxy_heart',name:'Сердце галактики',icon:'🌀',desc:'Пульсирует в такт с твоим сердцем. Однажды они забьются в унисон.',tier:'mythic',lore:'Сердце мёртвой галактики, которое всё ещё бьётся. Когда ты держишь его в руках, ты чувствуешь ритм вселенной. Говорят, когда оно остановится — всё начнётся заново. Большой взрыв уже был. Это второй.',puzzle:{type:'sequence',question:'Настройся на ритм вселенной!',symbols:['🌀','⭐','🌀','🌌','🌀'],rewardXP:200,rewardTitle:'title-puzzle-master'}},
+	{id:'primordial_light',name:'Первобытный свет',icon:'🌠',desc:'Первый свет, вспыхнувший после Большого взрыва. Заперт в хрустальной сфере.',tier:'mythic',lore:'Свет, который увидел первую тень. Заперт в сфере из невозможного хрусталя. Если выпустить — он осветит всё сущее. Или сожжёт дотла. Никто не решался открыть. Никто.',puzzle:{type:'pattern',question:'Какой свет был первым?',sequence:['🌑','🌒','🌓','🌔'],options:['🌕','🌑','☀️'],answer:0,rewardXP:200,rewardFrame:'frame-rune-master'}},
+	{id:'philosopher_stone',name:'Философский камень',icon:'🜁',desc:'Превращает мечты в реальность. По капле. Не торопись — реальность хрупка.',tier:'mythic',lore:'Искать его — бессмысленно. Он сам находит тебя. Камень исполняет желания, но берёт плату воспоминаниями. Чем грандиознее желание — тем ценнее память. Ты уже забыл, что загадал.',puzzle:{type:'math',question:'Если камень исполняет 1 желание в день, а ты забываешь 2 воспоминания за каждое — сколько воспоминаний ты потеряешь за неделю?',answer:'14',rewardXP:200,rewardTitle:'title-riddler'}},
+	{id:'infinity_ring',name:'Кольцо бесконечности',icon:'∞',desc:'Надпись внутри кольца: «Всё, что ты ищешь, уже внутри тебя». Примерь — почувствуешь.',tier:'mythic',lore:'Кольцо, которое помнит все свои прошлые жизни. Надпись внутри — это письмо самому себе. Каждый владелец оставлял там послание. Прочти — и узнаешь, что ты говорил себе до рождения.',puzzle:{type:'riddle',question:'Что внутри тебя, но ищешь ты это снаружи? (одно слово)',answer:'смысл',rewardXP:200,rewardFrame:'frame-puzzle-solver'}},
 	// Сезон 2 — Обычные
-	{id:'rusted_bell',name:'Ржавый колокольчик',icon:'🔔',desc:'Звенит сам по себе раз в столетие. Сегодня как раз тот день.',tier:'common'},
-	{id:'chipped_cup',name:'Щербатая кружка',icon:'🍵',desc:'На дне видна надпись: «Выпей меня». Лучше не надо.',tier:'common'},
-	{id:'old_key',name:'Старый ключ',icon:'🔑',desc:'Не подходит ни к одному замку. Может, он открывает то, что не заперто?',tier:'common'},
-	{id:'burnt_candle',name:'Огарок свечи',icon:'🕯️',desc:'Догорает уже тысячу лет. Тень от него живёт своей жизнью.',tier:'common'},
-	{id:'torn_map',name:'Рваная карта',icon:'🗺️',desc:'Ведёт в место, которого нет на карте. Метафора.',tier:'common'},
+	{id:'rusted_bell',name:'Ржавый колокольчик',icon:'🔔',desc:'Звенит сам по себе раз в столетие. Сегодня как раз тот день.',tier:'common',lore:'Колокольчик с двери заброшенной церкви. Звонят в него не ветры — время течёт сквозь металл. Когда звон услышишь — загадай желание. У тебя сто лет до следующего.'},
+	{id:'chipped_cup',name:'Щербатая кружка',icon:'🍵',desc:'На дне видна надпись: «Выпей меня». Лучше не надо.',tier:'common',lore:'Кружка из глины, замешанной на слезах поэта. Надпись на дне появляется, только когда наливаешь чай. Один глоток — и ты видишь мир его глазами. Грустно. Очень грустно.'},
+	{id:'old_key',name:'Старый ключ',icon:'🔑',desc:'Не подходит ни к одному замку. Может, он открывает то, что не заперто?',tier:'common',lore:'Кузнец выковал его из первой молнии. Ключ ищет замок, которого нет. Говорят, он отпирает двери в сны. Поверни во сне — попадёшь в сон внутри сна. Кто-то всё ещё там бродит.'},
+	{id:'burnt_candle',name:'Огарок свечи',icon:'🕯️',desc:'Догорает уже тысячу лет. Тень от него живёт своей жизнью.',tier:'common',lore:'Зажжена в день основания мира. Воск не убывает — время течёт мимо. Танцует не свеча — тени вспоминают, кем были до того, как стал свет.'},
+	{id:'torn_map',name:'Рваная карта',icon:'🗺️',desc:'Ведёт в место, которого нет на карте. Метафора.',tier:'common',lore:'Нарисована на коже того, кто заблудился в пустоте. Место назначения — «Ты уже здесь». Но ты не здесь. Или здесь, но не знаешь. Карта врёт ровно настолько, чтобы ты искал.'},
 	// Сезон 2 — Необычные
-	{id:'singing_shell',name:'Поющая ракушка',icon:'🐚',desc:'Внутри слышен не океан, а чей-то шёпот. Он зовёт тебя по имени.',tier:'uncommon'},
-	{id:'glow_mushroom',name:'Светящийся гриб',icon:'🍄',desc:'Растёт в полной темноте. Питается тишиной. Не срывай — заплачет.',tier:'uncommon'},
-	{id:'crystal_tear',name:'Хрустальная слеза',icon:'💧',desc:'Застывшая слеза древней статуи. Говорят, она плачет о конце света.',tier:'uncommon'},
-	{id:'silver_compass',name:'Серебряный компас',icon:'🧭',desc:'Стрелка всегда указывает на то, чего ты боишься больше всего.',tier:'uncommon'},
-	{id:'bone_flute',name:'Костяная флейта',icon:'🪈',desc:'Играет мелодию, которую никто не слышал, но все помнят.',tier:'uncommon'},
+	{id:'singing_shell',name:'Поющая ракушка',icon:'🐚',desc:'Внутри слышен не океан, а чей-то шёпот. Он зовёт тебя по имени.',tier:'uncommon',lore:'Ракушка с пляжа, которого нет на картах. Внутри — не море, а воспоминания утопленников. Каждый шёпот — чья-то последняя мысль. Твоё имя среди них. Ещё не сейчас, но уже есть.'},
+	{id:'glow_mushroom',name:'Светящийся гриб',icon:'🍄',desc:'Растёт в полной темноте. Питается тишиной. Не срывай — заплачет.',tier:'uncommon',lore:'Вырос на могиле молчаливого монаха. Грибница опутала его кости и теперь говорит его голосом. Светится, когда кто-то врёт. В темноте он сияет постоянно.'},
+	{id:'crystal_tear',name:'Хрустальная слеза',icon:'💧',desc:'Застывшая слеза древней статуи. Говорят, она плачет о конце света.',tier:'uncommon',lore:'Статуя плачет раз в тысячу лет. Каждая слеза — это мир, который мог бы быть. Внутри слезы видно другую версию тебя. Он счастливее. Он тоже смотрит на тебя.'},
+	{id:'silver_compass',name:'Серебряный компас',icon:'🧭',desc:'Стрелка всегда указывает на то, чего ты боишься больше всего.',tier:'uncommon',lore:'Сделан из серебра, которое не тускнеет. Потому что страх не тускнеет. Стрелка дрожит, когда ты близко к цели. Хочешь проверить — иди туда, куда он показывает. Не хочешь — он будет ждать.'},
+	{id:'bone_flute',name:'Костяная флейта',icon:'🪈',desc:'Играет мелодию, которую никто не слышал, но все помнят.',tier:'uncommon',lore:'Вырезана из ребра последнего единорога. Если подуть — услышишь песню, которую пели до изобретения слов. Все знают мелодию, никто не может напеть. Попробуй — горло сожмётся.'},
 	// Сезон 2 — Редкие
-	{id:'thunder_stone',name:'Камень грома',icon:'🪨',desc:'Гремит, если ударить им о землю. После удара остаётся тишина на час.',tier:'rare'},
-	{id:'witch_eye',name:'Ведьмин глаз',icon:'🔮',desc:'Внутри вращается зрачок. Он смотрит на тебя. Всегда.',tier:'rare'},
-	{id:'frost_flower',name:'Морозный цветок',icon:'🌸',desc:'Цветёт только при -50°C. Лепестки не тают даже в лаве.',tier:'rare'},
-	{id:'dream_catcher',name:'Ловец снов',icon:'🕸️',desc:'Ловит не плохие сны, а реальность. Проснёшься — не вспомнишь кто ты.',tier:'rare'},
-	{id:'void_fragment',name:'Осколок пустоты',icon:'⬛',desc:'Кусок ничего. Весит тонну. Если долго смотреть — исчезаешь.',tier:'rare'},
+	{id:'thunder_stone',name:'Камень грома',icon:'🪨',desc:'Гремит, если ударить им о землю. После удара остаётся тишина на час.',tier:'rare',lore:'Упал с неба в день, когда не было туч. Внутри камня бьётся живой гром. Один удар — и всё затихает. Не потому что гром замолкает, а потому что мир перестаёт слушать.',puzzle:{type:'riddle',question:'Что слышно только после того, как оно стихнет? (одно слово)',answer:'тишина',rewardXP:60}},
+	{id:'witch_eye',name:'Ведьмин глаз',icon:'🔮',desc:'Внутри вращается зрачок. Он смотрит на тебя. Всегда.',tier:'rare',lore:'Глаз ведьмы, которая смотрела в бездну так долго, что бездна моргнула первой. Теперь глаз ищет новое тело. Ночью он открывается сам. Не закрывай — он видит в темноте.',puzzle:{type:'pattern',question:'Что видит глаз, когда смотрит в бездну?',sequence:['👁️','⬛','👁️','⬛'],options:['👁️','⬛','🌀'],answer:0,rewardXP:60}},
+	{id:'frost_flower',name:'Морозный цветок',icon:'🌸',desc:'Цветёт только при -50°C. Лепестки не тают даже в лаве.',tier:'rare',lore:'Выращен в сердце ледника, который помнит начало мира. Цветок впитывает тепло всего живого вокруг. В лаве он не тает — он впитывает жар. Держать голыми руками нельзя — замёрзнешь изнутри.'},
+	{id:'dream_catcher',name:'Ловец снов',icon:'🕸️',desc:'Ловит не плохие сны, а реальность. Проснёшься — не вспомнишь кто ты.',tier:'rare',lore:'Сплетён из нитей между мирами. Ловит не сны — он ловит явь. Каждую ночь ты забываешь кусочек реальности. Утром кажется, что всё нормально. Но шёпот паутины помнит правду.'},
+	{id:'void_fragment',name:'Осколок пустоты',icon:'⬛',desc:'Кусок ничего. Весит тонну. Если долго смотреть — исчезаешь.',tier:'rare',lore:'Оторван от края вселенной. Он весит ровно столько, сколько весит пустота внутри тебя. Положи в карман — карман отвалится. Положи в сердце — перестанешь бояться. Или перестанешь быть.'},
 	// Сезон 2 — Эпические
-	{id:'soul_mirror',name:'Зеркало души',icon:'🪞',desc:'Показывает не отражение, а твою суть. Смотреть страшно.',tier:'epic'},
-	{id:'thunder_feather',name:'Перо бури',icon:'🌩️',desc:'Упало с неба в день, когда не было туч. Внутри бушует шторм.',tier:'epic'},
-	{id:'gravity_shard',name:'Осколок гравитации',icon:'🌀',desc:'Всё вокруг тянется к нему. Положи на стол — стол треснет.',tier:'epic'},
-	{id:'life_crystal',name:'Кристалл жизни',icon:'💚',desc:'Пульсирует зелёным. Внутри бьётся крошечное сердце.',tier:'epic'},
+	{id:'soul_mirror',name:'Зеркало души',icon:'🪞',desc:'Показывает не отражение, а твою суть. Смотреть страшно.',tier:'epic',lore:'В это зеркало смотрели все, кто искал истину. Никто не выдержал дольше минуты. Говорят, ты видишь не себя — а то, чем ты мог бы стать. Один взгляд — и ты уже никогда не будешь прежним.'},
+	{id:'thunder_feather',name:'Перо бури',icon:'🌩️',desc:'Упало с неба в день, когда не было туч. Внутри бушует шторм.',tier:'epic',lore:'Перо из крыла птицы, которая летает в эпицентре ураганов. Внутри пера — миллион молний, сжатых в тишину. Если сломать — начнётся шторм, который не прекратится, пока перо не склеят. Не сломай.'},
+	{id:'gravity_shard',name:'Осколок гравитации',icon:'🌀',desc:'Всё вокруг тянется к нему. Положи на стол — стол треснет.',tier:'epic',lore:'Осколок звезды, которая коллапсировала в чёрную дыру. Внутри — гравитация в чистом виде. Всё тянется к нему: пыль, свет, мысли. Не держи долго — начнёшь притягивать неприятности.'},
+	{id:'life_crystal',name:'Кристалл жизни',icon:'💚',desc:'Пульсирует зелёным. Внутри бьётся крошечное сердце.',tier:'epic',lore:'Рождается раз в миллион лет в недрах живых планет. Внутри кристалла бьётся сердце первого существа, которое полюбило. Если разбить — любовь исчезнет из мира. Не разбивай.'},
 	// Сезон 2 — Легендарные
-	{id:'world_seed',name:'Семя мира',icon:'🌱',desc:'Если посадить — вырастет новая вселенная. Горшок не прилагается.',tier:'legendary'},
-	{id:'time_hourglass',name:'Песочные часы времени',icon:'⌛',desc:'Переверни — время пойдёт вспять. Но только для тебя.',tier:'legendary'},
-	{id:'dragon_soul',name:'Душа дракона',icon:'🐉',desc:'Рёв внутри слышат только те, кто достоин. Ты слышишь?',tier:'legendary'},
-	{id:'celestial_map',name:'Небесная карта',icon:'🌌',desc:'На ней отмечено место твоей смерти. Оно меняется каждую секунду.',tier:'legendary'},
+	{id:'world_seed',name:'Семя мира',icon:'🌱',desc:'Если посадить — вырастет новая вселенная. Горшок не прилагается.',tier:'legendary',lore:'Семя из сада, где боги выращивают миры. Каждое семя — потенциальная вселенная. Внутри слышен первый вздох. Поливать нужно временем. Не посади случайно — новый мир может вытеснить наш.'},
+	{id:'time_hourglass',name:'Песочные часы времени',icon:'⌛',desc:'Переверни — время пойдёт вспять. Но только для тебя.',tier:'legendary',lore:'Песок в часах — это миллисекунды твоей жизни. Переверни — и ты проживёшь их заново. Но каждый раз песок становится мельче. Когда песчинки кончатся — время кончится для всех.'},
+	{id:'dragon_soul',name:'Душа дракона',icon:'🐉',desc:'Рёв внутри слышат только те, кто достоин. Ты слышишь?',tier:'legendary',lore:'Дракон не умер — он спрятал свою душу в этот камень, чтобы переждать конец эпохи. Если слышишь рёв — дракон зовёт тебя стать его новым телом. Не отзывайся. Или отзовись.'},
+	{id:'celestial_map',name:'Небесная карта',icon:'🌌',desc:'На ней отмечено место твоей смерти. Оно меняется каждую секунду.',tier:'legendary',lore:'Карта неба в момент твоего рождения. Звёзды складываются в дату твоей смерти. Но карта врёт — каждый раз, когда ты делаешь выбор, дата меняется. Живи быстро. Или живи вечно.'},
 	// Сезон 2 — Мифические
-	{id:'creation_hammer',name:'Молот созидания',icon:'🔨',desc:'Ударь — и появится то, чего не было. Но исчезнет что-то другое.',tier:'mythic'},
-	{id:'void_crown',name:'Корона бездны',icon:'👑',desc:'Надень — станешь повелителем ничего. Абсолютная власть над пустотой.',tier:'mythic'},
-	{id:'reality_fragment',name:'Осколок реальности',icon:'💠',desc:'Частица того, что было до Большого взрыва. До всего. До тебя.',tier:'mythic'}
+	{id:'creation_hammer',name:'Молот созидания',icon:'🔨',desc:'Ударь — и появится то, чего не было. Но исчезнет что-то другое.',tier:'mythic',lore:'Молот, которым боги забивали гвозди в основание мира. Каждый удар создаёт новое. Каждый удар что-то стирает. Баланс вселенной в одной кузнице. Не маши им просто так — стираешь чужие судьбы.'},
+	{id:'void_crown',name:'Корона бездны',icon:'👑',desc:'Надень — станешь повелителем ничего. Абсолютная власть над пустотой.',tier:'mythic',lore:'Корона из ничего. Она существует, только пока ты её носишь. Надевший видит всё, чего нет. Знает все тайны, которых не было. Сними — и ты забудешь, что такое пустота. Но пустота не забудет тебя.'},
+	{id:'reality_fragment',name:'Осколок реальности',icon:'💠',desc:'Частица того, что было до Большого взрыва. До всего. До тебя.',tier:'mythic',lore:'То, что осталось от предыдущей вселенной. В ней были другие законы, другие боги, другая любовь. Осколок помнит всё. Если прижать к виску — увидишь лицо того, кем ты был до себя.'}
 ];
 var CHEST_TYPES=[
-	{id:'common_chest',name:'Обычный сундук',icon:'📦',cost:200,desc:'Любой предмет, но чаще простой',rates:{common:70,uncommon:25,rare:4,epic:0.9,legendary:0.09,mythic:0.01}},
-	{id:'uncommon_chest',name:'Необычный сундук',icon:'🧰',cost:500,desc:'Шанс на редкую находку',rates:{common:40,uncommon:40,rare:15,epic:4,legendary:0.9,mythic:0.1}},
-	{id:'rare_chest',name:'Редкий сундук',icon:'📯',cost:1200,desc:'Хороший шанс на редкость',rates:{common:15,uncommon:30,rare:45,epic:8,legendary:1.8,mythic:0.2}},
-	{id:'epic_chest',name:'Эпический сундук',icon:'💎',cost:3000,desc:'Вероятны легендарные трофеи',rates:{common:5,uncommon:15,rare:35,epic:40,legendary:4,mythic:1}},
-	{id:'legendary_chest',name:'Легендарный сундук',icon:'🏆',cost:7000,desc:'Почти гарантированная легендарка',rates:{common:2,uncommon:8,rare:13,epic:30,legendary:45,mythic:2}},
-	{id:'mythic_chest',name:'Мифический сундук',icon:'🌀',cost:15000,desc:'Высший шанс на мифику',rates:{common:1,uncommon:3,rare:6,epic:15,legendary:35,mythic:40}}
+	{id:'common_chest',name:'Обычный сундук',icon:'📦',cost:200,desc:'Любой предмет, но чаще простой',rates:{common:70,uncommon:25,rare:4,epic:0.9,legendary:0.09,mythic:0.01},minLevel:1},
+	{id:'uncommon_chest',name:'Необычный сундук',icon:'🧰',cost:500,desc:'Шанс на редкую находку',rates:{common:40,uncommon:40,rare:15,epic:4,legendary:0.9,mythic:0.1},minLevel:3},
+	{id:'rare_chest',name:'Редкий сундук',icon:'📯',cost:1200,desc:'Хороший шанс на редкость',rates:{common:15,uncommon:30,rare:45,epic:8,legendary:1.8,mythic:0.2},minLevel:7},
+	{id:'epic_chest',name:'Эпический сундук',icon:'💎',cost:3000,desc:'Вероятны легендарные трофеи',rates:{common:5,uncommon:15,rare:35,epic:40,legendary:4,mythic:1},minLevel:12},
+	{id:'legendary_chest',name:'Легендарный сундук',icon:'🏆',cost:7000,desc:'Почти гарантированная легендарка',rates:{common:2,uncommon:8,rare:13,epic:30,legendary:45,mythic:2},minLevel:18},
+	{id:'mythic_chest',name:'Мифический сундук',icon:'🌀',cost:15000,desc:'Высший шанс на мифику',rates:{common:1,uncommon:3,rare:6,epic:15,legendary:35,mythic:40},minLevel:25}
 ];
 
 // State
-var score=0,highScore=0,collection=[],shovelLevel=1,luckLevel=0,playerLevel=1;
+var score=0,highScore=0,collection=[],shovelLevel=1,luckLevel=0,playerLevel=1,playerXP=0;
+function xpForLevel(lv){return lv*80+40;}
+function xpTotalForLevel(lv){if(lv<=1)return 0;return 40*(lv-1)*(lv+1);}
+function addXP(amount){
+	playerXP+=amount;
+	while(playerLevel<999&&playerXP>=xpTotalForLevel(playerLevel+1)){
+		playerLevel++;
+		setMessage('🎉 Уровень '+playerLevel+'!');
+		soundRare();tryVibrate(100);
+		updateUI();saveData();
+	}
+	updateUI();saveData();
+}
 var lastMineAtClicks=0;
 var cellStates=[],gameActive=false,gameStarted=false;
 var messageTimeout=null,spawnTimeout=null,combo=0,comboTimer=null,muted=false;
@@ -1614,6 +1699,9 @@ var particleCount=0,floatTextCount=0;
 var boostLevel=0,timeLevel=0,clicksSinceNewItem=0;
 var hasCharm=false,hasStreak=false,hasExpBoost=false;
 var collectedChestItems=[];
+function hasChestItem(id){return collectedChestItems.some(function(i){return i.id===id;});}
+function getChestCount(id){var e=collectedChestItems.find(function(i){return i.id===id;});return e?e.count:0;}
+function addChestItem(id){var e=collectedChestItems.find(function(i){return i.id===id;});if(e){e.count++;return false;}collectedChestItems.push({id:id,count:1});return true;}
 
 // Stats for achievements
 var stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1,itemCounts:{}};
@@ -1635,7 +1723,10 @@ try{
 		if(d.lastMineAtClicks!==undefined) lastMineAtClicks=d.lastMineAtClicks; else lastMineAtClicks=stats.totalClicks;
 		if(d.profile){profileState.equippedFrame=d.profile.equippedFrame||'default';profileState.equippedTitle=d.profile.equippedTitle||'novice';profileState.ownedFrames=d.profile.ownedFrames||['default'];profileState.ownedTitles=d.profile.ownedTitles||['novice'];}
 		if(d.boosters){hasCharm=!!d.boosters.charm;hasStreak=!!d.boosters.streak;hasExpBoost=!!d.boosters.exp;}
-		if(d.collectedChestItems) collectedChestItems=d.collectedChestItems;
+		if(d.collectedChestItems){collectedChestItems=d.collectedChestItems;if(collectedChestItems.length>0&&typeof collectedChestItems[0]==='string')collectedChestItems=collectedChestItems.map(function(id){return{id:id,count:1};});}
+		if(d.playerLevel!==undefined) playerLevel=d.playerLevel;
+		if(d.playerXP!==undefined) playerXP=d.playerXP;
+		if(d.puzzlesSolved) puzzlesSolved=d.puzzlesSolved;
 	}
 }catch(e){}
 // Load muted state
@@ -1647,7 +1738,7 @@ checkAchievements();
 
 function saveData(){
 	try{
-		localStorage.setItem('moleData',JSON.stringify({score:score,highScore:highScore,stats:stats,unlocked:unlocked,currentMine:currentMine,lastMineAtClicks:lastMineAtClicks,profile:profileState,boosters:{charm:hasCharm,streak:hasStreak,exp:hasExpBoost},collectedChestItems:collectedChestItems}));
+		localStorage.setItem('moleData',JSON.stringify({score:score,highScore:highScore,stats:stats,unlocked:unlocked,currentMine:currentMine,lastMineAtClicks:lastMineAtClicks,profile:profileState,boosters:{charm:hasCharm,streak:hasStreak,exp:hasExpBoost},collectedChestItems:collectedChestItems,playerLevel:playerLevel,playerXP:playerXP,puzzlesSolved:puzzlesSolved}));
 	}catch(e){}
 }
 
@@ -1679,7 +1770,7 @@ function checkMineProgression(){
 		lastMineAtClicks=stats.totalClicks;
 		var nextMine=currentMine+1;
 		currentMine=nextMine;
-		saveData();
+		addXP(20+currentMine*2);saveData();
 		var mine=getMine();
 		setMessage('⬇ '+mine.name+'!');
 		applyTheme(mine.theme);
@@ -1802,12 +1893,12 @@ function checkAchievements(){
 		collector_14:function(){return collectedChestItems.length>=14;},
 		collector_20:function(){return collectedChestItems.length>=20;},
 		collector_24:function(){return collectedChestItems.length>=24;},
-		common_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='common';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});},
-		uncommon_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='uncommon';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});},
-		rare_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='rare';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});},
-		epic_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='epic';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});},
-		legendary_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='legendary';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});},
-		mythic_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='mythic';}).map(function(i){return i.id;});return ids.every(function(id){return collectedChestItems.indexOf(id)>-1;});}
+		common_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='common';}).map(function(i){return i.id;});return ids.every(function(id){return hasChestItem(id);});},
+		uncommon_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='uncommon';}).map(function(i){return i.id;});return ids.every(function(id){return hasChestItem(id);});},
+		rare_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='rare';}).map(function(i){return i.id;});return ids.every(function(id){return hasChestItem(id);});},
+		epic_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='epic';}).map(function(i){return i.id;});return ids.every(function(id){return hasChestItem(id);});},
+		legendary_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='legendary';}).map(function(i){return i.id;});return ids.every(function(id){return hasChestItem(id);});},
+		mythic_set:function(){var ids=CHEST_ITEMS.filter(function(i){return i.tier==='mythic';}).map(function(i){return i.id;});return ids.every(function(id){return hasChestItem(id);});}
 	};
 	for(var i=0;i<ACHIEVEMENTS.length;i++){
 		var a=ACHIEVEMENTS[i];
@@ -1861,15 +1952,31 @@ function showCertificate(){
 	certAchs.textContent=achs+'/'+ACHIEVEMENTS.length;
 	certCombo.textContent='x'+stats.bestCombo;
 	certShovel.textContent=stats.maxShovel;
+	certLevel.textContent=playerLevel;
+	certMine.textContent=currentMine+1;
 	certCollection.textContent=stats.collectionCount;
-		D('certBody').innerHTML='Говорят, в недрах шахт можно найти легендарный сертификат.<br>Никто не знает, когда он выпадет. Может, сегодня?<br>Продолжай копать, <strong>'+getMine().name+'</strong> ждёт!';
+	D('certBody').innerHTML='Игрок <strong>уровня '+playerLevel+'</strong> нашёл легендарный сертификат<br>на шахте <strong>«'+getMine().name+'»</strong> (уровень '+(currentMine+1)+').<br>Поздравляем с великим достижением! 🎉';
 	certScreen.classList.add('show');
 	tryVibrate(100);
 	soundRare();
 	setTimeout(function(){soundRare();},400);
+	// Particles
+	var wrap=D('certWrap');
+	for(var pi=0;pi<8;pi++){
+		var p=document.createElement('div');p.className='cert-particle';
+		p.textContent=['✨','🌟','✦','💫','⭐','🌠'][pi%6];
+		p.style.left=(10+Math.random()*80)+'%';
+		p.style.top=(10+Math.random()*80)+'%';
+		p.style.animationDelay=(Math.random()*2)+'s';
+		p.style.fontSize=(8+Math.random()*10)+'px';
+		wrap.appendChild(p);
+	}
 }
 function closeCertificate(){
 	certScreen.classList.remove('show');
+	var wrap=D('certWrap');
+	var particles=wrap.querySelectorAll('.cert-particle');
+	for(var pi=0;pi<particles.length;pi++)wrap.removeChild(particles[pi]);
 }
 
 function openAchievements(){
@@ -2229,6 +2336,7 @@ function handleCellClick(idx){
 	var crit=false;
 	if(pts>0&&Math.random()<.05+luckLevel*.02){pts=Math.round(pts*2);crit=true;}
 	stats.totalClicks++;
+	addXP(1);
 	if(item.id==='bomb')stats.totalBombs++;
 	if(item.id==='king')stats.totalKings++;
 	if(item.id==='fast')stats.totalFast++;
@@ -2306,7 +2414,9 @@ function handleCellClick(idx){
 	updateUI();saveData();checkAchievements();
 	// Легендарный сертификат — редкая находка в глубинах
 	if(!stats.certFound&&currentMine>=5&&getUnlockedCount()>=Math.floor(ACHIEVEMENTS.length*0.6)){
-		var certChance=0.0005+getUnlockedCount()/ACHIEVEMENTS.length*0.001;
+		var baseChance=0.0003+getUnlockedCount()/ACHIEVEMENTS.length*0.0008;
+		var levelBonus=1+playerLevel*0.08;
+		var certChance=Math.min(baseChance*levelBonus,0.03);
 		if(Math.random()<certChance){stats.certFound=true;saveData();showCertificate();}
 	}
 	if(gameActive&&pts>=0){setTimeout(function(){
@@ -2425,6 +2535,9 @@ function upgradeTime(){
 // ===== Profile & Shop =====
 function renderProfile(){
 	profileLevelDisplay.textContent=playerLevel;
+	var xpNeeded=xpTotalForLevel(playerLevel+1)-xpTotalForLevel(playerLevel);
+	var xpHave=playerXP-xpTotalForLevel(playerLevel);
+	D('profileXPBar').style.width=Math.min(100,xpHave/xpNeeded*100)+'%';
 	profileMineDisplay.textContent=getMine().name+' ⛏'+(currentMine+1);
 	profileStatScore.textContent=score;
 	var achs=getUnlockedCount();
@@ -2465,9 +2578,10 @@ function renderShop(){
 	}
 	chestSection.innerHTML='';
 	CHEST_TYPES.forEach(function(ct){
-		var card=document.createElement('div');card.className='chest-card'+(sc<ct.cost?' disabled':'');
-		card.innerHTML='<span class="chest-card-icon">'+ct.icon+'</span><span class="chest-card-name">'+ct.name+'</span><span class="chest-card-desc">'+ct.desc+'</span><span class="chest-card-cost">💰'+ct.cost+'</span>';
-		if(sc>=ct.cost){
+		var levelOk=playerLevel>=ct.minLevel;
+		var card=document.createElement('div');card.className='chest-card'+(sc<ct.cost||!levelOk?' disabled':'');
+		card.innerHTML='<span class="chest-card-icon">'+ct.icon+'</span><span class="chest-card-name">'+ct.name+'</span><span class="chest-card-desc">'+ct.desc+'</span><span class="chest-card-cost">'+(levelOk?'💰'+ct.cost:'📊ур.'+ct.minLevel)+'</span>';
+		if(sc>=ct.cost&&levelOk){
 			holdToBuy(card,function(){buyChest(ct.id,1);});
 		}
 		chestSection.appendChild(card);
@@ -2509,12 +2623,13 @@ function renderCosmetics(){
 	PROFILE_FRAMES.forEach(function(f){
 		var owned=profileState.ownedFrames.indexOf(f.id)>-1;
 		var equipped=profileState.equippedFrame===f.id;
-		var canBuy=!owned&&score>=f.cost;
+		var levelOk=playerLevel>=f.minLevel;
+		var canBuy=!owned&&score>=f.cost&&levelOk;
 		var div=document.createElement('div');
-		div.className='shop-cosmetic-item'+(owned?' owned':'')+(equipped?' equipped':'')+(f.cost>0&&!owned&&score<f.cost?' locked':'');
-		div.innerHTML='<span class="shop-cosmetic-icon">'+f.icon+'</span><span class="shop-cosmetic-name">'+f.name+'</span><span class="shop-cosmetic-status">'+(equipped?'✅':(owned?'В наличии':'💰'+f.cost))+'</span>';
+		div.className='shop-cosmetic-item'+(owned?' owned':'')+(equipped?' equipped':'')+(f.cost>0&&!owned&&(!levelOk||score<f.cost)?' locked':'');
+		div.innerHTML='<span class="shop-cosmetic-icon">'+f.icon+'</span><span class="shop-cosmetic-name">'+f.name+'</span><span class="shop-cosmetic-status">'+(equipped?'✅':(owned?'В наличии':(!levelOk?'📊ур.'+f.minLevel:'💰'+f.cost)))+'</span>';
 		if(owned){div.addEventListener('click',function(){if(equipped)return;profileState.equippedFrame=f.id;saveData();renderCosmetics();renderProfile();});}
-		else if(f.cost>0&&score>=f.cost){holdToBuy(div,function(){if(score<f.cost)return;score-=f.cost;profileState.ownedFrames.push(f.id);profileState.equippedFrame=f.id;saveData();updateUI();setMessage('🖼 Рамка "'+f.name+'" куплена!');soundGold();renderCosmetics();renderProfile();});}
+		else if(levelOk&&score>=f.cost){holdToBuy(div,function(){if(score<f.cost)return;score-=f.cost;profileState.ownedFrames.push(f.id);profileState.equippedFrame=f.id;saveData();updateUI();setMessage('🖼 Рамка "'+f.name+'" куплена!');soundGold();renderCosmetics();renderProfile();});}
 		shopFrameList.appendChild(div);
 	});
 	// Titles
@@ -2545,8 +2660,6 @@ function pickByRates(rates){
 function getChestItemsByTier(rates){
 	var tier=pickByRates(rates);
 	var pool=CHEST_ITEMS.filter(function(i){return i.tier===tier;});
-	var missing=pool.filter(function(i){return collectedChestItems.indexOf(i.id)===-1;});
-	if(missing.length>0)return missing[Math.floor(Math.random()*missing.length)];
 	return pool[Math.floor(Math.random()*pool.length)];
 }
 var pendingChestItem=null;
@@ -2560,10 +2673,12 @@ function buyChest(chestId,qty){
 	if(score<ct.cost){setMessage('❌ Недостаточно монет 🪙');tryVibrate(20);return;}
 	if(score<totalCost){setMessage('❌ Нужно '+totalCost+' 🪙');tryVibrate(20);return;}
 	score-=totalCost;saveData();updateUI();
+	var xpGain=Math.round(ct.cost*0.05+5);addXP(xpGain);
 	var items=[];
 	for(var i=0;i<qty;i++){
 		var item=getChestItemsByTier(ct.rates);
-		collectedChestItems.push(item.id);
+		var isNew=addChestItem(item.id);
+		item._isNew=isNew;
 		items.push(item);
 	}
 	saveData();
@@ -2588,11 +2703,12 @@ function showBulkChestResults(items,ct,idx){
 	chestClosedOverlay.classList.add('leaving');
 	setTimeout(function(){chestClosedOverlay.classList.remove('show','leaving');},200);
 	var tierNames={common:'Обычный',uncommon:'Необычный',rare:'Редкий',epic:'Эпический',legendary:'Легендарный',mythic:'Мифический'};
-	chestResultTier.textContent='✦ '+tierNames[item.tier]+' ('+(idx+1)+'/'+items.length+')';
+	var cnt=getChestCount(item.id);
+	chestResultTier.textContent='✦ '+tierNames[item.tier]+(' ('+(idx+1)+'/'+items.length+')')+(item._isNew?' ✨':' · x'+cnt+' 🔁');
 	chestResultTier.className='chest-result-tier '+item.tier;
 	chestResultIcon.textContent=item.icon;
 	chestResultIcon.className='chest-result-icon tier-'+item.tier;
-	chestResultName.textContent=item.name;
+	chestResultName.textContent=item.name+(item._isNew?'':' (повтор)');
 	chestResultDesc.textContent=item.desc;
 	chestOpenResultOverlay.classList.add('show');
 	soundRare();tryVibrate(30);
@@ -2607,11 +2723,12 @@ function onChestClosedTap(){
 	setTimeout(function(){chestClosedOverlay.classList.remove('show','leaving');},300);
 	var item=pendingChestItem;
 	var tierNames={common:'Обычный',uncommon:'Необычный',rare:'Редкий',epic:'Эпический',legendary:'Легендарный',mythic:'Мифический'};
-	chestResultTier.textContent='✦ '+tierNames[item.tier]+' предмет';
+	var cnt=getChestCount(item.id);
+	chestResultTier.textContent='✦ '+tierNames[item.tier]+' предмет'+(item._isNew?' ✨':(' · x'+cnt+' 🔁'));
 	chestResultTier.className='chest-result-tier '+item.tier;
 	chestResultIcon.textContent=item.icon;
 	chestResultIcon.className='chest-result-icon tier-'+item.tier;
-	chestResultName.textContent=item.name;
+	chestResultName.textContent=item.name+(item._isNew?'':' (повтор)');
 	chestResultDesc.textContent=item.desc;
 	chestOpenResultOverlay.classList.add('show');
 	tryVibrate(100);
@@ -2630,6 +2747,8 @@ function openCollectibles(){
 	collectiblesOverlay.classList.add('show');
 }
 function closeCollectibles(){
+	lorePopup.classList.remove('show');
+	puzzlePopup.classList.remove('show');currentPuzzleItem=null;
 	collectiblesOverlay.classList.remove('show');
 	if(gameStarted&&!gameActive)pauseOverlay.classList.add('show');
 	else if(!gameStarted)menuScreen.classList.remove('hidden');
@@ -2644,20 +2763,208 @@ function renderCollectibles(){
 		var items=CHEST_ITEMS.filter(function(i){return i.tier===tier;});
 		if(items.length===0)return;
 		var header=document.createElement('div');header.className='collect-tier-header';
-		var owned=items.filter(function(i){return collectedChestItems.indexOf(i.id)>-1;}).length;
+		var owned=items.filter(function(i){return getChestCount(i.id)>0;}).length;
 		header.textContent=tierLabels[tier]+'  '+owned+'/'+items.length;
 		collectiblesGrid.appendChild(header);
 		var shelf=document.createElement('div');shelf.className='collect-shelf';
 		items.forEach(function(item){
-			var has=collectedChestItems.indexOf(item.id)>-1;
+			var cnt=getChestCount(item.id);
+			var has=cnt>0;
 			var slot=document.createElement('div');
 			slot.className='collect-slot tier-'+item.tier+(has?' filled':' empty');
-			slot.innerHTML='<span class="collect-slot-icon">'+(has?item.icon:'❓')+'</span><span class="collect-slot-name">'+(has?item.name:'???')+'</span>';
+			slot.innerHTML='<span class="collect-slot-icon">'+(has?item.icon:'❓')+'</span><span class="collect-slot-name">'+(has?item.name:'???')+'</span>'+(has&&cnt>1?'<span class="collect-count">x'+cnt+'</span>':'');
+			if(has)slot.addEventListener('click',function(i){return function(){openLorePopup(i);};}(item));
 			shelf.appendChild(slot);
 		});
 		collectiblesGrid.appendChild(shelf);
 	});
 }
+
+var lorePopup=D('lorePopup'),loreIcon=D('loreIcon'),loreName=D('loreName'),loreTier=D('loreTier'),loreCount=D('loreCount'),loreDesc=D('loreDesc'),loreText=D('loreText'),loreCloseBtn=D('loreCloseBtn'),lorePuzzleBtn=D('lorePuzzleBtn');
+function openLorePopup(item){
+	var tierNames={common:'Обычный',uncommon:'Необычный',rare:'Редкий',epic:'Эпический',legendary:'Легендарный',mythic:'Мифический'};
+	var cnt=getChestCount(item.id);
+	loreIcon.textContent=item.icon;
+	loreName.textContent=item.name;
+	loreTier.textContent='✦ '+tierNames[item.tier];
+	loreCount.textContent='x'+cnt+' в коллекции';
+	loreDesc.textContent=item.desc;
+	loreText.textContent='"'+item.lore+'"';
+	lorePopup.classList.add('show');
+	lorePuzzleBtn.style.display=item.puzzle?'inline-block':'none';
+	lorePuzzleBtn.className='lore-popup-puzzle'+(puzzlesSolved.indexOf(item.id)>-1?' solved':'');
+	lorePuzzleBtn.textContent=puzzlesSolved.indexOf(item.id)>-1?'✅ Загадка решена':'🧩 Решить загадку';
+	lorePuzzleBtn._item=item;
+}
+loreCloseBtn.addEventListener('click',function(){lorePopup.classList.remove('show');});
+lorePopup.addEventListener('click',function(e){if(e.target===lorePopup)lorePopup.classList.remove('show');});
+
+var puzzlesSolved=[];
+var puzzlePopup=D('puzzlePopup'),puzzleIcon=D('puzzleIcon'),puzzleTitle=D('puzzleTitle'),puzzleContent=D('puzzleContent'),puzzleResult=D('puzzleResult'),puzzleActions=D('puzzleActions');
+var currentPuzzleItem=null;
+
+function solvePuzzle(item){
+	if(puzzlesSolved.indexOf(item.id)>-1)return;
+	puzzlesSolved.push(item.id);
+	var p=item.puzzle;
+	addXP(p.rewardXP||50);
+	var msg='🧩 Загадка решена! +'+(p.rewardXP||50)+' XP';
+	if(p.rewardFrame){
+		if(profileState.ownedFrames.indexOf(p.rewardFrame)===-1){
+			profileState.ownedFrames.push(p.rewardFrame);
+			msg+=' 🖼 Новая рамка!';
+		}
+	}
+	if(p.rewardTitle){
+		if(profileState.ownedTitles.indexOf(p.rewardTitle)===-1){
+			profileState.ownedTitles.push(p.rewardTitle);
+			msg+=' 🎖 Новый титул!';
+		}
+	}
+	setMessage(msg);soundGold();tryVibrate(100);
+	saveData();updateUI();renderCollectibles();renderCosmetics();renderProfile();
+}
+
+puzzlePopup.addEventListener('click',function(e){if(e.target===puzzlePopup){puzzlePopup.classList.remove('show');currentPuzzleItem=null;}});
+
+lorePuzzleBtn.addEventListener('click',function(){
+	var item=this._item;
+	if(!item||!item.puzzle||puzzlesSolved.indexOf(item.id)>-1)return;
+	currentPuzzleItem=item;
+	var p=item.puzzle;
+	puzzlePopup.classList.add('show');
+	puzzleIcon.textContent=item.icon;
+	puzzleTitle.textContent='🧩 Загадка: '+item.name;
+	puzzleResult.textContent='';
+	puzzleContent.innerHTML='';
+	puzzleActions.innerHTML='';
+	if(p.type==='riddle'){
+		puzzleContent.innerHTML='<div style="font-size:14px;color:#c4b49a;margin-bottom:10px;line-height:1.4">'+p.question+'</div>';
+		var inp=document.createElement('input');inp.className='puzzle-input';inp.placeholder='Ваш ответ...';
+		var btn=document.createElement('button');btn.className='puzzle-submit';btn.textContent='✏️ Ответить';
+		puzzleContent.appendChild(inp);puzzleContent.appendChild(btn);
+		btn.addEventListener('click',function(){
+			if(inp.value.trim().toLowerCase()===p.answer.toLowerCase()){
+				puzzleResult.innerHTML='<span style="color:#44ff88">✅ Правильно!</span>';
+				puzzleResult.style.color='#44ff88';
+				solvePuzzle(item);
+				setTimeout(function(){puzzlePopup.classList.remove('show');currentPuzzleItem=null;},1500);
+			}else{
+				puzzleResult.innerHTML='<span style="color:#ff4444">❌ Неверно. Попробуй ещё.</span>';
+				inp.value='';inp.focus();
+			}
+		});
+		inp.addEventListener('keydown',function(e){if(e.key==='Enter')btn.click();});
+		setTimeout(function(){inp.focus();},100);
+	}else if(p.type==='pattern'){
+		puzzleContent.innerHTML='<div style="font-size:14px;color:#c4b49a;margin-bottom:8px;line-height:1.4">'+p.question+'</div>';
+		var seqDiv=document.createElement('div');seqDiv.className='puzzle-seq-grid';
+		p.sequence.forEach(function(s){
+			var c=document.createElement('div');c.className='puzzle-seq-cell';c.textContent=s;c.style.cursor='default';
+			seqDiv.appendChild(c);
+		});
+		puzzleContent.appendChild(seqDiv);
+		puzzleContent.innerHTML+='<div style="font-size:12px;color:#8a7a6a;margin:4px 0">Выбери следующий:</div>';
+		var optDiv=document.createElement('div');optDiv.style.textAlign='center';
+		p.options.forEach(function(o,i){
+			var opt=document.createElement('button');opt.className='puzzle-option';opt.textContent=o;
+			opt.addEventListener('click',function(){
+				document.querySelectorAll('.puzzle-option').forEach(function(x){x.className='puzzle-option';});
+				if(i===p.answer){
+					opt.classList.add('selected');
+					puzzleResult.innerHTML='<span style="color:#44ff88">✅ Верно!</span>';
+					solvePuzzle(item);
+					setTimeout(function(){puzzlePopup.classList.remove('show');currentPuzzleItem=null;},1500);
+				}else{
+					opt.classList.add('wrong');
+					puzzleResult.innerHTML='<span style="color:#ff4444">❌ Неправильно. Попробуй ещё.</span>';
+				}
+			});
+			optDiv.appendChild(opt);
+		});
+		puzzleContent.appendChild(optDiv);
+	}else if(p.type==='sequence'){
+		puzzleContent.innerHTML='<div style="font-size:14px;color:#c4b49a;margin-bottom:8px;line-height:1.4">'+p.question+'</div>';
+		var seq=p.symbols||['🔥','✨','🔥','🌟'];
+		var displayDiv=document.createElement('div');displayDiv.className='puzzle-seq-grid';
+		var step=0,inputStep=0,inputCells=[],phase='show';
+		seq.forEach(function(s,i){
+			var c=document.createElement('div');c.className='puzzle-seq-cell';c.textContent='?';c.style.fontSize='14px';
+			displayDiv.appendChild(c);
+		});
+		puzzleContent.appendChild(displayDiv);
+		var info=document.createElement('div');info.style.cssText='font-size:12px;color:#8a7a6a;margin:4px 0';
+		info.textContent='Запомни последовательность...';puzzleContent.appendChild(info);
+		function showSequence(idx){
+			if(idx>=seq.length){
+				phase='input';
+				info.textContent='Повтори последовательность! Нажимай символы внизу:';
+				renderInputButtons();
+				return;
+			}
+			phase='show';
+			var cells=displayDiv.querySelectorAll('.puzzle-seq-cell');
+			seq.forEach(function(s,i){
+				cells[i].textContent=i<=idx?seq[i]:'?';
+				cells[i].className='puzzle-seq-cell'+(i===idx?' highlight':'');
+			});
+			setTimeout(function(){showSequence(idx+1);},500);
+		}
+		function renderInputButtons(){
+			var unique=[...new Set(seq)];
+			var btnDiv=document.createElement('div');btnDiv.style.textAlign='center';
+			if(puzzleContent.contains(puzzleContent.lastChild)&&puzzleContent.lastChild.tagName==='DIV'&&puzzleContent.lastChild.style.textAlign==='center'){
+				puzzleContent.removeChild(puzzleContent.lastChild);
+			}
+			unique.forEach(function(sym){
+				var b=document.createElement('button');b.className='puzzle-option';b.textContent=sym;
+				b.addEventListener('click',function(){
+					if(phase!=='input')return;
+					if(sym===seq[inputStep]){
+						inputStep++;
+						var cells=displayDiv.querySelectorAll('.puzzle-seq-cell');
+						cells[inputStep-1].textContent=sym;cells[inputStep-1].className='puzzle-seq-cell active';
+						if(inputStep>=seq.length){
+							phase='done';
+							puzzleResult.innerHTML='<span style="color:#44ff88">✅ Идеально!</span>';
+							solvePuzzle(item);
+							setTimeout(function(){puzzlePopup.classList.remove('show');currentPuzzleItem=null;},1500);
+						}
+					}else{
+						puzzleResult.innerHTML='<span style="color:#ff4444">❌ Ошибка! Начни заново.</span>';
+						setTimeout(function(){
+							inputStep=0;phase='show';puzzleResult.textContent='';
+							var cells=displayDiv.querySelectorAll('.puzzle-seq-cell');
+							seq.forEach(function(s,i){cells[i].textContent='?';cells[i].className='puzzle-seq-cell';});
+							info.textContent='Запомни последовательность...';
+							setTimeout(function(){showSequence(0);},500);
+						},1000);
+					}
+				});
+				btnDiv.appendChild(b);
+			});
+			puzzleContent.appendChild(btnDiv);
+		}
+		setTimeout(function(){showSequence(0);},300);
+	}else if(p.type==='math'){
+		puzzleContent.innerHTML='<div style="font-size:16px;color:#ffd700;margin-bottom:8px;line-height:1.4;text-align:center;font-weight:bold">'+p.question+'</div>';
+		var inp=document.createElement('input');inp.className='puzzle-input';inp.type='number';inp.placeholder='Число...';
+		var btn=document.createElement('button');btn.className='puzzle-submit';btn.textContent='✅ Проверить';
+		puzzleContent.appendChild(inp);puzzleContent.appendChild(btn);
+		btn.addEventListener('click',function(){
+			if(inp.value.trim()===p.answer){
+				puzzleResult.innerHTML='<span style="color:#44ff88">✅ Правильно!</span>';
+				solvePuzzle(item);
+				setTimeout(function(){puzzlePopup.classList.remove('show');currentPuzzleItem=null;},1500);
+			}else{
+				puzzleResult.innerHTML='<span style="color:#ff4444">❌ Неверно. Попробуй ещё.</span>';
+				inp.value='';inp.focus();
+			}
+		});
+		inp.addEventListener('keydown',function(e){if(e.key==='Enter')btn.click();});
+		setTimeout(function(){inp.focus();},100);
+	}
+});
 
 function toggleSound(){
 	muted=!muted;var icon=muted?'🔇':'🔊';
@@ -2704,7 +3011,7 @@ var _resetGame=function(){
 	score=0;highScore=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=hasStreak?2:0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;bombCooldown=0;
 	currentMine=0;lastMineAtClicks=0;
 	hasCharm=false;hasStreak=false;hasExpBoost=false;
-	collectedChestItems=[];
+	collectedChestItems=[];playerLevel=1;playerXP=0;puzzlesSolved=[];
 	stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1,itemCounts:{},certFound:false};
 	unlocked={};
 	applyTheme(MINES[0].theme);
@@ -2870,7 +3177,7 @@ if(soundBtnEl)soundBtnEl.addEventListener('click',function(){toggleSound();updat
 updateSoundUI();
 document.addEventListener('keydown',function(e){
 	if(!gameStarted)return;
-	if(e.key==='Escape'){if(collectiblesOverlay.classList.contains('show'))closeCollectibles();else if(chestResultOverlay.classList.contains('show'))hideChestResult();else if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(profileScreen.classList.contains('show'))closeProfile();else if(pauseOverlay.classList.contains('show'))togglePause();else togglePause();}
+	if(e.key==='Escape'){if(puzzlePopup.classList.contains('show')){puzzlePopup.classList.remove('show');currentPuzzleItem=null;}else if(lorePopup.classList.contains('show'))lorePopup.classList.remove('show');else if(collectiblesOverlay.classList.contains('show'))closeCollectibles();else if(chestResultOverlay.classList.contains('show'))hideChestResult();else if(achScreen.classList.contains('show'))closeAchievements();else if(certScreen.classList.contains('show'))closeCertificate();else if(profileScreen.classList.contains('show'))closeProfile();else if(pauseOverlay.classList.contains('show'))togglePause();else togglePause();}
 	else if(e.key==='m'||e.key==='M')toggleSound();
 });
 
