@@ -781,7 +781,7 @@ body.is-mobile{min-height:100dvh;align-items:flex-end;justify-content:flex-start
 		<span class="level-badge">📊 <span id="levelDisplay">1</span></span>
 		<span class="high-score">🏆 <span id="highScoreDisplay">0</span></span>
 		<span>⭐ <span id="collectionDisplay">0</span>/<span id="collectionTargetDisplay">?</span></span>
-		<span id="mineDisplay" style="font-size:10px;color:#8b7b6a">🪨 1</span>
+		<span id="mineDisplay" style="font-size:15px;font-weight:700;color:#ffd700;text-shadow:0 0 10px rgba(255,215,0,.3);letter-spacing:.5px">🪨 1</span>
 		<span id="charmDisplay" style="font-size:12px;display:none" title="Анти-бомба активна">🛡️</span>
 		<button class="sound-btn" id="soundBtn">🔊</button>
 		<button class="pause-btn" id="pauseBtn">☰</button>
@@ -1192,45 +1192,45 @@ var ITEMS=[
 
 var THEME_ITEMS={
 	copper:['gold','silver','bronze','copper_coin','terra_pottery','bedrock','mud_lump'],
-	crystal:['crystal','artifact','gem_fragment','crystal_shard','glass_shard','prism_shard','aurora_fragment'],
-	danger:['bomb','king','wildfire','flame_wisp','lava_drop','brimstone','hell_ember'],
-	storm:['lightning_rod','thunder_heart','wind_chime','echo_fragment','height_feather','tempest_core','gust_essence'],
-	lucky:['clover_leaf','sunstone','gold_nugget','wish_bone','star_dust','beetle_wing','dawn_ray'],
-	mist:['phantom','mystic_rune','abyss_eye','twilight_orb','dusk_pearl','nightmare_dust','dark_mote'],
-	volcano:['lava_crystal','volcanic_glass','magma_core','magma_bubble','primordial_ember','brimstone','hell_ember'],
-	frozen:['frost_orb','absolute_shard','crystal_shard','diamond_dust','void_fragment','abyss_pearl','frost_shard'],
-	shadow:['shadow_essence','phantom','abyss_eye','void_fragment','mystic_rune','nightmare_dust','dark_mote'],
+	crystal:['crystal','artifact','gem_fragment','crystal_shard','prism_shard','diamond_dust','aurora_fragment'],
+	danger:['bomb','king','wildfire','flame_wisp','brimstone','hell_ember','crimson_drop'],
+	storm:['lightning_rod','thunder_heart','tempest_core','gust_essence','wind_chime','height_feather','echo_fragment'],
+	lucky:['clover_leaf','gold_nugget','wish_bone','star_dust','sunstone','dawn_ray','halo_gleam'],
+	mist:['phantom','mystic_rune','twilight_orb','dusk_pearl','nightmare_dust','dark_mote','spirit_orb'],
+	volcano:['lava_crystal','volcanic_glass','magma_core','magma_bubble','primordial_ember','lava_drop','brimstone'],
+	frozen:['frost_orb','frost_shard','crystal_shard','diamond_dust','absolute_shard','void_fragment','abyss_pearl'],
+	shadow:['shadow_essence','phantom','dark_mote','nightmare_dust','abyss_eye','void_fragment','alpha_void'],
 	legend:['legend_crown','gold_nugget','star_dust','sunstone','king_opal','halo_gleam','dawn_ray'],
 	magma:['magma_core','magma_bubble','lava_crystal','volcanic_glass','lava_drop','brimstone','hell_ember'],
-	cosmic:['cosmic_nebula','star_dust','ring_debris','void_fragment','moon_stone','pulsar_star','gravity_well'],
+	cosmic:['cosmic_nebula','star_dust','pulsar_star','gravity_well','saturn_gem','moon_stone','ring_debris'],
 	rainbow:['rainbow_scale','rainbow_essence','mosaic_tile','glass_shard','king_opal','aurora_fragment','prism_shard'],
-	dragon:['dragon_scale','dragon_heart','forest_spirit','ancient_moss','clover_leaf','flame_scale','beetle_wing'],
-	infinite:['alpha_void','void_fragment','star_dust','omega_crystal','cosmic_nebula','pulsar_star','gravity_well'],
-	bone:['fossil_bone','wish_bone','crystal_skull','terra_pottery','sand_grain','bedrock','mud_lump'],
-	sand:['sand_grain','sunstone','oasis_dew','gold_nugget','wish_bone','dawn_ray','beetle_wing'],
-	swamp:['swamp_gas','bog_pearl','mire_lamp','ancient_moss','forest_spirit','vine_coil','beetle_wing'],
-	steam:['gear_wheel','steam_valve','brass_cog','iron_scale','magnetite','circuit_chip','piston_rod'],
+	dragon:['dragon_scale','dragon_heart','flame_scale','wish_bone','gold_nugget','legend_crown','king_opal'],
+	infinite:['alpha_void','omega_crystal','cosmic_nebula','pulsar_star','gravity_well','star_dust','void_fragment'],
+	bone:['fossil_bone','wish_bone','crystal_skull','bedrock','sand_grain','terra_pottery','basalt_chunk'],
+	sand:['sand_grain','sunstone','oasis_dew','gold_nugget','wish_bone','dawn_ray','bedrock'],
+	swamp:['swamp_gas','bog_pearl','mire_lamp','ancient_moss','vine_coil','mud_lump','forest_spirit'],
+	steam:['gear_wheel','steam_valve','brass_cog','iron_scale','circuit_chip','piston_rod','magnetite'],
 	ruins:['artifact','clay_shard','terra_pottery','ancient_moss','fossil_bone','bedrock','mud_lump'],
-	underwater:['coral_shard','tide_wisdom','aqua_gem','tidal_wave','frost_orb','abyss_pearl','frost_shard'],
-	mystic:['mystic_rune','enchant_tome','abyss_eye','twilight_orb','moonlight_tear','arcane_circle','spirit_orb'],
-	lunar:['moon_stone','moonlight_tear','star_dust','cosmic_nebula','diamond_dust','aurora_fragment','gravity_well'],
-	diamond:['diamond_dust','crystal','king_opal','moonlight_tear','gem_fragment','prism_shard','aurora_fragment'],
-	primordial:['primordial_ember','alpha_void','void_fragment','abyss_eye','magma_core','hell_ember','dark_mote'],
-	magnetic:['magnetite','iron_scale','gear_wheel','brass_cog','thunder_heart','circuit_chip','piston_rod'],
-	gene:['dna_helix','clover_leaf','swamp_gas','dragon_scale','forest_spirit','beetle_wing','vine_coil'],
+	underwater:['coral_shard','tide_wisdom','aqua_gem','tidal_wave','abyss_pearl','frost_orb','frost_shard'],
+	mystic:['mystic_rune','enchant_tome','arcane_circle','spirit_orb','moonlight_tear','twilight_orb','abyss_eye'],
+	lunar:['moon_stone','moonlight_tear','star_dust','aurora_fragment','cosmic_nebula','diamond_dust','saturn_gem'],
+	diamond:['diamond_dust','crystal','king_opal','gem_fragment','prism_shard','aurora_fragment','moonlight_tear'],
+	primordial:['primordial_ember','alpha_void','void_fragment','magma_core','hell_ember','dark_mote','abyss_eye'],
+	magnetic:['magnetite','iron_scale','gear_wheel','brass_cog','circuit_chip','piston_rod','thunder_heart'],
+	gene:['dna_helix','vine_coil','swamp_gas','dragon_scale','forest_spirit','beetle_wing','clover_leaf'],
 	ringing:['resonance_chord','echo_fragment','wind_chime','lightning_rod','glass_shard','tempest_core','gust_essence'],
-	clay:['clay_shard','terra_pottery','basalt_chunk','sand_grain','fossil_bone','mud_lump','bedrock'],
-	basalt:['basalt_chunk','volcanic_glass','iron_scale','shadow_essence','magnetite','dark_mote','nightmare_dust'],
-	twilight:['twilight_orb','dusk_pearl','phantom','mystic_rune','moonlight_tear','spirit_orb','nightmare_dust'],
+	clay:['clay_shard','terra_pottery','mud_lump','sand_grain','fossil_bone','bedrock','basalt_chunk'],
+	basalt:['basalt_chunk','volcanic_glass','iron_scale','dark_mote','shadow_essence','magnetite','nightmare_dust'],
+	twilight:['twilight_orb','dusk_pearl','phantom','moonlight_tear','spirit_orb','nightmare_dust','dark_mote'],
 	mosaic:['mosaic_tile','glass_shard','rainbow_essence','king_opal','gem_fragment','prism_shard','aurora_fragment'],
-	ring:['ring_debris','cosmic_nebula','star_dust','moon_stone','alpha_void','orbit_path','saturn_gem'],
-	masquerade:['masquerade_mask','enchant_tome','phantom','mystic_rune','twilight_orb','arcane_circle','spirit_orb'],
+	ring:['ring_debris','orbit_path','saturn_gem','moon_stone','cosmic_nebula','star_dust','alpha_void'],
+	masquerade:['masquerade_mask','enchant_tome','phantom','twilight_orb','arcane_circle','spirit_orb','mystic_rune'],
 	gold_vein:['gold_nugget','legend_crown','sunstone','king_opal','star_dust','halo_gleam','dawn_ray'],
-	tidal:['tidal_wave','tide_wisdom','aqua_gem','coral_shard','absolute_shard','abyss_pearl','frost_shard'],
-	height:['height_feather','wind_chime','echo_fragment','thunder_heart','star_dust','gust_essence','tempest_core'],
-	ancient_forest:['ancient_moss','forest_spirit','clover_leaf','dragon_scale','swamp_gas','vine_coil','beetle_wing'],
+	tidal:['tidal_wave','tide_wisdom','aqua_gem','coral_shard','abyss_pearl','frost_shard','absolute_shard'],
+	height:['height_feather','wind_chime','gust_essence','tempest_core','thunder_heart','star_dust','echo_fragment'],
+	ancient_forest:['ancient_moss','forest_spirit','vine_coil','clover_leaf','dragon_scale','swamp_gas','beetle_wing'],
 	crimson:['crimson_drop','scarlet_vein','flame_wisp','wildfire','lava_drop','hell_ember','brimstone'],
-	absolute:['absolute_shard','frost_orb','diamond_dust','crystal_shard','void_fragment','frost_shard','abyss_pearl']
+	absolute:['absolute_shard','frost_orb','frost_shard','diamond_dust','crystal_shard','void_fragment','abyss_pearl']
 };
 var NAMED_MINES_COUNT=40;
 var MINES=[
