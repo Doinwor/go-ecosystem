@@ -1839,6 +1839,15 @@ function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 
 function getActiveItems(){
 	var ids=getMineItemsForMine(currentMine);
+	// Добавляем 1-2 предмета с предыдущей шахты для разнообразия
+	if(currentMine>0){
+		var prevIds=getMineItemsForMine(currentMine-1);
+		var extras=prevIds.filter(function(id){return ids.indexOf(id)===-1;});
+		if(extras.length>0){
+			var pick=extras.slice(0,1+Math.floor(Math.random()*Math.min(2,extras.length)));
+			ids=ids.concat(pick);
+		}
+	}
 	var items=ITEMS.filter(function(i){return ids.indexOf(i.id)!==-1;});
 	return items;
 }
@@ -2049,7 +2058,7 @@ function handleCellClick(idx){
 			spawnFloatText(pos.x-15,pos.y-20,'🛡️','#44ddff');
 			spawnParticles(pos.x,pos.y,'#44ddff',10);
 		}else{
-			var bombPenalty=Math.max(5,Math.min(Math.floor(score*0.08),300));
+			var bombPenalty=Math.max(10,Math.floor(score*0.08));
 			score=Math.max(0,score-bombPenalty);
 			soundBomb();combo=0;updateCombo();screenShake();
 			setMessage('💥 -'+bombPenalty+' 🪙');
@@ -2131,8 +2140,8 @@ function scheduleSpawn(){
 			};}(i),i*250);
 		}
 		// Бомба-сюрприз: неожиданно между обычными предметами
-		if(bombCooldown<=0&&Math.random()<0.18){
-			bombCooldown=2+Math.floor(Math.random()*3);
+		if(bombCooldown<=0&&Math.random()<0.12){
+			bombCooldown=3+Math.floor(Math.random()*3);
 			setTimeout(function(){
 				if(!gameActive)return;
 				var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}
