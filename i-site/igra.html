@@ -2118,19 +2118,19 @@ function handleCellClick(idx){
 function scheduleSpawn(){
 	if(!gameActive)return;
 	var isMob=document.body.classList.contains('is-mobile');
-	var base=(isMob?3500:2800);
-	var comboBonus=Math.min(600,Math.floor(combo/6)*50);
-	var intv=Math.max((isMob?1800:1400),base-comboBonus)+Math.random()*600;
+	var base=(isMob?4000:3200);
+	var comboBonus=Math.min(500,Math.floor(combo/8)*50);
+	var intv=Math.max((isMob?2200:1800),base-comboBonus)+Math.random()*500;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var maxCount=Math.min(isMob?5:7,3+Math.floor(combo/8)+Math.floor(Math.min(currentMine,15)/5));
+		var maxCount=Math.min(isMob?3:4,2+Math.floor(combo/12)+Math.floor(Math.min(currentMine,20)/8));
 		var count=1+Math.floor(Math.random()*maxCount);
 		for(var i=0;i<count;i++){
 			setTimeout(function(n){return function(){
 				if(!gameActive)return;
 				var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}
-				if(inv.length>0){var idx=inv[Math.floor(Math.random()*inv.length)];spawnMole(idx);}
-			};}(i),i*200);
+				if(inv.length>2){var idx=inv[Math.floor(Math.random()*inv.length)];spawnMole(idx);}
+			};}(i),i*250);
 		}
 		scheduleSpawn();
 	},intv);
@@ -2241,7 +2241,7 @@ function renderShop(){
 			var qbar=document.createElement('div');qbar.className='chest-qty-bar';
 			[1,5,10].forEach(function(q){
 				var b=document.createElement('button');b.className='chest-qty-btn';b.textContent='×'+q;
-				b.addEventListener('click',function(e){e.stopPropagation();buyChest(ct.id,q);});
+				b.addEventListener('click',(function(cq){return function(e){e.stopPropagation();buyChest(ct.id,cq);};})(q));
 				qbar.appendChild(b);
 			});
 			var ba=document.createElement('button');ba.className='chest-qty-btn';ba.textContent='×∞';
@@ -2329,14 +2329,15 @@ function getChestItemsByTier(rates){
 	return pool[Math.floor(Math.random()*pool.length)];
 }
 var pendingChestItem=null;
-var chestOpeningStep='idle'; // 'idle' | 'closed' | 'open'
+var chestOpeningStep='idle';
+var chestBulkTimer=null;
 function buyChest(chestId,qty){
 	qty=qty||1;
 	var ct=CHEST_TYPES.find(function(c){return c.id===chestId;});
 	if(!ct)return;
 	var totalCost=ct.cost*qty;
-	if(score<ct.cost)return;
-	if(score<totalCost){qty=Math.floor(score/ct.cost);if(qty<1)return;totalCost=ct.cost*qty;}
+	if(score<ct.cost){setMessage('❌ Недостаточно монет 🪙');tryVibrate(20);return;}
+	if(score<totalCost){setMessage('❌ Нужно '+totalCost+' 🪙');tryVibrate(20);return;}
 	score-=totalCost;saveData();updateUI();
 	var items=[];
 	for(var i=0;i<qty;i++){
@@ -2346,14 +2347,37 @@ function buyChest(chestId,qty){
 	}
 	saveData();
 	renderShop();renderCollectibles();checkAchievements();
-	pendingChestItem=items[items.length-1];
-	chestOpeningStep='closed';
-	chestClosedOverlay.classList.add('show');
-	chestOpenResultOverlay.classList.remove('show');
-	chestClosedIcon.textContent=ct.icon;
-	if(qty>1)chestClosedName.textContent=qty+'× '+ct.name;
-	else chestClosedName.textContent=ct.name;
-	soundRare();tryVibrate(50);
+	if(qty>1){
+		showBulkChestResults(items,ct,0);
+	}else{
+		pendingChestItem=items[0];
+		chestOpeningStep='closed';
+		chestClosedOverlay.classList.add('show');
+		chestOpenResultOverlay.classList.remove('show');
+		chestClosedIcon.textContent=ct.icon;
+		chestClosedName.textContent=ct.name;
+		soundRare();tryVibrate(50);
+	}
+}
+function showBulkChestResults(items,ct,idx){
+	if(idx>=items.length){hideChestResult();return;}
+	var item=items[idx];
+	pendingChestItem=item;
+	chestOpeningStep='open';
+	chestClosedOverlay.classList.add('leaving');
+	setTimeout(function(){chestClosedOverlay.classList.remove('show','leaving');},200);
+	var tierNames={common:'Обычный',uncommon:'Необычный',rare:'Редкий',epic:'Эпический',legendary:'Легендарный',mythic:'Мифический'};
+	chestResultTier.textContent='✦ '+tierNames[item.tier]+' ('+(idx+1)+'/'+items.length+')';
+	chestResultTier.className='chest-result-tier '+item.tier;
+	chestResultIcon.textContent=item.icon;
+	chestResultIcon.className='chest-result-icon tier-'+item.tier;
+	chestResultName.textContent=item.name;
+	chestResultDesc.textContent=item.desc;
+	chestOpenResultOverlay.classList.add('show');
+	soundRare();tryVibrate(30);
+	// Авто-переход к следующему
+	if(chestBulkTimer)clearTimeout(chestBulkTimer);
+	chestBulkTimer=setTimeout(function(){hideChestResult();showBulkChestResults(items,ct,idx+1);},400);
 }
 function onChestClosedTap(){
 	if(chestOpeningStep!=='closed')return;
@@ -2372,6 +2396,7 @@ function onChestClosedTap(){
 	tryVibrate(100);
 }
 function hideChestResult(){
+	if(chestBulkTimer)clearTimeout(chestBulkTimer);
 	chestOpeningStep='idle';
 	pendingChestItem=null;
 	chestOpenResultOverlay.classList.remove('show');
@@ -2455,8 +2480,14 @@ var _resetGame=function(){
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	achBanner.classList.remove('show');
 	pauseOverlay.classList.remove('show');
-	score=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=hasStreak?2:0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
-	saveData();updateCombo();gameActive=true;updateUI();setMessage('🔄 Новая игра');startSpawning();
+	score=0;highScore=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=hasStreak?2:0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
+	currentMine=0;lastMineAtClicks=0;
+	hasCharm=false;hasStreak=false;hasExpBoost=false;
+	collectedChestItems=[];
+	stats={totalClicks:0,totalEarnings:0,totalBombs:0,totalKings:0,totalFast:0,totalGhosts:0,bestCombo:0,maxLevel:1,collectionCount:0,maxShovel:1,itemCounts:{},certFound:false};
+	unlocked={};
+	applyTheme(MINES[0].theme);
+	saveData();updateCombo();gameActive=true;updateUI();setMessage('🔄 Всё сброшено!');startSpawning();
 	setTimeout(function(){setMessage('🔨 Копай!');},2000);
 }
 var resetGame=_resetGame;
