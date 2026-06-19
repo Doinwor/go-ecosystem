@@ -136,6 +136,8 @@ body::after{content:'';position:fixed;inset:0;z-index:-1;background:radial-gradi
 .game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);padding:15px;border-radius:40px;box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,215,0,.04),inset 0 1px 0 rgba(255,255,255,.05);max-width:500px;width:100%;position:relative;overflow:hidden;will-change:transform;transform:translateZ(0)}
 .game-wrap.shake{animation:shake .3s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px) rotate(-.5deg)}40%{transform:translateX(8px) rotate(.5deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@keyframes fadeOut{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.3) translateY(40px)}}
+.mole-fadeout{animation:fadeOut .5s ease forwards;pointer-events:none!important}
 @keyframes themeTransition{0%{transform:scale(.95);opacity:.6}100%{transform:scale(1);opacity:1}}
 /* Шахты по умолчанию — медная */
 .game-wrap{background:linear-gradient(145deg,#2a221a,#1f1814);box-shadow:0 20px 60px rgba(0,0,0,.9),0 0 80px rgba(255,215,0,.04),inset 0 1px 0 rgba(255,255,255,.05)}
@@ -1089,9 +1091,99 @@ var ITEMS=[
 	// 🌀 Абсолютная (m.39)
 	{id:'absolute_zero',emoji:'❄️',name:'Абсолютный ноль',rarity:.03,points:25,color:'#e0fbfc'},
 	{id:'final_spark',emoji:'✨',name:'Искра завершения',rarity:.02,points:40,color:'#ffd700'},
-	{id:'omega_crystal',emoji:'🌀',name:'Кристалл Омега',rarity:.01,points:60,color:'#ffffff'}
+	{id:'omega_crystal',emoji:'🌀',name:'Кристалл Омега',rarity:.01,points:60,color:'#ffffff'},
+	{id:'copper_coin',emoji:'🪙',name:'Медяк',rarity:.13,points:1,color:'#b87333'},
+	{id:'gem_fragment',emoji:'💠',name:'Осколок',rarity:.12,points:2,color:'#88ddff'},
+	{id:'wildfire',emoji:'🔥',name:'Дикий огонь',rarity:.11,points:2,color:'#ff4400'},
+	{id:'lightning_rod',emoji:'⚡',name:'Громоотвод',rarity:.10,points:2,color:'#ffee00'},
+	{id:'clover_leaf',emoji:'🍀',name:'Лист клевера',rarity:.11,points:2,color:'#44cc44'},
+	{id:'phantom',emoji:'👻',name:'Фантом',rarity:.10,points:2,color:'#aaddff'},
+	{id:'lava_crystal',emoji:'🔶',name:'Лавовый кристалл',rarity:.09,points:3,color:'#ff8800'},
+	{id:'star_dust',emoji:'✨',name:'Звёздная пыль',rarity:.09,points:3,color:'#ffffaa'},
+	{id:'rainbow_scale',emoji:'🌈',name:'Радужная чешуя',rarity:.08,points:3,color:'#ff88ff'},
+	{id:'dragon_scale',emoji:'🐉',name:'Чешуя дракона',rarity:.07,points:4,color:'#44ff44'},
+	{id:'void_fragment',emoji:'🌌',name:'Осколок бездны',rarity:.07,points:4,color:'#6600aa'},
+	{id:'fossil_bone',emoji:'🦴',name:'Кость',rarity:.12,points:1,color:'#eeddcc'},
+	{id:'sand_grain',emoji:'⏳',name:'Песчинка',rarity:.13,points:1,color:'#ddaa66'},
+	{id:'swamp_gas',emoji:'💨',name:'Болотный газ',rarity:.11,points:2,color:'#88aa44'},
+	{id:'gear_wheel',emoji:'⚙️',name:'Шестерня',rarity:.10,points:2,color:'#aa8866'},
+	{id:'coral_shard',emoji:'🪸',name:'Коралл',rarity:.11,points:2,color:'#ff6699'},
+	{id:'mystic_rune',emoji:'🔮',name:'Руна',rarity:.08,points:3,color:'#aa44ff'},
+	{id:'moon_stone',emoji:'🌙',name:'Лунный камень',rarity:.08,points:3,color:'#cceeff'},
+	{id:'diamond_dust',emoji:'💎',name:'Алмазная крошка',rarity:.07,points:4,color:'#ccffff'},
+	{id:'primordial_ember',emoji:'🌋',name:'Искра первозданная',rarity:.06,points:5,color:'#ff2200'},
+	{id:'magnetite',emoji:'🧲',name:'Магнетит',rarity:.10,points:2,color:'#555555'},
+	{id:'dna_helix',emoji:'🧬',name:'Спираль ДНК',rarity:.09,points:3,color:'#44aaff'},
+	{id:'resonance_chord',emoji:'🎵',name:'Резонанс',rarity:.10,points:2,color:'#ff66dd'},
+	{id:'clay_shard',emoji:'🍂',name:'Черепок глины',rarity:.13,points:1,color:'#aa7744'},
+	{id:'basalt_chunk',emoji:'🪨',name:'Кусок базальта',rarity:.12,points:1,color:'#444444'},
+	{id:'twilight_orb',emoji:'🌆',name:'Сумеречная сфера',rarity:.08,points:3,color:'#cc66ff'},
+	{id:'mosaic_tile',emoji:'🎨',name:'Мозаика',rarity:.11,points:2,color:'#ff8888'},
+	{id:'ring_debris',emoji:'🪐',name:'Обломок кольца',rarity:.09,points:3,color:'#ddaaff'},
+	{id:'masquerade_mask',emoji:'🎭',name:'Маска',rarity:.10,points:2,color:'#ffcc44'},
+	{id:'gold_nugget',emoji:'🥇',name:'Самородок',rarity:.07,points:4,color:'#ffd700'},
+	{id:'tidal_wave',emoji:'🌊',name:'Прилив',rarity:.09,points:3,color:'#4488ff'},
+	{id:'height_feather',emoji:'🪶',name:'Перо высоты',rarity:.11,points:2,color:'#aaddff'},
+	{id:'ancient_moss',emoji:'🌿',name:'Древний мох',rarity:.12,points:1,color:'#66aa44'},
+	{id:'crimson_drop',emoji:'🩸',name:'Капля багрянца',rarity:.08,points:3,color:'#cc0000'},
+	{id:'absolute_shard',emoji:'❄️',name:'Осколок абсолюта',rarity:.05,points:6,color:'#aaffff'},
+	{id:'volcanic_glass',emoji:'🪞',name:'Вулканическое стекло',rarity:.09,points:3,color:'#333333'},
+	{id:'shadow_essence',emoji:'⬛',name:'Теневая сущность',rarity:.07,points:4,color:'#222233'},
+	{id:'legend_crown',emoji:'👑',name:'Корона легенд',rarity:.04,points:8,color:'#ffaa00'},
+	{id:'magma_core',emoji:'🌡️',name:'Ядро магмы',rarity:.06,points:5,color:'#ff5500'},
+	{id:'cosmic_nebula',emoji:'☄️',name:'Туманность',rarity:.06,points:5,color:'#aa44cc'},
+	{id:'rainbow_essence',emoji:'🌈',name:'Радужная эссенция',rarity:.05,points:6,color:'#ff44ff'},
+	{id:'dragon_heart',emoji:'💖',name:'Сердце дракона',rarity:.03,points:12,color:'#ff0044'},
+	{id:'alpha_void',emoji:'🕳️',name:'Альфа-пустота',rarity:.04,points:8,color:'#000033'},
+	{id:'crystal_skull',emoji:'💀',name:'Хрустальный череп',rarity:.06,points:5,color:'#eeeeff'},
+	{id:'sunstone',emoji:'☀️',name:'Солнечный камень',rarity:.07,points:4,color:'#ffee44'},
+	{id:'bog_pearl',emoji:'🟤',name:'Болотная жемчужина',rarity:.10,points:2,color:'#665533'},
+	{id:'brass_cog',emoji:'🔩',name:'Латунная муфта',rarity:.11,points:2,color:'#bb9944'},
+	{id:'abyss_eye',emoji:'👁️',name:'Глаз бездны',rarity:.05,points:6,color:'#440066'},
+	{id:'tide_wisdom',emoji:'🧜',name:'Мудрость прилива',rarity:.08,points:3,color:'#44aaff'},
+	{id:'wind_chime',emoji:'🎐',name:'Ветер колокольчик',rarity:.11,points:2,color:'#99ddff'},
+	{id:'forest_spirit',emoji:'🧝',name:'Лесной дух',rarity:.07,points:4,color:'#88dd66'},
+	{id:'scarlet_vein',emoji:'🔴',name:'Багровая жила',rarity:.09,points:3,color:'#ff2244'},
+	{id:'frost_orb',emoji:'🔵',name:'Морозный шар',rarity:.08,points:3,color:'#88eeff'},
+	{id:'crystal_shard',emoji:'💠',name:'Кристальный осколок',rarity:.12,points:1,color:'#aaddff'},
+	{id:'flame_wisp',emoji:'🔸',name:'Пламенный дух',rarity:.10,points:2,color:'#ff8844'},
+	{id:'thunder_heart',emoji:'💛',name:'Грозовое сердце',rarity:.07,points:4,color:'#ffee44'},
+	{id:'wish_bone',emoji:'🦴',name:'Кость желаний',rarity:.09,points:3,color:'#ffddbb'},
+	{id:'oasis_dew',emoji:'💧',name:'Роса оазиса',rarity:.10,points:2,color:'#44ddff'},
+	{id:'mire_lamp',emoji:'🪔',name:'Лампа топей',rarity:.09,points:3,color:'#88cc55'},
+	{id:'steam_valve',emoji:'🫁',name:'Паровой клапан',rarity:.10,points:2,color:'#ccdddd'},
+	{id:'aqua_gem',emoji:'🟦',name:'Аквамарин',rarity:.08,points:3,color:'#4488ff'},
+	{id:'enchant_tome',emoji:'📖',name:'Том зачарованный',rarity:.06,points:5,color:'#bb66ff'},
+	{id:'moonlight_tear',emoji:'💠',name:'Лунная слеза',rarity:.07,points:4,color:'#ddeeff'},
+	{id:'king_opal',emoji:'👑',name:'Королевский опал',rarity:.04,points:8,color:'#ffaaff'},
+	{id:'magma_bubble',emoji:'🫧',name:'Пузырь магмы',rarity:.11,points:2,color:'#ff6622'},
+	{id:'iron_scale',emoji:'🛡️',name:'Железная чешуя',rarity:.10,points:2,color:'#778899'},
+	{id:'echo_fragment',emoji:'🔊',name:'Фрагмент эха',rarity:.11,points:2,color:'#cc88ff'},
+	{id:'terra_pottery',emoji:'🏺',name:'Глиняный горшок',rarity:.12,points:1,color:'#cc8844'},
+	{id:'lava_drop',emoji:'🟠',name:'Капля лавы',rarity:.10,points:2,color:'#ff6600'},
+	{id:'dusk_pearl',emoji:'🌄',name:'Сумеречная жемчужина',rarity:.08,points:3,color:'#cc88aa'},
+	{id:'glass_shard',emoji:'🪟',name:'Осколок витража',rarity:.11,points:2,color:'#88ccff'}
 ];
 
+var THEME_GROUPS={
+	earth:['bronze','silver','gold','copper_coin','fossil_bone','sand_grain','clay_shard','basalt_chunk','wish_bone','terra_pottery','sunstone'],
+	crystal:['crystal','artifact','gem_fragment','diamond_dust','crystal_shard','moon_stone','moonlight_tear','king_opal','glass_shard','mosaic_tile'],
+	fire:['bomb','king','wildfire','lava_crystal','volcanic_glass','magma_core','magma_bubble','flame_wisp','lava_drop','crimson_drop','scarlet_vein','primordial_ember','dragon_scale','dragon_heart'],
+	storm:['lightning_rod','thunder_heart','wind_chime','echo_fragment','resonance_chord','height_feather'],
+	nature:['clover_leaf','dna_helix','dragon_scale','ancient_moss','forest_spirit','swamp_gas','bog_pearl','mire_lamp','dragon_heart'],
+	shadow:['phantom','shadow_essence','twilight_orb','dusk_pearl','mystic_rune','enchant_tome','abyss_eye','masquerade_mask','crystal_skull'],
+	light:['legend_crown','rainbow_scale','rainbow_essence','gold_nugget','star_dust','sunstone','cosmic_nebula'],
+	water:['coral_shard','tide_wisdom','aqua_gem','tidal_wave','frost_orb','absolute_shard'],
+	cosmic:['cosmic_nebula','star_dust','void_fragment','alpha_void','ring_debris'],
+	tech:['gear_wheel','steam_valve','brass_cog','iron_scale','magnetite','dna_helix']
+};
+var THEME_TO_GROUP={
+	copper:'earth',crystal:'crystal',danger:'fire',storm:'storm',lucky:'nature',mist:'shadow',volcano:'fire',frozen:'water',
+	shadow:'shadow',legend:'light',magma:'fire',cosmic:'cosmic',rainbow:'light',dragon:'nature',infinite:'cosmic',bone:'earth',
+	sand:'earth',swamp:'nature',steam:'tech',ruins:'earth',underwater:'water',mystic:'shadow',lunar:'crystal',diamond:'crystal',
+	primordial:'fire',magnetic:'tech',gene:'nature',ringing:'storm',clay:'earth',basalt:'earth',twilight:'shadow',mosaic:'crystal',
+	ring:'cosmic',masquerade:'shadow',gold_vein:'light',tidal:'water',height:'storm',ancient_forest:'nature',crimson:'fire',absolute:'water'
+};
 var NAMED_MINES_COUNT=40;
 var MINES=[
 	{id:'copper',name:'🪨 Медная',desc:'Твоя первая шахта',theme:'copper'},
@@ -1487,6 +1579,23 @@ function checkMineProgression(){
 		var sinceLast=stats.totalClicks-lastMineAtClicks;
 		var needed=10+currentMine*1;
 		if(sinceLast<needed)break;
+		// Анимация затухания старых предметов
+		for(var ci=0;ci<TOTAL_CELLS;ci++){
+			if(!cellStates[ci]||!cellStates[ci].active)continue;
+			var cm=gridEl.children[ci];if(!cm)continue;
+			var cml=cm.querySelector('.mole');if(!cml)continue;
+			if(Math.random()<.3){
+				// 30% — автолут
+				var item=cellStates[ci].type;
+				if(item&&item.id&&item.points>0){
+					if(!collection.includes(item.emoji)){collection.push(item.emoji);stats.collectionCount++;}
+					score+=Math.round(item.points*(1+stats.totalClicks*.0001));
+				}
+			}
+			cml.classList.add('mole-fadeout');
+			if(cellStates[ci].timer){clearTimeout(cellStates[ci].timer);cellStates[ci].timer=null;}
+			setTimeout(function(idx){if(gridEl.children[idx]){var m=gridEl.children[idx].querySelector('.mole');if(m){m.classList.remove('show','mole-fadeout');}}},500,ci);
+		}
 		lastMineAtClicks=stats.totalClicks;
 		var nextMine=currentMine+1;
 		currentMine=nextMine;
@@ -1839,24 +1948,32 @@ function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 
 function getActiveItems(){
 	var ids=getMineItemsForMine(currentMine);
-	// Добавляем 1-2 предмета с предыдущей шахты для разнообразия
-	if(currentMine>0){
-		var prevIds=getMineItemsForMine(currentMine-1);
-		var extras=prevIds.filter(function(id){return ids.indexOf(id)===-1;});
-		if(extras.length>0){
-			var pick=extras.slice(0,1+Math.floor(Math.random()*Math.min(2,extras.length)));
-			ids=ids.concat(pick);
+	// Добавляем 4-5 предметов из тематической группы шахты
+	var mine=getMine(),group=THEME_TO_GROUP[mine.theme];
+	if(group&&THEME_GROUPS[group]){
+		var pool=THEME_GROUPS[group].filter(function(id){return ids.indexOf(id)===-1;});
+		if(pool.length){
+			var n=Math.min(5,3+Math.floor(Math.random()*Math.min(pool.length,3)));
+			for(var r=pool.slice();n>0&&r.length>0;n--){
+				var pick=Math.floor(Math.random()*r.length);
+				ids.push(r.splice(pick,1)[0]);
+			}
 		}
 	}
-	var items=ITEMS.filter(function(i){return ids.indexOf(i.id)!==-1;});
-	return items;
+	// Подмешиваем предметы с 2-3 предыдущих шахт
+	for(var pm=Math.max(0,currentMine-3);pm<currentMine;pm++){
+		var prevIds=getMineItemsForMine(pm);
+		var extras=prevIds.filter(function(id){return ids.indexOf(id)===-1;});
+		if(extras.length>0) ids=ids.concat(extras.slice(0,1));
+	}
+	return ITEMS.filter(function(i){return ids.indexOf(i.id)!==-1;});
 }
 function getMineItemsForMine(m){
 	if(m<NAMED_MINES_COUNT){
 		if(!MINES[m].items){
 			MINES[m].items=[];
 			var totalBefore=0;for(var mm=0;mm<m;mm++){totalBefore+=(MINES[mm].items?MINES[mm].items.length:0);}
-			var cnt=m===0||m===14||m===NAMED_MINES_COUNT-1?3:(m<10?2:(m<25?2:(m%5===0?3:2)));
+			var cnt=4;
 			for(var j=0;j<cnt&&totalBefore+j<ITEMS.length;j++){MINES[m].items.push(ITEMS[totalBefore+j].id);}
 		}
 		return MINES[m].items;
@@ -1865,7 +1982,7 @@ function getMineItemsForMine(m){
 	if(!window[key]){
 		window[key]=[];
 		var pool=ITEMS.slice();
-		var count=3+(m%3===0?1:0)+(m%5===0?1:0);
+		var count=4+(m%3===0?1:0)+(m%5===0?1:0);
 		for(var i=0;i<count;i++){
 			var base=pool[(m*3+i*2)%pool.length];
 			var bonus=m>=NAMED_MINES_COUNT?Math.floor(m/5):0;
