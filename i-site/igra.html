@@ -2309,36 +2309,44 @@ function handleCellClick(idx){
 		var certChance=0.0005+getUnlockedCount()/ACHIEVEMENTS.length*0.001;
 		if(Math.random()<certChance){stats.certFound=true;saveData();showCertificate();}
 	}
-	if(gameActive&&pts>=0){setTimeout(function(){if(!cellStates[idx].active)spawnMole(idx);},300+Math.random()*800);}
+	if(gameActive&&pts>=0){setTimeout(function(){
+		if(!gameActive)return;
+		var av=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active&&j!==idx)av.push(j);}
+		if(av.length>0)spawnMole(av[Math.floor(Math.random()*av.length)]);
+	},400+Math.random()*600);}
 }
 
 var bombCooldown=0;
 function scheduleSpawn(){
 	if(!gameActive)return;
 	var isMob=document.body.classList.contains('is-mobile');
-	var base=(isMob?4000:3200);
-	var comboBonus=Math.min(500,Math.floor(combo/8)*50);
-	var intv=Math.max((isMob?2200:1800),base-comboBonus)+Math.random()*500;
+	var intv=2200+Math.random()*800;
 	spawnTimeout=setTimeout(function(){
 		if(!gameActive)return;
-		var maxCount=Math.min(isMob?3:4,2+Math.floor(combo/12)+Math.floor(Math.min(currentMine,20)/8));
-		var count=1+Math.floor(Math.random()*maxCount);
-		for(var i=0;i<count;i++){
-			setTimeout(function(n){return function(){
-				if(!gameActive)return;
-				var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}
-				if(inv.length>2){var idx=inv[Math.floor(Math.random()*inv.length)];spawnMole(idx);}
-			};}(i),i*250);
+		// считаем свободные ячейки
+		var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}
+		var free=inv.length;
+		// сколько кротов уже на поле
+		var busy=TOTAL_CELLS-free;
+		// спавним, только если кротов меньше 5 (десктоп) / 3 (мобила)
+		var maxFill=isMob?3:5;
+		if(busy<maxFill&&free>0){
+			var want=Math.min(free,1+Math.floor(Math.random()*(isMob?1:2)));
+			for(var i=0;i<want;i++){
+				var pick=Math.floor(Math.random()*inv.length);
+				spawnMole(inv[pick]);
+				inv.splice(pick,1);
+			}
 		}
-		// Бомба-сюрприз: неожиданно между обычными предметами
-		if(bombCooldown<=0&&Math.random()<0.12){
+		// Бомба-сюрприз
+		if(bombCooldown<=0&&busy<maxFill&&Math.random()<0.12){
 			bombCooldown=3+Math.floor(Math.random()*3);
 			setTimeout(function(){
 				if(!gameActive)return;
-				var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}
-				if(inv.length>2){
+				var inv2=[];for(var j2=0;j2<TOTAL_CELLS;j2++){if(!cellStates[j2].active)inv2.push(j2);}
+				if(inv2.length>0){
 					var bombItem={id:'bomb',emoji:'💣',name:'Бомба',rarity:1,points:-2,color:'#ff4444'};
-					var idx=inv[Math.floor(Math.random()*inv.length)];
+					var idx=inv2[Math.floor(Math.random()*inv2.length)];
 					cellStates[idx].active=true;cellStates[idx].type=bombItem;
 					var cell=gridEl.children[idx],mole=cell.querySelector('.mole');
 					mole.className='mole bomb';mole.classList.add('bomb');
@@ -2349,7 +2357,7 @@ function scheduleSpawn(){
 					if(cellStates[idx].timer)clearTimeout(cellStates[idx].timer);
 					cellStates[idx].timer=setTimeout(function(){hideMole(idx);},du);
 				}
-			},(count)*280);
+			},600+Math.random()*400);
 		}else if(bombCooldown>0){
 			bombCooldown--;
 		}
@@ -2359,9 +2367,9 @@ function scheduleSpawn(){
 
 function startSpawning(){
 	if(spawnTimeout)clearTimeout(spawnTimeout);
-	for(var i=0;i<2;i++){setTimeout(function(){
+	setTimeout(function(){
 		if(gameActive){var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}if(inv.length>0)spawnMole(inv[Math.floor(Math.random()*inv.length)]);}
-	},i*400+300);}
+	},500);
 	scheduleSpawn();
 }
 
