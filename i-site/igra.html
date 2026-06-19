@@ -1165,24 +1165,47 @@ var ITEMS=[
 	{id:'glass_shard',emoji:'🪟',name:'Осколок витража',rarity:.11,points:2,color:'#88ccff'}
 ];
 
-var THEME_GROUPS={
-	earth:['bronze','silver','gold','copper_coin','fossil_bone','sand_grain','clay_shard','basalt_chunk','wish_bone','terra_pottery','sunstone'],
-	crystal:['crystal','artifact','gem_fragment','diamond_dust','crystal_shard','moon_stone','moonlight_tear','king_opal','glass_shard','mosaic_tile'],
-	fire:['bomb','king','wildfire','lava_crystal','volcanic_glass','magma_core','magma_bubble','flame_wisp','lava_drop','crimson_drop','scarlet_vein','primordial_ember','dragon_scale','dragon_heart'],
-	storm:['lightning_rod','thunder_heart','wind_chime','echo_fragment','resonance_chord','height_feather'],
-	nature:['clover_leaf','dna_helix','dragon_scale','ancient_moss','forest_spirit','swamp_gas','bog_pearl','mire_lamp','dragon_heart'],
-	shadow:['phantom','shadow_essence','twilight_orb','dusk_pearl','mystic_rune','enchant_tome','abyss_eye','masquerade_mask','crystal_skull'],
-	light:['legend_crown','rainbow_scale','rainbow_essence','gold_nugget','star_dust','sunstone','cosmic_nebula'],
-	water:['coral_shard','tide_wisdom','aqua_gem','tidal_wave','frost_orb','absolute_shard'],
-	cosmic:['cosmic_nebula','star_dust','void_fragment','alpha_void','ring_debris'],
-	tech:['gear_wheel','steam_valve','brass_cog','iron_scale','magnetite','dna_helix']
-};
-var THEME_TO_GROUP={
-	copper:'earth',crystal:'crystal',danger:'fire',storm:'storm',lucky:'nature',mist:'shadow',volcano:'fire',frozen:'water',
-	shadow:'shadow',legend:'light',magma:'fire',cosmic:'cosmic',rainbow:'light',dragon:'nature',infinite:'cosmic',bone:'earth',
-	sand:'earth',swamp:'nature',steam:'tech',ruins:'earth',underwater:'water',mystic:'shadow',lunar:'crystal',diamond:'crystal',
-	primordial:'fire',magnetic:'tech',gene:'nature',ringing:'storm',clay:'earth',basalt:'earth',twilight:'shadow',mosaic:'crystal',
-	ring:'cosmic',masquerade:'shadow',gold_vein:'light',tidal:'water',height:'storm',ancient_forest:'nature',crimson:'fire',absolute:'water'
+var THEME_ITEMS={
+	copper:['gold','silver','bronze','copper_coin','terra_pottery'],
+	crystal:['crystal','artifact','gem_fragment','crystal_shard','glass_shard'],
+	danger:['bomb','king','wildfire','flame_wisp','lava_drop'],
+	storm:['lightning_rod','thunder_heart','wind_chime','echo_fragment','height_feather'],
+	lucky:['clover_leaf','sunstone','gold_nugget','wish_bone','star_dust'],
+	mist:['phantom','mystic_rune','abyss_eye','twilight_orb','dusk_pearl'],
+	volcano:['lava_crystal','volcanic_glass','magma_core','magma_bubble','primordial_ember'],
+	frozen:['frost_orb','absolute_shard','crystal_shard','diamond_dust','void_fragment'],
+	shadow:['shadow_essence','phantom','abyss_eye','void_fragment','mystic_rune'],
+	legend:['legend_crown','gold_nugget','star_dust','sunstone','king_opal'],
+	magma:['magma_core','magma_bubble','lava_crystal','volcanic_glass','lava_drop'],
+	cosmic:['cosmic_nebula','star_dust','ring_debris','void_fragment','moon_stone'],
+	rainbow:['rainbow_scale','rainbow_essence','mosaic_tile','glass_shard','king_opal'],
+	dragon:['dragon_scale','dragon_heart','forest_spirit','ancient_moss','clover_leaf'],
+	infinite:['alpha_void','void_fragment','star_dust','omega_crystal','cosmic_nebula'],
+	bone:['fossil_bone','wish_bone','crystal_skull','terra_pottery','sand_grain'],
+	sand:['sand_grain','sunstone','oasis_dew','gold_nugget','wish_bone'],
+	swamp:['swamp_gas','bog_pearl','mire_lamp','ancient_moss','forest_spirit'],
+	steam:['gear_wheel','steam_valve','brass_cog','iron_scale','magnetite'],
+	ruins:['artifact','clay_shard','terra_pottery','ancient_moss','fossil_bone'],
+	underwater:['coral_shard','tide_wisdom','aqua_gem','tidal_wave','frost_orb'],
+	mystic:['mystic_rune','enchant_tome','abyss_eye','twilight_orb','moonlight_tear'],
+	lunar:['moon_stone','moonlight_tear','star_dust','cosmic_nebula','diamond_dust'],
+	diamond:['diamond_dust','crystal','king_opal','moonlight_tear','gem_fragment'],
+	primordial:['primordial_ember','alpha_void','void_fragment','abyss_eye','magma_core'],
+	magnetic:['magnetite','iron_scale','gear_wheel','brass_cog','thunder_heart'],
+	gene:['dna_helix','clover_leaf','swamp_gas','dragon_scale','forest_spirit'],
+	ringing:['resonance_chord','echo_fragment','wind_chime','lightning_rod','glass_shard'],
+	clay:['clay_shard','terra_pottery','basalt_chunk','sand_grain','fossil_bone'],
+	basalt:['basalt_chunk','volcanic_glass','iron_scale','shadow_essence','magnetite'],
+	twilight:['twilight_orb','dusk_pearl','phantom','mystic_rune','moonlight_tear'],
+	mosaic:['mosaic_tile','glass_shard','rainbow_essence','king_opal','gem_fragment'],
+	ring:['ring_debris','cosmic_nebula','star_dust','moon_stone','alpha_void'],
+	masquerade:['masquerade_mask','enchant_tome','phantom','mystic_rune','twilight_orb'],
+	gold_vein:['gold_nugget','legend_crown','sunstone','king_opal','star_dust'],
+	tidal:['tidal_wave','tide_wisdom','aqua_gem','coral_shard','absolute_shard'],
+	height:['height_feather','wind_chime','echo_fragment','thunder_heart','star_dust'],
+	ancient_forest:['ancient_moss','forest_spirit','clover_leaf','dragon_scale','swamp_gas'],
+	crimson:['crimson_drop','scarlet_vein','flame_wisp','wildfire','lava_drop'],
+	absolute:['absolute_shard','frost_orb','diamond_dust','crystal_shard','void_fragment']
 };
 var NAMED_MINES_COUNT=40;
 var MINES=[
@@ -1948,13 +1971,13 @@ function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 
 function getActiveItems(){
 	var ids=getMineItemsForMine(currentMine);
-	// Добавляем 4-5 предметов из тематической группы шахты
-	var mine=getMine(),group=THEME_TO_GROUP[mine.theme];
-	if(group&&THEME_GROUPS[group]){
-		var pool=THEME_GROUPS[group].filter(function(id){return ids.indexOf(id)===-1;});
-		if(pool.length){
-			var n=Math.min(5,3+Math.floor(Math.random()*Math.min(pool.length,3)));
-			for(var r=pool.slice();n>0&&r.length>0;n--){
+	// Добавляем 5-7 предметов из тематического пула шахты
+	var mine=getMine(),pool=THEME_ITEMS[mine.theme];
+	if(pool){
+		var extra=pool.filter(function(id){return ids.indexOf(id)===-1;});
+		if(extra.length){
+			var n=Math.min(7,5+Math.floor(Math.random()*Math.min(extra.length-3,3)));
+			for(var r=extra.slice();n>0&&r.length>0;n--){
 				var pick=Math.floor(Math.random()*r.length);
 				ids.push(r.splice(pick,1)[0]);
 			}
