@@ -2238,16 +2238,7 @@ function renderShop(){
 		var card=document.createElement('div');card.className='chest-card'+(sc<ct.cost?' disabled':'');
 		card.innerHTML='<span class="chest-card-icon">'+ct.icon+'</span><span class="chest-card-name">'+ct.name+'</span><span class="chest-card-desc">'+ct.desc+'</span><span class="chest-card-cost">💰'+ct.cost+'</span>';
 		if(sc>=ct.cost){
-			var qbar=document.createElement('div');qbar.className='chest-qty-bar';
-			[1,5,10].forEach(function(q){
-				var b=document.createElement('button');b.className='chest-qty-btn';b.textContent='×'+q;
-				b.addEventListener('click',(function(cq){return function(e){e.stopPropagation();buyChest(ct.id,cq);};})(q));
-				qbar.appendChild(b);
-			});
-			var ba=document.createElement('button');ba.className='chest-qty-btn';ba.textContent='×∞';
-			ba.addEventListener('click',function(e){e.stopPropagation();var m=Math.floor(score/ct.cost);if(m>0)buyChest(ct.id,m);});
-			qbar.appendChild(ba);
-			card.appendChild(qbar);
+			card.addEventListener('click',function(e){e.stopPropagation();buyChest(ct.id,1);});
 		}
 		chestSection.appendChild(card);
 	});
