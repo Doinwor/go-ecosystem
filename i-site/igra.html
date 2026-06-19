@@ -2053,9 +2053,10 @@ function handleCellClick(idx){
 			spawnFloatText(pos.x-15,pos.y-20,'🛡️','#44ddff');
 			spawnParticles(pos.x,pos.y,'#44ddff',10);
 		}else{
-			score=Math.max(0,score+pts);
+			var bombPenalty=Math.max(5,Math.min(Math.floor(score*0.08),300));
+			score=Math.max(0,score-bombPenalty);
 			soundBomb();combo=0;updateCombo();screenShake();
-			setMessage('💥 '+item.name);
+			setMessage('💥 -'+bombPenalty+' 🪙');
 		}
 	}else{setMessage('😐 '+item.emoji);}
 	spawnFloatText(pos.x-15,pos.y-20,(crit?'КРИТ! ':'')+pts,item.color||'#fff');
