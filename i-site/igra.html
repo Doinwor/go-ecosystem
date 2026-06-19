@@ -2468,7 +2468,7 @@ function renderShop(){
 		var card=document.createElement('div');card.className='chest-card'+(sc<ct.cost?' disabled':'');
 		card.innerHTML='<span class="chest-card-icon">'+ct.icon+'</span><span class="chest-card-name">'+ct.name+'</span><span class="chest-card-desc">'+ct.desc+'</span><span class="chest-card-cost">💰'+ct.cost+'</span>';
 		if(sc>=ct.cost){
-			card.addEventListener('click',function(e){e.stopPropagation();buyChest(ct.id,1);});
+			holdToBuy(card,function(){buyChest(ct.id,1);});
 		}
 		chestSection.appendChild(card);
 	});
