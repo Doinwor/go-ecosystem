@@ -1840,10 +1840,6 @@ function getComboMultiplier(){return 1+Math.floor(combo/5)*.5;}
 function getActiveItems(){
 	var ids=getMineItemsForMine(currentMine);
 	var items=ITEMS.filter(function(i){return ids.indexOf(i.id)!==-1;});
-	// Бомба может выпасть в любой шахте (но реже)
-	if(ids.indexOf('bomb')===-1){
-		items.push({id:'bomb',emoji:'💣',name:'Бомба',rarity:0.025,points:-2,color:'#ff4444'});
-	}
 	return items;
 }
 function getMineItemsForMine(m){
@@ -2116,6 +2112,7 @@ function handleCellClick(idx){
 	if(gameActive&&pts>=0){setTimeout(function(){if(!cellStates[idx].active)spawnMole(idx);},300+Math.random()*800);}
 }
 
+var bombCooldown=0;
 function scheduleSpawn(){
 	if(!gameActive)return;
 	var isMob=document.body.classList.contains('is-mobile');
@@ -2132,6 +2129,29 @@ function scheduleSpawn(){
 				var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}
 				if(inv.length>2){var idx=inv[Math.floor(Math.random()*inv.length)];spawnMole(idx);}
 			};}(i),i*250);
+		}
+		// Бомба-сюрприз: неожиданно между обычными предметами
+		if(bombCooldown<=0&&Math.random()<0.18){
+			bombCooldown=2+Math.floor(Math.random()*3);
+			setTimeout(function(){
+				if(!gameActive)return;
+				var inv=[];for(var j=0;j<TOTAL_CELLS;j++){if(!cellStates[j].active)inv.push(j);}
+				if(inv.length>2){
+					var bombItem={id:'bomb',emoji:'💣',name:'Бомба',rarity:1,points:-2,color:'#ff4444'};
+					var idx=inv[Math.floor(Math.random()*inv.length)];
+					cellStates[idx].active=true;cellStates[idx].type=bombItem;
+					var cell=gridEl.children[idx],mole=cell.querySelector('.mole');
+					mole.className='mole bomb';mole.classList.add('bomb');
+					var es=mole.querySelector('.emoji');if(es)es.textContent='💣';
+					mole.classList.add('show');
+					var du=3000+Math.random()*1500;
+					du*=(1+timeLevel*0.15);
+					if(cellStates[idx].timer)clearTimeout(cellStates[idx].timer);
+					cellStates[idx].timer=setTimeout(function(){hideMole(idx);},du);
+				}
+			},(count)*280);
+		}else if(bombCooldown>0){
+			bombCooldown--;
 		}
 		scheduleSpawn();
 	},intv);
@@ -2472,7 +2492,7 @@ var _resetGame=function(){
 	document.querySelectorAll('.float-text,.particle').forEach(function(e){e.remove();});
 	achBanner.classList.remove('show');
 	pauseOverlay.classList.remove('show');
-	score=0;highScore=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=hasStreak?2:0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;
+	score=0;highScore=0;collection=[];shovelLevel=1;luckLevel=0;playerLevel=1;combo=hasStreak?2:0;boostLevel=0;timeLevel=0;clicksSinceNewItem=0;bombCooldown=0;
 	currentMine=0;lastMineAtClicks=0;
 	hasCharm=false;hasStreak=false;hasExpBoost=false;
 	collectedChestItems=[];
