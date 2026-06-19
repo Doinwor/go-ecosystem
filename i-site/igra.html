@@ -1748,21 +1748,21 @@ function checkAchievements(){
 		god_of_legends:function(){return countFinds('crown_legend')+countFinds('star_master')+countFinds('aegis')+countFinds('phoenix_tear')>=15;},
 		magma_walker:function(){return countFinds('magma_stone')>=5;},
 		flame_keeper:function(){return countFinds('flame')>=8;},
-		volcano_god:function(){var m=MINES[10];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
+		volcano_god:function(){return getMineItemsForMine(10).every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
 		stardust_gatherer:function(){return countFinds('cosmic_dust')>=5;},
 		nebula_seer:function(){return countFinds('nebula')>=4;},
-		cosmic_master:function(){var m=MINES[11];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
+		cosmic_master:function(){return getMineItemsForMine(11).every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
 		supernova_god:function(){return countFinds('nebula')>=10;},
 		prism_collector:function(){return countFinds('prism')>=5;},
 		rainbow_hunter:function(){return countFinds('rainbow_gem')>=3;},
-		rainbow_warrior:function(){var m=MINES[12];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
+		rainbow_warrior:function(){return getMineItemsForMine(12).every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
 		dragon_scales:function(){return countFinds('dragon_scale')>=8;},
 		dragon_eye_collector:function(){return countFinds('dragon_eye')>=3;},
-		dragon_slayer:function(){var m=MINES[13];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
+		dragon_slayer:function(){return getMineItemsForMine(13).every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
 		dragon_lord:function(){return countFinds('dragon_eye')>=10;},
 		infinity_reach:function(){return countFinds('infinity_star')>=5;},
 		eternal_seeker:function(){return countFinds('eternal_crystal')>=3;},
-		infinite_one:function(){var m=MINES[14];return m.items.every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
+		infinite_one:function(){return getMineItemsForMine(14).every(function(id){return collection.indexOf(ITEMS.find(function(i){return i.id===id;})?.emoji||'')>-1||unlocked[id];});},
 		eternal_legend:function(){return countFinds('eternal_crystal')>=7;},
 		combo_master:function(){return stats.bestCombo>=20;},
 		gold_million:function(){return stats.totalEarnings>=2000;},
@@ -2044,7 +2044,7 @@ function getActiveItems(){
 }
 function getMineItemsForMine(m){
 	if(m<NAMED_MINES_COUNT){
-		if(!MINES[m].items){
+		if(!MINES[m].items||MINES[m].items.length===0){
 			MINES[m].items=[];
 			var totalBefore=0;for(var mm=0;mm<m;mm++){totalBefore+=(MINES[mm].items?MINES[mm].items.length:0);}
 			var cnt=4;
@@ -2380,7 +2380,7 @@ function updateUI(){
 	progressBar.style.width=pct+'%';progressLabel.textContent=collection.length+'/'+ct;
 	shovelLevelSpan.textContent=shovelLevel;luckLevelSpan.textContent=luckLevel;
 	D('mineDisplay').textContent=getMine().name.split(' ')[0]+' '+(currentMine+1);
-	var locEl=D('locationBanner');if(locEl){var m=getMine();locEl.innerHTML=/*'*/m.name/*'*/+' · '+m.desc;locEl.style.opacity='0';setTimeout(function(){locEl.style.opacity='1';},20);}
+	var locEl=D('locationBanner');if(locEl){var m=getMine();locEl.innerHTML=m.name+' · '+m.desc;locEl.style.opacity='0';setTimeout(function(){locEl.style.opacity='1';},20);}
 	D('charmDisplay').style.display=hasCharm?'inline':'none';
 }
 
