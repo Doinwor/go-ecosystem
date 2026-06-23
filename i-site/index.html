@@ -22,6 +22,7 @@
       --arrow-color: #bbb;
       --arrow-hover: #1a1a1a;
       --footer-color: #ccc;
+      --accent: #5be37b;
 
     }
 
@@ -37,6 +38,7 @@
       --arrow-color: #555;
       --arrow-hover: #f0ece4;
       --footer-color: #333;
+      --accent: #5be37b;
 
     }
 
@@ -222,6 +224,14 @@
     .project-card:hover {
       border-color: var(--border-hover);
       box-shadow: 0 4px 20px var(--card-shadow);
+    }
+
+    .project-card-accent {
+      border-color: var(--accent) !important;
+    }
+    .project-card-accent:hover {
+      border-color: var(--accent) !important;
+      box-shadow: 0 4px 24px rgba(91,227,123,0.15);
     }
 
     .project-card__name {
@@ -938,10 +948,10 @@
     <div class="projects reveal">
       <h2>Проекты</h2>
       <div class="projects-grid">
-        <a href="go-launcher.html" class="project-card">
-          <div class="project-card__name">Go Launcher</div>
+        <a href="go-launcher.html" class="project-card project-card-accent">
+          <div class="project-card__name" style="background:linear-gradient(135deg,var(--text),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Go Launcher</div>
           <div class="project-card__desc">Minecraft Offline Launcher — управление версиями, загрузчиками и модами</div>
-          <div class="project-card__arrow">→</div>
+          <div class="project-card__arrow" style="color:var(--accent)">→</div>
         </a>
         <a href="https://sites.google.com/view/evlampia-org/%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F-%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0" target="_blank" rel="noopener" class="project-card">
           <div class="project-card__name">Евлампия</div>
