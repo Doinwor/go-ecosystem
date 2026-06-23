@@ -19,6 +19,7 @@
       --border-hover: #ccc;
       --heading-color: #bbb;
       --footer-color: #ccc;
+      --accent: #5be37b;
     }
 
     [data-theme="dark"] {
@@ -30,6 +31,7 @@
       --border-hover: #333;
       --heading-color: #555;
       --footer-color: #333;
+      --accent: #5be37b;
     }
 
     body {
@@ -99,12 +101,17 @@
       font-size: clamp(28px, 5vw, 48px);
       font-weight: 700;
       margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .page-sub {
       font-size: 13px;
       font-weight: 300;
-      color: var(--muted);
+      color: var(--accent);
+      opacity: 0.7;
       letter-spacing: 0.05em;
       margin-bottom: 56px;
     }
@@ -131,7 +138,7 @@
     }
 
     section p strong {
-      color: var(--text);
+      color: var(--accent);
       font-weight: 600;
     }
 
