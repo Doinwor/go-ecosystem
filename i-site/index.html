@@ -374,6 +374,11 @@
       50% { background-position: 100% 50%; }
     }
 
+    @keyframes goGreenShimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
     .event-card__chevron {
       font-size: 16px;
       color: #ffd70099;
@@ -943,7 +948,7 @@
       <h2>Проекты</h2>
       <div class="projects-grid">
         <a href="go-launcher.html" class="project-card">
-          <div class="project-card__name" style="background:linear-gradient(135deg,var(--text),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Go Launcher</div>
+          <div class="project-card__name" style="background:linear-gradient(135deg,#5be37b,#2ecc71);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:goGreenShimmer 3s ease-in-out infinite">Go Launcher</div>
           <div class="project-card__desc">Minecraft Offline Launcher — управление версиями, загрузчиками и модами</div>
           <div class="project-card__arrow" style="color:var(--accent)">→</div>
         </a>
