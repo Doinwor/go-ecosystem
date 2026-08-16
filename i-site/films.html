@@ -186,6 +186,35 @@
       50% { background-position: 100% 50%; }
     }
 
+    /* ─── accent project item: gold ─── */
+    .project-item--accent-gold {
+      border-color: #d7d73a;
+      background: linear-gradient(135deg, rgba(224, 224, 62, 0.12), rgba(255, 215, 0, 0.04));
+    }
+
+    .project-item--accent-gold:hover {
+      border-color: #eee84e;
+    }
+
+    .project-item--accent-gold .project-item__title a {
+      color: transparent;
+      background: linear-gradient(135deg, #d9cf2e, #f0e84e, #d9cf2e);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: olegushkaShimmer 3s ease-in-out infinite;
+    }
+
+    .project-item--accent-gold .project-item__title a:hover {
+      opacity: 0.8;
+    }
+
+    @keyframes olegushkaShimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
     /* ─── film message ─── */
     .film-message {
       border: 1px solid var(--border);
@@ -389,7 +418,7 @@
         <div class="project-item__title"><a href="https://doinwor.github.io/go-ecosystem/i-site/evlampia.html">Евлампия — добрая и злая гадалка →</a></div>
         <div class="project-item__desc">Веб-сериал о гадалке Евлампии: предсказания по шару, картам и телефону. Сезоны и архивные серии.</div>
       </div>
-      <div class="project-item">
+      <div class="project-item project-item--accent-gold">
         <div class="project-item__title"><a href="https://doinwor.github.io/go-ecosystem/i-site/olegushka.html">Добрый Олегушка →</a></div>
         <div class="project-item__desc">Развлекательный видеоканал: смешные ролики на разные темы. Список видео постоянно обновляется.</div>
       </div>
