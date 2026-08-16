@@ -157,6 +157,35 @@
       line-height: 1.6;
     }
 
+    /* ─── accent project item ─── */
+    .project-item--accent {
+      border-color: #6c3cf0;
+      background: linear-gradient(135deg, rgba(108, 60, 240, 0.09), rgba(160, 138, 255, 0.03));
+    }
+
+    .project-item--accent:hover {
+      border-color: #a08aff;
+    }
+
+    .project-item--accent .project-item__title a {
+      color: transparent;
+      background: linear-gradient(135deg, #6c3cf0, #a08aff, #6c3cf0);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: evlampiaShimmer 3s ease-in-out infinite;
+    }
+
+    .project-item--accent .project-item__title a:hover {
+      opacity: 0.8;
+    }
+
+    @keyframes evlampiaShimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
     /* ─── film message ─── */
     .film-message {
       border: 1px solid var(--border);
@@ -356,7 +385,7 @@
         <div class="project-item__title"><a href="https://doinwor.github.io/go-ecosystem/i-site/tram.html">Петербургский трамвай: Ржевка-Пороховые →</a></div>
         <div class="project-item__desc">История трамвая в спальном районе — от расцвета до возрождения.</div>
       </div>
-      <div class="project-item">
+      <div class="project-item project-item--accent">
         <div class="project-item__title"><a href="https://doinwor.github.io/go-ecosystem/i-site/evlampia.html">Евлампия — добрая и злая гадалка →</a></div>
         <div class="project-item__desc">Веб-сериал о гадалке Евлампии: предсказания по шару, картам и телефону. Сезоны и архивные серии.</div>
       </div>
