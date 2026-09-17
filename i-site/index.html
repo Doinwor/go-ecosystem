@@ -257,6 +257,28 @@
       margin-bottom: 80px;
     }
 
+    .event-more {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .event-more a {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+
+    .event-more a:hover {
+      color: var(--text);
+    }
+
+    .event-more a span {
+      color: #ffd700;
+    }
+
     .event-card {
       border: 2px solid #ffd700;
       border-radius: 24px;
@@ -924,6 +946,9 @@
           <a href="event.html" class="event-card__play">▶ Подробнее</a>
         </div>
       </div>
+      <div class="event-more">
+        <a href="events.html">Все ивенты — <span>архив</span></a>
+      </div>
     </div>
 
     <div class="pages-nav reveal">
@@ -936,6 +961,10 @@
         <a href="films.html" class="service-card">
           <div class="service-card__name">Фильмы и видео</div>
           <div class="service-card__desc">Короткометражки, видеоарт и видеопроекты.</div>
+        </a>
+        <a href="events.html" class="service-card">
+          <div class="service-card__name">Ивенты</div>
+          <div class="service-card__desc">Архив прошедших ивентов студии.</div>
         </a>
         <a href="contacts.html" class="service-card">
           <div class="service-card__name">Контакты</div>
