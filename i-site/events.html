@@ -216,6 +216,31 @@
       color: var(--gold);
     }
 
+    .archive-card--shape {
+      border-color: rgba(0,229,255,.35);
+    }
+
+    .archive-card--shape:hover {
+      border-color: #00e5ff;
+      box-shadow: 0 0 30px rgba(0,229,255,.08);
+    }
+
+    .archive-card--shape .archive-card__badge {
+      color: #04121f;
+      background: linear-gradient(135deg, #00e5ff, #2979ff);
+    }
+
+    .archive-card--shape .archive-card__title span {
+      background: linear-gradient(135deg, #00e5ff, #7aa2ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .archive-card--shape .archive-card__link span {
+      color: #00e5ff;
+    }
+
     /* ─── note ─── */
     .note {
       border: 1px solid var(--border);
@@ -388,6 +413,21 @@
     <p class="page-sub reveal reveal-delay-1">Архив прошедших событий студии i.</p>
 
     <section class="reveal reveal-delay-2">
+      <h2>Текущий ивент</h2>
+      <div class="archive-list">
+        <a href="shape-event.html" class="archive-card archive-card--shape">
+          <div class="archive-card__top">
+            <span class="archive-card__badge">🎯 Текущее</span>
+            <span class="archive-card__meta">новый ивент студии</span>
+          </div>
+          <div class="archive-card__title">Попади в <span>фигуру</span></div>
+          <div class="archive-card__desc">Новый ивент студии i. — аркада, в которой ты кликаешь по движущейся фигуре: она ползёт, прыгает, телепортируется, размножается на обманки и убегает от курсора. 4 волны, боссы и бесконечный режим.</div>
+          <div class="archive-card__link">Подробнее <span>→</span></div>
+        </a>
+      </div>
+    </section>
+
+    <section class="reveal reveal-delay-3">
       <h2>Прошедшие</h2>
       <div class="archive-list">
         <a href="event.html" class="archive-card">
@@ -402,7 +442,7 @@
       </div>
     </section>
 
-    <section class="reveal reveal-delay-3">
+    <section class="reveal">
       <div class="note">
         <p>Прошедшие ивенты остаются в архиве навсегда. Новые события анонсируем на сайте и в канале проектов.</p>
       </div>
