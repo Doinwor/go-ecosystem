@@ -917,40 +917,6 @@
       </div>
     </div>
 
-    <div class="event reveal reveal-delay-2">
-      <div class="event-card" id="eventCard">
-        <span class="sparkle"></span>
-        <span class="sparkle"></span>
-        <span class="sparkle"></span>
-        <span class="sparkle"></span>
-        <span class="sparkle"></span>
-        <span class="sparkle"></span>
-        <div class="event-card__header">
-          <span class="event-card__badge">🎮 Событие</span>
-          <span class="event-card__title">Крот-<span>собиратель</span></span>
-          <span class="event-card__chevron">▼</span>
-        </div>
-        <div class="event-card__body">
-          <p class="event-card__desc">
-            Первая игра студии i.&nbsp;— аркада, в&nbsp;которой ты стучишь по&nbsp;кротам,
-            открываешь шахты, собираешь предметы, открываешь сундуки и&nbsp;охотишься за&nbsp;легендарным сертификатом.
-          </p>
-          <ul class="event-card__rules">
-            <li>⛏ &nbsp;40 шахт — от медной до абсолютной</li>
-            <li>📦 &nbsp;87+ предметов + 48 из сундуков</li>
-            <li>🏆 &nbsp;105+ достижений четырёх тиров</li>
-            <li>⚡ &nbsp;Комбо, улучшения, бустеры</li>
-            <li>🎁 &nbsp;Сундуки с коллекционными предметами</li>
-            <li>📜 &nbsp;Легендарный сертификат — найдёшь ли?</li>
-          </ul>
-          <a href="event.html" class="event-card__play">▶ Подробнее</a>
-        </div>
-      </div>
-      <div class="event-more">
-        <a href="events.html">Все ивенты — <span>архив</span></a>
-      </div>
-    </div>
-
     <div class="pages-nav reveal">
       <h2>О студии</h2>
       <div class="services-grid">
@@ -1112,15 +1078,6 @@
             }, i * 180);
           });
         });
-      })();
-
-      (function eventCard() {
-        var card = document.getElementById('eventCard');
-        if (card) {
-          card.addEventListener('click', function() {
-            card.classList.toggle('open');
-          });
-        }
       })();
 
       (function reveal() {
