@@ -137,6 +137,10 @@ body.miss-flash .bg{filter:brightness(1.25) saturate(.7)}
 @keyframes starSpin{to{transform:rotate(360deg)}}
 @keyframes bombPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
 
+.magnet-ring{position:absolute;z-index:3;pointer-events:none;border:1px dashed rgba(0,229,255,.6);border-radius:50%;display:none;box-shadow:0 0 30px rgba(0,229,255,.15),inset 0 0 30px rgba(0,229,255,.08)}
+.magnet-ring.on{display:block;animation:magnetPulse 1.6s ease-in-out infinite}
+@keyframes magnetPulse{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.05);opacity:.95}}}
+
 .shop-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;width:min(740px,100%);max-height:56vh;overflow:auto;padding:2px}
 .shop-item{display:flex;align-items:center;gap:12px;border:1px solid #242f55;border-radius:14px;padding:14px}
 .shop-item .s-ico{width:42px;height:42px;flex:0 0 42px;display:flex;align-items:center;justify-content:center;font-size:22px;background:#181d33;border:1px solid #2a3b6b;border-radius:10px}
@@ -254,11 +258,14 @@ var field=$('field');
 var SHAPES=['square','circle','triangle'];
 var shapeEl=document.createElement('div');
 shapeEl.className='shape';shapeEl.id='shape';field.appendChild(shapeEl);
+var MAGNET_R=260;
+var magnetEl=document.createElement('div');magnetEl.className='magnet-ring';magnetEl.style.width=(MAGNET_R*2)+'px';magnetEl.style.height=(MAGNET_R*2)+'px';field.appendChild(magnetEl);
 
 var M={drift:false,driftSpeed:2.2,jumpP:0,teleportP:0,shrink:false,copies:0,flee:false,shift:false,blink:false,speedup:false,camo:false,boss:false,wave:''};
 var S={running:false,paused:false,level:1,wave:'',goal:3,missMax:5,hits:0,missUsed:0,misses:0,combo:0,bestCombo:0,score:0,startMs:0,x:0,y:0,vx:2,vy:1.6,size:76,spMul:1,shapeType:'square',visible:true,lastAction:0,lastReveal:0,patienceDone:false,tricksterDone:false,flawlessStreak:0,newRecord:false,coinsRun:0,bombsDodged:0,frenzyUntil:0,magnet:false,freezeUntil:0};
 var timers=[];
 var pickups=[];
+var curLabel='';
 
 var KEY_REC='squareGameRecord',KEY_LVL='squareGameLevel',KEY_ACH='squareGameAch';
 var KEY_COINS='squareGameCoins',KEY_SHIELD='squareGameShields',KEY_POW='squareGamePow';
@@ -301,8 +308,8 @@ var ACH=[
 var achById={};ACH.forEach(function(a){achById[a.id]=a;});
 var SHOP=[
  {id:'shield',n:'Щит',d:'Поглощает один промах. Работает автоматически.',i:'🛡',cost:15,max:3,get:function(){return shields;},add:function(){shields++;save(KEY_SHIELD,shields);}},
- {id:'freeze',n:'Фриз на старте',d:'Первые 4 секунды фигура движется медленнее.',i:'❄️',cost:12,max:1,get:function(){return powers.freeze|0;},add:function(){powers.freeze=(powers.freeze|0)+1;save(KEY_POW,JSON.stringify(powers));}},
- {id:'magnet',n:'Магнит монет',d:'Автоматически притягивает монеты рядом.',i:'🧲',cost:18,max:1,get:function(){return powers.magnet|0;},add:function(){powers.magnet=(powers.magnet|0)+1;save(KEY_POW,JSON.stringify(powers));}}
+ {id:'freeze',n:'Фриз на старте',d:'Первые 4 секунды фигура медленнее. Действует в каждом забеге.',i:'❄️',cost:12,max:1,get:function(){return powers.freeze|0;},add:function(){powers.freeze=1;save(KEY_POW,JSON.stringify(powers));}},
+ {id:'magnet',n:'Магнит монет',d:'Притягивает монеты в радиусе. Действует в каждом забеге.',i:'🧲',cost:18,max:1,get:function(){return powers.magnet|0;},add:function(){powers.magnet=1;save(KEY_POW,JSON.stringify(powers));}}
 ];
 function hasAch(id){return ach.indexOf(id)!==-1;}
 function unlock(id){
@@ -352,17 +359,19 @@ var LEVELS=[
 {g:10,m:3,w:'Волна 3 · Оно злится',mech:['jump','copies1']},
 {g:10,m:2,w:'Волна 3 · Оно злится',mech:['drift','speedup']},
 {g:11,m:2,w:'Волна 3 · Оно злится',mech:['drift','camo']},
-{g:12,m:2,w:'Волна 4 · Боссы',mech:['copies1','teleport'],boss:true},
-{g:12,m:2,w:'Волна 4 · Боссы',mech:['flee','shrink'],boss:true},
-{g:12,m:2,w:'Волна 4 · Боссы',mech:['blink','shift','driftSlow'],boss:true},
-{g:12,m:2,w:'Волна 4 · Боссы',mech:['jump','shift','blink','driftSlow'],boss:true},
-{g:15,m:2,w:'Волна 4 · БОСС',mech:['all'],boss:true}
+{g:12,m:3,w:'Волна 4 · Боссы',mech:['copies1','teleport'],boss:true},
+{g:12,m:3,w:'Волна 4 · Боссы',mech:['flee','shrink'],boss:true},
+{g:12,m:3,w:'Волна 4 · Боссы',mech:['blink','shift','driftSlow'],boss:true},
+{g:12,m:3,w:'Волна 4 · Боссы',mech:['jump','shift','blink','driftSlow'],boss:true},
+{g:12,m:3,w:'Волна 4 · БОСС',mech:['all'],boss:true}
 ];
 function levelCfg(n){
   if(n<=20){var l=LEVELS[n-1];return {g:l.g,m:l.m,w:l.w,mech:l.mech.slice(),boss:!!l.boss};}
   var pool=['drift','jump','teleport','shrink','copies1','copies2','flee','shift','blink','speedup','camo'];
   var mech=[];while(mech.length<2+Math.floor(Math.random()*3)&&pool.length){var i=Math.floor(Math.random()*pool.length);mech.push(pool.splice(i,1)[0]);}
-  return {g:12+(n-20)*2,m:Math.max(1,2-Math.floor((n-20)/5)),w:'Бесконечность',mech:mech,boss:Math.random()<.3};
+  var goal=Math.min(15,10+Math.ceil((n-20)/3));
+  var mMax=Math.max(3,4-Math.floor((n-20)/6));
+  return {g:goal,m:mMax,w:'Бесконечность',mech:mech,boss:Math.random()<.3};
 }
 function parseMech(cfg){
   M.wave=cfg.w;M.drift=false;M.driftSpeed=2.2;M.jumpP=0;M.teleportP=0;M.shrink=false;M.copies=0;M.flee=false;M.shift=false;M.blink=false;M.speedup=false;M.camo=false;M.boss=cfg.boss;
@@ -554,7 +563,7 @@ function updatePickups(){
     if(p.kind==='coin'&&S.magnet){
       var cx=S.x+S.size/2,cy=S.y+S.size/2,px=p.x+p.size/2,py=p.y+p.size/2;
       var dx=cx-px,dy=cy-py;
-      if(Math.sqrt(dx*dx+dy*dy)<150){collect(p);continue;}
+      if(Math.sqrt(dx*dx+dy*dy)<MAGNET_R){collect(p);continue;}
     }
     if(age>p.life-450)p.el.style.opacity=String(Math.max(0,(p.life-age)/450));
     p.el.style.left=p.x+'px';p.el.style.top=p.y+'px';
@@ -592,7 +601,7 @@ function startLevel(n){
   S.vx=Math.cos(ang)*mag;S.vy=Math.sin(ang)*mag;
   if(M.flee){S.vx*=.4;S.vy*=.4;}
   shapeEl.style.opacity=(M.camo?'0.24':'1');shapeEl.style.pointerEvents='auto';
-  $('hudMech').textContent=mechLabel(cfg);
+  curLabel=mechLabel(cfg);$('hudMech').textContent=curLabel;
   applyShape();
   randomPlace();
   clearFieldFx();
@@ -611,7 +620,7 @@ function renderHUD(){
   $('hudScore').textContent=S.score;
   $('hudLevel').textContent=S.level;
   $('hudBest').textContent=Math.max(record,S.score);
-  $('hudCoins').textContent='🪙 '+coins+' · 🛡 '+shields;
+  $('hudCoins').textContent='🪙 '+coins+' · 🛡 '+shields+(S.magnet?' · 🧲':'');
   var mult=multiplier();
   $('hudCombo').textContent=(S.combo>2)?('комбо x'+mult+' · '+S.combo):'';
   var pct=Math.min(100,S.hits/S.goal*100);
@@ -653,7 +662,7 @@ function doHit(px,py){
   if(S.combo===5)unlock('sniper');
   if(S.combo===10)unlock('legendary');
   if(M.shrink)shrinkShape();
-  if(M.speedup)S.spMul*=1.05;
+  if(M.speedup)S.spMul=Math.min(2.4,S.spMul*1.05);
   var ghostWin=false;
   if(M.blink&&Date.now()-S.lastReveal<400){ghostWin=true;unlock('ghost');}
   particles(px,py);
@@ -665,7 +674,7 @@ function doHit(px,py){
   if(S.hits>=S.goal)levelDone();
 }
 function shrinkShape(){
-  S.size=Math.max(34,S.size*.9);
+  S.size=Math.max(46,S.size*.9);
   shapeEl.style.width=S.size+'px';shapeEl.style.height=S.size+'px';
   document.querySelectorAll('.copy').forEach(function(c){c.style.width=S.size+'px';c.style.height=S.size+'px';});
   if(S.x+S.size>rect().w)S.x=rect().w-S.size;
@@ -821,9 +830,15 @@ function tick(ts){
     }
     updateCopies();
     updatePickups();
+    if(S.magnet){
+      magnetEl.classList.add('on');
+      magnetEl.style.left=(S.x+S.size/2-MAGNET_R)+'px';
+      magnetEl.style.top=(S.y+S.size/2-MAGNET_R)+'px';
+    }else magnetEl.classList.remove('on');
     if(!S.patienceDone&&Date.now()-S.lastAction>10000&&S.score>0){S.patienceDone=true;unlock('patience');}
     var m=multiplier();
     $('hudCombo').textContent=(S.combo>2)?('комбо x'+m+' · '+S.combo):'';
+    $('hudMech').textContent=curLabel+(S.freezeUntil&&Date.now()<S.freezeUntil?(' · ❄️ '+Math.ceil((S.freezeUntil-Date.now())/1000)+'с'):'');
     $('hudFrenzy').textContent=frenzyActive()?('⚡ френзи x2 · '+Math.ceil((S.frenzyUntil-Date.now())/1000)+'с'):'';
   }
   requestAnimationFrame(tick);
@@ -834,10 +849,9 @@ $('btnPlay').addEventListener('click',function(){
   $('menu').classList.remove('show');
   $('shopScreen').classList.remove('show');
   S.misses=0;S.score=0;S.combo=0;S.bestCombo=0;S.level=1;sessAch=[];S.tricksterDone=false;S.patienceDone=false;S.flawlessStreak=0;
-  S.coinsRun=0;S.bombsDodged=0;S.frenzyUntil=0;S.magnet=false;S.freezeUntil=0;
+  S.coinsRun=0;S.bombsDodged=0;S.frenzyUntil=0;S.magnet=(powers.magnet|0)===1;S.freezeUntil=0;
   S.startMs=Date.now();S.lastAction=Date.now();
-  if(powers.freeze>0){powers.freeze--;save(KEY_POW,JSON.stringify(powers));S.freezeUntil=Date.now()+4000;showToast('❄️','Фриз активен');}
-  if(powers.magnet>0){powers.magnet--;save(KEY_POW,JSON.stringify(powers));S.magnet=true;showToast('🧲','Магнит активен');}
+  if((powers.freeze|0)===1){S.freezeUntil=Date.now()+4000;showToast('❄️','Фриз активен');}
   $('game').classList.add('show');
   S.running=true;S.paused=false;
   refreshMenu();
