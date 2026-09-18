@@ -59,6 +59,8 @@ body.miss-flash .bg{filter:brightness(1.25) saturate(.7)}
 .shape.shape--circle{border-radius:50%}
 .shape.shape--warn{animation:shapeWarn .55s ease 1}
 @keyframes shapeWarn{0%,100%{transform:scale(1)}50%{transform:scale(.86);filter:brightness(1.9) drop-shadow(0 0 14px #fff)}}
+.shape.shape--morph{animation:shapeMorph .38s ease 1}
+@keyframes shapeMorph{0%{transform:scale(1) rotate(0deg)}50%{transform:scale(.12) rotate(90deg);opacity:.5}100%{transform:scale(1) rotate(0deg)}}
 .shape.shape--slide{transition:border-radius .3s,opacity .25s,left .28s cubic-bezier(.3,.8,.3,1),top .28s cubic-bezier(.3,.8,.3,1)}
 .shape.shape--triangle{border-radius:0;background:linear-gradient(135deg,#00e5ff,#2979ff);clip-path:polygon(50% 6%,94% 94%,6% 94%);box-shadow:none;filter:drop-shadow(0 0 16px rgba(0,229,255,.5))}
 .shape.shape--hit{animation:shapeHit .18s ease}
@@ -269,6 +271,7 @@ var S={running:false,paused:false,level:1,wave:'',goal:3,missMax:5,hits:0,missUs
 var timers=[];
 var pickups=[];
 var curLabel='';
+var ptrX=0,ptrY=0;
 
 var KEY_REC='squareGameRecord',KEY_LVL='squareGameLevel',KEY_ACH='squareGameAch';
 var KEY_COINS='squareGameCoins',KEY_SHIELD='squareGameShields',KEY_POW='squareGamePow';
@@ -279,7 +282,7 @@ var bestLevel=load(KEY_LVL,1);
 var ach=load(KEY_ACH,[]);
 var coins=load(KEY_COINS,0)|0;
 var shields=load(KEY_SHIELD,0)|0;
-var powers=load(KEY_POW,{freeze:0,magnet:0});
+var powers=load(KEY_POW,{freeze:0,magnet:0,hover:0});
 if(!powers||typeof powers!=='object')powers={freeze:0,magnet:0};
 if(!powers.freeze)powers.freeze=0;
 if(!powers.magnet)powers.magnet=0;
@@ -312,7 +315,8 @@ var achById={};ACH.forEach(function(a){achById[a.id]=a;});
 var SHOP=[
  {id:'shield',n:'Щит',d:'Поглощает один промах. Работает автоматически.',i:'🛡',cost:15,max:3,get:function(){return shields;},add:function(){shields++;save(KEY_SHIELD,shields);}},
  {id:'freeze',n:'Фриз на старте',d:'Первые 4 секунды фигура медленнее. Действует в каждом забеге.',i:'❄️',cost:12,max:1,get:function(){return powers.freeze|0;},add:function(){powers.freeze=1;save(KEY_POW,JSON.stringify(powers));}},
- {id:'magnet',n:'Магнит монет',d:'Притягивает монеты в радиусе. Действует в каждом забеге.',i:'🧲',cost:18,max:1,get:function(){return powers.magnet|0;},add:function(){powers.magnet=1;save(KEY_POW,JSON.stringify(powers));}}
+ {id:'magnet',n:'Магнит монет',d:'Притягивает монеты в радиусе. Действует в каждом забеге.',i:'🧲',cost:18,max:1,get:function(){return powers.magnet|0;},add:function(){powers.magnet=1;save(KEY_POW,JSON.stringify(powers));}},
+ {id:'hover',n:'Сборщик',d:'Монеты собираются под курсором просто при наведении. Действует в каждом забеге.',i:'🖱️',cost:22,max:1,get:function(){return powers.hover|0;},add:function(){powers.hover=1;save(KEY_POW,JSON.stringify(powers));}}
 ];
 function hasAch(id){return ach.indexOf(id)!==-1;}
 function unlock(id){
@@ -434,6 +438,8 @@ function morphShape(){
   var t=S.shapeType;
   while(t===S.shapeType)t=pick(SHAPES);
   S.shapeType=t;applyShape();
+  shapeEl.classList.remove('shape--morph');void shapeEl.offsetWidth;shapeEl.classList.add('shape--morph');
+  beep(660,120,'triangle',.05);
 }
 function bounce(){var r=rect();if(S.x<=0){S.x=0;S.vx=Math.abs(S.vx);}if(S.x>=r.w-S.size){S.x=r.w-S.size;S.vx=-Math.abs(S.vx);}if(S.y<=0){S.y=0;S.vy=Math.abs(S.vy);}if(S.y>=r.h-S.size){S.y=r.h-S.size;S.vy=-Math.abs(S.vy);}}
 function clearTimer(){timers.forEach(function(t){clearInterval(t);});timers=[];}
@@ -452,7 +458,7 @@ function startTimers(){
       setTimeout(function(){shapeEl.classList.remove('shape--slide');},420);
     },300);
   },M.teleportP));
-  if(M.shift)timers.push(setInterval(function(){if(!S.running||S.paused)return;morphShape();},800));
+  if(M.shift)timers.push(setInterval(function(){if(!S.running||S.paused)return;morphShape();},950));
   if(M.drift)timers.push(setInterval(function(){
     if(!S.running||S.paused)return;
     var a=(Math.random()-.5)*1.5;
@@ -579,6 +585,10 @@ function updatePickups(){
       var dx=cx-px,dy=cy-py;
       if(Math.sqrt(dx*dx+dy*dy)<MAGNET_R){collect(p);continue;}
     }
+    if(p.kind==='coin'&&(powers.hover|0)===1){
+      var hx=ptrX-r.l,hy=ptrY-r.t;
+      if(hx>=p.x&&hx<=p.x+p.size&&hy>=p.y&&hy<=p.y+p.size){collect(p);continue;}
+    }
     if(age>p.life-450)p.el.style.opacity=String(Math.max(0,(p.life-age)/450));
     p.el.style.left=p.x+'px';p.el.style.top=p.y+'px';
   }
@@ -634,7 +644,7 @@ function renderHUD(){
   $('hudScore').textContent=S.score;
   $('hudLevel').textContent=S.level;
   $('hudBest').textContent=Math.max(record,S.score);
-  $('hudCoins').textContent='🪙 '+coins+' · 🛡 '+shields+(S.magnet?' · 🧲':'');
+  $('hudCoins').textContent='🪙 '+coins+' · 🛡 '+shields+(S.magnet?' · 🧲':'')+(((powers.hover|0)===1)?' · 🖱️':'');
   var mult=multiplier();
   $('hudCombo').textContent=(S.combo>2)?('комбо x'+mult+' · '+S.combo):'';
   var pct=Math.min(100,S.hits/S.goal*100);
@@ -769,7 +779,7 @@ function quitRun(){
 }
 function resetProgress(){
   try{localStorage.removeItem(KEY_REC);localStorage.removeItem(KEY_LVL);localStorage.removeItem(KEY_ACH);localStorage.removeItem(KEY_COINS);localStorage.removeItem(KEY_SHIELD);localStorage.removeItem(KEY_POW);}catch(e){}
-  record=0;bestLevel=1;ach=[];sessAch=[];coins=0;shields=0;powers={freeze:0,magnet:0};
+  record=0;bestLevel=1;ach=[];sessAch=[];coins=0;shields=0;powers={freeze:0,magnet:0,hover:0};
   refreshMenu();
   renderShop();renderAch();
 }
@@ -826,7 +836,16 @@ field.addEventListener('pointerdown',function(e){
   else doMiss(e.clientX,e.clientY,false);
 });
 field.addEventListener('pointermove',function(e){
-  if(M.flee){var c=shapeEl.getBoundingClientRect();var cx=c.left+c.width/2,cy=c.top+c.height/2;var dx=cx-e.clientX,dy=cy-e.clientY;var d=Math.sqrt(dx*dx+dy*dy);if(d<130&&d>1){var sp=S.size*.05;S.vx=(dx/d)*sp;S.vy=(dy/d)*sp;}}
+  ptrX=e.clientX;ptrY=e.clientY;
+  if(!S.running||S.paused)return;
+  if(M.flee){
+    var now=Date.now();
+    if(now-S._lastFlee<110)return;
+    S._lastFlee=now;
+    if(Math.random()<.25)return;
+    var c=shapeEl.getBoundingClientRect();var cx=c.left+c.width/2,cy=c.top+c.height/2;var dx=cx-e.clientX,dy=cy-e.clientY;var d=Math.sqrt(dx*dx+dy*dy);
+    if(d<120&&d>1){var sp=Math.min(3,S.size*.038);S.vx=(dx/d)*sp;S.vy=(dy/d)*sp;}
+  }
 });
 
 var lastT=0;
