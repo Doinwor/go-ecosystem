@@ -29,7 +29,7 @@ body.miss-flash .bg{filter:brightness(1.25) saturate(.7)}
 .shape-demo{display:flex;gap:14px;justify-content:center;margin:40px 0 6px}
 .shape-demo .d{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#00e5ff,#2979ff);box-shadow:0 0 22px rgba(0,229,255,.35);opacity:.9}
 .shape-demo .d--c{border-radius:50%}
-.shape-demo .d--t{border-radius:0;background:none;clip-path:polygon(50% 6%,94% 94%,6% 94%);filter:drop-shadow(0 0 10px rgba(0,229,255,.5))}
+.shape-demo .d--t{border-radius:0;background:linear-gradient(135deg,#00e5ff,#2979ff);clip-path:polygon(50% 6%,94% 94%,6% 94%);filter:drop-shadow(0 0 10px rgba(0,229,255,.5))}
 .menu-record{margin-top:22px;font-size:12px;font-weight:300;color:#9fb0d4;letter-spacing:.08em}
 .menu-record b{color:#00e5ff;font-weight:700}
 .menu-buttons{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;justify-content:center}
@@ -57,14 +57,14 @@ body.miss-flash .bg{filter:brightness(1.25) saturate(.7)}
 
 .shape{position:absolute;width:76px;height:76px;border-radius:16px;background:linear-gradient(135deg,#00e5ff,#2979ff);box-shadow:0 0 26px rgba(0,229,255,.45),inset 0 0 20px rgba(255,255,255,.18);z-index:5;transition:border-radius .3s,opacity .25s;will-change:left,top}
 .shape.shape--circle{border-radius:50%}
-.shape.shape--triangle{border-radius:0;background:none;clip-path:polygon(50% 6%,94% 94%,6% 94%);box-shadow:none;filter:drop-shadow(0 0 16px rgba(0,229,255,.5))}
+.shape.shape--triangle{border-radius:0;background:linear-gradient(135deg,#00e5ff,#2979ff);clip-path:polygon(50% 6%,94% 94%,6% 94%);box-shadow:none;filter:drop-shadow(0 0 16px rgba(0,229,255,.5))}
 .shape.shape--hit{animation:shapeHit .18s ease}
 @keyframes shapeHit{0%{transform:scale(1)}50%{transform:scale(.78)}100%{transform:scale(1)}}
 .shape.shape--camo{opacity:.24;box-shadow:none;filter:none}
 
 .copy{position:absolute;width:76px;height:76px;border-radius:16px;background:linear-gradient(135deg,#00e5ff,#2979ff);opacity:.35;z-index:4;pointer-events:auto;transition:border-radius .3s}
 .copy.copy--circle{border-radius:50%}
-.copy.copy--triangle{border-radius:0;background:none;clip-path:polygon(50% 6%,94% 94%,6% 94%);opacity:.3;filter:drop-shadow(0 0 12px rgba(0,229,255,.25))}
+.copy.copy--triangle{border-radius:0;background:linear-gradient(135deg,#00e5ff,#2979ff);clip-path:polygon(50% 6%,94% 94%,6% 94%);opacity:.3;filter:drop-shadow(0 0 12px rgba(0,229,255,.25))}
 
 .particle{position:fixed;border-radius:50%;pointer-events:none;z-index:2001;animation:particleFly .6s ease-out forwards}
 @keyframes particleFly{to{transform:translate(var(--dx),var(--dy)) scale(.15);opacity:0}}
