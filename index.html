@@ -3,689 +3,791 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08080b">
+  <meta name="description" content="GO — экосистема независимых цифровых проектов: музыкальный проект WAWE, студия і. и инструменты. Разные миры. Одна орбита.">
   <title>GO — экосистема проектов</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%2308080b'/%3E%3Ctext x='50' y='72' font-family='Arial,sans-serif' font-size='66' font-weight='bold' fill='%23b8a6ff' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *,
+    *::before,
+    *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg: #07070d;
-      --text: #f0ece4;
-      --muted: rgba(240,236,228,0.35);
-      --dim: rgba(240,236,228,0.5);
-      --accent-1: #6c3cf0;
-      --accent-2: #a08aff;
-      --accent-3: #ff6b9d;
-      --accent-4: #00d4aa;
-      --border: rgba(255,255,255,0.06);
-      --border-hover: rgba(255,255,255,0.15);
+      --bg: #08080b;
+      --bg-soft: #0d0d13;
+      --text: #f4f2ee;
+      --muted: rgba(244, 242, 238, 0.54);
+      --dim: rgba(244, 242, 238, 0.34);
+      --faint: rgba(244, 242, 238, 0.16);
+      --line: rgba(255, 255, 255, 0.08);
+      --line-strong: rgba(255, 255, 255, 0.16);
+      --card: rgba(255, 255, 255, 0.02);
+      --card-hover: rgba(255, 255, 255, 0.035);
+      --violet: #7c5cff;
+      --lilac: #b8a6ff;
+      --pink: #ff6b9d;
+      --mint: #29d3a6;
+      --amber: #ffb347;
+      --font-display: 'Unbounded', 'Helvetica Neue', Arial, sans-serif;
+      --font-body: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+      --wrap: 1180px;
+      --pad: clamp(20px, 5vw, 48px);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
     body {
-      font-family: 'Unbounded', sans-serif;
+      font-family: var(--font-body);
       background: var(--bg);
       color: var(--text);
+      line-height: 1.6;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
-    /* ─── scrollbar ─── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+    h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; }
+    a { color: inherit; text-decoration: none; }
+    img, svg { display: block; max-width: 100%; }
+    ul { list-style: none; }
 
-    /* ─── background grid ─── */
+    ::selection { background: rgba(124, 92, 255, 0.35); color: #fff; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
     .bg-grid {
-      position: fixed; inset: 0; z-index: 0;
-      pointer-events: none;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background-image:
-        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-      background-size: 60px 60px;
+        linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 20%, transparent 78%);
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, #000 20%, transparent 78%);
     }
 
-    /* ─── floating orbs ─── */
-    .orb {
+    .glow {
       position: fixed; z-index: 0; pointer-events: none;
       border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.4;
-      animation: orbFloating 20s ease-in-out infinite;
+      filter: blur(110px);
+      will-change: transform;
     }
-    .orb:nth-child(1) {
-      width: 500px; height: 500px;
-      background: var(--accent-1);
-      top: -10%; left: -10%;
-      animation-delay: 0s;
-    }
-    .orb:nth-child(2) {
-      width: 400px; height: 400px;
-      background: var(--accent-3);
-      bottom: -10%; right: -10%;
-      animation-delay: -7s;
-      opacity: 0.25;
-    }
-    .orb:nth-child(3) {
-      width: 300px; height: 300px;
-      background: var(--accent-4);
-      top: 50%; left: 50%;
-      animation-delay: -14s;
-      opacity: 0.15;
-    }
+    .glow--violet { width: 620px; height: 620px; top: -18%; left: -12%; background: rgba(124, 92, 255, 0.22); }
+    .glow--pink { width: 460px; height: 460px; top: 32%; right: -14%; background: rgba(255, 107, 157, 0.12); }
+    .glow--mint { width: 380px; height: 380px; bottom: -14%; left: 24%; background: rgba(41, 211, 166, 0.08); }
 
-    @keyframes orbFloating {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      25% { transform: translate(60px, -40px) scale(1.1); }
-      50% { transform: translate(-30px, 60px) scale(0.9); }
-      75% { transform: translate(40px, 30px) scale(1.05); }
-    }
-
-    /* ─── noise overlay ─── */
-    #noise {
-      position: fixed; inset: 0; z-index: 1;
-      pointer-events: none;
-      opacity: 0.025;
+    .noise {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.03;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
       background-size: 256px 256px;
     }
 
-    /* ─── nav ─── */
+    .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); position: relative; z-index: 2; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-display);
+      font-size: 11px; font-weight: 500; letter-spacing: 0.34em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .eyebrow::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--lilac); box-shadow: 0 0 12px 2px rgba(184, 166, 255, 0.6);
+      animation: pulseDot 2.6s ease-in-out infinite;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 20px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(7,7,13,0.6);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-      transition: transform 0.3s;
+      transition: transform 0.4s var(--ease), background 0.3s, border-color 0.3s;
+      border-bottom: 1px solid transparent;
     }
+    nav.scrolled {
+      background: rgba(8, 8, 11, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom-color: var(--line);
+    }
+    nav.hidden { transform: translateY(-100%); }
 
-    nav .logo {
-      font-size: 20px;
-      font-weight: 900;
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+
+    .nav__logo {
+      font-family: var(--font-display); font-weight: 900; font-size: 20px;
       letter-spacing: -0.02em;
-      text-decoration: none;
-      color: var(--text);
+      background: linear-gradient(120deg, #fff, var(--lilac) 60%, var(--violet));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    nav .links {
-      display: flex;
-      gap: 28px;
+    .nav__links { display: flex; align-items: center; gap: 6px; }
+    .nav__links a {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+      color: var(--muted); padding: 9px 14px; border-radius: 100px;
+      transition: color 0.2s, background 0.2s;
     }
+    .nav__links a:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
 
-    nav .links a {
-      font-size: 11px;
-      font-weight: 400;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 0.05em;
-      transition: color 0.25s;
-      text-transform: uppercase;
+    .nav__cta {
+      margin-left: 8px;
+      color: var(--text) !important;
+      border: 1px solid var(--line-strong);
     }
+    .nav__cta:hover { background: rgba(255, 255, 255, 0.08) !important; }
 
-    nav .links a:hover { color: var(--text); }
-
-    /* ─── site wrapper ─── */
-    .site-wrapper {
-      position: relative; z-index: 2;
+    .nav__burger {
+      display: none; width: 42px; height: 42px; border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line);
+      cursor: pointer; align-items: center; justify-content: center; flex-direction: column; gap: 5px;
     }
+    .nav__burger span { width: 18px; height: 1.5px; background: var(--text); transition: 0.3s; }
 
-    section {
-      padding: 140px 24px;
-      max-width: 1200px;
-      margin: 0 auto;
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-display); font-size: 13px; font-weight: 600;
+      padding: 15px 30px; border-radius: 100px; cursor: pointer;
+      border: 1px solid transparent; transition: transform 0.2s var(--ease), box-shadow 0.3s, background 0.3s, border-color 0.3s;
     }
-
-    @media (max-width: 768px) {
-      section { padding: 80px 16px; }
+    .btn--primary {
+      background: linear-gradient(120deg, var(--violet), var(--lilac));
+      color: #0a0812;
+      box-shadow: 0 10px 40px -12px rgba(124, 92, 255, 0.75);
     }
+    .btn--primary:hover { transform: translateY(-2px); box-shadow: 0 18px 50px -12px rgba(124, 92, 255, 0.9); }
+    .btn--ghost { border-color: var(--line-strong); color: var(--text); }
+    .btn--ghost:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); }
+    .btn__arrow { transition: transform 0.25s var(--ease); }
+    .btn:hover .btn__arrow { transform: translateX(4px); }
 
-    /* ─── hero ─── */
     .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      padding: 40px 24px;
+      position: relative; min-height: 100svh;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      padding: 120px 0 80px;
     }
-
     .hero__glow {
-      position: absolute;
-      width: 700px;
-      height: 700px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(108,60,240,0.15) 0%, rgba(108,60,240,0.05) 30%, transparent 70%);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      animation: heroPulse 6s ease-in-out infinite;
+      position: absolute; top: 46%; left: 50%; width: 760px; height: 760px;
+      transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none;
+      background: radial-gradient(circle, rgba(124, 92, 255, 0.18) 0%, rgba(124, 92, 255, 0.05) 40%, transparent 70%);
+      animation: heroPulse 7s ease-in-out infinite;
+    }
+    @keyframes heroPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+      50% { transform: translate(-50%, -50%) scale(1.18); opacity: 1; }
     }
 
-    @keyframes heroPulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-      50% { transform: translate(-50%, -50%) scale(1.4); opacity: 1; }
-    }
+    .hero__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
 
     .hero__logo {
-      font-size: clamp(90px, 22vw, 220px);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      line-height: 1;
-      background: linear-gradient(135deg, #f0ece4 0%, #c4b0ff 35%, #6c3cf0 65%, #a08aff 100%);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: shimmer 5s ease-in-out infinite;
-      position: relative;
-      cursor: default;
-      transition: transform 0.1s ease-out;
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: clamp(64px, 15vw, 148px);
+      font-weight: 900; letter-spacing: -0.025em; line-height: 1.1;
+      padding: 0.08em 0.06em;
+      background: linear-gradient(135deg, #ffffff 0%, #d8ccff 34%, var(--violet) 68%, var(--lilac) 100%);
+      background-size: 220% 220%;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      animation: shimmer 8s ease-in-out infinite;
     }
-
     @keyframes shimmer {
       0%, 100% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
     }
 
     .hero__sub {
-      font-size: clamp(13px, 2vw, 20px);
-      font-weight: 300;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-top: 12px;
+      font-family: var(--font-display); font-weight: 400;
+      font-size: clamp(12px, 1.6vw, 16px); letter-spacing: 0.42em; text-transform: uppercase;
+      color: var(--muted); margin-top: 22px;
     }
-
     .hero__tagline {
-      font-size: clamp(15px, 1.8vw, 22px);
-      font-weight: 300;
-      color: rgba(240,236,228,0.3);
-      margin-top: 32px;
-      max-width: 520px;
-      line-height: 1.7;
+      font-weight: 300; font-size: clamp(15px, 1.6vw, 19px);
+      color: var(--dim); margin-top: 22px; max-width: 460px;
     }
+    .hero__actions { display: flex; gap: 12px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
 
     .hero__scroll {
-      margin-top: 60px;
-      width: 22px;
-      height: 36px;
-      border: 2px solid rgba(240,236,228,0.12);
-      border-radius: 12px;
-      position: relative;
+      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--faint);
+    }
+    .hero__scroll i {
+      width: 1px; height: 46px; overflow: hidden; position: relative; display: block;
+      background: var(--line);
+    }
+    .hero__scroll i::after {
+      content: ''; position: absolute; top: -50%; left: 0; width: 100%; height: 50%;
+      background: linear-gradient(var(--lilac), transparent);
+      animation: scrollLine 2.2s var(--ease) infinite;
+    }
+    @keyframes scrollLine { 0% { top: -50%; } 100% { top: 100%; } }
+
+    section { position: relative; }
+    .section { padding: clamp(80px, 12vw, 160px) 0; }
+
+    .head { max-width: 720px; margin-bottom: 64px; }
+    .head--center { margin-left: auto; margin-right: auto; text-align: center; }
+    .head__title {
+      font-size: clamp(30px, 5vw, 58px); font-weight: 800; margin-top: 18px;
+    }
+    .head__title span {
+      background: linear-gradient(120deg, var(--lilac), var(--violet));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .head__desc { color: var(--muted); font-size: 15px; font-weight: 300; margin-top: 18px; max-width: 560px; }
+    .head--center .head__desc { margin-left: auto; margin-right: auto; }
+
+    .about { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(40px, 6vw, 90px); align-items: center; }
+    .about__text p { color: var(--muted); font-size: 16px; font-weight: 300; margin-bottom: 18px; }
+    .about__text p strong { color: var(--text); font-weight: 600; }
+    .about__text .lead { color: var(--text); font-size: clamp(18px, 2.2vw, 22px); font-weight: 300; line-height: 1.5; margin-bottom: 26px; }
+
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 36px; }
+    .stat {
+      border: 1px solid var(--line); border-radius: var(--radius-sm);
+      padding: 26px 22px; background: var(--card);
+    }
+    .stat__num {
+      font-family: var(--font-display); font-size: 38px; font-weight: 800; line-height: 1;
+      background: linear-gradient(120deg, var(--lilac), var(--violet));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat__label { font-size: 11px; letter-spacing: 0.05em; color: var(--muted); margin-top: 10px; }
+
+    .orbit { position: relative; width: min(400px, 78vw); aspect-ratio: 1; margin: 0 auto; }
+    .orbit__ring {
+      position: absolute; inset: 4%; border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+    .orbit__ring--inner { inset: 24%; border-style: solid; border-color: rgba(255, 255, 255, 0.06); }
+    .orbit__comet { position: absolute; inset: 4%; animation: spin 22s linear infinite; }
+    .orbit__comet::before {
+      content: ''; position: absolute; top: 0; left: 50%;
+      width: 8px; height: 8px; margin-left: -4px; border-radius: 50%;
+      background: var(--lilac); box-shadow: 0 0 18px 4px rgba(184, 166, 255, 0.7);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .orbit__core {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 118px; height: 118px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display); font-weight: 900; font-size: 34px;
+      color: #fff;
+      background: radial-gradient(circle at 50% 40%, rgba(124, 92, 255, 0.35), rgba(13, 13, 19, 0.9) 70%);
+      border: 1px solid rgba(184, 166, 255, 0.45);
+      box-shadow: 0 0 60px -6px rgba(124, 92, 255, 0.7), inset 0 0 30px rgba(124, 92, 255, 0.25);
     }
 
-    .hero__scroll::after {
-      content: '';
-      width: 3px;
-      height: 7px;
-      background: rgba(240,236,228,0.35);
-      border-radius: 2px;
-      position: absolute;
-      top: 5px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: scrollDown 2s ease-in-out infinite;
+    .orbit__sat {
+      position: absolute; transform: translate(-50%, -50%);
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 100px;
+      background: rgba(13, 13, 19, 0.85); border: 1px solid var(--line-strong);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      font-family: var(--font-display); font-size: 12px; font-weight: 600; white-space: nowrap;
+      box-shadow: 0 8px 30px -12px rgba(0, 0, 0, 0.8);
+    }
+    .orbit__sat i { width: 7px; height: 7px; border-radius: 50%; }
+    .orbit__sat--wawe { top: 4%; left: 50%; }
+    .orbit__sat--wawe i { background: var(--mint); box-shadow: 0 0 10px var(--mint); }
+    .orbit__sat--i { top: 75%; left: 8%; }
+    .orbit__sat--i i { background: var(--pink); box-shadow: 0 0 10px var(--pink); }
+    .orbit__sat--go { top: 75%; left: 92%; }
+    .orbit__sat--go i { background: #5be37b; box-shadow: 0 0 10px #5be37b; }
+
+    .timeline { position: relative; max-width: 780px; margin: 0 auto; }
+    .timeline::before {
+      content: ''; position: absolute; left: 15px; top: 8px; bottom: 8px; width: 1px;
+      background: linear-gradient(var(--lilac), rgba(184, 166, 255, 0.15) 60%, transparent);
+    }
+    .tl-item { position: relative; padding: 0 0 46px 58px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-item__dot {
+      position: absolute; left: 7px; top: 2px;
+      width: 17px; height: 17px; border-radius: 50%;
+      border: 1px solid var(--line-strong); background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tl-item__dot::after { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--dim); }
+    .tl-item--current .tl-item__dot { border-color: var(--lilac); box-shadow: 0 0 22px rgba(184, 166, 255, 0.55); }
+    .tl-item--current .tl-item__dot::after { background: var(--lilac); }
+    .tl-item__step {
+      font-family: var(--font-display); font-size: 10px; font-weight: 600;
+      letter-spacing: 0.26em; text-transform: uppercase; color: var(--faint);
+    }
+    .tl-item__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 8px 0 10px; }
+    .tl-item__title { font-family: var(--font-display); font-size: clamp(22px, 3vw, 32px); font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+    .tl-item--current .tl-item__title {
+      background: linear-gradient(120deg, var(--lilac), var(--violet));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .tl-item__badge {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); border: 1px solid var(--line); border-radius: 100px; padding: 4px 10px;
+    }
+    .tl-item__badge--now { color: var(--lilac); border-color: rgba(184, 166, 255, 0.4); }
+    .tl-item__desc { color: var(--muted); font-size: 14px; font-weight: 300; line-height: 1.7; max-width: 540px; }
+
+    .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+    .project {
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: var(--card); padding: 38px 36px;
+      transition: transform 0.5s var(--ease), border-color 0.4s, background 0.4s;
+    }
+    .project::after {
+      content: ''; position: absolute; inset: 0; border-radius: var(--radius);
+      background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 0%), rgba(184, 166, 255, 0.1), transparent 45%);
+      opacity: 0; transition: opacity 0.5s; pointer-events: none;
+    }
+    .project:hover { transform: translateY(-6px); border-color: var(--line-strong); background: var(--card-hover); }
+    .project:hover::after { opacity: 1; }
+    .project--wide { grid-column: 1 / -1; }
+    .project--wide .project__body { max-width: 640px; }
+
+    .project__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+    .project__index { font-family: var(--font-display); font-size: 12px; font-weight: 600; color: var(--faint); letter-spacing: 0.1em; }
+    .project__icon {
+      width: 46px; height: 46px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--line-strong); background: rgba(255, 255, 255, 0.03);
+      color: var(--accent, var(--lilac));
+    }
+    .project__icon svg { width: 22px; height: 22px; }
+
+    .project__title { font-size: clamp(24px, 3vw, 34px); font-weight: 800; margin-bottom: 12px; }
+    .project__title--wawe { background: linear-gradient(120deg, var(--mint), #37b6ff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .project__title--i { background: linear-gradient(120deg, var(--pink), #c44dff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .project__title--go { background: linear-gradient(120deg, #5be37b, #2ecc71); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .project__title--go { background-size: 200% 200%; animation: shimmer 6s ease-in-out infinite; }
+    .project__desc { color: var(--muted); font-size: 14.5px; font-weight: 300; line-height: 1.7; margin-bottom: 24px; }
+
+    .project__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+    .tag {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 6px 12px; border-radius: 100px; color: var(--muted);
+      background: rgba(255, 255, 255, 0.03); border: 1px solid var(--line);
     }
 
-    @keyframes scrollDown {
-      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
-      50% { transform: translateX(-50%) translateY(9px); opacity: 0.2; }
+    .project__link {
+      margin-top: auto; display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--text);
     }
+    .project__link .btn__arrow { transition: transform 0.3s var(--ease); }
+    .project:hover .project__link .btn__arrow { transform: translateX(5px); }
 
-    /* ─── section header ─── */
-    .section-header {
-      text-align: center;
-      margin-bottom: 64px;
-    }
-
-    .section-header__label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .section-header__title {
-      font-size: clamp(30px, 5vw, 52px);
-      font-weight: 700;
-      line-height: 1.15;
-    }
-
-    .section-header__title span {
-      background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .section-header__desc {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--muted);
-      max-width: 500px;
-      margin: 14px auto 0;
-      line-height: 1.7;
-    }
-
-    /* ─── about ─── */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
+    .inside {
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: linear-gradient(150deg, rgba(255, 107, 157, 0.05), rgba(13, 13, 19, 0.4));
+      padding: clamp(32px, 5vw, 56px);
+      display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(30px, 5vw, 64px);
       align-items: center;
     }
+    .inside__title { font-size: clamp(26px, 4vw, 44px); font-weight: 800; }
+    .inside__title em {
+      font-style: normal;
+      background: linear-gradient(120deg, var(--pink), #c44dff);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .inside__desc { color: var(--muted); font-size: 15px; font-weight: 300; margin-top: 16px; }
+    .inside__list { display: flex; flex-direction: column; }
+    .inside__item {
+      display: flex; align-items: center; gap: 18px; padding: 18px 4px;
+      border-top: 1px solid var(--line); transition: padding 0.3s var(--ease), color 0.3s;
+    }
+    .inside__item:last-child { border-bottom: 1px solid var(--line); }
+    .inside__item:hover { padding-left: 14px; }
+    .inside__item:hover .inside__item-name { color: var(--lilac); }
+    .inside__item-name { font-family: var(--font-display); font-size: 15px; font-weight: 600; transition: color 0.3s; }
+    .inside__item-desc { font-size: 12.5px; color: var(--dim); margin-left: auto; text-align: right; }
+    .inside__item-arrow { color: var(--faint); transition: color 0.3s, transform 0.3s var(--ease); }
+    .inside__item:hover .inside__item-arrow { color: var(--lilac); transform: translateX(4px); }
 
-    @media (max-width: 768px) {
-      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    footer { border-top: 1px solid var(--line); padding: 56px 0 44px; }
+    .footer { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+    .footer__brand {
+      font-family: var(--font-display); font-weight: 900; font-size: 26px;
+      background: linear-gradient(120deg, #fff, var(--lilac) 60%, var(--violet));
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .footer__note { color: var(--dim); font-size: 12px; margin-top: 12px; max-width: 320px; }
+    .footer__cols { display: flex; gap: 64px; flex-wrap: wrap; }
+    .footer__col h4 { font-family: var(--font-display); font-size: 10px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint); margin-bottom: 16px; }
+    .footer__col a { display: block; font-size: 13px; color: var(--muted); padding: 5px 0; transition: color 0.2s; }
+    .footer__col a:hover { color: var(--text); }
+    .footer__bottom {
+      margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+      font-size: 11px; color: var(--faint); letter-spacing: 0.04em;
     }
 
-    .about-text h2 {
-      font-size: clamp(26px, 4vw, 40px);
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 20px;
+    .reveal { opacity: 0; transform: translateY(34px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+
+    @media (max-width: 920px) {
+      .about { grid-template-columns: 1fr; }
+      .orbit { order: -1; }
+      .inside { grid-template-columns: 1fr; }
+      .inside__item-desc { display: none; }
     }
 
-    .about-text h2 span {
-      background: linear-gradient(135deg, #f0c040, #e8845c);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    @media (max-width: 760px) {
+      .nav__links {
+        position: fixed; top: 72px; left: 0; right: 0;
+        flex-direction: column; gap: 4px; align-items: stretch;
+        padding: 16px var(--pad) 24px;
+        background: rgba(8, 8, 11, 0.96);
+        backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+        border-bottom: 1px solid var(--line);
+        transform: translateY(-140%); transition: transform 0.4s var(--ease);
+      }
+      .nav__links.open { transform: translateY(0); }
+      .nav__links a { padding: 13px 14px; border-radius: 12px; font-size: 14px; }
+      .nav__cta { margin-left: 0; text-align: center; }
+      .nav__burger { display: flex; }
+      .projects { grid-template-columns: 1fr; }
+      .hero__actions { width: 100%; }
+      .hero__actions .btn { flex: 1; justify-content: center; }
     }
 
-    .about-text p {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--muted);
-      line-height: 1.8;
-      margin-bottom: 14px;
+    @media (max-width: 480px) {
+      .stats { grid-template-columns: 1fr; }
+      .footer__cols { gap: 40px; }
     }
 
-    .about-text p strong {
-      background: linear-gradient(135deg, var(--accent-3), var(--accent-1));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+      .reveal { opacity: 1; transform: none; }
     }
-
-    .about-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .stat-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px 24px;
-      text-align: center;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-
-    .stat-card:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
-    }
-
-    .stat-card__number {
-      font-size: 40px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .stat-card__label {
-      font-size: 11px;
-      font-weight: 300;
-      color: var(--muted);
-      margin-top: 8px;
-      letter-spacing: 0.05em;
-    }
-
-    /* ─── projects ─── */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 768px) {
-      .projects-grid { grid-template-columns: 1fr; }
-    }
-
-    .project-card-link {
-      display: block;
-      background: rgba(255,255,255,0.015);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 40px 32px;
-      position: relative;
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1), border-color 0.4s;
-    }
-
-    .project-card-link:hover {
-      transform: translateY(-6px);
-      border-color: var(--border-hover);
-    }
-
-    .project-card-link::before {
-      content: '';
-      position: absolute;
-      inset: -1px;
-      border-radius: 24px;
-      padding: 1px;
-      background: linear-gradient(135deg, transparent, transparent);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      transition: background 0.6s;
-      pointer-events: none;
-    }
-
-    .project-card-link:hover::before {
-      background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%);
-    }
-
-    .project-card__glow {
-      position: absolute;
-      top: -50%; left: -50%;
-      width: 200%; height: 200%;
-      border-radius: 50%;
-      opacity: 0;
-      transition: opacity 0.6s;
-      pointer-events: none;
-    }
-
-    .project-card-link:hover .project-card__glow {
-      opacity: 0.08;
-    }
-
-    .project-card__icon {
-      font-size: 28px;
-      margin-bottom: 18px;
-      display: block;
-    }
-
-    .project-card__name {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .project-card__name--wawe {
-      background: linear-gradient(135deg, var(--accent-4), #0099ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .project-card__name--i {
-      background: linear-gradient(135deg, var(--accent-3), #c44dff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .project-card__desc {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 18px;
-    }
-
-    .project-card__tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .project-card__tag {
-      font-size: 9px;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 100px;
-      background: rgba(255,255,255,0.04);
-      color: var(--muted);
-      border: 1px solid var(--border);
-    }
-
-    .project-card__link-arrow {
-      margin-top: 16px;
-      font-size: 13px;
-      color: var(--muted);
-      transition: transform 0.3s, color 0.3s;
-      display: inline-block;
-    }
-
-    .project-card-link:hover .project-card__link-arrow {
-      transform: translateX(4px);
-      color: var(--text);
-    }
-
-    /* ─── footer ─── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 56px 24px 40px;
-      text-align: center;
-    }
-
-    footer .logo-small {
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    footer p {
-      font-size: 11px;
-      font-weight: 300;
-      color: rgba(240,236,228,0.18);
-      margin-top: 10px;
-      letter-spacing: 0.05em;
-    }
-
-    /* ─── reveal ─── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1), transform 0.9s cubic-bezier(0.22,1,0.36,1);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
   </style>
 </head>
 <body>
 
-  <div class="orb"></div>
-  <div class="orb"></div>
-  <div class="orb"></div>
   <div class="bg-grid"></div>
-  <div id="noise"></div>
+  <div class="glow glow--violet"></div>
+  <div class="glow glow--pink"></div>
+  <div class="glow glow--mint"></div>
+  <div class="noise"></div>
 
-  <nav>
-    <a href="#" class="logo">GO</a>
-    <div class="links">
-      <a href="#about">О нас</a>
-      <a href="#projects">Проекты</a>
+  <nav id="nav">
+    <div class="wrap nav">
+      <a href="#top" class="nav__logo">GO</a>
+      <button class="nav__burger" id="burger" aria-label="Меню"><span></span><span></span></button>
+      <div class="nav__links" id="navLinks">
+        <a href="#about">О нас</a>
+        <a href="#history">История</a>
+        <a href="#projects">Проекты</a>
+        <a href="#inside">Студия і.</a>
+        <a href="i-site/" class="nav__cta">Сайт студии →</a>
+      </div>
     </div>
   </nav>
 
-  <div class="site-wrapper">
+  <main>
 
-    <!-- HERO -->
-    <section class="hero" id="hero">
-      <div class="hero__glow"></div>
-      <div class="hero__logo">GO</div>
-      <p class="hero__sub">Экосистема проектов</p>
-      <p class="hero__tagline">Разные миры. Одна орбита.</p>
-      <div class="hero__scroll"></div>
-    </section>
-
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="about-grid">
-        <div class="about-text reveal">
-          <h2>Что такое <span>GO</span>?</h2>
-          <p>
-            GO — это не компания и не бренд. Это орбита, вокруг которой вращаются
-            независимые проекты, объединённые общим вкусом, вниманием к деталям
-            и желанием делать красивые цифровые вещи.
-          </p>
-          <p>
-            WAWE — независимый музыкальный проект, а студия <strong>і.</strong>
-            — пространство, где живут Евлампия, фильмы и другие эксперименты.
-          </p>
-        </div>
-        <div class="about-stats reveal reveal-delay-1">
-          <div class="stat-card">
-            <div class="stat-card__number">2</div>
-            <div class="stat-card__label">основных проекта</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-card__number">∞</div>
-            <div class="stat-card__label">границ не существует</div>
-          </div>
+    <header class="hero" id="top">
+      <div class="hero__glow" id="heroGlow"></div>
+      <div class="wrap hero__inner">
+        <h1 class="hero__logo">GO</h1>
+        <p class="hero__sub">Экосистема проектов</p>
+        <p class="hero__tagline">Разные миры. Одна орбита. Независимые цифровые проекты, объединённые вкусом к деталям.</p>
+        <div class="hero__actions">
+          <a href="#projects" class="btn btn--primary">Смотреть проекты <span class="btn__arrow">→</span></a>
+          <a href="i-site/" class="btn btn--ghost">Студия і. <span class="btn__arrow">↗</span></a>
         </div>
       </div>
-    </section>
+      <div class="hero__scroll"><i></i>Листайте</div>
+    </header>
 
-    <!-- PROJECTS -->
-    <section id="projects">
-      <div class="section-header reveal">
-        <p class="section-header__label">Проекты</p>
-        <h2 class="section-header__title">Всё, что мы <span>создаём</span></h2>
-        <p class="section-header__desc">
-          Каждый проект — отдельная вселенная со своим стилем и настроением.
-        </p>
-      </div>
-
-      <div class="projects-grid">
-
-        <a href="https://doinwor.github.io/WAWE-site/" target="_blank" rel="noopener" class="project-card-link reveal reveal-delay-1">
-          <div class="project-card__glow" style="background: radial-gradient(circle, #00d4aa, transparent 60%);"></div>
-          <span class="project-card__icon">🎵</span>
-          <h3 class="project-card__name project-card__name--wawe">WAWE</h3>
-          <p class="project-card__desc">
-            Музыкальный проект для тех, кто хочет слушать, а не искать.
-            Волны звука, которые уносят.
-          </p>
-          <div class="project-card__tags">
-            <span class="project-card__tag">музыка</span>
-            <span class="project-card__tag">стриминг</span>
-            <span class="project-card__tag">атмосфера</span>
+    <section class="section" id="about">
+      <div class="wrap">
+        <div class="about">
+          <div class="about__text reveal">
+            <span class="eyebrow">О экосистеме</span>
+            <h2 class="head__title" style="margin-top:18px;">Что такое <span>GO</span>?</h2>
+            <p class="lead" style="margin-top:24px;">GO — это не компания и не бренд. Это орбита, вокруг которой вращаются независимые проекты.</p>
+            <p>Их объединяет общий вкус, внимание к деталям и желание делать красивые цифровые вещи — без компромиссов и шаблонов.</p>
+            <p><strong>WAWE</strong> — независимый музыкальный проект, а студия <strong>і.</strong> — пространство, где живут Евлампия, фильмы и другие эксперименты.</p>
+            <div class="stats">
+              <div class="stat">
+                <div class="stat__num">2</div>
+                <div class="stat__label">основных проекта</div>
+              </div>
+              <div class="stat">
+                <div class="stat__num">∞</div>
+                <div class="stat__label">границ не существует</div>
+              </div>
+            </div>
           </div>
-          <span class="project-card__link-arrow">→</span>
-        </a>
-
-        <a href="https://doinwor.github.io/go-ecosystem/i-site/" target="_blank" rel="noopener" class="project-card-link reveal reveal-delay-2">
-          <div class="project-card__glow" style="background: radial-gradient(circle, #ff6b9d, transparent 60%);"></div>
-          <span class="project-card__icon">✦</span>
-          <h3 class="project-card__name project-card__name--i">і.</h3>
-          <p class="project-card__desc">
-            Студия. Точка отсчёта. Место, где идеи обретают форму —
-            от айдентики до интерфейсов.
-          </p>
-          <div class="project-card__tags">
-            <span class="project-card__tag">студия</span>
-            <span class="project-card__tag">дизайн</span>
-            <span class="project-card__tag">разработка</span>
+          <div class="orbit reveal d1" aria-hidden="true">
+            <div class="orbit__ring"></div>
+            <div class="orbit__ring orbit__ring--inner"></div>
+            <div class="orbit__comet"></div>
+            <div class="orbit__core">GO</div>
+            <div class="orbit__sat orbit__sat--wawe"><i></i>WAWE</div>
+            <div class="orbit__sat orbit__sat--i"><i></i>і.</div>
+            <div class="orbit__sat orbit__sat--go"><i></i>Go Launcher</div>
           </div>
-          <span class="project-card__link-arrow">→</span>
-        </a>
-
-        <a href="https://doinwor.github.io/go-launcher/" target="_blank" rel="noopener" class="project-card-link reveal reveal-delay-1">
-          <div class="project-card__glow" style="background: radial-gradient(circle, #5be37b, transparent 60%);"></div>
-          <span class="project-card__icon">&#9881;</span>
-          <h3 class="project-card__name" style="background:linear-gradient(135deg,#5be37b,#2ecc71);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Go Launcher</h3>
-          <p class="project-card__desc">
-            Minecraft Offline Launcher. Управляй версиями, загрузчиками и модами
-            в одном окне. Сделано на Go.
-          </p>
-          <div class="project-card__tags">
-            <span class="project-card__tag">minecraft</span>
-            <span class="project-card__tag">golang</span>
-            <span class="project-card__tag">лаунчер</span>
-          </div>
-          <span class="project-card__link-arrow">→</span>
-        </a>
-
+        </div>
       </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer>
-      <div class="logo-small">GO</div>
-      <p>Экосистема проектов &nbsp;·&nbsp; 2026</p>
-    </footer>
+    <section class="section" id="history">
+      <div class="wrap">
+        <div class="head head--center reveal">
+          <span class="eyebrow">История</span>
+          <h2 class="head__title">От экосистемы к <span>GO</span></h2>
+          <p class="head__desc">Как мы менялись: от идеи экосистемы через эпоху Discord до сегодняшнего GO.</p>
+        </div>
+        <div class="timeline">
+          <div class="tl-item reveal">
+            <span class="tl-item__dot"></span>
+            <span class="tl-item__step">Этап 01</span>
+            <div class="tl-item__head">
+              <h3 class="tl-item__title">Экосистема</h3>
+            </div>
+            <p class="tl-item__desc">Отправная точка. Идея собрать разные независимые проекты под одной орбитой.</p>
+          </div>
+          <div class="tl-item reveal d1">
+            <span class="tl-item__dot"></span>
+            <span class="tl-item__step">Этап 02</span>
+            <div class="tl-item__head">
+              <h3 class="tl-item__title">Fam4ik</h3>
+              <span class="tl-item__badge">Discord</span>
+            </div>
+            <p class="tl-item__desc">Переезд в Discord — первое имя и первый дом для сообщества и проектов.</p>
+          </div>
+          <div class="tl-item reveal d2">
+            <span class="tl-item__dot"></span>
+            <span class="tl-item__step">Этап 03</span>
+            <div class="tl-item__head">
+              <h3 class="tl-item__title">Fam4ik World Project</h3>
+              <span class="tl-item__badge">Discord</span>
+            </div>
+            <p class="tl-item__desc">Рост и объединение проектов: радио, кинотеатр и другие идеи внутри одного мира.</p>
+          </div>
+          <div class="tl-item reveal d3">
+            <span class="tl-item__dot"></span>
+            <span class="tl-item__step">Этап 04</span>
+            <div class="tl-item__head">
+              <h3 class="tl-item__title">GO World Project</h3>
+              <span class="tl-item__badge">Discord</span>
+            </div>
+            <p class="tl-item__desc">Единое имя для всего, что было создано. Точка, из которой выросло сегодняшнее GO.</p>
+          </div>
+          <div class="tl-item tl-item--current reveal">
+            <span class="tl-item__dot"></span>
+            <span class="tl-item__step">Сегодня</span>
+            <div class="tl-item__head">
+              <h3 class="tl-item__title">GO</h3>
+              <span class="tl-item__badge tl-item__badge--now">сейчас</span>
+            </div>
+            <p class="tl-item__desc">Мы ушли от Discord и стали просто GO. Всё накопленное осталось в прошлом — но память и идеи живут дальше.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  </div>
+    <section class="section" id="projects">
+      <div class="wrap">
+        <div class="head head--center reveal">
+          <span class="eyebrow">Проекты</span>
+          <h2 class="head__title">Всё, что мы <span>создаём</span></h2>
+          <p class="head__desc">Каждый проект — отдельная вселенная со своим стилем и настроением.</p>
+        </div>
+
+        <div class="projects">
+
+          <a class="project reveal" href="https://doinwor.github.io/WAWE-site/" target="_blank" rel="noopener" style="--accent: var(--mint);">
+            <div class="project__top">
+              <span class="project__index">01 / Музыка</span>
+              <span class="project__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+              </span>
+            </div>
+            <h3 class="project__title project__title--wawe">WAWE</h3>
+            <p class="project__desc">Музыкальный проект для тех, кто хочет слушать, а не искать. Волны звука, которые уносят.</p>
+            <div class="project__tags">
+              <span class="tag">музыка</span>
+              <span class="tag">стриминг</span>
+              <span class="tag">атмосфера</span>
+            </div>
+            <span class="project__link">Открыть проект <span class="btn__arrow">→</span></span>
+          </a>
+
+          <a class="project reveal d1" href="i-site/" style="--accent: var(--pink);">
+            <div class="project__top">
+              <span class="project__index">02 / Студия</span>
+              <span class="project__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>
+              </span>
+            </div>
+            <h3 class="project__title project__title--i">і.</h3>
+            <p class="project__desc">Студия. Точка отсчёта. Место, где идеи обретают форму — от айдентики до интерфейсов.</p>
+            <div class="project__tags">
+              <span class="tag">студия</span>
+              <span class="tag">дизайн</span>
+              <span class="tag">разработка</span>
+            </div>
+            <span class="project__link">Открыть студию <span class="btn__arrow">→</span></span>
+          </a>
+
+          <a class="project project--wide reveal d2" href="https://doinwor.github.io/go-launcher/" target="_blank" rel="noopener" style="--accent: #5be37b;">
+            <div class="project__top">
+              <span class="project__index">03 / Инструмент</span>
+              <span class="project__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/></svg>
+              </span>
+            </div>
+            <div class="project__body">
+              <h3 class="project__title project__title--go">Go Launcher</h3>
+              <p class="project__desc">Minecraft Offline Launcher. Управляй версиями, загрузчиками и модами в одном окне. Сделано на Go.</p>
+              <div class="project__tags">
+                <span class="tag">minecraft</span>
+                <span class="tag">golang</span>
+                <span class="tag">лаунчер</span>
+              </div>
+              <span class="project__link">Открыть проект <span class="btn__arrow">→</span></span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="inside">
+      <div class="wrap">
+        <div class="inside reveal">
+          <div class="inside__intro">
+            <span class="eyebrow">Внутри студии</span>
+            <h2 class="inside__title" style="margin-top:18px;">Студия <em>і.</em> —<br>проект GO</h2>
+            <p class="inside__desc">Студия і. входит в экосистему GO и развивает собственные продукты, фильмы и ивенты.</p>
+            <a href="i-site/" class="btn btn--ghost" style="margin-top:26px;">Все проекты студии <span class="btn__arrow">→</span></a>
+          </div>
+          <div class="inside__list">
+            <a class="inside__item" href="i-site/go-launcher.html">
+              <span class="inside__item-name">Go Launcher</span>
+              <span class="inside__item-desc">Minecraft-лаунчер на Go</span>
+              <span class="inside__item-arrow">→</span>
+            </a>
+            <a class="inside__item" href="i-site/rutube-downloader.html">
+              <span class="inside__item-name">Rutube Downloader</span>
+              <span class="inside__item-desc">скачивание видео до 4K</span>
+              <span class="inside__item-arrow">→</span>
+            </a>
+            <a class="inside__item" href="i-site/films.html">
+              <span class="inside__item-name">Фильмы и видео</span>
+              <span class="inside__item-desc">короткометражки и видеоарт</span>
+              <span class="inside__item-arrow">→</span>
+            </a>
+            <a class="inside__item" href="i-site/events.html">
+              <span class="inside__item-name">Ивенты</span>
+              <span class="inside__item-desc">архив событий студии</span>
+              <span class="inside__item-arrow">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer">
+        <div>
+          <div class="footer__brand">GO</div>
+          <p class="footer__note">Экосистема независимых проектов. Разные миры — одна орбита.</p>
+        </div>
+        <div class="footer__cols">
+          <div class="footer__col">
+            <h4>Экосистема</h4>
+            <a href="https://doinwor.github.io/WAWE-site/" target="_blank" rel="noopener">WAWE</a>
+            <a href="i-site/">Студия і.</a>
+            <a href="https://doinwor.github.io/go-launcher/" target="_blank" rel="noopener">Go Launcher</a>
+          </div>
+          <div class="footer__col">
+            <h4>Студия і.</h4>
+            <a href="i-site/about.html">О студии</a>
+            <a href="i-site/brand.html">Фирменный стиль</a>
+            <a href="i-site/digital.html">Цифровой дизайн</a>
+            <a href="i-site/contacts.html">Контакты</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 · Экосистема проектов GO</span>
+        <span>Сделано с вниманием к деталям</span>
+      </div>
+    </div>
+  </footer>
 
   <script>
-    (function navScroll() {
+    (function () {
+      var nav = document.getElementById('nav');
+      var burger = document.getElementById('burger');
+      var links = document.getElementById('navLinks');
       var prev = 0;
-      var nav = document.querySelector('nav');
-      window.addEventListener('scroll', function() {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      window.addEventListener('scroll', function () {
         var cur = window.scrollY;
-        if (cur > 120 && cur > prev) {
-          nav.style.transform = 'translateY(-100%)';
-        } else {
-          nav.style.transform = 'translateY(0)';
-        }
+        nav.classList.toggle('scrolled', cur > 20);
+        nav.classList.toggle('hidden', cur > 240 && cur > prev);
         prev = cur;
-      });
-    })();
+      }, { passive: true });
 
-    (function heroParallax() {
-      var logo = document.querySelector('.hero__logo');
-      var glow = document.querySelector('.hero__glow');
-      if (!logo) return;
-      document.addEventListener('mousemove', function(e) {
-        var x = (e.clientX / window.innerWidth - 0.5) * 16;
-        var y = (e.clientY / window.innerHeight - 0.5) * 16;
-        glow.style.transform = 'translate(calc(-50% + ' + x + 'px), calc(-50% + ' + y + 'px)) scale(1)';
+      burger.addEventListener('click', function () {
+        links.classList.toggle('open');
       });
-    })();
+      links.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') links.classList.remove('open');
+      });
 
-    (function reveal() {
-      var els = document.querySelectorAll('.reveal');
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) e.target.classList.add('visible');
+      var glow = document.getElementById('heroGlow');
+      if (glow && !reduce) {
+        window.addEventListener('mousemove', function (e) {
+          var x = (e.clientX / window.innerWidth - 0.5) * 26;
+          var y = (e.clientY / window.innerHeight - 0.5) * 26;
+          glow.style.transform = 'translate(calc(-50% + ' + x + 'px), calc(-50% + ' + y + 'px))';
         });
-      }, { threshold: 0.15 });
-      els.forEach(function(el) { observer.observe(el); });
+      }
+
+      document.querySelectorAll('.project').forEach(function (card) {
+        card.addEventListener('mousemove', function (e) {
+          var r = card.getBoundingClientRect();
+          card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+          card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        });
+      });
+
+      var els = document.querySelectorAll('.reveal');
+      if (reduce || !('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) { entry.target.classList.add('visible'); io.unobserve(entry.target); }
+          });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        els.forEach(function (el) { io.observe(el); });
+      }
     })();
   </script>
 
