@@ -19,7 +19,7 @@
       --border-hover: #ccc;
       --heading-color: #bbb;
       --footer-color: #ccc;
-      --accent: #5be37b;
+      --accent: #ff3b3b;
     }
 
     [data-theme="dark"] {
@@ -31,7 +31,7 @@
       --border-hover: #333;
       --heading-color: #555;
       --footer-color: #333;
-      --accent: #5be37b;
+      --accent: #ff3b3b;
     }
 
     body {
@@ -101,7 +101,7 @@
       font-size: clamp(28px, 5vw, 48px);
       font-weight: 700;
       margin-bottom: 8px;
-      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 60%);
+      background: linear-gradient(135deg, #ff3b3b 0%, #3b7bff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -110,8 +110,11 @@
     .page-sub {
       font-size: 13px;
       font-weight: 300;
-      color: var(--accent);
-      opacity: 0.7;
+      background: linear-gradient(135deg, #ff3b3b, #3b7bff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0.85;
       letter-spacing: 0.05em;
       margin-bottom: 56px;
     }
@@ -138,7 +141,10 @@
     }
 
     section p strong {
-      color: var(--accent);
+      background: linear-gradient(90deg, #ff3b3b, #3b7bff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
       font-weight: 600;
     }
 
@@ -333,7 +339,7 @@
   <div class="wrapper">
     <div class="top">
       <div class="back">
-        <a href="https://doinwor.github.io/go-ecosystem/i-site/">і.</a>
+        <a href="https://doinwor.github.io/go-ecosystem/" style="color:#7c5cff">GO</a><span style="color:var(--border-hover);margin:0 7px">/</span><a href="index.html">і.</a><span style="color:var(--border-hover);margin:0 7px">/</span><span style="background:linear-gradient(90deg,#ff3b3b,#3b7bff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#ff3b3b;font-weight:600">Rutube Downloader</span>
       </div>
       <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">
         <span class="theme-toggle__knob"></span>
