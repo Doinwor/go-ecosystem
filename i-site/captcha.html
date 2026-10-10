@@ -30,29 +30,34 @@
       color: var(--ink);
     }
 
+    /* ─── one-line strip ─── */
     .captcha {
-      width: min(300px, 92vw);
+      position: relative;
+      width: min(440px, 94vw);
       border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 14px;
+      border-radius: 10px;
       background: #fff;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 30px -22px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 30px -24px rgba(0, 0, 0, 0.3);
+      transition: border-color 0.25s;
     }
+    .captcha.ok { border-color: #a6e3bd; }
+    .captcha.bad { border-color: #f0b4bf; }
 
-    /* ─── brand header ─── */
-    .head {
+    .strip {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
+      gap: 7px;
+      padding: 8px 10px;
     }
 
-    .brand { display: flex; align-items: baseline; gap: 7px; line-height: 1; }
+    /* ─── brand ─── */
+    .brand { display: flex; align-items: baseline; gap: 5px; flex: none; padding-right: 2px; }
 
     .brand__mark {
       font-family: 'Unbounded', sans-serif;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 13px;
       letter-spacing: -0.02em;
       color: var(--ink);
     }
@@ -61,54 +66,34 @@
     .brand__name {
       font-family: 'Unbounded', sans-serif;
       font-weight: 300;
-      font-size: 9px;
-      letter-spacing: 0.3em;
+      font-size: 8px;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--muted);
-      padding-bottom: 1px;
     }
-
-    .refresh {
-      flex: none;
-      width: 28px;
-      height: 28px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fff;
-      color: #a2a2a2;
-      font-size: 15px;
-      line-height: 1;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .refresh:hover { color: var(--ink); border-color: #d2d2d2; }
-    .refresh:active { transform: rotate(-180deg); }
-    .refresh:disabled { opacity: 0.4; cursor: default; }
 
     /* ─── code image ─── */
     canvas {
-      width: 100%;
-      height: 54px;
+      flex: none;
+      width: 120px;
+      height: 42px;
       display: block;
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: 7px;
       background: #eef1f8;
       cursor: pointer;
-      margin-bottom: 8px;
     }
 
     /* ─── controls ─── */
-    .row { display: flex; gap: 8px; }
-
     input {
-      flex: 1 1 auto;
+      flex: 1 1 80px;
       min-width: 0;
       height: 42px;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 0 12px;
+      border-radius: 7px;
+      padding: 0 8px;
       font-family: inherit;
-      font-size: 16px;
+      font-size: 15px;
       letter-spacing: 3px;
       text-align: center;
       text-transform: uppercase;
@@ -122,26 +107,49 @@
     .check {
       flex: none;
       height: 42px;
-      padding: 0 16px;
+      padding: 0 13px;
       border: none;
-      border-radius: 8px;
+      border-radius: 7px;
       background: var(--ink);
       color: #fff;
       font-family: 'Unbounded', sans-serif;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
-      letter-spacing: 0.02em;
       cursor: pointer;
       transition: background 0.2s, opacity 0.2s;
     }
     .check:hover { background: #000; }
     .check:disabled { opacity: 0.4; cursor: default; }
 
+    .refresh {
+      flex: none;
+      width: 34px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: #a2a2a2;
+      font-size: 15px;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .refresh:hover { color: var(--ink); border-color: #d2d2d2; }
+    .refresh:active { transform: rotate(-180deg); }
+    .refresh:disabled { opacity: 0.4; cursor: default; }
+
+    /* ─── caption under the strip ─── */
     .msg {
-      margin-top: 8px;
-      font-size: 12px;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 6px;
+      text-align: center;
+      font-size: 11px;
       color: var(--muted);
-      min-height: 15px;
+      min-height: 13px;
+      pointer-events: none;
       transition: color 0.2s;
     }
     .msg.ok { color: #1a9e4b; }
@@ -155,6 +163,11 @@
     }
     .captcha.shake { animation: shake 0.36s; }
 
+    @media (max-width: 480px) {
+      .brand__name { display: none; }
+      canvas { width: 104px; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       * { animation: none !important; transition: none !important; }
     }
@@ -162,21 +175,19 @@
 </head>
 <body>
   <div class="captcha" id="captcha">
-    <div class="head">
+    <div class="strip">
       <span class="brand">
         <span class="brand__mark">і<span class="dot">.</span></span>
         <span class="brand__name">капча</span>
       </span>
+
+      <canvas id="cv" title="Обновить код" role="img" aria-label="Капча: нажмите, чтобы обновить"></canvas>
+
+      <input id="inp" type="text" inputmode="latin" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="5" placeholder="код" aria-label="Код с картинки">
+
+      <button class="check" id="check" type="button">Проверить</button>
       <button class="refresh" id="refresh" type="button" title="Обновить код" aria-label="Обновить код">↻</button>
     </div>
-
-    <canvas id="cv" title="Обновить код" role="img" aria-label="Капча: нажмите, чтобы обновить"></canvas>
-
-    <div class="row">
-      <input id="inp" type="text" inputmode="latin" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="5" placeholder="код" aria-label="Код с картинки">
-      <button class="check" id="check" type="button">Проверить</button>
-    </div>
-
     <div class="msg" id="msg" aria-live="polite"></div>
   </div>
 
@@ -191,7 +202,7 @@
 
       var CHARS = 'ACDEFGHJKLMNPQRSTUVWXYZ23456789';
       var PALETTE = ['#4b2ea6', '#1f4f8a', '#8a2b57', '#2b7a5f', '#7a4a12', '#5a2b8a'];
-      var H = 54;
+      var H = 42;
 
       var code = '';
       var solved = false;
@@ -205,7 +216,7 @@
       }
 
       function ctx2d() {
-        var w = cv.clientWidth || 260;
+        var w = cv.clientWidth || 120;
         var dpr = Math.min(2, window.devicePixelRatio || 1);
         cv.width = Math.round(w * dpr);
         cv.height = Math.round(H * dpr);
@@ -224,35 +235,36 @@
       }
 
       function drawNoise(x, w, h) {
-        for (var i = 0; i < 110; i++) {
+        for (var i = 0; i < 80; i++) {
           x.fillStyle = 'rgba(' + (50 + rand(130)) + ',' + (60 + rand(120)) + ',' + (110 + rand(120)) + ',' + (0.12 + Math.random() * 0.24).toFixed(2) + ')';
           x.fillRect(Math.random() * w, Math.random() * h, 1, 1);
         }
       }
 
       function drawLines(x, w, h) {
-        for (var l = 0; l < 3; l++) {
+        for (var l = 0; l < 2; l++) {
           x.strokeStyle = 'rgba(' + (90 + rand(80)) + ',' + (80 + rand(80)) + ',' + (150 + rand(70)) + ',' + (0.18 + Math.random() * 0.16).toFixed(2) + ')';
           x.lineWidth = 1 + Math.random();
           x.beginPath();
-          var y = 8 + Math.random() * (h - 16);
+          var y = 7 + Math.random() * (h - 14);
           x.moveTo(0, y);
-          x.bezierCurveTo(w * 0.33, y + (Math.random() - 0.5) * 26, w * 0.66, y + (Math.random() - 0.5) * 26, w, y + (Math.random() - 0.5) * 14);
+          x.bezierCurveTo(w * 0.33, y + (Math.random() - 0.5) * 20, w * 0.66, y + (Math.random() - 0.5) * 20, w, y + (Math.random() - 0.5) * 10);
           x.stroke();
         }
       }
 
       function drawGlyphs(x, w, h) {
         var n = code.length;
-        var pad = 16;
+        var pad = 9;
         var step = (w - pad * 2) / n;
+        var size = Math.max(15, Math.min(24, Math.round(step * 0.92)));
         for (var k = 0; k < n; k++) {
           x.save();
           var cx = pad + step * k + step / 2;
-          var cy = h / 2 + (Math.random() - 0.5) * 6;
+          var cy = h / 2 + (Math.random() - 0.5) * 5;
           x.translate(cx, cy);
           x.rotate((Math.random() - 0.5) * 0.5);
-          x.font = '700 ' + (25 + rand(9)) + 'px "Arial Black", Arial, sans-serif';
+          x.font = '700 ' + size + 'px "Arial Black", Arial, sans-serif';
           x.textAlign = 'center';
           x.textBaseline = 'middle';
           x.fillStyle = pick(PALETTE);
@@ -282,15 +294,10 @@
         x.lineCap = 'round';
         x.lineJoin = 'round';
         x.beginPath();
-        x.moveTo(w / 2 - 34, h / 2 + 1);
-        x.lineTo(w / 2 - 23, h / 2 + 12);
-        x.lineTo(w / 2 - 1, h / 2 - 11);
+        x.moveTo(w / 2 - 12, h / 2 + 1);
+        x.lineTo(w / 2 - 3, h / 2 + 10);
+        x.lineTo(w / 2 + 13, h / 2 - 9);
         x.stroke();
-        x.fillStyle = '#1a9e4b';
-        x.font = '600 13px Arial, sans-serif';
-        x.textAlign = 'left';
-        x.textBaseline = 'middle';
-        x.fillText('пройдено', w / 2 + 10, h / 2);
       }
 
       function setMsg(t, cls) {
@@ -309,11 +316,14 @@
         drawCode();
         inp.value = '';
         setMsg('');
+        card.classList.remove('ok', 'bad');
       }
 
       function success() {
         solved = true;
         drawSolved();
+        card.classList.add('ok');
+        card.classList.remove('bad');
         setMsg('Проверка пройдена', 'ok');
         inp.disabled = true;
         check.disabled = true;
@@ -326,6 +336,8 @@
       }
 
       function fail() {
+        card.classList.add('bad');
+        card.classList.remove('ok');
         setMsg('Неверный код, попробуйте ещё раз', 'bad');
         shake();
         inp.value = '';
@@ -340,7 +352,7 @@
       function checkCode() {
         if (solved) return;
         var val = inp.value.trim().toUpperCase();
-        if (!val) { setMsg('Введите код', 'bad'); return; }
+        if (!val) { setMsg('Введите код', 'bad'); card.classList.add('bad'); return; }
         if (val === code) success();
         else fail();
       }
