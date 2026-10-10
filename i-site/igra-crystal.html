@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#0a0716">
+<title>Кристальная шахта — ивент і.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Unbounded',sans-serif;background:#0a0716;color:#ece7ff;overflow:hidden;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.bg{position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(1100px 820px at 12% 6%,rgba(139,92,246,.16),transparent 60%),
+  radial-gradient(900px 720px at 88% 96%,rgba(34,211,238,.13),transparent 60%),
+  linear-gradient(160deg,#0a0716,#120b26)}
+.bg::after{content:'';position:fixed;inset:0;background:
+  radial-gradient(2px 2px at 20% 30%,rgba(139,92,246,.10),transparent 220px),
+  radial-gradient(2px 2px at 72% 62%,rgba(34,211,238,.10),transparent 220px),
+  radial-gradient(2px 2px at 44% 86%,rgba(176,107,255,.08),transparent 220px)}
+body.shake{animation:shake .24s linear}
+@keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-8px,3px)}40%{transform:translate(6px,-4px)}60%{transform:translate(-4px,-3px)}80%{transform:translate(5px,4px)}}
+body.miss-flash .bg{filter:brightness(1.3) saturate(.6)}
+
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:24px;text-align:center}
+.screen.show{display:flex}
+.screen .back-link{position:absolute;top:20px;left:22px;font-size:11px;font-weight:500;color:#8a83b8;text-decoration:none;letter-spacing:.06em;transition:color .2s}
+.screen .back-link:hover{color:#ece7ff}
+
+.title{font-size:clamp(28px,6vw,56px);font-weight:900;letter-spacing:-.03em;line-height:1.04}
+.title span{background:linear-gradient(135deg,#8b5cf6,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{margin-top:12px;font-size:11px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:#8a83b8}
+.gem-demo{display:flex;gap:14px;justify-content:center;margin:38px 0 6px}
+.gem-demo .g{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:26px;filter:drop-shadow(0 0 14px rgba(139,92,246,.55));animation:gemFloat 3s ease-in-out infinite}
+.gem-demo .g:nth-child(2){animation-delay:.5s}
+.gem-demo .g:nth-child(3){animation-delay:1s}
+@keyframes gemFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+.menu-record{margin-top:22px;font-size:12px;font-weight:300;color:#a99fd4;letter-spacing:.06em;line-height:2}
+.menu-record b{color:#22d3ee;font-weight:700}
+.menu-record em{color:#b06bff;font-style:normal;font-weight:700}
+.menu-buttons{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;justify-content:center}
+
+.btn{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:600;color:#ece7ff;background:transparent;border:1px solid #3a2f63;border-radius:100px;padding:14px 30px;cursor:pointer;letter-spacing:.04em;transition:transform .15s,box-shadow .2s,border-color .2s,color .2s}
+.btn:hover{transform:scale(1.04);border-color:#7c5cff}
+.btn:active{transform:scale(.96)}
+.btn--primary{background:linear-gradient(135deg,#8b5cf6,#22d3ee);color:#08061a;border:none;font-weight:700;box-shadow:0 6px 26px rgba(139,92,246,.32)}
+.btn--primary:hover{box-shadow:0 8px 36px rgba(34,211,238,.45)}
+.btn--ghost{font-size:10px;padding:9px 20px;margin-top:18px;color:#6f6799;border-color:#2a2350}
+.btn--ghost:hover{color:#d8cffb;border-color:#4a3d80}
+
+.hud{width:min(680px,96vw);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 4px 0}
+.hud .cell{display:flex;flex-direction:column;gap:5px;text-align:left;min-width:0}
+.hud .cell--right{text-align:right;align-items:flex-end}
+.hud .cell--center{text-align:center;align-items:center}
+.hud .label{font-size:9px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:#6f6799}
+.hud .value{font-size:clamp(16px,3vw,22px);font-weight:700;color:#ece7ff}
+.hud .value small{font-size:11px;font-weight:400;color:#22d3ee}
+.hud .subline{font-size:10px;color:#8a83b8;letter-spacing:.06em;min-height:13px}
+.hud .back-mini{font-size:10px;color:#8a83b8;text-decoration:none;letter-spacing:.06em;transition:color .2s;cursor:pointer}
+.hud .back-mini:hover{color:#ece7ff}
+.hearts{font-size:15px;letter-spacing:2px}
+
+.board-wrap{flex:1;display:flex;align-items:center;justify-content:center;width:100%;padding:10px 0;min-height:0}
+.board{display:grid;gap:clamp(2px,.55vw,5px);width:min(94vw,560px,68vh);aspect-ratio:1/1;margin:0 auto}
+.cell{position:relative;border-radius:8px;background:linear-gradient(150deg,#3b3159,#2a2244);border:1px solid #463a72;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:clamp(9px,2.3vw,18px);cursor:pointer;transition:transform .08s,background .18s,border-color .18s,box-shadow .18s;overflow:hidden}
+.cell::before{content:'';position:absolute;inset:0;background:linear-gradient(150deg,rgba(255,255,255,.10),transparent 55%);opacity:.7}
+.cell:hover{border-color:#7c5cff;box-shadow:0 0 14px rgba(139,92,246,.35)}
+.cell:active{transform:scale(.93)}
+.cell.revealed{background:linear-gradient(150deg,#171227,#100b1e);border-color:#271f45;cursor:default;box-shadow:none}
+.cell.revealed::before{opacity:.15}
+.cell.revealed:hover{box-shadow:none}
+.cell.flag{background:linear-gradient(150deg,#2a1f44,#1e1636);border-color:#ff5d7a}
+.cell.hazard{background:radial-gradient(circle at 50% 45%,#3a1020,#1a0812);border-color:#ff5d7a;cursor:default}
+.cell.hazard::before{opacity:0}
+.cell.collapsed{animation:cellBoom .4s ease}
+@keyframes cellBoom{0%{transform:scale(1)}35%{transform:scale(1.25);filter:brightness(1.9)}100%{transform:scale(1)}}
+.cell.crystal{cursor:default}
+.cell.crystal .ico{filter:drop-shadow(0 0 8px rgba(139,92,246,.7));animation:icoIn .3s ease}
+.cell.geode{background:radial-gradient(circle at 50% 40%,#2a2352,#171029);border-color:#22d3ee}
+.cell.pop{animation:pop .22s ease}
+@keyframes pop{0%{transform:scale(.6)}100%{transform:scale(1)}}
+@keyframes icoIn{0%{transform:scale(.2) rotate(-25deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+.cell.hint{box-shadow:inset 0 0 0 2px #ffd24a}
+.cell .num1{color:#6ea8ff}.cell .num2{color:#5be37b}.cell .num3{color:#ffd24a}.cell .num4{color:#ff9f43}
+.cell .num5{color:#ff5d7a}.cell .num6{color:#b06bff}.cell .num7{color:#22d3ee}.cell .num8{color:#ece7ff}
+.cell .ico{font-size:1.25em;line-height:1}
+
+.toolbar{width:min(680px,96vw);display:flex;gap:10px;justify-content:center;align-items:center;padding:8px 4px 14px;flex-wrap:wrap;min-height:56px}
+.tool{font-family:'Unbounded',sans-serif;font-size:11px;font-weight:600;color:#d8cffb;background:rgba(139,92,246,.10);border:1px solid #4a3d80;border-radius:12px;padding:10px 16px;cursor:pointer;letter-spacing:.03em;transition:transform .12s,border-color .2s,background .2s;display:flex;align-items:center;gap:7px}
+.tool:hover{border-color:#22d3ee}
+.tool:active{transform:scale(.95)}
+.tool.active{background:linear-gradient(135deg,#8b5cf6,#22d3ee);color:#08061a;border-color:transparent;box-shadow:0 0 20px rgba(34,211,238,.4)}
+.tool:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.tool .cnt{font-size:10px;opacity:.85}
+.descend{background:linear-gradient(135deg,#22d3ee,#5be37b);color:#04121f;border:none;box-shadow:0 6px 26px rgba(34,211,238,.4);display:none}
+.descend.show{display:flex;animation:descendPulse 1.6s ease-in-out infinite}
+@keyframes descendPulse{0%,100%{box-shadow:0 6px 26px rgba(34,211,238,.4)}50%{box-shadow:0 6px 34px rgba(91,227,123,.7)}}
+
+.banner{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:2000;background:rgba(8,6,20,.74);backdrop-filter:blur(7px);text-align:center;padding:24px}
+.banner.show{display:flex;animation:bannerIn .35s ease}
+@keyframes bannerIn{0%{opacity:0}100%{opacity:1}}
+.banner .b-wave{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#8a83b8;margin-bottom:12px}
+.banner h2{font-size:clamp(26px,6vw,54px);font-weight:900;letter-spacing:-.02em}
+.banner h2 span{background:linear-gradient(135deg,#8b5cf6,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.banner .b-bonus{margin-top:16px;font-size:13px;font-weight:300;color:#a99fd4}
+.banner .b-bonus b{color:#22d3ee}
+
+.over{position:fixed;inset:0;display:none;z-index:1500;background:rgba(8,6,20,.95);backdrop-filter:blur(8px);flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;overflow:auto}
+.over.show{display:flex}
+.over-title{font-size:clamp(22px,5vw,40px);font-weight:900;letter-spacing:-.02em}
+.over-title span{background:linear-gradient(135deg,#ff5d7a,#b06bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.over-record{display:inline-block;margin-top:18px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#08061a;background:linear-gradient(135deg,#8b5cf6,#22d3ee);padding:7px 16px;border-radius:100px;font-weight:700;box-shadow:0 0 30px rgba(34,211,238,.4)}
+.over-stats{display:grid;grid-template-columns:repeat(4,minmax(110px,1fr));gap:12px;margin-top:32px;width:min(720px,100%)}
+.over-stat{border:1px solid #342a58;border-radius:14px;padding:16px}
+.over-stat .k{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#6f6799;margin-bottom:8px}
+.over-stat .v{font-size:20px;font-weight:700}
+.over-ach{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:22px;max-width:680px}
+.over-ach span{font-size:10px;color:#b06bff;border:1px solid #3a2f63;background:rgba(176,107,255,.08);border-radius:100px;padding:6px 12px}
+.over-buttons{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;justify-content:center}
+
+.pause{position:fixed;inset:0;display:none;z-index:1300;background:rgba(8,6,20,.82);backdrop-filter:blur(6px);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+.pause.show{display:flex}
+.pause h2{font-size:clamp(26px,5vw,44px);font-weight:900;letter-spacing:-.02em}
+.pause h2 span{background:linear-gradient(135deg,#8b5cf6,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pause .menu-buttons{margin-top:32px}
+
+.panel{position:fixed;inset:0;display:none;z-index:1800;background:rgba(8,6,20,.97);flex-direction:column;align-items:center;padding:24px;overflow:auto}
+.panel.show{display:flex}
+.panel h2{font-size:clamp(22px,4vw,34px);font-weight:900;margin-top:14px}
+.panel h2 span{background:linear-gradient(135deg,#8b5cf6,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.panel .panel-sub{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8a83b8;margin:6px 0 22px;text-align:center}
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px;width:min(760px,100%);max-height:60vh;overflow:auto;padding:2px}
+.card{border:1px solid #342a58;border-radius:14px;padding:16px 14px;text-align:left;transition:border-color .2s,transform .15s}
+.card:hover{transform:translateY(-2px)}
+.card .c-ico{font-size:24px;margin-bottom:8px}
+.card .c-name{font-size:12px;font-weight:700;margin-bottom:5px}
+.card .c-desc{font-size:10px;font-weight:300;color:#9a90c6;line-height:1.6}
+.card.unlocked{border-color:#7c5cff;background:linear-gradient(145deg,rgba(139,92,246,.12),rgba(34,211,238,.06));box-shadow:0 0 20px rgba(139,92,246,.10)}
+.card.locked{opacity:.42;filter:grayscale(.8)}
+.card.hot{animation:hotPulse 1.2s ease 3}
+@keyframes hotPulse{0%,100%{box-shadow:0 0 0 rgba(34,211,238,0)}50%{box-shadow:0 0 26px rgba(34,211,238,.5)}}
+.card.missed .c-name{color:#8a83b8}
+.rarity{font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.panel .close{margin:24px 0 8px}
+
+.shop-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;width:min(740px,100%);max-height:58vh;overflow:auto;padding:2px}
+.shop-item{display:flex;align-items:center;gap:12px;border:1px solid #342a58;border-radius:14px;padding:14px}
+.shop-item .s-ico{width:44px;height:44px;flex:0 0 44px;display:flex;align-items:center;justify-content:center;font-size:22px;background:#181130;border:1px solid #3a2f63;border-radius:12px}
+.shop-item .s-info{flex:1;min-width:0;text-align:left}
+.shop-item .s-name{font-size:12px;font-weight:700;margin-bottom:4px}
+.shop-item .s-name small{color:#22d3ee;font-weight:400}
+.shop-item .s-desc{font-size:10px;font-weight:300;color:#9a90c6;line-height:1.5}
+.btn--buy{flex:0 0 auto;font-size:11px;padding:9px 16px}
+.btn--buy:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+.howto-list{list-style:none;width:min(560px,100%);text-align:left;display:flex;flex-direction:column;gap:12px;max-height:56vh;overflow:auto;padding:2px}
+.howto-list li{font-size:12px;font-weight:300;color:#c3bbe6;line-height:1.7;border:1px solid #2c2450;border-radius:12px;padding:13px 16px}
+.howto-list li b{color:#22d3ee;font-weight:600}
+.howto-list li i{font-style:normal;color:#b06bff;font-weight:600}
+
+.toast{position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:3000;font-size:12px;font-weight:600;color:#ece7ff;background:rgba(16,11,30,.92);border:1px solid #7c5cff;border-radius:100px;padding:10px 22px;box-shadow:0 0 24px rgba(139,92,246,.28);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(4px)}
+
+.mc-toasts{position:fixed;top:14px;right:14px;z-index:4000;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.mc-toast{display:flex;align-items:center;gap:12px;background:rgba(16,11,30,.95);border:1px solid #4a3d80;box-shadow:0 6px 24px rgba(0,0,0,.55);padding:10px 18px 10px 10px;border-radius:12px;transform:translateX(130%);opacity:0;transition:transform .32s cubic-bezier(.2,.9,.3,1.3),opacity .32s;min-width:230px;max-width:min(340px,80vw)}
+.mc-toast.in{transform:translateX(0);opacity:1}
+.mc-toast .t-ico{width:38px;height:38px;flex:0 0 38px;display:flex;align-items:center;justify-content:center;background:#1c1436;border:1px solid #4a3d80;border-radius:10px;font-size:20px}
+.mc-toast .t-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.mc-toast .t-title{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:#9a90c6}
+.mc-toast .t-name{font-size:13px;font-weight:700;color:#22d3ee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.mobile-notice{display:none;position:fixed;inset:0;z-index:9999;background:#0a0716;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center;transition:opacity .35s ease}
+.mobile-notice--dismiss{opacity:0}
+.mobile-notice h2{font-size:24px;font-weight:900;letter-spacing:-.02em;margin-bottom:12px}
+.mobile-notice p{font-size:12px;font-weight:300;line-height:1.8;color:#9a90c6;max-width:340px}
+.mobile-notice__btn{margin-top:24px;font-family:'Unbounded',sans-serif;font-size:11px;font-weight:500;color:#ece7ff;background:none;border:1px solid #3a2f63;border-radius:100px;padding:10px 28px;cursor:pointer;letter-spacing:.05em;transition:border-color .25s}
+.mobile-notice__btn:hover{border-color:#7c5cff}
+
+.legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:min(560px,100%);margin-top:8px}
+.legend span{font-size:10px;color:#9a90c6;display:flex;align-items:center;gap:5px}
+
+@media(max-width:520px){
+.screen{padding:16px}
+.gem-demo{margin:26px 0 6px}
+.gem-demo .g{width:34px;height:34px;font-size:22px}
+.mc-toasts{top:auto;bottom:14px;right:10px;left:10px;align-items:stretch}
+.mc-toast{min-width:0}
+.hud{padding:10px 2px 0}
+.hud .value{font-size:16px}
+.board{width:min(96vw,92vw,74vh)}
+.over-stats{grid-template-columns:repeat(2,1fr)}
+.grid-cards{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
+.tool{padding:9px 12px;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="toast" id="toast"></div>
+<div class="mc-toasts" id="mcToasts"></div>
+
+<!-- MOBILE -->
+<div class="mobile-notice" id="mobileNotice">
+  <h2>На телефоне может быть неудобно</h2>
+  <p>Играть можно, но лучше на компьютере: поле крупнее, а правая кнопка мыши заменяет долгое нажатие для флажка. Попробуете?</p>
+  <button class="mobile-notice__btn" id="mobileTryBtn">Играть</button>
+</div>
+
+<!-- MENU -->
+<div class="screen show" id="menu">
+  <a class="back-link" href="index.html">← і. студия</a>
+  <div class="gem-demo"><div class="g">🔮</div><div class="g">💎</div><div class="g">💚</div></div>
+  <h1 class="title">Кристальная <span>шахта</span></h1>
+  <p class="sub">ивент студии і. · логическая шахта</p>
+  <p class="menu-record">Рекорд: <b id="menuRecord">0</b> &nbsp;·&nbsp; Глубина: <em id="menuDepth">1</em><br>Руда: <b id="menuOre">0</b> &nbsp;·&nbsp; Кристаллов собрано: <em id="menuCollected">0</em>/<span id="menuTypes">6</span></p>
+  <div class="menu-buttons">
+    <button class="btn btn--primary" id="btnPlay">▶ Копать</button>
+    <button class="btn" id="btnShop">🛒 Магазин</button>
+    <button class="btn" id="btnCol">💠 Коллекция</button>
+    <button class="btn" id="btnAch">🏆 Ачивки</button>
+    <button class="btn" id="btnHow">Как играть</button>
+  </div>
+  <button class="btn btn--ghost" id="btnReset">Сбросить прогресс</button>
+</div>
+
+<!-- HOWTO -->
+<div class="panel" id="howto">
+  <h2>Как <span>играть</span></h2>
+  <p class="panel-sub">дедукция и немного риска</p>
+  <ul class="howto-list">
+    <li><b>Цель</b> — набрать квоту кристаллов и спуститься глубже. Вскрывай безопасные плитки, собирай кристаллы.</li>
+    <li><b>Числа</b> на вскрытой пустой плите — сколько рядом нестабильных (опасных) плиток из 8 соседних. По ним вычисляй безопасные.</li>
+    <li><b>Копок</b> — левая кнопка мыши / тап. <b>Флажок</b> — правая кнопка / долгое нажатие. Флажок метит подозрительную плитку, не копая.</li>
+    <li><i>Пустая счётчиком 0</i> открывает всю область вокруг автоматически — это твоя награда за точную логику.</li>
+    <li><b>Обвал</b>: копнул опасную плитку — минус жизнь и сброс комбо. Три обвала — забег окончен. Щит из магазина поглощает один обвал.</li>
+    <li><b>Первый копок</b> всегда безопасен — вокруг стартовой плитки опасных нет.</li>
+    <li><b>Риск</b>: квоту набрал — можешь спускаться, а можешь копать дальше ради счёта. Друзы (💠) дают сразу несколько кристаллов.</li>
+    <li><b>Комбо</b>: серия безопасных копков подряд повышает множитель (x2/x3/x5). Обвал обнуляет серию.</li>
+    <li><b>Инструменты</b>: Зонд — подсмотреть число без копка. Сканер — отметить одну скрытую опасную плитку. Покупаются в магазине.</li>
+  </ul>
+  <button class="btn close" id="btnHowClose">Понятно</button>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="game">
+  <div class="hud">
+    <div class="cell">
+      <a class="back-mini" id="btnPause">‹ пауза</a>
+      <span class="label">Счёт</span>
+      <span class="value" id="hudScore">0</span>
+      <span class="subline" id="hudCombo"></span>
+    </div>
+    <div class="cell cell--center">
+      <span class="label">Глубина</span>
+      <span class="value" id="hudDepth">1</span>
+      <span class="subline" id="hudQuota"></span>
+      <span class="subline" id="hudTime"></span>
+    </div>
+    <div class="cell cell--right">
+      <span class="label">Жизни</span>
+      <span class="value hearts" id="hudLives">❤❤❤</span>
+      <span class="subline" id="hudOre">⛏ 0 &nbsp; 🛡 0</span>
+    </div>
+  </div>
+  <div class="board-wrap"><div class="board" id="board"></div></div>
+  <div class="toolbar">
+    <button class="tool" id="toolProbe" title="Подсмотреть число">🔎 Зонд <span class="cnt" id="probeCnt">0</span></button>
+    <button class="tool" id="toolScan" title="Отметить опасную плитку">📡 Сканер <span class="cnt" id="scanCnt">0</span></button>
+    <button class="tool descend" id="btnDescend">↓ Спуститься ниже</button>
+  </div>
+</div>
+
+<!-- BANNER -->
+<div class="banner" id="banner">
+  <span class="b-wave" id="bannerWave">Глубина 1</span>
+  <h2>Уровень <span id="bannerLevel">1</span> пройден!</h2>
+  <p class="b-bonus" id="bannerBonus"></p>
+</div>
+
+<!-- PAUSE -->
+<div class="pause" id="pause">
+  <h2>Пау<span>за</span></h2>
+  <div class="menu-buttons">
+    <button class="btn btn--primary" id="btnResume">Продолжить</button>
+    <button class="btn" id="btnRestart">Заново</button>
+    <button class="btn" id="btnToMenu">В меню</button>
+  </div>
+</div>
+
+<!-- OVER -->
+<div class="over" id="over">
+  <h2 class="over-title">Забег <span>окончен</span></h2>
+  <div class="over-record" id="overRecord" style="display:none">✦ Новый рекорд!</div>
+  <div class="over-stats">
+    <div class="over-stat"><div class="k">Счёт</div><div class="v" id="ovScore">0</div></div>
+    <div class="over-stat"><div class="k">Глубина</div><div class="v" id="ovDepth">1</div></div>
+    <div class="over-stat"><div class="k">Кристаллы</div><div class="v" id="ovCrystals">0</div></div>
+    <div class="over-stat"><div class="k">Рекорд</div><div class="v" id="ovRecord">0</div></div>
+  </div>
+  <div class="over-ach" id="ovAch"></div>
+  <div class="over-buttons">
+    <button class="btn btn--primary" id="btnAgain">Ещё раз</button>
+    <button class="btn" id="btnOverMenu">В меню</button>
+  </div>
+</div>
+
+<!-- ACH -->
+<div class="panel" id="achScreen">
+  <h2>Ачив<span>ки</span></h2>
+  <p class="panel-sub" id="achCount">0 / 0</p>
+  <div class="grid-cards" id="achGrid"></div>
+  <button class="btn close" id="btnAchClose">Назад</button>
+</div>
+
+<!-- COLLECTION -->
+<div class="panel" id="colScreen">
+  <h2>Коллек<span>ция</span></h2>
+  <p class="panel-sub" id="colCount">0 / 6</p>
+  <div class="grid-cards" id="colGrid"></div>
+  <button class="btn close" id="btnColClose">Назад</button>
+</div>
+
+<!-- SHOP -->
+<div class="panel" id="shopScreen">
+  <h2>Мага<span>зин</span></h2>
+  <p class="panel-sub">Руда: <b id="shopOre">0</b> · добывается за кристаллы</p>
+  <div class="shop-list" id="shopList"></div>
+  <button class="btn close" id="btnShopClose">Назад</button>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id);};
+var boardEl=$('board');
+
+/* ---------- crystal types ---------- */
+var CRYSTALS=[
+  {id:'quartz',  n:'Кварц',   i:'🔹', v:1,  w:34, r:'обычный',   col:'#6ea8ff'},
+  {id:'amethyst',n:'Аметист', i:'🔮', v:2,  w:26, r:'обычный',   col:'#b06bff'},
+  {id:'topaz',   n:'Топаз',   i:'🟡', v:3,  w:18, r:'редкий',    col:'#ffd24a'},
+  {id:'emerald', n:'Изумруд', i:'💚', v:4,  w:12, r:'редкий',    col:'#5be37b'},
+  {id:'ruby',    n:'Рубин',   i:'❤️', v:6,  w:7,  r:'эпический', col:'#ff5d7a'},
+  {id:'diamond', n:'Алмаз',   i:'💎', v:10, w:3,  r:'легенда',   col:'#22d3ee'}
+];
+var CRY_BY_ID={};CRYSTALS.forEach(function(c){CRY_BY_ID[c.id]=c;});
+
+/* ---------- achievements ---------- */
+var ACH=[
+  {id:'first',    n:'Первый кристалл', d:'Собрать первый кристалл',        i:'🔹'},
+  {id:'c10',      n:'Рудокоп',         d:'Собрать 10 кристаллов за забег', i:'⛏'},
+  {id:'c25',      n:'Старатель',       d:'Собрать 25 кристаллов за забег', i:'⛏'},
+  {id:'combo5',   n:'Находка',         d:'Комбо x3 и выше',                i:'✨'},
+  {id:'combo10',  n:'Жила',            d:'Комбо x5',                       i:'⚡'},
+  {id:'depth3',   n:'Штольня',         d:'Спуститься на глубину 3',        i:'🪜'},
+  {id:'depth5',   n:'Шахтёр',          d:'Спуститься на глубину 5',        i:'⛑'},
+  {id:'depth10',  n:'Забойщик',        d:'Спуститься на глубину 10',       i:'🔟'},
+  {id:'depth20',  n:'Покоритель недр', d:'Спуститься на глубину 20',       i:'🌋'},
+  {id:'geode',    n:'Геод',            d:'Вскрыть друзу',                  i:'💠'},
+  {id:'flawless', n:'Чисто',           d:'Уровень без обвала',             i:'🎯'},
+  {id:'noflag',   n:'На глаз',         d:'Пройти уровень без флажков',     i:'👁'},
+  {id:'tough',    n:'Стойкий',         d:'Пережить обвал со щитом',        i:'🛡'},
+  {id:'comeback', n:'Возвращение',     d:'Пройти уровень после 2 обвалов', i:'💪'},
+  {id:'fast',     n:'Скороход',        d:'Пройти уровень быстрее 25 сек',  i:'🏃'},
+  {id:'alltypes', n:'Геммолог',        d:'Собрать все 6 типов за забег',   i:'🧭'},
+  {id:'machine',  n:'Машина',          d:'1000 очков за забег',            i:'🤖'},
+  {id:'rich',     n:'Богач',           d:'Накопить 500 руды',              i:'💰'},
+  {id:'shopper',  n:'Покупатель',      d:'Купить в магазине',              i:'🛒'},
+  {id:'diamond',  n:'Алмазный глаз',   d:'Найти алмаз',                    i:'💎'}
+];
+var ACH_BY_ID={};ACH.forEach(function(a){ACH_BY_ID[a.id]=a;});
+
+/* ---------- shop ---------- */
+var SHOP=[
+  {id:'life',  n:'Запасная жизнь', d:'Превышение базовых 3 жизней. Пассивно в каждом забеге.', i:'❤️', cost:70, max:2, get:function(){return P.bonusLives;}, add:function(){P.bonusLives++;saveP();}},
+  {id:'shield',n:'Щит',            d:'Поглощает один обвал. Пассивно, автоматически.',        i:'🛡', cost:40, max:3, get:function(){return P.shields|0;}, add:function(){P.shields=(P.shields|0)+1;saveP();}},
+  {id:'probe', n:'Зонд',           d:'Подсмотреть число плитки, не копая. Расходник.',         i:'🔎', cost:25, max:5, get:function(){return P.probes|0;}, add:function(){P.probes=(P.probes|0)+1;saveP();}},
+  {id:'scan',  n:'Сканер',         d:'Отметить одну скрытую опасную плитку. Расходник.',       i:'📡', cost:35, max:3, get:function(){return P.scans|0;}, add:function(){P.scans=(P.scans|0)+1;saveP();}}
+];
+
+/* ---------- persistence ---------- */
+var K={rec:'crystalMineRecord',depth:'crystalMineDepth',ore:'crystalMineOre',ach:'crystalMineAch',coll:'crystalMineCollect'};
+var P={bonusLives:0,shields:0,probes:0,scans:0};
+try{
+  var pv=JSON.parse(localStorage.getItem('crystalMinePow')||'null');
+  if(pv&&typeof pv==='object'){P.bonusLives=pv.bonusLives|0;P.shields=pv.shields|0;P.probes=pv.probes|0;P.scans=pv.scans|0;}
+}catch(e){}
+function saveP(){try{localStorage.setItem('crystalMinePow',JSON.stringify(P));}catch(e){}}
+function save(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function load(k,f){try{var v=localStorage.getItem(k);return v===null?f:JSON.parse(v);}catch(e){return f;}}
+var record=load(K.rec,0)|0;
+var bestDepth=load(K.depth,1)|0;
+var ore=load(K.ore,0)|0;
+var ach=load(K.ach,[]);
+var collected=load(K.coll,{});
+if(!collected||typeof collected!=='object')collected={};
+if(!ach||!Array.isArray(ach))ach=[];
+
+/* ---------- run + board state ---------- */
+var G={rows:8,cols:8,hazCount:10,crystalCount:9,geodes:1,quota:6,cells:[],els:[],ready:false,
+      level:1,score:0,combo:0,bestCombo:0,lives:3,maxLives:3,shields:0,runCrystals:0,runTypes:{},
+      revealed:0,safeTotal:0,collapses:0,flags:0,levelStart:0,levelFlawless:true,levelNoFlag:true,
+      pending:null,frenzy:0,bombsDodged:0,tried:0};
+var sessAch=[];
+var elapsedT=0,timerId=null;
+
+/* ---------- audio ---------- */
+var audioCtx=null,MUTE=false;
+function ctx(){if(!audioCtx)try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}return audioCtx;}
+function tone(f,ms,type,vol,delay){
+  var a=ctx();if(!a)return;
+  var t0=a.currentTime+(delay||0);
+  var o=a.createOscillator(),g=a.createGain();
+  o.type=type||'square';o.frequency.value=f;
+  g.gain.setValueAtTime(0.0001,t0);
+  g.gain.linearRampToValueAtTime((vol||.12)*(MUTE?0:1),t0+.008);
+  g.gain.exponentialRampToValueAtTime(.0001,t0+ms/1000);
+  o.connect(g);g.connect(a.destination);o.start(t0);o.stop(t0+ms/1000+.02);
+}
+function sDig(){tone(240,55,'square',.05);}
+function sGem(v){tone(660+v*70,90,'triangle',.09);tone(990+v*90,120,'triangle',.07,.05);}
+function sFlag(){tone(520,50,'square',.05);}
+function sHint(){tone(880,70,'sine',.07);}
+function sBoom(){tone(120,260,'sawtooth',.18);tone(70,300,'sawtooth',.14,.03);}
+function sLevel(){tone(523,110,'square',.09);tone(659,110,'square',.09,.11);tone(880,220,'square',.09,.22);}
+function sShield(){tone(520,110,'triangle',.11);tone(784,240,'triangle',.11,.1);}
+function sBuy(){tone(740,70,'square',.09);tone(1108,160,'square',.09,.08);}
+function sAch(){tone(1046,150,'triangle',.11);tone(1568,360,'triangle',.11,.14);}
+function sOver(){tone(392,180,'sawtooth',.1);tone(294,240,'sawtooth',.1,.16);tone(196,400,'sawtooth',.11,.34);}
+
+/* ---------- helpers ---------- */
+function rnd(a,b){return a+Math.random()*(b-a);}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function clamp(v,a,b){return v<a?a:v>b?b:v;}
+
+/* ---------- achievements ---------- */
+function hasAch(id){return ach.indexOf(id)!==-1;}
+function unlock(id){
+  if(hasAch(id))return;
+  ach.push(id);save(K.ach,JSON.stringify(ach));
+  if(sessAch.indexOf(id)===-1)sessAch.push(id);
+  var a=ACH_BY_ID[id];
+  if(a)showToast(a.i,a.n);
+  sAch();
+  if(id==='shopper'||id==='rich'){} // handled elsewhere
+}
+var toastQueue=[],toastBusy=false;
+function showToast(icon,name){toastQueue.push({i:icon,n:name});pumpToasts();}
+function pumpToasts(){
+  if(toastBusy||!toastQueue.length)return;
+  toastBusy=true;
+  var o=toastQueue.shift();
+  var box=$('mcToasts');
+  var el=document.createElement('div');el.className='mc-toast';
+  el.innerHTML='<div class="t-ico">'+o.i+'</div><div class="t-txt"><div class="t-title">Достижение получено!</div><div class="t-name">'+o.n+'</div></div>';
+  box.appendChild(el);
+  void el.offsetWidth;el.classList.add('in');
+  setTimeout(function(){el.classList.remove('in');setTimeout(function(){el.remove();toastBusy=false;pumpToasts();},340);},3000);
+}
+var toastEl=$('toast'),toastT=null;
+function msg(text){toastEl.textContent=text;toastEl.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('show');},1600);}
+
+/* ---------- crystal picking by depth ---------- */
+function crystalForDepth(depth){
+  var w=CRYSTALS.map(function(c,i){return c.w*Math.pow(1+depth*0.045,i);});
+  var sum=0;w.forEach(function(x){sum+=x;});
+  var r=Math.random()*sum,i=0;
+  for(;i<w.length;i++){r-=w[i];if(r<=0)break;}
+  return CRYSTALS[clamp(i,0,CRYSTALS.length-1)];
+}
+
+/* ---------- level config ---------- */
+function levelConfig(n){
+  var rows=clamp(7+Math.floor((n-1)/2),7,16);
+  var cols=rows;
+  var total=rows*cols;
+  var hr=clamp(0.12+(n-1)*0.006,0.12,0.21);
+  var haz=Math.max(4,Math.round(total*hr));
+  var cry=Math.max(5,Math.round(total*0.13));
+  var geode=n<3?1:(Math.random()<0.6?1:2);
+  var quota=clamp(Math.round(cry*0.5),4,18);
+  return {rows:rows,cols:cols,haz:haz,cry:cry,geode:geode,quota:quota};
+}
+
+/* ---------- board build ---------- */
+function buildBoardDOM(){
+  boardEl.innerHTML='';
+  boardEl.style.gridTemplateColumns='repeat('+G.cols+',1fr)';
+  boardEl.style.gridTemplateRows='repeat('+G.rows+',1fr)';
+  G.els=[];
+  for(var r=0;r<G.rows;r++){
+    G.els[r]=[];
+    for(var c=0;c<G.cols;c++){
+      var el=document.createElement('div');
+      el.className='cell';
+      el.dataset.r=r;el.dataset.c=c;
+      boardEl.appendChild(el);
+      G.els[r][c]=el;
+    }
+  }
+}
+function newCells(){
+  G.cells=[];
+  for(var r=0;r<G.rows;r++){
+    G.cells[r]=[];
+    for(var c=0;c<G.cols;c++){G.cells[r][c]={h:0,rev:0,flag:0,n:0,ctype:null,geode:0};}
+  }
+}
+
+/* ---------- generate after first dig ---------- */
+function generateBoard(sr,sc){
+  var banned={};
+  for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++)banned[(sr+dr)+','+(sc+dc)]=1;
+  var pool=[];
+  for(var r=0;r<G.rows;r++)for(var c=0;c<G.cols;c++){if(!banned[r+','+c])pool.push([r,c]);}
+  shuffle(pool);
+  var n=Math.min(G.hazCount,pool.length);
+  for(var i=0;i<n;i++){var p=pool[i];G.cells[p[0]][p[1]].h=1;}
+  // safe cells list
+  var safe=[];
+  for(var r2=0;r2<G.rows;r2++)for(var c2=0;c2<G.cols;c2++){if(!G.cells[r2][c2].h)safe.push([r2,c2]);}
+  shuffle(safe);
+  var ci=0;
+  for(;ci<Math.min(G.crystalCount,safe.length);ci++){
+    var cell=G.cells[safe[ci][0]][safe[ci][1]];
+    var ct=crystalForDepth(G.level);
+    cell.ctype=ct.id;
+  }
+  for(var g=0;g<G.geodes&&ci<safe.length;g++,ci++){
+    var gcell=G.cells[safe[ci][0]][safe[ci][1]];
+    gcell.geode=1;
+  }
+  // numbers
+  for(var r3=0;r3<G.rows;r3++)for(var c3=0;c3<G.cols;c3++){
+    if(G.cells[r3][c3].h)continue;
+    var cnt=0;
+    for(var a=-1;a<=1;a++)for(var b=-1;b<=1;b++){
+      if(a===0&&b===0)continue;
+      var nr=r3+a,nc=c3+b;
+      if(nr<0||nc<0||nr>=G.rows||nc>=G.cols)continue;
+      if(G.cells[nr][nc].h)cnt++;
+    }
+    G.cells[r3][c3].n=cnt;
+  }
+  G.safeTotal=0;
+  for(var r4=0;r4<G.rows;r4++)for(var c4=0;c4<G.cols;c4++)if(!G.cells[r4][c4].h)G.safeTotal++;
+  G.ready=true;
+}
+
+/* ---------- view ---------- */
+function cellView(r,c){
+  var cell=G.cells[r][c],el=G.els[r][c];
+  el.className='cell';
+  el.innerHTML='';
+  if(cell.rev){
+    el.classList.add('revealed');
+    if(cell.h){el.classList.add('hazard');el.innerHTML='<span class="ico">💥</span>';return;}
+    if(cell.geode){el.classList.add('geode');el.innerHTML='<span class="ico">💠</span>';return;}
+    if(cell.ctype){var ct=CRY_BY_ID[cell.ctype];el.classList.add('crystal');el.innerHTML='<span class="ico">'+ct.i+'</span>';return;}
+    if(cell.n>0)el.innerHTML='<span class="num'+cell.n+'">'+cell.n+'</span>';
+    else el.innerHTML='<span style="opacity:.25">·</span>';
+    return;
+  }
+  if(cell.flag){el.classList.add('flag');el.innerHTML='<span class="ico">🚩</span>';}
+}
+
+/* ---------- scoring ---------- */
+function multiplier(){return G.combo>=10?5:G.combo>=5?3:G.combo>=3?2:1;}
+function runCrystalValue(){var s=0;for(var k in G.runTypes){s+=G.runTypes[k];}return s;}
+
+function collectCrystal(ct){
+  G.combo++;if(G.combo>G.bestCombo)G.bestCombo=G.combo;
+  var mult=multiplier();
+  var pts=ct.v*mult;
+  G.score+=pts;
+  G.runCrystals++;
+  G.runTypes[ct.id]=1;
+  collected[ct.id]=(collected[ct.id]|0)+1;save(K.coll,JSON.stringify(collected));
+  ore+=ct.v;save(K.ore,ore);
+  if(ct.id==='diamond')unlock('diamond');
+  if(G.combo>=5)unlock('combo5');
+  if(G.combo>=10)unlock('combo10');
+  if(G.runCrystals>=10)unlock('c10');
+  if(G.runCrystals>=25)unlock('c25');
+  if(G.score>=1000)unlock('machine');
+  if(ore>=500)unlock('rich');
+  if(Object.keys(G.runTypes).length>=6)unlock('alltypes');
+  if(G.runCrystals===1)unlock('first');
+  showFloat('+'+pts+' '+ct.i,'gem');
+  sGem(ct.v);
+}
+function collectGeode(){
+  G.combo++;if(G.combo>G.bestCombo)G.bestCombo=G.combo;
+  var n=2+Math.floor(rnd(0,4));
+  var gained=0;
+  for(var i=0;i<n;i++){var ct=crystalForDepth(G.level);G.runCrystals++;G.runTypes[ct.id]=1;collected[ct.id]=(collected[ct.id]|0)+1;ore+=ct.v;gained+=ct.v;}
+  save(K.coll,JSON.stringify(collected));save(K.ore,ore);
+  var pts=gained*multiplier();
+  G.score+=pts;
+  unlock('geode');
+  if(ore>=500)unlock('rich');
+  if(G.runCrystals>=10)unlock('c10');
+  if(G.runCrystals>=25)unlock('c25');
+  if(Object.keys(G.runTypes).length>=6)unlock('alltypes');
+  showFloat('💠 друза +'+pts,'gem');
+  sGem(5);
+}
+
+/* ---------- reveal / dig ---------- */
+function userDig(r,c){
+  if(!G.ready)generateBoard(r,c);
+  var cell=G.cells[r][c];
+  if(cell.rev)return;
+  if(cell.flag){msg('Тут флажок — сначала сними');return;}
+  if(G.pending==='probe'){useProbe(r,c);return;}
+  if(G.pending==='scan'){useScan();return;}
+  if(cell.h){collapse(r,c);return;}
+  G.combo++;
+  if(G.combo>G.bestCombo)G.bestCombo=G.combo;
+  openArea(r,c);
+  if(G.combo>=5)unlock('combo5');
+  if(G.combo>=10)unlock('combo10');
+  sDig();
+  afterReveal();
+}
+function openArea(sr,sc){
+  var stack=[[sr,sc]];
+  while(stack.length){
+    var cur=stack.pop();
+    var r=cur[0],c=cur[1];
+    var cell=G.cells[r][c];
+    if(cell.rev||cell.flag||cell.h)continue;
+    cell.rev=1;G.revealed++;
+    cellView(r,c);
+    G.els[r][c].classList.add('pop');
+    if(cell.geode){collectGeode();}
+    else if(cell.ctype){collectCrystal(CRY_BY_ID[cell.ctype]);}
+    if(cell.n===0&&!cell.geode&&!cell.ctype){
+      for(var a=-1;a<=1;a++)for(var b=-1;b<=1;b++){
+        if(a===0&&b===0)continue;
+        var nr=r+a,nc=c+b;
+        if(nr<0||nc<0||nr>=G.rows||nc>=G.cols)continue;
+        if(!G.cells[nr][nc].rev)stack.push([nr,nc]);
+      }
+    }else if(cell.n===0){
+      for(var a2=-1;a2<=1;a2++)for(var b2=-1;b2<=1;b2++){
+        if(a2===0&&b2===0)continue;
+        var nr2=r+a2,nc2=c+b2;
+        if(nr2<0||nc2<0||nr2>=G.rows||nc2>=G.cols)continue;
+        var nb=G.cells[nr2][nc2];
+        if(!nb.rev&&nb.n===0&&!nb.h)stack.push([nr2,nc2]);
+      }
+    }
+  }
+}
+function collapse(r,c){
+  var cell=G.cells[r][c];
+  cell.rev=1;
+  var shielded=false;
+  if(G.shields>0){G.shields--;shielded=true;P.shields=G.shields;saveP();sShield();unlock('tough');}
+  G.combo=0;
+  G.levelFlawless=false;
+  cellView(r,c);
+  G.els[r][c].classList.add('collapsed');
+  if(shielded){
+    showFloat('🛡 щит спас','shield');
+    renderHUD();
+    return;
+  }
+  G.lives--;G.collapses++;
+  G.score=Math.max(0,G.score-5);
+  document.body.classList.remove('shake','miss-flash');void document.body.offsetWidth;
+  document.body.classList.add('shake','miss-flash');
+  setTimeout(function(){document.body.classList.remove('shake','miss-flash');},260);
+  showFloat('💥 обвал!','boom');
+  sBoom();
+  renderHUD();
+  if(G.lives<=0){gameOver();return;}
+  if(G.collapses>=2&&G.level>1)unlock('comeback');
+  afterReveal();
+}
+function afterReveal(){
+  renderHUD();
+  if(G.runCrystals>=G.quota){$('btnDescend').classList.add('show');}
+  if(G.revealed>=G.safeTotal){levelComplete();}
+}
+function levelComplete(){
+  if(G.levelDone)return;
+  G.levelDone=true;
+  boardEl.style.pointerEvents='none';
+  stopLevelTimer();
+  if(G.levelFlawless)unlock('flawless');
+  if(G.flags===0)unlock('noflag');
+  if(elapsedT<=25)unlock('fast');
+  var bonus=60*G.level+30*G.quota;
+  G.score+=bonus;
+  $('bannerLevel').textContent=G.level;
+  $('bannerWave').textContent='Глубина '+G.level;
+  $('bannerBonus').innerHTML='Бонус <b>+'+bonus+'</b>'+(G.levelFlawless?' · без обвалов':''); 
+  $('banner').classList.add('show');
+  sLevel();
+  setTimeout(function(){
+    $('banner').classList.remove('show');
+    startLevel(G.level+1);
+  },1500);
+}
+function descend(){
+  if(G.runCrystals<G.quota)return;
+  levelComplete();
+}
+
+/* ---------- timers ---------- */
+function startLevelTimer(){
+  stopLevelTimer();
+  G.levelStart=Date.now();elapsedT=0;
+  timerId=setInterval(function(){
+    if(G.paused||!G.runningNow)return;
+    elapsedT=Math.floor((Date.now()-G.levelStart)/1000);
+    $('hudTime').textContent=fmtTime(elapsedT);
+  },500);
+  $('hudTime').textContent='0:00';
+}
+function stopLevelTimer(){if(timerId){clearInterval(timerId);timerId=null;}}
+function fmtTime(s){var m=Math.floor(s/60),ss=s%60;return m+':'+(ss<10?'0':'')+ss;}
+
+/* ---------- start level / run ---------- */
+function startLevel(n){
+  var cfg=levelConfig(n);
+  G.rows=cfg.rows;G.cols=cfg.cols;G.hazCount=cfg.haz;G.crystalCount=cfg.cry;G.geodes=cfg.geode;G.quota=cfg.quota;
+  G.level=n;G.ready=false;G.done=false;G.levelDone=false;G.levelFlawless=true;G.levelNoFlag=true;G.revealed=0;G.flags=0;G.pending=null;
+  boardEl.style.pointerEvents='auto';
+  newCells();buildBoardDOM();
+  clearPending();
+  $('btnDescend').classList.remove('show');
+  $('hudDepth').textContent=n;
+  if(n>=3)unlock('depth3');
+  if(n>=5)unlock('depth5');
+  if(n>=10)unlock('depth10');
+  if(n>=20)unlock('depth20');
+  renderHUD();
+  startLevelTimer();
+}
+function newRun(){
+  G.score=0;G.combo=0;G.bestCombo=0;G.collapses=0;G.runCrystals=0;G.runTypes={};
+  G.maxLives=3+(P.bonusLives|0);G.lives=G.maxLives;G.shields=P.shields|0;
+  sessAch=[];
+  G.runningNow=true;G.paused=false;G.levelDone=false;
+  startLevel(1);
+}
+function gameOver(){
+  G.runningNow=false;stopLevelTimer();
+  sOver();
+  if(record<G.score){record=G.score;save(K.rec,record);G.newRec=true;}else G.newRec=false;
+  if(bestDepth<G.level){bestDepth=G.level;save(K.depth,bestDepth);}
+  $('ovScore').textContent=G.score;
+  $('ovDepth').textContent=G.level;
+  $('ovCrystals').textContent=G.runCrystals;
+  $('ovRecord').textContent=record;
+  $('overRecord').style.display=G.newRec?'inline-block':'none';
+  var box=$('ovAch');box.innerHTML='';
+  if(sessAch.length){sessAch.forEach(function(id){var a=ACH_BY_ID[id];if(a){var s=document.createElement('span');s.textContent=a.i+' '+a.n;box.appendChild(s);}});}
+  else{var e=document.createElement('span');e.textContent='ачивок пока нет';box.appendChild(e);}
+  P.shields=G.shields;saveP();
+  $('over').classList.add('show');
+  refreshMenu();
+}
+function quitRun(){
+  G.runningNow=false;G.paused=false;stopLevelTimer();
+  P.shields=G.shields;saveP();
+  ['banner','pause','over','game'].forEach(function(id){$(id).classList.remove('show');});
+}
+
+/* ---------- tools ---------- */
+function clearPending(){G.pending=null;$('toolProbe').classList.remove('active');$('toolScan').classList.remove('active');}
+function syncTools(){
+  $('probeCnt').textContent=P.probes|0;
+  $('scanCnt').textContent=P.scans|0;
+  $('toolProbe').disabled=(P.probes|0)<=0;
+  $('toolScan').disabled=(P.scans|0)<=0;
+}
+function useProbe(r,c){
+  var cell=G.cells[r][c];
+  if(cell.rev){clearPending();return;}
+  if((P.probes|0)<=0){clearPending();return;}
+  G.els[r][c].classList.add('hint');
+  var num=cell.h?'☠':String(cell.n);
+  G.els[r][c].innerHTML='<span class="num'+(cell.h?5:cell.n)+'">'+num+'</span>';
+  P.probes--;saveP();syncTools();
+  showFloat('🔎 '+(cell.h?'опасно!':cell.n+' рядом'),'hint');
+  sHint();
+  clearPending();
+}
+function useScan(){
+  if((P.scans|0)<=0){clearPending();return;}
+  var hidden=[];
+  for(var r=0;r<G.rows;r++)for(var c=0;c<G.cols;c++){var cl=G.cells[r][c];if(cl.h&&!cl.rev&&!cl.flag)hidden.push([r,c]);}
+  if(!hidden.length){msg('Опасных не осталось');clearPending();return;}
+  var p=hidden[Math.floor(Math.random()*hidden.length)];
+  G.cells[p[0]][p[1]].flag=1;
+  if(G.ready)G.flags++;
+  cellView(p[0],p[1]);
+  P.scans--;saveP();syncTools();
+  showFloat('📡 опасная плитка','hint');
+  sHint();
+  clearPending();
+}
+
+/* ---------- floats ---------- */
+function showFloat(text,kind){
+  var el=document.createElement('div');
+  el.className='float';
+  el.style.cssText='position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:2002;font-size:14px;font-weight:700;pointer-events:none;letter-spacing:.02em;text-shadow:0 2px 14px rgba(0,0,0,.7);animation:floatUp .95s ease-out forwards';
+  el.style.color=kind==='boom'?'#ff5d7a':kind==='shield'?'#5be37b':kind==='hint'?'#ffd24a':'#22d3ee';
+  el.textContent=text;
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove();},980);
+}
+
+/* ---------- HUD / panels ---------- */
+function renderHUD(){
+  $('hudScore').textContent=G.score;
+  var m=multiplier();
+  $('hudCombo').textContent=G.combo>2?('комбо x'+m+' · '+G.combo):'';
+  $('hudQuota').innerHTML='💠 '+G.runCrystals+'/'+G.quota;
+  var hearts='';for(var i=0;i<G.maxLives;i++)hearts+=(i<G.lives?'❤':'🖤');
+  $('hudLives').textContent=hearts;
+  $('hudOre').innerHTML='⛏ '+ore+' &nbsp; 🛡 '+(G.shields|0);
+  syncTools();
+}
+function renderAch(){
+  $('achCount').textContent=ach.length+' / '+ACH.length;
+  var grid=$('achGrid');grid.innerHTML='';
+  ACH.forEach(function(a){
+    var el=document.createElement('div');
+    el.className='card '+(hasAch(a.id)?'unlocked':'locked')+(sessAch.indexOf(a.id)!==-1?' hot':'');
+    el.innerHTML='<div class="c-ico">'+a.i+'</div><div class="c-name">'+a.n+'</div><div class="c-desc">'+a.d+'</div>';
+    grid.appendChild(el);
+  });
+}
+function renderCollection(){
+  var found=0;CRYSTALS.forEach(function(c){if((collected[c.id]|0)>0)found++;});
+  $('colCount').textContent=found+' / '+CRYSTALS.length;
+  var grid=$('colGrid');grid.innerHTML='';
+  CRYSTALS.forEach(function(c){
+    var cnt=collected[c.id]|0;
+    var unlocked=cnt>0;
+    var el=document.createElement('div');
+    el.className='card '+(unlocked?'unlocked':'locked');
+    el.innerHTML='<div class="c-ico">'+(unlocked?c.i:'❔')+'</div>'+
+      '<div class="c-name" style="color:'+(unlocked?c.col:'#8a83b8')+'">'+(unlocked?c.n:'???')+'</div>'+
+      '<div class="c-desc"><span class="rarity" style="color:'+c.col+'">'+c.r+'</span> · ценность '+c.v+(unlocked?' · найдено: '+cnt:'')+'</div>';
+    grid.appendChild(el);
+  });
+}
+function renderShop(){
+  $('shopOre').textContent=ore;
+  var list=$('shopList');list.innerHTML='';
+  SHOP.forEach(function(it){
+    var have=it.get();
+    var wrap=document.createElement('div');wrap.className='shop-item';
+    wrap.innerHTML='<div class="s-ico">'+it.i+'</div><div class="s-info"><div class="s-name">'+it.n+' <small>'+have+'/'+it.max+'</small></div><div class="s-desc">'+it.d+'</div></div>';
+    var b=document.createElement('button');b.className='btn btn--buy';
+    var can=ore>=it.cost&&have<it.max;
+    b.textContent=it.cost+' ⛏';
+    b.disabled=!can;
+    b.addEventListener('click',function(){
+      if(ore<it.cost||it.get()>=it.max)return;
+      ore-=it.cost;save(K.ore,ore);
+      it.add();unlock('shopper');sBuy();
+      if(ore>=500)unlock('rich');
+      renderShop();renderHUD();refreshMenu();
+    });
+    wrap.appendChild(b);
+    list.appendChild(wrap);
+  });
+}
+function refreshMenu(){
+  $('menuRecord').textContent=record;
+  $('menuDepth').textContent=bestDepth;
+  $('menuOre').textContent=ore;
+  var found=0;CRYSTALS.forEach(function(c){if((collected[c.id]|0)>0)found++;});
+  $('menuCollected').textContent=found;
+  $('menuTypes').textContent=CRYSTALS.length;
+}
+
+/* ---------- board input ---------- */
+var pressTimer=null,pressCell=null,suppress=false;
+function cellFromEvent(e){
+  var t=e.target;
+  if(!t||!t.classList||!t.classList.contains('cell'))return null;
+  var r=+t.dataset.r,c=+t.dataset.c;
+  if(isNaN(r)||isNaN(c))return null;
+  return {r:r,c:c};
+}
+boardEl.addEventListener('contextmenu',function(e){
+  e.preventDefault();
+  if(!G.runningNow||G.paused)return;
+  var p=cellFromEvent(e);if(!p)return;
+  toggleFlag(p.r,p.c);
+});
+boardEl.addEventListener('pointerdown',function(e){
+  if(!G.runningNow||G.paused)return;
+  var p=cellFromEvent(e);if(!p)return;
+  if(e.pointerType==='touch'){
+    suppress=false;
+    pressCell=p;
+    clearTimeout(pressTimer);
+    pressTimer=setTimeout(function(){
+      suppress=true;
+      toggleFlag(p.r,p.c);
+    },420);
+  }
+});
+boardEl.addEventListener('pointerup',function(e){
+  if(!G.runningNow||G.paused)return;
+  var p=cellFromEvent(e);if(!p)return;
+  clearTimeout(pressTimer);
+  if(e.pointerType==='touch'){
+    if(suppress){suppress=false;return;}
+    userDig(p.r,p.c);
+  }else{
+    userDig(p.r,p.c);
+  }
+});
+boardEl.addEventListener('pointerleave',function(){clearTimeout(pressTimer);if(suppress)suppress=false;});
+boardEl.addEventListener('pointercancel',function(){clearTimeout(pressTimer);suppress=false;});
+function toggleFlag(r,c){
+  var cell=G.cells[r][c];
+  if(cell.rev)return;
+  cell.flag=cell.flag?0:1;
+  if(G.ready){G.flags+=cell.flag?1:-1;if(G.flags<0)G.flags=0;if(!cell.flag&&G.flags===0){}}
+  cellView(r,c);
+  sFlag();
+}
+
+/* ---------- buttons ---------- */
+$('btnPlay').addEventListener('click',function(){
+  ctx();
+  $('menu').classList.remove('show');
+  $('shopScreen').classList.remove('show');
+  $('colScreen').classList.remove('show');
+  newRun();
+  $('game').classList.add('show');
+});
+$('btnHow').addEventListener('click',function(){$('howto').classList.add('show');});
+$('btnHowClose').addEventListener('click',function(){$('howto').classList.remove('show');});
+$('btnAch').addEventListener('click',function(){renderAch();$('achScreen').classList.add('show');});
+$('btnAchClose').addEventListener('click',function(){$('achScreen').classList.remove('show');});
+$('btnCol').addEventListener('click',function(){renderCollection();$('colScreen').classList.add('show');});
+$('btnColClose').addEventListener('click',function(){$('colScreen').classList.remove('show');});
+$('btnShop').addEventListener('click',function(){renderShop();$('shopScreen').classList.add('show');});
+$('btnShopClose').addEventListener('click',function(){$('shopScreen').classList.remove('show');});
+$('btnReset').addEventListener('click',function(){
+  if(!window.confirm('Точно сбросить весь прогресс: рекорд, руду, ачивки и коллекцию?'))return;
+  try{localStorage.removeItem(K.rec);localStorage.removeItem(K.depth);localStorage.removeItem(K.ore);localStorage.removeItem(K.ach);localStorage.removeItem(K.coll);localStorage.removeItem('crystalMinePow');}catch(e){}
+  record=0;bestDepth=1;ore=0;ach=[];collected={};P={bonusLives:0,shields:0,probes:0,scans:0};sessAch=[];
+  refreshMenu();renderAch();renderCollection();renderShop();renderHUD();
+});
+$('btnPause').addEventListener('click',function(){
+  if(!G.runningNow)return;
+  G.paused=true;$('pause').classList.add('show');
+});
+$('btnResume').addEventListener('click',function(){$('pause').classList.remove('show');G.paused=false;});
+$('btnRestart').addEventListener('click',function(){quitRun();$('menu').classList.remove('show');newRun();$('game').classList.add('show');});
+$('btnToMenu').addEventListener('click',function(){quitRun();$('menu').classList.add('show');refreshMenu();});
+$('btnAgain').addEventListener('click',function(){quitRun();newRun();$('game').classList.add('show');});
+$('btnOverMenu').addEventListener('click',function(){quitRun();$('menu').classList.add('show');refreshMenu();});
+$('btnDescend').addEventListener('click',function(){descend();});
+$('toolProbe').addEventListener('click',function(){
+  if((P.probes|0)<=0)return;
+  if(G.pending==='probe'){clearPending();return;}
+  G.pending='probe';$('toolScan').classList.remove('active');$('toolProbe').classList.add('active');
+  msg('Выберите плитку для зонда');
+});
+$('toolScan').addEventListener('click',function(){
+  if((P.scans|0)<=0)return;
+  G.pending='scan';$('toolProbe').classList.remove('active');$('toolScan').classList.add('active');
+  msg('Сканирую...');
+  useScan();
+});
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&G.runningNow){
+    if(G.paused){$('pause').classList.remove('show');G.paused=false;}
+    else if(!$('over').classList.contains('show')){G.paused=true;$('pause').classList.add('show');}
+  }
+});
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden&&G.runningNow&&!G.paused){G.paused=true;$('pause').classList.add('show');}
+});
+window.addEventListener('blur',function(){
+  if(G.runningNow&&!G.paused){G.paused=true;$('pause').classList.add('show');}
+});
+window.addEventListener('resize',function(){/* grid is fluid */});
+
+/* ---------- mobile notice ---------- */
+(function(){
+  var isMobile=window.innerWidth<560||/Mobi|Android/i.test(navigator.userAgent);
+  if(isMobile&&!sessionStorage.getItem('crystal-mobile-dismiss')){
+    var n=$('mobileNotice');n.style.display='flex';
+    $('mobileTryBtn').addEventListener('click',function(){
+      n.classList.add('mobile-notice--dismiss');
+      setTimeout(function(){n.style.display='none';},350);
+      sessionStorage.setItem('crystal-mobile-dismiss','1');
+    });
+  }
+})();
+
+/* ---------- init ---------- */
+(function(){
+  var s=document.createElement('style');
+  s.textContent='@keyframes floatUp{0%{transform:translate(-50%,-50%);opacity:1}100%{transform:translate(-50%,-160%);opacity:0}}';
+  document.head.appendChild(s);
+})();
+refreshMenu();renderAch();renderCollection();renderHUD();
+})();
+</script>
+</body>
+</html>

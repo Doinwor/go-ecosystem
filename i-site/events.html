@@ -241,6 +241,31 @@
       color: #00e5ff;
     }
 
+    .archive-card--crystal {
+      border-color: rgba(139,92,246,.4);
+    }
+
+    .archive-card--crystal:hover {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 30px rgba(139,92,246,.1);
+    }
+
+    .archive-card--crystal .archive-card__badge {
+      color: #160b2e;
+      background: linear-gradient(135deg, #8b5cf6, #22d3ee);
+    }
+
+    .archive-card--crystal .archive-card__title span {
+      background: linear-gradient(135deg, #8b5cf6, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .archive-card--crystal .archive-card__link span {
+      color: #22d3ee;
+    }
+
     /* ─── note ─── */
     .note {
       border: 1px solid var(--border);
@@ -415,13 +440,13 @@
     <section class="reveal reveal-delay-2">
       <h2>Текущий ивент</h2>
       <div class="archive-list">
-        <a href="shape-event.html" class="archive-card archive-card--shape">
+        <a href="crystal-event.html" class="archive-card archive-card--crystal">
           <div class="archive-card__top">
-            <span class="archive-card__badge">🎯 Текущее</span>
+            <span class="archive-card__badge">💎 Текущее</span>
             <span class="archive-card__meta">новый ивент студии</span>
           </div>
-          <div class="archive-card__title">Попади в <span>фигуру</span></div>
-          <div class="archive-card__desc">Новый ивент студии i. — аркада, в которой ты кликаешь по движущейся фигуре: она ползёт, прыгает, телепортируется, размножается на обманки и убегает от курсора. 4 волны, боссы и бесконечный режим.</div>
+          <div class="archive-card__title">Кристальная <span>шахта</span></div>
+          <div class="archive-card__desc">Новый ивент студии i. — головоломка на дедукцию: спускайся вглубь шахты, читай подсказки на камнях и добывай кристаллы, не вскрыв ни одной пустоты. 6 минералов, инструменты, квота и рекорд глубины.</div>
           <div class="archive-card__link">Подробнее <span>→</span></div>
         </a>
       </div>
@@ -430,6 +455,15 @@
     <section class="reveal reveal-delay-3">
       <h2>Прошедшие</h2>
       <div class="archive-list">
+        <a href="shape-event.html" class="archive-card archive-card--shape">
+          <div class="archive-card__top">
+            <span class="archive-card__badge">🎯 Прошедшее</span>
+            <span class="archive-card__meta">второй ивент студии</span>
+          </div>
+          <div class="archive-card__title">Попади в <span>фигуру</span></div>
+          <div class="archive-card__desc">Аркада, в которой ты кликаешь по движущейся фигуре: она ползёт, прыгает, телепортируется, размножается на обманки и убегает от курсора. 4 волны, боссы и бесконечный режим.</div>
+          <div class="archive-card__link">Подробнее <span>→</span></div>
+        </a>
         <a href="event.html" class="archive-card">
           <div class="archive-card__top">
             <span class="archive-card__badge">🎮 Прошедшее</span>
