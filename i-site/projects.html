@@ -251,6 +251,22 @@
       50% { background-position: 100% 50%; }
     }
 
+    /* iridescent yellow → red → green (for і. капча) */
+    .project-card--tri .project-card__name,
+    .project-card--tri .project-card__arrow {
+      background: linear-gradient(100deg, #ffd400, #ff3b30, #34c759, #ffd400);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 220% 220%;
+      animation: triShimmer 7s linear infinite;
+    }
+
+    @keyframes triShimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
     .reveal {
       opacity: 0;
       transform: translateY(30px);
@@ -331,6 +347,11 @@
         <a href="i-image.html" class="project-card project-card--accent" style="--a1:#6c5ce7;--a2:#1fc29a">
           <div class="project-card__name">і. Image</div>
           <div class="project-card__desc">Редактор, конвертер и компрессор изображений прямо в браузере — файлы не покидают устройство</div>
+          <div class="project-card__arrow">→</div>
+        </a>
+        <a href="captcha.html" class="project-card project-card--tri">
+          <div class="project-card__name">і. капча</div>
+          <div class="project-card__desc">Двухуровневая капча для сайтов: вставляется одной прозрачной плашкой, защита форм от ботов</div>
           <div class="project-card__arrow">→</div>
         </a>
         <a href="https://doinwor.github.io/pogrebkoff-karty/" target="_blank" rel="noopener" class="project-card project-card--accent" style="--a1:#ffb347;--a2:#ff6b9d">
