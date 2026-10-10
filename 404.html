@@ -2,114 +2,264 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>404 — GO</title>
+  <meta name="theme-color" content="#000000">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg: #fafaf8;
-      --text: #1a1a1a;
-      --muted: #999;
-      --dim: #666;
-      --border: #e8e8e5;
-      --border-hover: #ccc;
-    }
 
     html, body { height: 100%; }
 
     body {
-      font-family: 'Unbounded', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      background: #000;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+    }
+
+    /* ─── the DVD logo ─── */
+    .dvd {
+      position: absolute;
+      top: 0;
+      left: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      padding: 0.5em 0.85em;
+      color: #fff;
+      opacity: 0;
+      font-family: 'Arial Black', 'Arial Bold', Arial, Helvetica, sans-serif;
+      font-size: clamp(34px, 6vw, 74px);
+      will-change: transform;
     }
 
-    .center { text-align: center; padding: 32px; }
+    .dvd__disc {
+      position: absolute;
+      inset: 0;
+      border: 0.05em solid currentColor;
+      border-radius: 50%;
+      transform: rotate(-7deg);
+      opacity: 0.9;
+      pointer-events: none;
+    }
 
-    .center__code {
-      font-size: clamp(100px, 20vw, 180px);
+    .dvd__word {
+      position: relative;
+      font-style: italic;
       font-weight: 900;
-      line-height: 1;
-      color: var(--text);
-      opacity: 0.08;
-      letter-spacing: -0.04em;
+      font-size: 1em;
+      letter-spacing: -0.055em;
+      line-height: 0.86;
     }
 
-    .center__title {
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      margin-top: -8px;
+    .dvd__video {
+      position: relative;
+      margin-top: 0.16em;
+      font-size: 0.185em;
+      font-weight: 700;
+      letter-spacing: 0.34em;
+      text-indent: 0.34em;
+      white-space: nowrap;
     }
 
-    .center__desc {
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--dim);
-      margin-top: 14px;
-      line-height: 1.7;
-      max-width: 340px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .links {
-      margin-top: 28px;
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .links a {
+    /* ─── faint way back ─── */
+    .home {
+      position: fixed;
+      top: 20px;
+      z-index: 5;
+      font-family: 'Unbounded', sans-serif;
       font-size: 11px;
       font-weight: 500;
-      color: var(--muted);
+      letter-spacing: 0.05em;
+      color: #fff;
       text-decoration: none;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 10px 24px;
-      transition: border-color 0.25s, color 0.25s;
-      letter-spacing: 0.03em;
+      opacity: 0.18;
+      transition: opacity 0.3s ease;
     }
 
-    .links a:hover {
-      border-color: var(--border-hover);
-      color: var(--text);
-    }
+    .home--left { left: 22px; }
+    .home--right { right: 22px; }
 
-    @media (max-width: 480px) {
-      .center__code { font-size: 80px; }
-      .center__title { font-size: 15px; }
-      .links a { font-size: 10px; padding: 8px 18px; }
+    .home:hover { opacity: 1; }
+
+    /* ─── caption ─── */
+    .caption {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 22px;
+      z-index: 4;
+      text-align: center;
+      pointer-events: none;
+      font-family: 'Unbounded', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 0.16em;
+      color: #6a6a78;
     }
   </style>
 </head>
 <body>
-  <div class="center">
-    <div class="center__code">404</div>
-    <div class="center__title">Страница не найдена</div>
-    <div class="center__desc">
-      Такой страницы нет. Может, вы ошиблись адресом, или она была перемещена.
-    </div>
-    <div class="links">
-      <a href="https://doinwor.github.io/go-ecosystem/">GO</a>
-      <a href="https://doinwor.github.io/go-ecosystem/i-site/">і. студия</a>
-      <a href="https://doinwor.github.io/go-ecosystem/i-site/brand.html">Бренд</a>
-      <a href="https://doinwor.github.io/go-ecosystem/i-site/digital.html">Digital</a>
-    </div>
+  <a class="home home--left" href="index.html">← GO</a>
+  <a class="home home--right" href="i-site/index.html">і. студия</a>
+
+  <div class="dvd" id="dvd">
+    <span class="dvd__disc"></span>
+    <span class="dvd__word">DVD</span>
+    <span class="dvd__video">GO · VIDEO</span>
   </div>
+
+  <div class="caption">404 · даже мы не нашли эту страничку</div>
+
   <script>
-    var path = window.location.pathname;
-    if (path.indexOf('/i-site/') !== -1) {
-      window.location.href = 'https://doinwor.github.io/go-ecosystem/i-site/404.html';
-    }
+    (function () {
+      var template = document.getElementById('dvd');
+      template.removeAttribute('id');
+
+      var colors = [
+        '#ffffff', '#ff2d2d', '#ffd400', '#25ff6a',
+        '#2dd0ff', '#8a5cff', '#ff5cd0', '#ff8a2d', '#25ffd0'
+      ];
+      var ci = 0;
+
+      var speedX = 130;
+      var speedY = 100;
+      var maxLogos = 2;
+
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var running = !reduced;
+      var last = 0;
+      var logos = [];
+
+      function makeLogo(sx, sy, vx, vy) {
+        var el = template.cloneNode(true);
+        document.body.appendChild(el);
+        var logo = { el: el, x: sx, y: sy, vx: vx, vy: vy, w: el.offsetWidth, h: el.offsetHeight };
+        el.style.opacity = '1';
+        logos.push(logo);
+        return logo;
+      }
+
+      function nextColor(el) {
+        var i;
+        do { i = Math.floor(Math.random() * colors.length); }
+        while (colors.length > 1 && i === ci);
+        ci = i;
+        el.style.color = colors[i];
+      }
+
+      function keepSpeed(logo) {
+        var sp = Math.sqrt(speedX * speedX + speedY * speedY);
+        var m = Math.sqrt(logo.vx * logo.vx + logo.vy * logo.vy) || 1;
+        logo.vx = logo.vx / m * sp;
+        logo.vy = logo.vy / m * sp;
+      }
+
+      function jitter(logo) {
+        var a = (Math.random() - 0.5) * 2 * 0.8 * Math.PI / 180;
+        var c = Math.cos(a), s = Math.sin(a);
+        var vx = logo.vx * c - logo.vy * s;
+        var vy = logo.vx * s + logo.vy * c;
+        logo.vx = vx;
+        logo.vy = vy;
+      }
+
+      function spawnOpposite(src) {
+        var W = window.innerWidth;
+        var H = window.innerHeight;
+        var sx = src.vx > 0 ? W - src.w : 0;
+        var sy = src.vy > 0 ? H - src.h : 0;
+        var vx = sx === 0 ? speedX : -speedX;
+        var vy = sy === 0 ? speedY : -speedY;
+        makeLogo(sx, sy, vx, vy);
+      }
+
+      function update(logo, dt) {
+        var W = window.innerWidth;
+        var H = window.innerHeight;
+
+        logo.x += logo.vx * dt;
+        logo.y += logo.vy * dt;
+
+        var hx = false, hy = false;
+        if (logo.x <= 0) { logo.x = 0; logo.vx = Math.abs(logo.vx); hx = true; }
+        else if (logo.x + logo.w >= W) { logo.x = W - logo.w; logo.vx = -Math.abs(logo.vx); hx = true; }
+        if (logo.y <= 0) { logo.y = 0; logo.vy = Math.abs(logo.vy); hy = true; }
+        else if (logo.y + logo.h >= H) { logo.y = H - logo.h; logo.vy = -Math.abs(logo.vy); hy = true; }
+
+        if (hx || hy) {
+          nextColor(logo.el);
+          jitter(logo);
+        }
+
+        if (hx && hy && logos.length < maxLogos) spawnOpposite(logo);
+
+        logo.el.style.transform = 'translate3d(' + logo.x + 'px,' + logo.y + 'px,0)';
+      }
+
+      function collide(a, b) {
+        var ax = a.x + a.w / 2, ay = a.y + a.h / 2;
+        var bx = b.x + b.w / 2, by = b.y + b.h / 2;
+        var dx = bx - ax, dy = by - ay;
+        var dist = Math.sqrt(dx * dx + dy * dy) || 0.0001;
+        var r = Math.max(a.w, a.h) * 0.5;
+        if (dist >= r * 2) return;
+
+        var nx = dx / dist, ny = dy / dist;
+        var dvx = a.vx - b.vx, dvy = a.vy - b.vy;
+        var dot = dvx * nx + dvy * ny;
+
+        if (dot < 0) {
+          a.vx -= dot * nx; a.vy -= dot * ny;
+          b.vx += dot * nx; b.vy += dot * ny;
+          keepSpeed(a);
+          keepSpeed(b);
+          nextColor(a.el);
+          nextColor(b.el);
+        }
+
+        var push = (r * 2 - dist) / 2;
+        a.x -= nx * push; a.y -= ny * push;
+        b.x += nx * push; b.y += ny * push;
+      }
+
+      function frame(t) {
+        if (!last) last = t;
+        var dt = Math.min(34, t - last) / 1000;
+        last = t;
+
+        for (var i = 0; i < logos.length; i++) update(logos[i], dt);
+        for (var j = 0; j < logos.length; j++) {
+          for (var k = j + 1; k < logos.length; k++) collide(logos[j], logos[k]);
+        }
+
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener('resize', function () {
+        var W = window.innerWidth, H = window.innerHeight;
+        for (var i = 0; i < logos.length; i++) {
+          var l = logos[i];
+          if (l.x + l.w > W) l.x = W - l.w;
+          if (l.y + l.h > H) l.y = H - l.h;
+          if (l.x < 0) l.x = 0;
+          if (l.y < 0) l.y = 0;
+          l.el.style.transform = 'translate3d(' + l.x + 'px,' + l.y + 'px,0)';
+        }
+      });
+
+      var w = template.offsetWidth, h = template.offsetHeight;
+      makeLogo((window.innerWidth - w) / 2, (window.innerHeight - h) / 2, speedX, speedY);
+
+      if (running) requestAnimationFrame(frame);
+    })();
   </script>
 </body>
 </html>
