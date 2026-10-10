@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>і. капча</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ink: #141414;
+      --muted: #9a9a9a;
+      --line: #e7e7e7;
+      --accent: #5be37b;
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      color: var(--ink);
+    }
+
+    .captcha {
+      width: min(300px, 92vw);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 10px 30px -22px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ─── brand header ─── */
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .brand { display: flex; align-items: baseline; gap: 7px; line-height: 1; }
+
+    .brand__mark {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .brand__mark .dot { color: var(--accent); }
+
+    .brand__name {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 300;
+      font-size: 9px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 1px;
+    }
+
+    .refresh {
+      flex: none;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: #a2a2a2;
+      font-size: 15px;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .refresh:hover { color: var(--ink); border-color: #d2d2d2; }
+    .refresh:active { transform: rotate(-180deg); }
+    .refresh:disabled { opacity: 0.4; cursor: default; }
+
+    /* ─── code image ─── */
+    canvas {
+      width: 100%;
+      height: 54px;
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #eef1f8;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+
+    /* ─── controls ─── */
+    .row { display: flex; gap: 8px; }
+
+    input {
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0 12px;
+      font-family: inherit;
+      font-size: 16px;
+      letter-spacing: 3px;
+      text-align: center;
+      text-transform: uppercase;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input::placeholder { color: #c4c4c4; letter-spacing: 1px; }
+    input:focus { border-color: #bcbcbc; }
+    input:disabled { opacity: 0.55; }
+
+    .check {
+      flex: none;
+      height: 42px;
+      padding: 0 16px;
+      border: none;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-family: 'Unbounded', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+    }
+    .check:hover { background: #000; }
+    .check:disabled { opacity: 0.4; cursor: default; }
+
+    .msg {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      min-height: 15px;
+      transition: color 0.2s;
+    }
+    .msg.ok { color: #1a9e4b; }
+    .msg.bad { color: #e0344b; }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-3px); }
+    }
+    .captcha.shake { animation: shake 0.36s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="captcha" id="captcha">
+    <div class="head">
+      <span class="brand">
+        <span class="brand__mark">і<span class="dot">.</span></span>
+        <span class="brand__name">капча</span>
+      </span>
+      <button class="refresh" id="refresh" type="button" title="Обновить код" aria-label="Обновить код">↻</button>
+    </div>
+
+    <canvas id="cv" title="Обновить код" role="img" aria-label="Капча: нажмите, чтобы обновить"></canvas>
+
+    <div class="row">
+      <input id="inp" type="text" inputmode="latin" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="5" placeholder="код" aria-label="Код с картинки">
+      <button class="check" id="check" type="button">Проверить</button>
+    </div>
+
+    <div class="msg" id="msg" aria-live="polite"></div>
+  </div>
+
+  <script>
+    (function () {
+      var cv = document.getElementById('cv');
+      var inp = document.getElementById('inp');
+      var check = document.getElementById('check');
+      var refresh = document.getElementById('refresh');
+      var msg = document.getElementById('msg');
+      var card = document.getElementById('captcha');
+
+      var CHARS = 'ACDEFGHJKLMNPQRSTUVWXYZ23456789';
+      var PALETTE = ['#4b2ea6', '#1f4f8a', '#8a2b57', '#2b7a5f', '#7a4a12', '#5a2b8a'];
+      var H = 54;
+
+      var code = '';
+      var solved = false;
+
+      function rand(n) { return Math.floor(Math.random() * n); }
+      function pick(arr) { return arr[rand(arr.length)]; }
+      function newCode() {
+        var s = '';
+        for (var i = 0; i < 5; i++) s += CHARS[rand(CHARS.length)];
+        return s;
+      }
+
+      function ctx2d() {
+        var w = cv.clientWidth || 260;
+        var dpr = Math.min(2, window.devicePixelRatio || 1);
+        cv.width = Math.round(w * dpr);
+        cv.height = Math.round(H * dpr);
+        cv.style.height = H + 'px';
+        var x = cv.getContext('2d');
+        x.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { x: x, w: w, h: H };
+      }
+
+      function drawBackground(x, w, h) {
+        var g = x.createLinearGradient(0, 0, w, h);
+        g.addColorStop(0, '#f5f7fc');
+        g.addColorStop(1, '#e2e7f2');
+        x.fillStyle = g;
+        x.fillRect(0, 0, w, h);
+      }
+
+      function drawNoise(x, w, h) {
+        for (var i = 0; i < 110; i++) {
+          x.fillStyle = 'rgba(' + (50 + rand(130)) + ',' + (60 + rand(120)) + ',' + (110 + rand(120)) + ',' + (0.12 + Math.random() * 0.24).toFixed(2) + ')';
+          x.fillRect(Math.random() * w, Math.random() * h, 1, 1);
+        }
+      }
+
+      function drawLines(x, w, h) {
+        for (var l = 0; l < 3; l++) {
+          x.strokeStyle = 'rgba(' + (90 + rand(80)) + ',' + (80 + rand(80)) + ',' + (150 + rand(70)) + ',' + (0.18 + Math.random() * 0.16).toFixed(2) + ')';
+          x.lineWidth = 1 + Math.random();
+          x.beginPath();
+          var y = 8 + Math.random() * (h - 16);
+          x.moveTo(0, y);
+          x.bezierCurveTo(w * 0.33, y + (Math.random() - 0.5) * 26, w * 0.66, y + (Math.random() - 0.5) * 26, w, y + (Math.random() - 0.5) * 14);
+          x.stroke();
+        }
+      }
+
+      function drawGlyphs(x, w, h) {
+        var n = code.length;
+        var pad = 16;
+        var step = (w - pad * 2) / n;
+        for (var k = 0; k < n; k++) {
+          x.save();
+          var cx = pad + step * k + step / 2;
+          var cy = h / 2 + (Math.random() - 0.5) * 6;
+          x.translate(cx, cy);
+          x.rotate((Math.random() - 0.5) * 0.5);
+          x.font = '700 ' + (25 + rand(9)) + 'px "Arial Black", Arial, sans-serif';
+          x.textAlign = 'center';
+          x.textBaseline = 'middle';
+          x.fillStyle = pick(PALETTE);
+          x.fillText(code[k], 0, 0);
+          x.restore();
+        }
+      }
+
+      function drawCode() {
+        var c = ctx2d();
+        drawBackground(c.x, c.w, c.h);
+        drawNoise(c.x, c.w, c.h);
+        drawLines(c.x, c.w, c.h);
+        drawGlyphs(c.x, c.w, c.h);
+      }
+
+      function drawSolved() {
+        var c = ctx2d();
+        var x = c.x, w = c.w, h = c.h;
+        var g = x.createLinearGradient(0, 0, w, h);
+        g.addColorStop(0, '#eafbf1');
+        g.addColorStop(1, '#d7f5e3');
+        x.fillStyle = g;
+        x.fillRect(0, 0, w, h);
+        x.strokeStyle = '#1a9e4b';
+        x.lineWidth = 3;
+        x.lineCap = 'round';
+        x.lineJoin = 'round';
+        x.beginPath();
+        x.moveTo(w / 2 - 34, h / 2 + 1);
+        x.lineTo(w / 2 - 23, h / 2 + 12);
+        x.lineTo(w / 2 - 1, h / 2 - 11);
+        x.stroke();
+        x.fillStyle = '#1a9e4b';
+        x.font = '600 13px Arial, sans-serif';
+        x.textAlign = 'left';
+        x.textBaseline = 'middle';
+        x.fillText('пройдено', w / 2 + 10, h / 2);
+      }
+
+      function setMsg(t, cls) {
+        msg.textContent = t;
+        msg.className = 'msg' + (cls ? ' ' + cls : '');
+      }
+      function shake() {
+        card.classList.remove('shake');
+        void card.offsetWidth;
+        card.classList.add('shake');
+      }
+
+      function refreshCode() {
+        if (solved) return;
+        code = newCode();
+        drawCode();
+        inp.value = '';
+        setMsg('');
+      }
+
+      function success() {
+        solved = true;
+        drawSolved();
+        setMsg('Проверка пройдена', 'ok');
+        inp.disabled = true;
+        check.disabled = true;
+        refresh.disabled = true;
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'captcha-success', source: 'i-studio' }, '*');
+          }
+        } catch (e) {}
+      }
+
+      function fail() {
+        setMsg('Неверный код, попробуйте ещё раз', 'bad');
+        shake();
+        inp.value = '';
+        window.setTimeout(function () {
+          if (solved) return;
+          code = newCode();
+          drawCode();
+          inp.focus();
+        }, 420);
+      }
+
+      function checkCode() {
+        if (solved) return;
+        var val = inp.value.trim().toUpperCase();
+        if (!val) { setMsg('Введите код', 'bad'); return; }
+        if (val === code) success();
+        else fail();
+      }
+
+      check.addEventListener('click', checkCode);
+      refresh.addEventListener('click', refreshCode);
+      cv.addEventListener('click', refreshCode);
+      inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); checkCode(); }
+      });
+      inp.addEventListener('input', function () {
+        inp.value = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      });
+      window.addEventListener('resize', function () {
+        if (solved) drawSolved(); else drawCode();
+      });
+
+      code = newCode();
+      drawCode();
+    })();
+  </script>
+</body>
+</html>
